@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from . import backends
 
-class NormalAithTest(TestCase):
+class NormalAuthTest(TestCase):
     def setUp(self):
         self.auth_backend = backends.NormalAuth()
         self.imap_backend = backends.ImapAuth()
@@ -17,7 +17,7 @@ class NormalAithTest(TestCase):
         self.assertEqual(self.ext_user.username, auth_user.username)
 
     def test_auth_enib(self):
-        # auth with username as it's the email adress without le @enib.fr
+        # auth with username as it's the email adress without @enib.fr
         auth_user = self.auth_backend.authenticate(email=self.enib_user.username, password='BBB')
         self.assertEqual(self.enib_user.username, auth_user.username)
 
