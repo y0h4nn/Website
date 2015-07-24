@@ -1,0 +1,2 @@
+test:
+    script: python manage.py test
