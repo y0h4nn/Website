@@ -1,0 +1,29 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Site des eleves</title>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+
+	</head>
+
+	<body>
+		{% if error %}
+			<p>
+				{{ error }}
+			</p>
+		{% endif %}
+		<form action="{% url 'accounts:login'%}" method="POST">
+			{% csrf_token %}
+			<label for="username">Username</label>
+			<input type="text" id="username" name="username" required />
+
+			<label for="password">Password</label>
+			<input type="password" id="password" name="password" required />
+
+			<button>Login</button>
+		</form>
+	</body>
+</html>
