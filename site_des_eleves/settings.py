@@ -103,3 +103,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Authentification backend
+
+AUTHENTICATION_BACKENDS = (
+    'accounts.backends.AuthBackend',
+)
