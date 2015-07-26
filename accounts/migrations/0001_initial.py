@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Adress',
             fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
                 ('description', models.TextField()),
                 ('street', models.TextField()),
@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Email',
             fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
                 ('email', models.EmailField(max_length=254)),
                 ('valid', models.BooleanField(default=False)),
             ],
@@ -35,37 +35,37 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Family',
             fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
                 ('descriptionn', models.TextField()),
-                ('picture', models.ImageField(width_field='width', height_field='height', upload_to='')),
+                ('picture', models.ImageField(height_field='height', width_field='width', upload_to='')),
             ],
         ),
         migrations.CreateModel(
             name='Profile',
             fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
                 ('nickname', models.CharField(max_length=255)),
-                ('picture', models.ImageField(width_field='width', height_field='height', upload_to='')),
+                ('picture', models.ImageField(height_field='height', width_field='width', upload_to='')),
                 ('birthdate', models.DateField()),
                 ('enib_join_year', models.PositiveSmallIntegerField()),
-                ('semester', models.CharField(default=None, max_length=2, choices=[(None, 'Aucun'), ('S1', 'Semestre 1'), ('S2', 'Semestre 2'), ('S3', 'Semestre 3'), ('S4', 'Semestre 4'), ('S5', 'Semestre 5'), ('S6', 'Semestre 6'), ('S7', 'Semestre 7'), ('S8', 'Semestre 8'), ('S9', 'Semestre 9'), ('S10', 'Semestre 10')])),
-                ('family', models.ForeignKey(related_name='members', to='core.Family')),
+                ('semester', models.CharField(choices=[(None, 'Aucun'), ('S1', 'Semestre 1'), ('S2', 'Semestre 2'), ('S3', 'Semestre 3'), ('S4', 'Semestre 4'), ('S5', 'Semestre 5'), ('S6', 'Semestre 6'), ('S7', 'Semestre 7'), ('S8', 'Semestre 8'), ('S9', 'Semestre 9'), ('S10', 'Semestre 10')], max_length=2, default=None)),
+                ('family', models.ForeignKey(related_name='members', to='accounts.Family')),
             ],
         ),
         migrations.CreateModel(
             name='Promo',
             fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
                 ('description', models.TextField()),
-                ('picture', models.ImageField(width_field='width', height_field='height', upload_to='')),
+                ('picture', models.ImageField(height_field='height', width_field='width', upload_to='')),
             ],
         ),
         migrations.AddField(
             model_name='profile',
             name='promo',
-            field=models.ForeignKey(related_name='members', to='core.Promo'),
+            field=models.ForeignKey(related_name='members', to='accounts.Promo'),
         ),
         migrations.AddField(
             model_name='profile',
@@ -75,11 +75,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='email',
             name='profile',
-            field=models.ForeignKey(related_name='secondary_emails', to='core.Profile'),
+            field=models.ForeignKey(related_name='secondary_emails', to='accounts.Profile'),
         ),
         migrations.AddField(
             model_name='adress',
             name='profile',
-            field=models.ForeignKey(related_name='addresses', to='core.Profile'),
+            field=models.ForeignKey(related_name='addresses', to='accounts.Profile'),
         ),
     ]
