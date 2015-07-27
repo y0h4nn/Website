@@ -1,0 +1,18 @@
+<h1>Edit user {{ user.username }}</h1>
+
+
+<form method="POST" action="{% url 'accounts:edit' username=user.username %}">
+	{% csrf_token %}
+
+	<fieldset>
+		<legend>Configuration utilisateur</legend>
+		{{ userform }}
+	</fieldset>
+
+	<fieldset>
+		<legend>Configuration du profil</legend>
+		{{ profileform }}
+	</fieldset>
+
+	<button>Sauvegarder</button>
+</form>

@@ -11,7 +11,7 @@
 
 	<body>
 		{% if request.user.is_active %}
-			<h1>Bonjour {{ request.user }}</h1>
+		<h1>Bonjour <a href="{% url 'accounts:show' username=request.user.username %}">{{ request.user }}</a></h1>
 			<a href="{% url 'accounts:logout' %}">Logout</a>
 		{% else %}
 			<h1>Bonjour</h1>

@@ -1,0 +1,27 @@
+<h1>Profile utilisateur {{ user.username }} -- <a href="{% url 'accounts:edit' username=user.username %}">edit</a></h1>
+
+<dl>
+	<dt>Nom</dt>
+	<dd>{{ last_name }}</dd>
+
+	<dt>Prénom</dt>
+	<dd>{{ first_name }}</dd>
+
+	<dt>Email</dt>
+	<dd><a href="mailto:{{ email }}">{{ email }}</a></dd>
+
+	<dt>Groups</dt>
+	<dd>{{ groups }}</dd>
+
+	<dt>Permission</dt>
+	<dd>{{ perms }}</dd>
+
+	<dt>Date de la derniere connexion</dt>
+	<dd>{{ last_login }}</dd>
+
+	<dt>Date d'enregistrement</dt>
+	<dd>{{ date_joined }}</dd>
+
+	<dt>Adresses</dt>
+	<dd>{{ adresses}}</dd>
+</dl>
