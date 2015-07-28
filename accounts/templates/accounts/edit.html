@@ -1,6 +1,9 @@
-<h1>Edit user {{ user.username }}</h1>
+{% extends 'core/base.html' %}
 
+{% block title %}User edit{% endblock %}
+{% block header %}Edition du profile {{ user.username }}{% endblock %}
 
+{% block main %}
 <form method="POST" action="{% url 'accounts:edit' username=user.username %}">
 	{% csrf_token %}
 
@@ -16,3 +19,4 @@
 
 	<button>Sauvegarder</button>
 </form>
+{% endblock %}

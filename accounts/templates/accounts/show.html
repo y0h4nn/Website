@@ -1,5 +1,9 @@
-<h1>Profile utilisateur {{ user.username }} -- <a href="{% url 'accounts:edit' username=user.username %}">edit</a></h1>
+{% extends 'core/base.html' %}
 
+{% block title %}User edit{% endblock %}
+{% block header %}Profile utilisateur {{ user.username }} -- <a href="{% url 'accounts:edit' username=user.username %}">edit</a>{% endblock %}
+
+{% block main %}
 <dl>
 	<dt>Nom</dt>
 	<dd>{{ last_name }}</dd>
@@ -25,3 +29,4 @@
 	<dt>Adresses</dt>
 	<dd>{{ adresses}}</dd>
 </dl>
+{% endblock %}

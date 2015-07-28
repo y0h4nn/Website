@@ -1,21 +1,11 @@
-{% load static %}
+{% extends 'core/base.html' %}
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Site des eleves</title>
-		<meta charset="UTF-8" />
-		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+{% block title %}Index{% endblock %}
 
-	</head>
-
-	<body>
-		{% if request.user.is_active %}
-		<h1>Bonjour <a href="{% url 'accounts:show' username=request.user.username %}">{{ request.user }}</a></h1>
-			<a href="{% url 'accounts:logout' %}">Logout</a>
-		{% else %}
-			<h1>Bonjour</h1>
-			<a href="{% url 'accounts:login' %}">Login</a>
-		{% endif %}
-	</body>
-</html>
+{% block main %}
+	{% if request.user.is_active %}
+		<a href="{% url 'accounts:logout' %}">Logout</a>
+	{% else %}
+		<a href="{% url 'accounts:login' %}">Login</a>
+	{% endif %}
+{% endblock %}

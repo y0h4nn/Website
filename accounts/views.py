@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from . import forms
 
+
 def login(request):
     context = {}
 
@@ -20,9 +21,11 @@ def login(request):
 
     return render(request, 'login.html', context)
 
+
 def logout(request):
     auth.logout(request)
     return redirect(reverse('core:index'))
+
 
 # TODO require login
 def show(request, username):
@@ -41,6 +44,7 @@ def show(request, username):
         'date_joined': user.date_joined,
     }
     return render(request, 'accounts/show.html', context)
+
 
 def edit(request, username):
     if request.user.username != username:
