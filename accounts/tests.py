@@ -3,12 +3,13 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from . import backends
 
+
 class NormalAuthTest(TestCase):
     def setUp(self):
         self.auth_backend = backends.NormalAuth()
         self.imap_backend = backends.ImapAuth()
 
-        # Be carefull when changing user password ad they are hardcoded
+        # Be careful when changing user passwords as they are hardcoded
         self.ext_user = User.objects.create_user('AAA', 'AAA@exemple.com', 'AAA')
         self.enib_user = User.objects.create_user('BBB', 'BBB@enib.fr', 'BBB')
 
@@ -46,5 +47,4 @@ class NormalAuthTest(TestCase):
         auth_user = self.imap_backend.authenticate(email=mail, password=password)
         self.assertIsNotNone(auth_user)
         self.assertEqual(auth_user.email, mail)
-
 

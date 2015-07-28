@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^', include('core.urls', namespace="core")),
     url(r'^accounts/', include('accounts.urls', namespace="accounts")),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^poll/', include('poll.urls', namespace='poll')),
 ]

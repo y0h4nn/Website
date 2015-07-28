@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'core',
     'accounts',
+    'poll',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -108,4 +109,5 @@ STATIC_URL = '/static/'
 AUTHENTICATION_BACKENDS = (
     'accounts.backends.NormalAuth',
     'accounts.backends.ImapAuth',
+    'django.contrib.auth.backends.ModelBackend'
 )
