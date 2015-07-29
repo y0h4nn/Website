@@ -1,18 +1,8 @@
 from django.core.urlresolvers import reverse
+import core.register
 
 
 def menu(request):
-    menu = [
-        {'name': 'Accueil', 'url': reverse('core:index')}
-    ]
-
-    if request.user.is_active:
-        menu.append(
-            {
-                'name': 'Profil',
-                'url': reverse('accounts:show', kwargs={'username': request.user.username}),
-            }
-        )
     return {
-        'base_menu': menu
+        'base_menu': core.register.registered_views
     }

@@ -87,3 +87,4 @@ def edit(request, username):
         }
 
         return render(request, 'accounts/edit.html', context)
+

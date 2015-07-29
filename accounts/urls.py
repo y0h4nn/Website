@@ -1,5 +1,6 @@
 from django.conf.urls import include, url
 from . import views
+from core import register
 
 urlpatterns = [
     url(r'^login$', views.login, name='login'),
@@ -7,3 +8,4 @@ urlpatterns = [
     url(r'^(?P<username>[a-zA-Z0-9]+)$', views.show, name='show'),
     url(r'^(?P<username>[a-zA-Z0-9]+)/edit$', views.edit, name='edit'),
 ]
+
