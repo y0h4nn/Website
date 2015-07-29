@@ -1,0 +1,19 @@
+<div>
+{% for error in errors %}
+	<div> {{ error }} </div>
+{% endfor %}
+
+{{ question.text }}
+
+<form action="{% url 'poll:poll' pid=pid %}" method="POST">
+	{% csrf_token %}
+	{% for question in poll.questions.all %}
+		{{ question }}
+		{% for answer in question.answers.all %}
+			<input type="radio" id="answer{{answer.id}}" name="question{{question.id}}" value="{{answer.id}}"/><label for="answer{{answer.id}}">{{ answer }}</label>
+		{% endfor %}
+		<br>
+	{% endfor %}
+<button>Voter</button>
+</form>
+</div>
