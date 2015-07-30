@@ -40,3 +40,7 @@ def thanks(request):
 def already(request):
     return render(request, 'poll/already.html', {})
 
+def admin_index(request):
+    context = {'polls': Poll.objects.all()}
+    return render(request, 'poll/admin/index.html', context)
+

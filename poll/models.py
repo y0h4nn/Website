@@ -7,6 +7,9 @@ class Poll(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
 
+    def __str__(self):
+        return self.title
+
 
 class Question(models.Model):
     poll = models.ForeignKey('Poll', related_name='questions')
