@@ -1,0 +1,13 @@
+<h1>{{ poll }}</h1>
+
+{% for question in poll.questions.all %}
+	<div>
+		{{ question }}
+		<div style="margin-left: 50px">
+			{% for answer in question.answers.all %}
+				{{ answer }} => {{ answer.votes }}
+				<br>
+			{% endfor %}
+		</div>
+	</div>
+{% endfor %}

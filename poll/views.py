@@ -44,3 +44,8 @@ def admin_index(request):
     context = {'polls': Poll.objects.all()}
     return render(request, 'poll/admin/index.html', context)
 
+def admin_view_poll(request, pid):
+    p = Poll.objects.get(id=pid)
+    context = {'poll': p}
+    return render(request, 'poll/admin/view_poll.html', context)
+
