@@ -1,5 +1,5 @@
 from django.db.models import F
-from django.http import Http404
+from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from .models import Question, Answer, Poll, Voter
@@ -8,7 +8,7 @@ from .forms import PollForm
 
 def question(request, pid):
     if not request.user.is_authenticated():
-        raise Http404
+        return HttpResponseForbidden()
     p = get_object_or_404(Poll, id=pid)
     try:
         already_voted = Voter.objects.get(user=request.user, poll=p)
@@ -65,7 +65,7 @@ def admin_add_poll(request):
                     a = Answer(question=q, text=form.cleaned_data[answer], votes=0)
                     a.save()
     else:
-        raise Http404
+        return HttpResponseNotAllowed()
     context= {'form': form}
     return render(request, 'poll/admin/add.html', context)
 
