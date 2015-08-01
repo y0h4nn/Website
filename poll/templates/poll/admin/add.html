@@ -1,0 +1,5 @@
+<form method="POST" action="{% url 'poll:admin_add_poll' %}">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<button>Ajouter</button>
+</form>

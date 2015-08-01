@@ -1,3 +1,5 @@
 {% for poll in polls %}
 	<a href="{% url 'poll:admin_view_poll' pid=poll.id %}">{{ poll }}</a>
 {% endfor %}
+
+<a href="{% url 'poll:admin_add_poll' %}">Ajouter un sondage</a>

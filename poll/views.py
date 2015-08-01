@@ -3,6 +3,7 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from .models import Question, Answer, Poll, Voter
+from .forms import PollForm
 
 
 def question(request, pid):
@@ -48,4 +49,23 @@ def admin_view_poll(request, pid):
     p = Poll.objects.get(id=pid)
     context = {'poll': p}
     return render(request, 'poll/admin/view_poll.html', context)
+
+def admin_add_poll(request):
+    if request.method == 'GET':
+        form = PollForm()
+    elif request.method == 'POST':
+        form = PollForm(request.POST)
+        if form.is_valid():
+            p = Poll(title=form.cleaned_data['title'], author=request.user, start_date=form.cleaned_data['start_time'], end_date=form.cleaned_data['end_time'])
+            p.save()
+            q = Question(poll=p, text=form.cleaned_data['q1'])
+            q.save()
+            a = Answer(question=q, text=form.cleaned_data['a1_q1'], votes=0)
+            a.save()
+            a = Answer(question=q, text=form.cleaned_data['a2_q1'], votes=0)
+            a.save()
+    else:
+        raise Http404
+    context= {'form': form}
+    return render(request, 'poll/admin/add.html', context)
 
