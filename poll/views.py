@@ -46,7 +46,7 @@ def admin_index(request):
     return render(request, 'poll/admin/index.html', context)
 
 def admin_view_poll(request, pid):
-    p = Poll.objects.get(id=pid)
+    p = get_object_or_404(Poll, id=pid)
     context = {'poll': p}
     return render(request, 'poll/admin/view_poll.html', context)
 
