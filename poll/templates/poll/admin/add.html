@@ -1,5 +1,31 @@
 <form method="POST" action="{% url 'poll:admin_add_poll' %}">
 	{% csrf_token %}
 	{{ form.as_p }}
+	<div id="main_form">
+	</div>
+	<a href="#" onclick="add_question();">Ajouter une question</a>
 	<button>Ajouter</button>
 </form>
+
+<script>
+
+	var nb_questions = 1;
+	var answers_nb = {}
+	function add_question(){
+		var main_form = document.getElementById("main_form");
+		main_form.insertAdjacentHTML('beforeend', "<div><label for=\"q" + nb_questions + "\">Question " + nb_questions + ": </label>");
+		main_form.insertAdjacentHTML('beforeend', "<input type=\"text\" id=\"q" + nb_questions + "\" name=\"q" + nb_questions + "\"/>");
+		main_form.insertAdjacentHTML('beforeend', "<a href=\"#\" onclick=\"add_response(" + nb_questions + ")\">Ajouter une réponse</a><div id=\"q_a" + nb_questions + "\"></div></div>");
+		answers_nb[nb_questions] = 0;
+		nb_questions += 1;
+	}
+
+	function add_response(qid){
+		var answer_div = document.getElementById("q_a" + qid);
+		aid = answers_nb[qid];
+		answer_div.insertAdjacentHTML('beforeend', "<div><label for=\"a" + aid + "\">Réponse " + aid + "</label>");
+		answer_div.insertAdjacentHTML('beforeend', "<input type=\"text\" name=\"a" + aid + "_q" + qid + "\" id=\"a" + aid +"\"/></div>");
+		answers_nb[qid] += 1;
+	}
+
+</script>

@@ -58,12 +58,12 @@ def admin_add_poll(request):
         if form.is_valid():
             p = Poll(title=form.cleaned_data['title'], author=request.user, start_date=form.cleaned_data['start_time'], end_date=form.cleaned_data['end_time'])
             p.save()
-            q = Question(poll=p, text=form.cleaned_data['q1'])
-            q.save()
-            a = Answer(question=q, text=form.cleaned_data['a1_q1'], votes=0)
-            a.save()
-            a = Answer(question=q, text=form.cleaned_data['a2_q1'], votes=0)
-            a.save()
+            for question, answers in form.questions_answers.items():
+                q = Question(poll=p, text=form.cleaned_data[question])
+                q.save()
+                for answer in answers:
+                    a = Answer(question=q, text=form.cleaned_data[answer], votes=0)
+                    a.save()
     else:
         raise Http404
     context= {'form': form}
