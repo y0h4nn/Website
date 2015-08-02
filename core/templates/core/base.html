@@ -26,12 +26,12 @@
 		<section id="nav">
 			<nav>
 				<ul>
-					{% menu_item 'Index' 'core:index' %}
+					{% base_menu_item 'Index' 'core:index' %}
 					{% if request.user.is_active %}
-						{% menu_item 'Profil' 'accounts:show' username=request.user.username %}
-						{% menu_item 'Logout' 'accounts:logout' %}
+						{% base_menu_item 'Profil' 'accounts:show' username=request.user.username %}
+						{% base_menu_item 'Logout' 'accounts:logout' %}
 					{% else %}
-						{% menu_item 'Login' 'accounts:login' %}
+						{% base_menu_item 'Login' 'accounts:login' %}
 					{% endif %}
 				</ul>
 			</nav>
