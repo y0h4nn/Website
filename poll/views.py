@@ -41,14 +41,17 @@ def thanks(request):
 def already(request):
     return render(request, 'poll/already.html', {})
 
+
 def admin_index(request):
     context = {'polls': Poll.objects.all()}
     return render(request, 'poll/admin/index.html', context)
+
 
 def admin_view_poll(request, pid):
     p = get_object_or_404(Poll, id=pid)
     context = {'poll': p}
     return render(request, 'poll/admin/view_poll.html', context)
+
 
 def admin_add_poll(request):
     if request.method == 'GET':
