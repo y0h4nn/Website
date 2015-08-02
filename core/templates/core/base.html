@@ -1,4 +1,5 @@
 {% load static %}
+{% load menu_item %}
 
 <!DOCTYPE>
 
@@ -11,15 +12,42 @@
 		{% block scripts %}{% endblock %}
 	</head>
 	<body>
-		<h1>{% block header %}{{ header }}{% endblock %}</h1>
-		<nav id="base_menu">
-			<ul>
-				{% for item in base_menu %}
-					<li><a href="{{ item.url }}" title="{{ item.name }}">{{ item.name }}</a></li>
-				{% endfor %}
-			</ul>
-		</nav>
-		{% block main %}
-		{% endblock main %}
+		<section id="header">
+			<img id="logo" src="{% static 'images/logo.png' %}" alt="logo-bde"/>
+			<div>
+				<p>
+					<q>
+						Aaaaah cher élève ...
+					</q>
+				</p>
+			</div>
+		</section>
+
+		<section id="nav">
+			<nav>
+				<ul>
+					{% menu_item 'Index' 'core:index' %}
+					{% if request.user.is_active %}
+						{% menu_item 'Profil' 'accounts:show' username=request.user.username %}
+						{% menu_item 'Logout' 'accounts:logout' %}
+					{% else %}
+						{% menu_item 'Login' 'accounts:login' %}
+					{% endif %}
+				</ul>
+			</nav>
+		</section>
+
+		<section id="main_container">
+			<h1>
+				{% block header %}
+				{% endblock header %}
+			</h1>
+			{% block main %}
+			{% endblock main %}
+		</section>
+
+		<section id="footer">
+		</section>
+
 	</body>
 </html>

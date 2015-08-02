@@ -1,15 +1,8 @@
-{% load static %}
+{% extends 'core/base.html' %}
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Site des eleves</title>
-		<meta charset="UTF-8" />
-		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+{% block title %}Index{% endblock %}
 
-	</head>
-
-	<body>
+{% block main %}
 		{% if error %}
 			<p>
 				{{ error }}
@@ -25,5 +18,4 @@
 
 			<button>Login</button>
 		</form>
-	</body>
-</html>
+{% endblock %}

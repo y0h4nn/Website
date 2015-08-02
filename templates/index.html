@@ -3,9 +3,5 @@
 {% block title %}Index{% endblock %}
 
 {% block main %}
-	{% if request.user.is_active %}
-		<a href="{% url 'accounts:logout' %}">Logout</a>
-	{% else %}
-		<a href="{% url 'accounts:login' %}">Login</a>
-	{% endif %}
+	meh
 {% endblock %}

@@ -1,0 +1,66 @@
+$base-bg: #FFF
+$base-fg: #333
+$header-bg: #DDD
+$nav-bg: #EEE
+$nav-fg: black
+
+*
+  box-sizing: border-box
+
+html
+  height: 100%
+  color: $base-fg
+
+body
+  margin: 0
+  padding: 0
+  min-height: 100%
+  background-color: $base-bg
+
+a
+  text-decoration: none
+
+nav > ul
+  display: flex
+  flex-flow: row
+  justify-content: flex-start
+  align-content: center
+  align-items: center
+  padding: 0
+  margin: 0
+
+  & > li
+    flex: 0 1 auto
+    list-style: none
+
+    & > a
+      display: block
+      padding: 1.2em
+
+#header
+  padding: 1em
+  background-color: $header-bg
+  display: flex
+  flex-flow: row
+  justify-content: flex-start
+  align-content: center
+  align-items: center
+
+  & > div
+    flex: 1 1 auto
+    text-align: right
+
+#logo
+  width: 150px
+
+#nav
+  background-color: $nav-bg
+  a
+    color: $nav-fg
+    &:hover, &.selected
+      background-color: $base-bg
+      color: $base-fg
+ 
+
+#main_container
+  padding: 2em
