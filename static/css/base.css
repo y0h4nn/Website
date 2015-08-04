@@ -110,10 +110,11 @@ nav > ul {
     border-radius: 3px;
     border: none;
     padding: 0.5em 1em;
+    border-radius: 4px;
     cursor: pointer;
     margin: 0.75em 0;
     transition: background-color 0.25s;
-    color: #555; }
+    color: white; }
     #user_container header button i {
       padding: 0 1em;
       vertical-align: middle; }

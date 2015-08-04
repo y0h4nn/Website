@@ -15,7 +15,9 @@
 		<section id="nav_container">
 			<header>
 				<div>
-					<img id="logo" src="{% static 'images/logo.png' %}" alt="logo" />
+					<a href="{% url 'core:index' %}">
+						<img id="logo" src="{% static 'images/logo.png' %}" alt="logo" />
+					</a>
 				</div>
 				<nav>
 					<ul>
