@@ -52,8 +52,10 @@ nav > ul {
     margin: 2.2em 0; }
     #nav_container main form div {
       position: relative;
-      height: 2em; }
+      height: 2em;
+      font-size: 15px; }
     #nav_container main form i {
+      font-size: 15px;
       display: block;
       position: absolute;
       color: #555;
@@ -61,6 +63,7 @@ nav > ul {
       text-shadow: 0 0 10px transparent;
       transition: color 0.5s, text-shadow; }
     #nav_container main form input {
+      font-size: 15px;
       display: block;
       position: absolute;
       background-color: #3A3A3A;
