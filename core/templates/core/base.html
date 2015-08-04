@@ -1,7 +1,6 @@
 {% load static %}
 {% load menu_item %}
-
-<!DOCTYPE>
+<!DOCTYPE html>
 
 <html>
 	<head>
@@ -37,9 +36,6 @@
 				<nav>
 					<ul>
 						{% base_menu_item 'Index' 'core:index' %}
-						{% if request.user.is_active %}
-							{% base_menu_item 'Profil' 'accounts:show' username=request.user.username %}
-						{% endif %}
 					</ul>
 				</nav>
 			</main>
@@ -69,7 +65,24 @@
 		<section id="user_container">
 			<header>
 				{% if request.user.is_active %}
-				<a href="{% url 'accounts:logout' %}">Deconexion</a>
+				<img src="{% static 'images/monkey-git.jpg' %}" alt="picture" />
+				{% if request.user.first_name and request.user.last_name %}
+					<h1 class="center">
+						{% if request.user.profile.nickname %}
+							«{{ request.user.profile.nickname }}»<br/>
+						{% endif %}
+						{{ request.user.first_name }}
+						{{ request.user.last_name }}
+					</h1>
+				{% else %}
+					<h1 class="center">{{ request.user.username }}</h1>
+				{% endif %}
+				<nav>
+					<ul>
+						<li><a href="{% url 'accounts:show' username=request.user.username %}"><i class="fa fa-user"></i> Mon profil</a></li>
+						<li><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> Deconnexion</a></li>
+					</ul>
+				</nav>
 				{% else %}
 					<h1>Connexion<a href="#"> <i class="fa fa-question-circle"></i></a></h1>
 					<form action="{% url 'accounts:login' %}" method="POST">
