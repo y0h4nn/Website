@@ -22,12 +22,12 @@ nav > ul {
   list-style: none; }
 
 #main_container {
-  flex: 1 1 auto; }
-  #main_container > main {
-    margin: 2.5em; }
+  flex: 1 1 auto;
+  padding: 2.5em; }
 
 #nav_container {
   min-width: 300px;
+  flex: 0 1 300px;
   background-color: #333;
   padding: 1.2em; }
   #nav_container header {
@@ -55,7 +55,8 @@ nav > ul {
       position: absolute;
       color: #555;
       margin: 0.5em 0 0 0.5em;
-      transition: color 0.5s; }
+      text-shadow: 0 0 10px transparent;
+      transition: color 0.5s, text-shadow; }
     #nav_container main form input {
       display: block;
       position: absolute;
@@ -69,7 +70,8 @@ nav > ul {
       #nav_container main form input:focus {
         background-color: #444; }
         #nav_container main form input:focus + i {
-          color: white; }
+          color: orange;
+          text-shadow: 0 0 10px orange; }
   #nav_container main nav a {
     color: white;
     display: block;
@@ -80,8 +82,40 @@ nav > ul {
       background-color: #2a2a2a; }
 
 #user_container {
-  min-width: 300px;
-  background-color: beige; }
+  min-width: 225px;
+  flex: 0 1 225px;
+  background-color: #f2f2f2;
+  padding: 1em; }
+  #user_container header h1 {
+    font-size: 1.1em;
+    margin: 0.75em 0; }
+    #user_container header h1 i {
+      color: #bbb; }
+  #user_container header input, #user_container header label {
+    display: block;
+    width: 100%;
+    margin: 0.5em 0; }
+  #user_container header label {
+    padding: 0.25em 0; }
+  #user_container header input {
+    background-color: #fff;
+    border: 1px solid #dfdfdf;
+    padding: 0.4em 0.6em; }
+  #user_container header button {
+    background-color: #FCCD76;
+    width: 100%;
+    border-radius: 3px;
+    border: none;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    margin: 0.75em 0;
+    transition: background-color 0.25s;
+    color: #555; }
+    #user_container header button i {
+      padding: 0 1em;
+      vertical-align: middle; }
+    #user_container header button:hover {
+      background-color: #FFC458; }
 
 #logo {
   width: 150px; }

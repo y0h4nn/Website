@@ -22,6 +22,7 @@
 					<ul>
 						<li><a href="#"><i class="fa fa-envelope"></i></a></li>
 						<li><a href="#"><i class="fa fa-inbox"></i></a></li>
+						<li><a href="#"><i class="fa fa-question-circle"></i></a></li>
 					</ul>
 				</nav>
 			</header>
@@ -38,9 +39,6 @@
 						{% base_menu_item 'Index' 'core:index' %}
 						{% if request.user.is_active %}
 							{% base_menu_item 'Profil' 'accounts:show' username=request.user.username %}
-							{% base_menu_item 'Logout' 'accounts:logout' %}
-						{% else %}
-							{% base_menu_item 'Login' 'accounts:login' %}
 						{% endif %}
 					</ul>
 				</nav>
@@ -54,8 +52,10 @@
 
 		<section id="main_container">
 			<header>
-				{% block header %}
-				{% endblock header %}
+				<h1>
+					{% block header %}
+					{% endblock header %}
+				</h1>
 			</header>
 			<main>
 				{% block main %}
@@ -68,25 +68,24 @@
 
 		<section id="user_container">
 			<header>
-				<form action="." method="POST">
-					{% csrf_token %}
+				{% if request.user.is_active %}
+				<a href="{% url 'accounts:logout' %}">Deconexion</a>
+				{% else %}
+					<h1>Connexion<a href="#"> <i class="fa fa-question-circle"></i></a></h1>
+					<form action="{% url 'accounts:login' %}" method="POST">
+						{% csrf_token %}
 
-					<input type="text" id="email" name="email" />
-					<label for="email">Email de l'utilisateur</label>
+						<input type="text" id="email" name="email" placeholder="email"/>
+						<input type="password" id="password" name="password" placeholder="password"/>
 
-					<input type="password" id="password" name="password" />
-					<label for="password">Mot de passe</label>
+						<button>connexion<i class="fa fa-chevron-right"></i></button>
 
-					<button>connexion</button>
-
-				</form>
+					</form>
+				{% endif %}
 			</header>
 			<main>
 
 			</main>
-			<footer>
-				?	
-			</footer>
 		</section>
 
 	</body>

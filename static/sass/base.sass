@@ -29,12 +29,11 @@ nav > ul
 
 #main_container
   flex: 1 1 auto
-
-  & > main
-    margin: 2.5em 
+  padding: 2.5em
 
 #nav_container
   min-width: 300px
+  flex: 0 1 300px
   background-color: #333
   padding: 1.2em
 
@@ -69,7 +68,8 @@ nav > ul
       position: absolute
       color: #555
       margin: 0.5em 0 0 0.5em
-      transition: color 0.5s
+      text-shadow: 0 0 10px transparent
+      transition: color 0.5s, text-shadow
 
     input
       display: block
@@ -86,7 +86,8 @@ nav > ul
         background-color: #444
 
         & + i
-          color: white
+          color: orange
+          text-shadow: 0 0 10px orange
 
   main nav a
     color: white
@@ -99,8 +100,49 @@ nav > ul
       background-color: #2a2a2a
 
 #user_container
-  min-width: 300px
-  background-color: beige
+  min-width: 225px
+  flex: 0 1 225px
+  background-color: #f2f2f2
+  padding: 1em
+
+  header
+    h1
+      font-size: 1.1em
+      margin: 0.75em 0
+      i
+        color: #bbb
+
+    input, label
+      display: block
+      width: 100%
+      margin: 0.5em 0
+
+    label
+      padding: 0.25em 0
+
+    input
+      background-color: #fff
+      border: 1px solid #dfdfdf
+      padding: 0.4em 0.6em
+
+    button
+      background-color: #FCCD76
+      width: 100%
+      border-radius: 3px
+      border: none
+      padding: 0.5em 1em
+      cursor: pointer
+      margin: 0.75em 0
+      transition: background-color 0.25s
+      color: #555
+
+      i
+        padding: 0 1em
+        vertical-align: middle
+
+      &:hover
+        background-color: #FFC458
+
 
 #logo
   width: 150px
