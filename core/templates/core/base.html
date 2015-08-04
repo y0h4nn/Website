@@ -8,45 +8,85 @@
 		<title>{% block title %}Site des élèves{% endblock %}</title>
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" href="{% static 'css/base.css' %}" />
+		<link rel="stylesheet" href="{% static 'contrib/font-awesome-4.4.0/css/font-awesome.min.css' %}" />
 		{% block styles %}{% endblock %}
 		{% block scripts %}{% endblock %}
 	</head>
 	<body>
-		<section id="header">
-			<img id="logo" src="{% static 'images/logo.png' %}" alt="logo-bde"/>
-			<div>
+		<section id="nav_container">
+			<header>
+				<div>
+					<img id="logo" src="{% static 'images/logo.png' %}" alt="logo" />
+				</div>
+				<nav>
+					<ul>
+						<li><a href="#"><i class="fa fa-envelope"></i></a></li>
+						<li><a href="#"><i class="fa fa-inbox"></i></a></li>
+					</ul>
+				</nav>
+			</header>
+			<main>
+				<form action="." method="POST">
+					<div>
+						{% csrf_token %}
+						<input type="text" name="command" autocomplete="off" />
+						<i class="fa fa-chevron-right"></i>
+					</div>
+				</form>
+				<nav>
+					<ul>
+						{% base_menu_item 'Index' 'core:index' %}
+						{% if request.user.is_active %}
+							{% base_menu_item 'Profil' 'accounts:show' username=request.user.username %}
+							{% base_menu_item 'Logout' 'accounts:logout' %}
+						{% else %}
+							{% base_menu_item 'Login' 'accounts:login' %}
+						{% endif %}
+					</ul>
+				</nav>
+			</main>
+			<footer>
 				<p>
-					<q>
-						Aaaaah cher élève ...
-					</q>
+					Made with love by bananium dev team
 				</p>
-			</div>
-		</section>
-
-		<section id="nav">
-			<nav>
-				<ul>
-					{% base_menu_item 'Index' 'core:index' %}
-					{% if request.user.is_active %}
-						{% base_menu_item 'Profil' 'accounts:show' username=request.user.username %}
-						{% base_menu_item 'Logout' 'accounts:logout' %}
-					{% else %}
-						{% base_menu_item 'Login' 'accounts:login' %}
-					{% endif %}
-				</ul>
-			</nav>
+			</footer>
 		</section>
 
 		<section id="main_container">
-			<h1>
+			<header>
 				{% block header %}
 				{% endblock header %}
-			</h1>
-			{% block main %}
-			{% endblock main %}
+			</header>
+			<main>
+				{% block main %}
+				{% endblock main %}
+
+				{% lorem 50 p %}
+
+			</main>
 		</section>
 
-		<section id="footer">
+		<section id="user_container">
+			<header>
+				<form action="." method="POST">
+					{% csrf_token %}
+
+					<input type="text" id="email" name="email" />
+					<label for="email">Email de l'utilisateur</label>
+
+					<input type="password" id="password" name="password" />
+					<label for="password">Mot de passe</label>
+
+					<button>connexion</button>
+
+				</form>
+			</header>
+			<main>
+
+			</main>
+			<footer>
+				?	
+			</footer>
 		</section>
 
 	</body>

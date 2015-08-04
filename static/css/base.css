@@ -9,50 +9,81 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100%;
-  background-color: #FFF; }
+  background-color: #FFF;
+  display: flex;
+  flex-flow: row;
+  align-items: stretch; }
 
 a {
   text-decoration: none; }
 
 nav > ul {
-  display: flex;
-  flex-flow: row;
-  justify-content: flex-start;
-  align-content: center;
-  align-items: center;
   padding: 0;
-  margin: 0; }
-  nav > ul > li {
-    flex: 0 1 auto;
-    list-style: none; }
-    nav > ul > li > a {
-      display: block;
-      padding: 1.2em; }
+  list-style: none; }
 
-#header {
-  padding: 1em;
-  background-color: #DDD;
-  display: flex;
-  flex-flow: row;
-  justify-content: flex-start;
-  align-content: center;
-  align-items: center; }
-  #header > div {
-    flex: 1 1 auto;
-    text-align: right; }
+#main_container {
+  flex: 1 1 auto; }
+  #main_container > main {
+    margin: 2.5em; }
+
+#nav_container {
+  min-width: 300px;
+  background-color: #333;
+  padding: 1.2em; }
+  #nav_container header {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-items: center;
+    margin: 1em 0; }
+    #nav_container header div {
+      flex: 1 1 auto; }
+    #nav_container header nav {
+      text-align: right; }
+      #nav_container header nav a {
+        display: block;
+        padding: 0.25em;
+        color: white;
+        font-size: 1.5em; }
+  #nav_container main form {
+    margin: 2.2em 0; }
+    #nav_container main form div {
+      position: relative;
+      height: 2em; }
+    #nav_container main form i {
+      display: block;
+      position: absolute;
+      color: #555;
+      margin: 0.5em 0 0 0.5em;
+      transition: color 0.5s; }
+    #nav_container main form input {
+      display: block;
+      position: absolute;
+      background-color: #3A3A3A;
+      border: none;
+      border-radius: 3px;
+      padding: 0.5em 1em 0.5em 1.75em;
+      width: 100%;
+      color: #CCC;
+      transition: background-color 0.25s; }
+      #nav_container main form input:focus {
+        background-color: #444; }
+        #nav_container main form input:focus + i {
+          color: white; }
+  #nav_container main nav a {
+    color: white;
+    display: block;
+    padding: 0.75em 1em;
+    border-radius: 3px;
+    margin: 5px 0; }
+    #nav_container main nav a:hover, #nav_container main nav a.selected {
+      background-color: #2a2a2a; }
+
+#user_container {
+  min-width: 300px;
+  background-color: beige; }
 
 #logo {
   width: 150px; }
-
-#nav {
-  background-color: #EEE; }
-  #nav a {
-    color: black; }
-    #nav a:hover, #nav a.selected {
-      background-color: #FFF;
-      color: #333; }
-
-#main_container {
-  padding: 2em; }
 
 /*# sourceMappingURL=base.css.map */

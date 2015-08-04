@@ -16,51 +16,91 @@ body
   padding: 0
   min-height: 100%
   background-color: $base-bg
+  display: flex
+  flex-flow: row
+  align-items: stretch
 
 a
   text-decoration: none
 
 nav > ul
-  display: flex
-  flex-flow: row
-  justify-content: flex-start
-  align-content: center
-  align-items: center
   padding: 0
-  margin: 0
+  list-style: none
 
-  & > li
-    flex: 0 1 auto
-    list-style: none
+#main_container
+  flex: 1 1 auto
 
-    & > a
+  & > main
+    margin: 2.5em 
+
+#nav_container
+  min-width: 300px
+  background-color: #333
+  padding: 1.2em
+
+
+  header
+    display: flex
+    flex-flow: row
+    justify-content: center
+    align-items: center
+    margin: 1em 0
+
+    div
+      flex: 1 1 auto
+
+    nav
+      text-align: right
+
+      a
+        display: block
+        padding: 0.25em
+        color: white
+        font-size: 1.5em
+ 
+  main form
+    margin: 2.2em 0
+    div
+      position: relative
+      height: 2em
+
+    i
       display: block
-      padding: 1.2em
+      position: absolute
+      color: #555
+      margin: 0.5em 0 0 0.5em
+      transition: color 0.5s
 
-#header
-  padding: 1em
-  background-color: $header-bg
-  display: flex
-  flex-flow: row
-  justify-content: flex-start
-  align-content: center
-  align-items: center
+    input
+      display: block
+      position: absolute
+      background-color: #3A3A3A
+      border: none
+      border-radius: 3px
+      padding: 0.5em 1em 0.5em 1.75em
+      width: 100%
+      color: #CCC
+      transition: background-color 0.25s
 
-  & > div
-    flex: 1 1 auto
-    text-align: right
+      &:focus
+        background-color: #444
+
+        & + i
+          color: white
+
+  main nav a
+    color: white
+    display: block
+    padding: 0.75em 1em
+    border-radius: 3px
+    margin: 5px 0
+
+    &:hover, &.selected
+      background-color: #2a2a2a
+
+#user_container
+  min-width: 300px
+  background-color: beige
 
 #logo
   width: 150px
-
-#nav
-  background-color: $nav-bg
-  a
-    color: $nav-fg
-    &:hover, &.selected
-      background-color: $base-bg
-      color: $base-fg
- 
-
-#main_container
-  padding: 2em
