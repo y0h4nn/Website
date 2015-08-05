@@ -1,5 +1,6 @@
 {% load static %}
 {% load menu_item %}
+
 <!DOCTYPE html>
 
 <html>
@@ -37,7 +38,7 @@
 				</form>
 				<nav>
 					<ul>
-						{% base_menu_item 'Index' 'core:index' %}
+						{% _base_menu_item 'Index' 'core:index' %}
 					</ul>
 				</nav>
 			</main>
@@ -52,15 +53,20 @@
 			<header>
 				<h1>
 					{% block header %}
+						Default title
 					{% endblock header %}
 				</h1>
+
+				<nav>
+					<ul>
+						{% block menu %}
+						{% endblock menu %}
+					</ul>
+				</nav>
 			</header>
 			<main>
 				{% block main %}
 				{% endblock main %}
-
-				{% lorem 50 p %}
-
 			</main>
 		</section>
 
