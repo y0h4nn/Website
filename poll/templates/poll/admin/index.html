@@ -1,5 +1,13 @@
-{% for poll in polls %}
-	<a href="{% url 'poll:admin_view_poll' pid=poll.id %}">{{ poll }}</a>
-{% endfor %}
+{% extends 'core/base.html' %}
 
-<a href="{% url 'poll:admin_add_poll' %}">Ajouter un sondage</a>
+{% block header %} Liste des sondages {% endblock %}
+{% block main %}
+
+	{% for poll in polls %}
+		<a href="{% url 'poll:admin_view_poll' pid=poll.id %}">{{ poll }}</a>
+	{% endfor %}
+
+	<a href="{% url 'poll:admin_add_poll' %}">Ajouter un sondage</a>
+
+{% endblock %}
+
