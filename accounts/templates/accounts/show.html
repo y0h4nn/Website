@@ -1,7 +1,19 @@
 {% extends 'core/base.html' %}
 
+{% load menu_item %}
+
 {% block title %}User edit{% endblock %}
-{% block header %}Profile utilisateur {{ user.username }} -- <a href="{% url 'accounts:edit' username=user.username %}">edit</a>{% endblock %}
+
+{% block header %}
+	Profil utilisateur
+{% endblock %}
+
+{% block menu %}
+	{% menu_item username 'accounts:show' username=username %}
+	{% if request.user.username == username %}
+		{% menu_item 'edit' 'accounts:edit' username=username %}
+	{% endif %}
+{% endblock%}
 
 {% block main %}
 <dl>

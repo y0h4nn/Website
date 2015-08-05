@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from . import forms
+from core.register import menu_item
 
 
 def login(request):
@@ -35,6 +36,7 @@ def show(request, username):
         return redirect(reverse('core:index'))
 
     context = {
+        'username': username,
         'last_name': user.last_name or "Donnée inconue",
         'first_name': user.first_name or "Donnée inconue",
         'email': user.email,
@@ -64,13 +66,11 @@ def edit(request, username):
             userform.save()
         elif not userform.is_valid():
             error = True
-            print("bad user form")
 
         if profileform.has_changed() and profileform.is_valid():
             profileform.save()
         elif not profileform.is_valid():
             error = True
-            print("bad profile form")
 
         if error:
             return redirect(reverse('accounts:edit', kwargs={'username': username}))

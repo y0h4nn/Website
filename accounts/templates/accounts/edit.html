@@ -1,7 +1,19 @@
 {% extends 'core/base.html' %}
+{% load staticfiles %}
+{% load menu_item %}
 
 {% block title %}User edit{% endblock %}
-{% block header %}Edition du profile {{ user.username }}{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'accounts/js/edit.js' %}"></script>
+{% endblock scripts %}
+
+{% block header %}Edition du profil{% endblock %}
+
+{% block menu %}
+	{% menu_item request.user.username 'accounts:show' username=request.user.username %}
+	{% menu_item 'edit' 'accounts:edit' username=request.user.username %}
+{% endblock %}
 
 {% block main %}
 <form method="POST" action="{% url 'accounts:edit' username=user.username %}">
@@ -15,6 +27,20 @@
 	<fieldset>
 		<legend>Configuration du profil</legend>
 		{{ profileform }}
+	</fieldset>
+
+	<fieldset>
+		<legend>e-mails</legend>
+		<div id="emails">
+		</div>
+		<button id="emails_add" type="button"><i class="fa fa-plus"></i> Ajouter une adresse email</button>
+	</fieldset>
+
+	<fieldset>
+		<legend>Adresses</legend>
+		<div id="address_container">
+		</div>
+		<button id="address_add" type="button"><i class="fa fa-plus"></i> Ajouter une adresse</button>
 	</fieldset>
 
 	<button>Sauvegarder</button>
