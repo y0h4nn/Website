@@ -35,3 +35,8 @@ class PollForm(forms.Form):
                 self.questions_answers[q].append(a)
                 nb_a += 1
 
+    def clean(self):
+        cleaned_data = super().clean()
+        for q, a in self.questions_answers.items():
+            if not a:
+                self.add_error(q, "Vous ne pouvez pas ajouter de question sans réponse.")
