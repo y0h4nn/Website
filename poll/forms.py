@@ -1,4 +1,29 @@
 import django.forms as forms
+import json
+
+
+class QuestionWidget(forms.widgets.TextInput):
+    def __init__(self, qid, answers, data, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.qid = qid
+        self.answers = answers
+        self.data = data
+
+    def render(self, name="", value="", **kwargs):
+        plus = "<a href=\"#\" onclick=\"add_response(" + self.qid[1:] + ")\">Ajouter une réponse</a><div id=\"q_a" + self.qid + "\"></div>"
+        plus += "<div id=\"q_a" + self.qid[1:] + "\">"
+        for i, answer in enumerate(self.answers):
+            plus += "<div><label for=\""+ answer +"\">Réponse" + str(i) + "</label></div>" + super().render(name=answer, value=self.data[answer], attrs={"id": answer})
+        plus += "</div>"
+        return super().render(name=name, value=value, **kwargs) + plus
+
+class QuestionField(forms.Field):
+    def __init__(self, qid, answers, data, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.qid = str(qid)
+        self.answers = answers
+        self.data = data
+        self.widget = QuestionWidget(self.qid, self.answers, self.data)
 
 
 class PollForm(forms.Form):
@@ -8,6 +33,8 @@ class PollForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.q_a_nb = "{}"
+        self.questions_answers = {}
         if not len(args):  # If the request is empty
             return
         questions = []
@@ -20,23 +47,27 @@ class PollForm(forms.Form):
             if arg.startswith('a'):
                 answers.append(arg)
 
-        self.questions_answers = {}
         nb_q = 1
         # Association of questions and answers
         for q in sorted(questions, key=lambda x: int(x[1:])):
             nb_a = 1
             self.questions_answers[q] = []
-            self.fields[q] = forms.CharField(initial=self.data[q], label="Question " + str(nb_q))
-            nb_q += 1
             for a in sorted(answers, key=lambda x: int(x[1:].split("_")[0])):
                 if not a.endswith(q):
                     continue
-                self.fields[a] = forms.CharField(initial=self.data[a], label="Réponse " + str(nb_a))
                 self.questions_answers[q].append(a)
                 nb_a += 1
+            self.fields[q] = QuestionField(qid=q, answers=self.questions_answers[q], data=self.data, initial=self.data[q], label="Question " + str(nb_q))
+            nb_q += 1
+        self.q_a_nb = json.dumps({q[1:]: len(a) for q, a in self.questions_answers.items()})
 
     def clean(self):
         cleaned_data = super().clean()
         for q, a in self.questions_answers.items():
             if not a:
                 self.add_error(q, "Vous ne pouvez pas ajouter de question sans réponse.")
+            for answer in a:
+                cleaned_data[answer] = forms.CharField(required=False).clean(self.data[answer])
+                if not cleaned_data[answer]:
+                    self.add_error(q, "Vous ne pouvez pas avoir de réponse vide")
+

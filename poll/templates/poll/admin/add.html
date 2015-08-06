@@ -15,7 +15,7 @@
 	<script>
 
 		var nb_questions = {{ form.questions_answers.keys|length }};
-		var answers_nb = {}
+		var answers_nb = {{ form.q_a_nb | safe }}
 		function add_question(){
 			nb_questions += 1;
 			var main_form = document.getElementById("main_form");
@@ -26,11 +26,11 @@
 		}
 
 		function add_response(qid){
+			answers_nb[qid] += 1;
 			var answer_div = document.getElementById("q_a" + qid);
 			aid = answers_nb[qid];
 			answer_div.insertAdjacentHTML('beforeend', "<div><label for=\"a" + aid + "\">Réponse " + aid + "</label>");
 			answer_div.insertAdjacentHTML('beforeend', "<input type=\"text\" name=\"a" + aid + "_q" + qid + "\" id=\"a" + aid +"\"/></div>");
-			answers_nb[qid] += 1;
 		}
 
 	</script>
