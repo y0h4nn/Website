@@ -10,12 +10,12 @@ class QuestionWidget(forms.widgets.TextInput):
         self.data = data
 
     def render(self, name="", value="", **kwargs):
-        plus = "<button onclick=\"add_response(" + self.qid[1:] + ");return false;\">+</button><button onclick=\"del_question(" + self.qid[1:] + ");return false;\">x</button><div id=\"q_a" + self.qid + "\"></div>"
-        plus += "<div id=\"q_a" + self.qid[1:] + "\">"
+        plus = "<button onclick=\"add_response({qid});return false;\">+</button><button onclick=\"del_question({qid});return false;\">x</button><div id=\"q_a{real_qid}\"></div>"
+        plus += "<div id=\"q_a{qid}\">"
         for i, answer in enumerate(self.answers):
             plus += "<div id=\"div_q" + self.qid[1:] + "_" + str(i + 1) + "\"><label for=\""+ answer +"\">Réponse: </label>" + super().render(name=answer, value=self.data[answer], attrs={"id": answer}) + "<button onclick=\"del_answer(" + self.qid[1:] + "," + str(i + 1) + ");return false;\">x</button></div>"
         plus += "</div></div>"
-        return "<div id=\"div_q" + self.qid[1:] + "\"><label for=\"" + self.qid + "\">Question: </label>" + super().render(name=name, value=value, **kwargs) + plus
+        return "<div id=\"div_q" + self.qid[1:] + "\"><label for=\"" + self.qid + "\">Question: </label>" + super().render(name=name, value=value, **kwargs) + plus.format(qid=self.qid[1:], real_qid=self.qid)
 
 
 class QuestionField(forms.Field):
