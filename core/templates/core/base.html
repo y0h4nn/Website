@@ -73,24 +73,28 @@
 		<section id="user_container">
 			<header>
 				{% if request.user.is_active %}
-				<img src="{% static 'images/monkey-git.jpg' %}" alt="picture" />
-				{% if request.user.first_name and request.user.last_name %}
-					<h1 class="center">
-						{% if request.user.profile.nickname %}
-							«{{ request.user.profile.nickname }}»<br/>
-						{% endif %}
-						{{ request.user.first_name }}
-						{{ request.user.last_name }}
-					</h1>
-				{% else %}
-					<h1 class="center">{{ request.user.username }}</h1>
-				{% endif %}
-				<nav>
-					<ul>
-						<li><a href="{% url 'accounts:show' username=request.user.username %}"><i class="fa fa-user"></i> Mon profil</a></li>
-						<li><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> Deconnexion</a></li>
-					</ul>
-				</nav>
+					{% if request.user.profile.picture %}
+						<img src="{{ request.user.profile.picture.url }}" alt="picture" />
+					{% else %}
+						<img src="{% static 'images/default_user_icon.png' %}" alt="picture"/>
+					{% endif %}
+					{% if request.user.first_name and request.user.last_name %}
+						<h1 class="center">
+							{% if request.user.profile.nickname %}
+								«{{ request.user.profile.nickname }}»<br/>
+							{% endif %}
+							{{ request.user.first_name }}
+							{{ request.user.last_name }}
+						</h1>
+					{% else %}
+						<h1 class="center">{{ request.user.username }}</h1>
+					{% endif %}
+					<nav>
+						<ul>
+							<li><a href="{% url 'accounts:show' username=request.user.username %}"><i class="fa fa-user"></i> Mon profil</a></li>
+							<li><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> Deconnexion</a></li>
+						</ul>
+					</nav>
 				{% else %}
 					<h1>Connexion<a href="#"> <i class="fa fa-question-circle"></i></a></h1>
 					<form action="{% url 'accounts:login' %}" method="POST">

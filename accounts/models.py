@@ -21,7 +21,7 @@ class Promo(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL)
     nickname = models.CharField(max_length=255, null=True, blank=True)
-    picture = models.ImageField(height_field='height', width_field='width', null=True, blank=True)
+    picture = models.ImageField(upload_to="profile_pictures", null=True, blank=True)
     birthdate = models.DateField(null=True, blank=True)
     family = models.ForeignKey('Family', related_name='members', null=True, blank=True)
     promo = models.ForeignKey('Promo', related_name='members', null=True, blank=True)
