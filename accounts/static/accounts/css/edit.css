@@ -1,0 +1,10 @@
+img{
+	display: inline-block;
+	flex:  1 1 auto;
+	max-width: 150px;
+}
+
+
+.align_left{
+	text-align: left;
+}

@@ -63,6 +63,7 @@ def edit(request, username):
         userform = forms.UserForm(request.POST, instance=user)
         passwordform = auth.forms.PasswordChangeForm(request.user, request.POST)
         profileform = forms.ProfileForm(request.POST, instance=user.profile)
+        profileimgform = forms.ImageProfileForm(request.POST, request.FILES, instance=user.profile)
 
         error = False
         if userform.has_changed() and userform.is_valid():
@@ -75,13 +76,14 @@ def edit(request, username):
         elif passwordform.has_changed() :
             error = True
 
-        print(userform.errors)
-        print(passwordform.errors)
-        print(profileform.errors)
-
         if profileform.has_changed() and profileform.is_valid():
             profileform.save()
         elif profileform.has_changed():
+            error = True
+
+        if profileimgform.has_changed() and profileimgform.is_valid():
+            profileimgform.save()
+        elif profileimgform.has_changed():
             error = True
 
         if error:
@@ -89,6 +91,7 @@ def edit(request, username):
                 'userform': userform.as_p(),
                 'passwordform': passwordform.as_p(),
                 'profileform': profileform.as_p(),
+                'profileimgform': profileimgform.as_p(),
             }
 
             return render(request, 'accounts/edit.html', context)
@@ -99,11 +102,13 @@ def edit(request, username):
         userform = forms.UserForm(instance=user)
         passwordform = auth.forms.PasswordChangeForm(request.user)
         profileform = forms.ProfileForm(instance=user.profile)
+        profileimgform = forms.ImageProfileForm(instance=user.profile)
 
         context = {
             'userform': userform.as_p(),
             'passwordform': passwordform.as_p(),
             'profileform': profileform.as_p(),
+            'profileimgform': profileimgform.as_p(),
         }
 
         return render(request, 'accounts/edit.html', context)
