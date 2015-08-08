@@ -5,7 +5,6 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from . import forms
-from core.register import menu_item
 
 
 def login(request):
