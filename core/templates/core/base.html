@@ -99,8 +99,8 @@
 						<input type="text" id="email" name="email" placeholder="email"/>
 						<input type="password" id="password" name="password" placeholder="password"/>
 
+						<input type="hidden" name="next" value="{{ request.path }}" />
 						<button>connexion<i class="fa fa-chevron-right"></i></button>
-
 					</form>
 				{% endif %}
 			</header>

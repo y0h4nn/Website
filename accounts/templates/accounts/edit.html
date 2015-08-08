@@ -12,7 +12,7 @@
 
 {% block menu %}
 	{% menu_item request.user.username 'accounts:show' username=request.user.username %}
-	{% menu_item 'edit' 'accounts:edit' username=request.user.username %}
+	{% menu_item 'editer' 'accounts:edit' username=request.user.username %}
 {% endblock %}
 
 {% block main %}

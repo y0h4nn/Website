@@ -11,7 +11,7 @@
 {% block menu %}
 	{% menu_item username 'accounts:show' username=username %}
 	{% if request.user.username == username %}
-		{% menu_item 'edit' 'accounts:edit' username=username %}
+		{% menu_item 'editer' 'accounts:edit' username=username %}
 	{% endif %}
 {% endblock%}
 

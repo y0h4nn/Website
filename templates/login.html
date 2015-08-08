@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Index{% endblock %}
+{% block header %}Connexion{% endblock %}
 
 {% block main %}
 		{% if error %}
@@ -10,12 +10,17 @@
 		{% endif %}
 		<form action="{% url 'accounts:login'%}" method="POST">
 			{% csrf_token %}
-			<label for="email">User email</label>
-			<input type="text" id="email" name="email" required />
+			<p>
+				<label for="email">User email</label>
+				<input type="text" id="email" name="email" required />
+			</p>
 
-			<label for="password">Password</label>
-			<input type="password" id="password" name="password" required />
+			<p>
+				<label for="password">Password</label>
+				<input type="password" id="password" name="password" required />
+			</p>
 
-			<button>Login</button>
+			<input type='hidden' name='next' value='{{ next }}' />
+			<button>Connexion <i class="fa fa-chevron-right"></i></button>
 		</form>
 {% endblock %}

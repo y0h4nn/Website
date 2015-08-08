@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
@@ -16,10 +17,11 @@ def login(request):
         user = auth.authenticate(email=email, password=password)
         if user:
             auth.login(request, user)
-            return redirect(reverse('core:index'))
+            return redirect(request.POST.get('next', reverse('core:index')))
         else:
             context['error'] = 'Invalid user'
 
+    context['next'] = request.GET.get('next', reverse('core:index'))
     return render(request, 'login.html', context)
 
 
@@ -28,7 +30,7 @@ def logout(request):
     return redirect(reverse('core:index'))
 
 
-# TODO require login
+@login_required()
 def show(request, username):
     try:
         user = User.objects.get(username=username)
@@ -48,6 +50,7 @@ def show(request, username):
     return render(request, 'accounts/show.html', context)
 
 
+@login_required()
 def edit(request, username):
     if request.user.username != username:
         return redirect(reverse('accounts:show', kwargs={'username': username}))

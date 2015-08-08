@@ -66,7 +66,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'core.context_processors.menu',
             ],
         },
     },
@@ -117,3 +116,5 @@ AUTHENTICATION_BACKENDS = (
     'accounts.backends.ImapAuth',
     'django.contrib.auth.backends.ModelBackend'
 )
+
+LOGIN_URL = '/accounts/login'

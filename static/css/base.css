@@ -38,14 +38,16 @@ form button {
   border: none;
   border-radius: 3px;
   color: white; }
+  form button i {
+    vertical-align: middle;
+    margin: 0 0.5em; }
 form label {
   flex: 0 1 30%;
   display: inline-block;
   font-weight: bold;
-  text-align: right;
   padding-right: 0.5em; }
 form input {
-  flex: 0 1 50%;
+  flex: 0 1 70%;
   display: inline-block; }
 
 input {
