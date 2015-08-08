@@ -67,6 +67,25 @@ fieldset {
   padding: 1em 0;
   margin: 1em 0; }
 
+.errorlist {
+  background-color: #E06060;
+  font-weight: bold;
+  color: white;
+  list-style: none;
+  padding: 1em;
+  margin-bottom: 0; }
+
+.errorlist + p {
+  background-color: #EA9797;
+  margin-top: 0;
+  color: white;
+  padding: 1em; }
+  .errorlist + p input {
+    background-color: #F9C3C3;
+    border-color: #CF8383; }
+    .errorlist + p input:focus {
+      border-color: red; }
+
 .center {
   text-align: center; }
 

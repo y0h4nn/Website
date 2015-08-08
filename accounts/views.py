@@ -59,30 +59,48 @@ def edit(request, username):
 
     if request.method == 'POST':
         userform = forms.UserForm(request.POST, instance=user)
+        passwordform = auth.forms.PasswordChangeForm(request.user, request.POST)
         profileform = forms.ProfileForm(request.POST, instance=user.profile)
 
         error = False
-        if userform.has_changed() and userform.has_changed():
+        if userform.has_changed() and userform.is_valid():
             userform.save()
-        elif not userform.is_valid():
+        elif userform.has_changed():
             error = True
+
+        if passwordform.has_changed() and passwordform.is_valid():
+            passwordform.save()
+        elif passwordform.has_changed() :
+            error = True
+
+        print(userform.errors)
+        print(passwordform.errors)
+        print(profileform.errors)
 
         if profileform.has_changed() and profileform.is_valid():
             profileform.save()
-        elif not profileform.is_valid():
+        elif profileform.has_changed():
             error = True
 
         if error:
-            return redirect(reverse('accounts:edit', kwargs={'username': username}))
+            context = {
+                'userform': userform.as_p(),
+                'passwordform': passwordform.as_p(),
+                'profileform': profileform.as_p(),
+            }
+
+            return render(request, 'accounts/edit.html', context)
         else:
-            return redirect(reverse('accounts:show', kwargs={'username': username}))
+            return redirect(reverse('accounts:edit', kwargs={'username': username}))
 
     else:
         userform = forms.UserForm(instance=user)
+        passwordform = auth.forms.PasswordChangeForm(request.user)
         profileform = forms.ProfileForm(instance=user.profile)
 
         context = {
             'userform': userform.as_p(),
+            'passwordform': passwordform.as_p(),
             'profileform': profileform.as_p(),
         }
 
