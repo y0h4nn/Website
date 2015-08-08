@@ -13,7 +13,7 @@ class QuestionWidget(forms.widgets.TextInput):
         plus = "<button onclick=\"add_response(" + self.qid[1:] + ");return false;\">+</button><button onclick=\"del_question(" + self.qid[1:] + ");return false;\">x</button><div id=\"q_a" + self.qid + "\"></div>"
         plus += "<div id=\"q_a" + self.qid[1:] + "\">"
         for i, answer in enumerate(self.answers):
-            plus += "<div><label for=\""+ answer +"\">Réponse" + str(i) + "</label></div>" + super().render(name=answer, value=self.data[answer], attrs={"id": answer})
+            plus += "<div id=\"div_q" + self.qid[1:] + "_" + str(i + 1) + "\"><label for=\""+ answer +"\">Réponse: </label>" + super().render(name=answer, value=self.data[answer], attrs={"id": answer}) + "<button onclick=\"del_answer(" + self.qid[1:] + "," + str(i + 1) + ");return false;\">x</button></div>"
         plus += "</div></div>"
         return "<div id=\"div_q" + self.qid[1:] + "\"><label for=\"" + self.qid + "\">Question: </label>" + super().render(name=name, value=value, **kwargs) + plus
 
@@ -60,7 +60,7 @@ class PollForm(forms.Form):
                 nb_a += 1
             self.fields[q] = QuestionField(qid=q, answers=self.questions_answers[q], data=self.data, initial=self.data[q], label="Question " + str(nb_q))
             nb_q += 1
-        self.q_a_nb = json.dumps({q[1:]: len(a) - 1 for q, a in self.questions_answers.items()})
+        self.q_a_nb = json.dumps({q[1:]: len(a) for q, a in self.questions_answers.items()})
 
     def clean(self):
         cleaned_data = super().clean()

@@ -11,20 +11,26 @@
 
 		<div>
 			{{ form.title.errors }}
-			<label for="{{ form.title.id_for_label }}">Titre: </label>
-			{{ form.title }}
+			<p>
+				<label for="{{ form.title.id_for_label }}">Titre: </label>
+				{{ form.title }}
+			</p>
 		</div>
 
 		<div>
 			{{ form.start_time.errors }}
-			<label for="{{ form.start_time.id_for_label }}">Début: </label>
-			{{ form.start_time }}
+			<p>
+				<label for="{{ form.start_time.id_for_label }}">Début: </label>
+				{{ form.start_time }}
+			</p>
 		</div>
 
 		<div>
 			{{ form.end_time.errors }}
-			<label for="{{ form.end_time.id_for_label }}">Fin: </label>
-			{{ form.end_time }}
+			<p>
+				<label for="{{ form.end_time.id_for_label }}">Fin: </label>
+				{{ form.end_time }}
+			</p>
 		</div>
 
 		<div id="main_form">
@@ -56,13 +62,20 @@
 			answers_nb[qid] += 1;
 			var answer_div = document.getElementById("q_a" + qid);
 			aid = answers_nb[qid];
-			answer_div.insertAdjacentHTML('beforeend', "<div><label for=\"a" + aid + "\">Réponse " + aid + "</label>");
-			answer_div.insertAdjacentHTML('beforeend', "<input type=\"text\" name=\"a" + aid + "_q" + qid + "\" id=\"a" + aid +"\"/></div>");
+			answer_div.insertAdjacentHTML('beforeend', "<div id=\"div_q" + qid + "_" + aid +"\"><label for=\"a" + aid + "\">Réponse: "</label>" +
+													   "<input type=\"text\" name=\"a" + aid + "_q" + qid + "\" id=\"a" + aid +"\"/><button onclick=\"del_answer(" + qid + ", " + aid + "); return false;\">x</button></div>");
 		}
 
 		function del_question(qid){
 			var q = document.getElementById("div_q" + qid);
 			q.parentNode.removeChild(q);
+		}
+
+		function del_answer(qid, aid){
+			console.log(qid);
+			console.log(aid);
+			var a = document.getElementById("div_q" + qid + "_" + aid);
+			a.parentNode.removeChild(a);
 		}
 
 	</script>
