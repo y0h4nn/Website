@@ -1,0 +1,44 @@
+
+form
+  p
+    display: flex
+    flex-flow: row
+    align-items: center
+
+  button
+    cursor: pointer
+    padding: 0.5em 1em
+    background-color: $blue
+    border: none
+    border-radius: 3px
+    color: white
+
+  label
+    flex: 0 1 30%
+    display: inline-block
+    font-weight: bold
+    text-align: right
+    padding-right: 0.5em
+
+  input
+    flex: 0 1 50%
+    display: inline-block
+
+input
+  padding: 0.25em 0.5em
+  border: 1px solid #ccc
+  background-color: #f5f5f5
+  border-radius: 3px
+  &:focus
+    border-color: $blue
+
+legend
+  padding: 1em
+  margin: 0 0 0 2em
+  font-size: 0.95em
+
+fieldset
+  border: none
+  border-top: 1px solid #ccc
+  padding: 1em 0
+  margin: 1em 0

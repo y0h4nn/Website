@@ -27,25 +27,6 @@ nav > ul {
   padding: 0;
   list-style: none; }
 
-input {
-  padding: 0.25em 0.5em;
-  border: 1px solid #ccc;
-  background-color: #f5f5f5;
-  border-radius: 3px; }
-  input:focus {
-    border-color: #68B9DE; }
-
-legend {
-  padding: 1em;
-  margin: 0 0 0 2em;
-  font-size: 0.95em; }
-
-fieldset {
-  border: none;
-  border-top: 1px solid #ccc;
-  padding: 1em 0;
-  margin: 1em 0; }
-
 form p {
   display: flex;
   flex-flow: row;
@@ -66,6 +47,25 @@ form label {
 form input {
   flex: 0 1 50%;
   display: inline-block; }
+
+input {
+  padding: 0.25em 0.5em;
+  border: 1px solid #ccc;
+  background-color: #f5f5f5;
+  border-radius: 3px; }
+  input:focus {
+    border-color: #68B9DE; }
+
+legend {
+  padding: 1em;
+  margin: 0 0 0 2em;
+  font-size: 0.95em; }
+
+fieldset {
+  border: none;
+  border-top: 1px solid #ccc;
+  padding: 1em 0;
+  margin: 1em 0; }
 
 .center {
   text-align: center; }
@@ -156,6 +156,9 @@ form input {
     #nav_container main nav a:hover, #nav_container main nav a.selected {
       background-color: #2a2a2a; }
 
+#logo {
+  width: 150px; }
+
 #user_container {
   min-width: 225px;
   flex: 0 1 225px;
@@ -212,8 +215,5 @@ form input {
     border-radius: 2em;
     text-align: center;
     color: white; }
-
-#logo {
-  width: 150px; }
 
 /*# sourceMappingURL=base.css.map */

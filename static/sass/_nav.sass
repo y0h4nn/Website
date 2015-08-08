@@ -1,0 +1,73 @@
+#nav_container
+  min-width: 300px
+  flex: 0 1 300px
+  background-color: #333
+  padding: 1.2em
+
+
+  header
+    display: flex
+    flex-flow: row
+    justify-content: center
+    align-items: center
+    margin: 1em 0
+
+    div
+      flex: 1 1 auto
+
+    nav
+      text-align: right
+
+      a
+        display: block
+        padding: 0.25em
+        color: white
+        font-size: 1.5em
+ 
+  main form
+    margin: 2.2em 0
+    div
+      position: relative
+      height: 2em
+      font-size: 15px
+
+    i
+      font-size: 18px
+      display: block
+      position: absolute
+      color: #555
+      margin: 0.5em 0 0 0.5em
+      text-shadow: 0 0 10px transparent
+      transition: color 0.5s, text-shadow
+
+    input
+      font-size: 15px
+      display: block
+      position: absolute
+      background-color: #3A3A3A
+      border: none
+      border-radius: 3px
+      padding: 0.5em 1em 0.5em 1.75em
+      width: 100%
+      color: #CCC
+      transition: background-color 0.25s
+
+      &:focus
+        background-color: #444
+
+        & + i
+          color: orange
+          text-shadow: 0 0 10px orange
+
+  main nav a
+    color: white
+    display: block
+    padding: 0.75em 1em
+    border-radius: 3px
+    margin: 5px 0
+
+    &:hover, &.selected
+      background-color: #2a2a2a
+
+#logo
+  width: 150px

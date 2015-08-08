@@ -1,0 +1,32 @@
+#main_container
+  flex: 1 1 auto
+  padding: 2.5em
+
+  header
+    h1
+      border-bottom: 1px solid #68B9DE
+      padding:  0 0 0.75em 0
+      margin: 1em 0
+      color: #999
+    nav
+      margin: 1em 0 2em 0
+
+    li
+      display: inline-block
+    a
+      display: inline-block
+      background-color: #B3D6E6
+      padding: 0.5em 1em
+      border-radius: 3px
+      margin: 0 0.5em 0 0
+      color: white
+      font-weight: bold
+      cursor: pointer
+      transition: background-color 0.25s
+
+      &.selected, &:hover
+        background-color: #68B9DE
+  
+  main
+    color: #555
+
