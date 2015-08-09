@@ -16,7 +16,7 @@ class UserForm(forms.ModelForm):
     prefix = 'user'
     class Meta:
         model = User
-        fields = ['last_name', 'first_name']
+        fields = ['last_name', 'first_name', 'email']
 
 
 class ProfileForm(forms.ModelForm):
@@ -26,6 +26,7 @@ class ProfileForm(forms.ModelForm):
         model = models.Profile
         fields = [
             'nickname',
+            'phone',
             'birthdate',
             'family',
             'promo',
@@ -36,6 +37,7 @@ class ProfileForm(forms.ModelForm):
         labels = {
             'nickname': 'Surnom',
             'picture': 'Image de profil',
+            'phone': 'Téléphone',
             'birthdate': 'Date de naissance',
             'family': 'Famille',
             'promo': 'Promo',
