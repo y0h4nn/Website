@@ -43,9 +43,9 @@ class Email(models.Model):
 
 class Address(models.Model):
     profile = models.OneToOneField('Profile', related_name='address')
-    street = models.CharField(max_length=512, null=True)
-    postal_code = models.IntegerField(null=True)
-    town = models.CharField(max_length=255, null=True)
+    street = models.CharField(max_length=512, null=True, blank=True)
+    postal_code = models.IntegerField(null=True, blank=True)
+    town = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return "{}, {} {}".format(self.streer, self.postal_code, self.town)

@@ -15,16 +15,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Address',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
-                ('street', models.CharField(null=True, max_length=512)),
-                ('postal_code', models.IntegerField(null=True)),
-                ('town', models.CharField(null=True, max_length=255)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
+                ('street', models.CharField(blank=True, null=True, max_length=512)),
+                ('postal_code', models.IntegerField(blank=True, null=True)),
+                ('town', models.CharField(blank=True, null=True, max_length=255)),
             ],
         ),
         migrations.CreateModel(
             name='Email',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
                 ('email', models.EmailField(max_length=254)),
                 ('valid', models.BooleanField(default=False)),
             ],
@@ -32,38 +32,38 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Family',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
                 ('descriptionn', models.TextField(blank=True, null=True)),
-                ('picture', models.ImageField(height_field='height', null=True, width_field='width', blank=True, upload_to='')),
+                ('picture', models.ImageField(height_field='height', upload_to='', blank=True, null=True, width_field='width')),
             ],
         ),
         migrations.CreateModel(
             name='Profile',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
                 ('nickname', models.CharField(blank=True, null=True, max_length=255)),
                 ('phone', models.CharField(blank=True, null=True, max_length=10)),
-                ('picture', models.ImageField(blank=True, upload_to='profile_pictures', null=True)),
+                ('picture', models.ImageField(upload_to='profile_pictures', blank=True, null=True)),
                 ('birthdate', models.DateField(blank=True, null=True)),
                 ('enib_join_year', models.PositiveSmallIntegerField(blank=True, null=True)),
-                ('semester', models.CharField(blank=True, null=True, max_length=2, choices=[(None, 'Aucun'), ('S1', 'Semestre 1'), ('S2', 'Semestre 2'), ('S3', 'Semestre 3'), ('S4', 'Semestre 4'), ('S5', 'Semestre 5'), ('S6', 'Semestre 6'), ('S7', 'Semestre 7'), ('S8', 'Semestre 8'), ('S9', 'Semestre 9'), ('S10', 'Semestre 10')])),
-                ('family', models.ForeignKey(null=True, related_name='members', blank=True, to='accounts.Family')),
+                ('semester', models.CharField(choices=[(None, 'Aucun'), ('S1', 'Semestre 1'), ('S2', 'Semestre 2'), ('S3', 'Semestre 3'), ('S4', 'Semestre 4'), ('S5', 'Semestre 5'), ('S6', 'Semestre 6'), ('S7', 'Semestre 7'), ('S8', 'Semestre 8'), ('S9', 'Semestre 9'), ('S10', 'Semestre 10')], blank=True, null=True, max_length=2)),
+                ('family', models.ForeignKey(related_name='members', to='accounts.Family', blank=True, null=True)),
             ],
         ),
         migrations.CreateModel(
             name='Promo',
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
                 ('name', models.CharField(max_length=255)),
                 ('description', models.TextField(blank=True, null=True)),
-                ('picture', models.ImageField(height_field='height', null=True, width_field='width', blank=True, upload_to='')),
+                ('picture', models.ImageField(height_field='height', upload_to='', blank=True, null=True, width_field='width')),
             ],
         ),
         migrations.AddField(
             model_name='profile',
             name='promo',
-            field=models.ForeignKey(null=True, related_name='members', blank=True, to='accounts.Promo'),
+            field=models.ForeignKey(related_name='members', to='accounts.Promo', blank=True, null=True),
         ),
         migrations.AddField(
             model_name='profile',
@@ -73,7 +73,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='email',
             name='profile',
-            field=models.ForeignKey(to='accounts.Profile', related_name='secondary_emails'),
+            field=models.ForeignKey(related_name='secondary_emails', to='accounts.Profile'),
         ),
         migrations.AddField(
             model_name='address',
