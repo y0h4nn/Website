@@ -18,9 +18,11 @@
 
 {% block menu %}
 	{% menu_item 'Liste des membres' 'accounts:members'  %}
-	{% menu_item 'Mon profil' 'accounts:show' username=user.username %}
 	{% if request.user.username == user.username %}
+		{% menu_item 'Mon profil' 'accounts:show' username=user.username %}
 		{% menu_item 'Editer mon profil' 'accounts:edit' username=user.username %}
+	{% else %}
+		{% menu_item user.username 'accounts:show' username=user.username %}
 	{% endif %}
 {% endblock%}
 
