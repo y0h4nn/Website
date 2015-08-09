@@ -14,8 +14,8 @@ class QuestionWidget(forms.widgets.TextInput):
         plus += "<div id=\"q_a{qid}\">"
         for i, answer in enumerate(self.answers):
             plus += "<div id=\"div_q" + self.qid[1:] + "_" + str(i + 1) + "\"><label for=\""+ answer +"\">Réponse: </label>" + super().render(name=answer, value=self.data[answer], attrs={"id": answer}) + "<button onclick=\"del_answer(" + self.qid[1:] + "," + str(i + 1) + ");return false;\">x</button></div>"
-        plus += "</div></div>"
-        return "<div id=\"div_q" + self.qid[1:] + "\"><label for=\"" + self.qid + "\">Question: </label>" + super().render(name=name, value=value, **kwargs) + plus.format(qid=self.qid[1:], real_qid=self.qid)
+        plus += "</div></fieldset>"
+        return "<fieldset id=\"div_q" + self.qid[1:] + "\"><label for=\"" + self.qid + "\">Question: </label>" + super().render(name=name, value=value, **kwargs) + plus.format(qid=self.qid[1:], real_qid=self.qid)
 
 
 class QuestionField(forms.Field):
@@ -71,3 +71,4 @@ class PollForm(forms.Form):
                 cleaned_data[answer] = forms.CharField(required=False).clean(self.data[answer])
                 if not cleaned_data[answer]:
                     self.add_error(None, "Vous ne pouvez pas avoir de réponse vide")
+
