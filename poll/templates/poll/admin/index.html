@@ -3,9 +3,11 @@
 {% block header %} Liste des sondages {% endblock %}
 {% block main %}
 
-	{% for poll in polls %}
-		<a href="{% url 'poll:admin_view_poll' pid=poll.id %}">{{ poll }}</a>
-	{% endfor %}
+	<ul>
+		{% for poll in polls %}
+			<li><a href="{% url 'poll:admin_view_poll' pid=poll.id %}">{{ poll }}</a></li>
+		{% endfor %}
+	</ul>
 
 	<a href="{% url 'poll:admin_add_poll' %}">Ajouter un sondage</a>
 

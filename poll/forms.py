@@ -69,10 +69,16 @@ class PollForm(forms.Form):
         cleaned_data = super().clean()
         err_no_answer = False
         err_empty_answer = False
+        err_empty_question = False
+        if not self.questions_answers:
+            self.add_error(None, "Il doit y avoir au moins une question")
         for q, a in self.questions_answers.items():
             if not a and not err_no_answer:
                 err_no_answer = True
                 self.add_error(None, "Vous ne pouvez pas ajouter de question sans réponse.")
+            if not self.data[q] and not err_empty_question:
+                err_empty_question = True
+                self.add_error(None, "Vous ne pouvez pas avoir de question vide")
             for answer in a:
                 cleaned_data[answer] = forms.CharField(required=False).clean(self.data[answer])
                 if not cleaned_data[answer] and not err_empty_answer:
