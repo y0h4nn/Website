@@ -5,7 +5,11 @@
 
 	<ul>
 		{% for poll in polls %}
-			<li><a href="{% url 'poll:admin_view_poll' pid=poll.id %}">{{ poll }}</a></li>
+			{% if poll.is_open %}
+				<li>{{ poll }} (Fin le {{ poll.end_date }})</li>
+			{% else %}
+				<li><a href="{% url 'poll:admin_view_poll' pid=poll.id %}">{{ poll }} (Terminé le {{ poll.end_date }})</a></li>
+			{% endif %}
 		{% endfor %}
 	</ul>
 
