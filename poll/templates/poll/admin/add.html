@@ -56,7 +56,7 @@
 			var main_form = document.getElementById("main_form");
 			main_form.insertAdjacentHTML('beforeend', "<fieldset id=\"div_q" + nb_questions + "\"><label for=\"q" + nb_questions + "\">Question: </label>" +
 													  "<input type=\"text\" id=\"q" + nb_questions + "\" name=\"q" + nb_questions + "\"/>" +
-													  "<button onclick=\"add_response(" + nb_questions + "); return false;\">+</button><button onclick=\"del_question(" + nb_questions + ");return false;\">x</button><div id=\"q_a" + nb_questions + "\"></div></fieldset>");
+													  "<button onclick=\"add_response(" + nb_questions + "); return false;\">+</button><button class=\"red_button\" onclick=\"del_question(" + nb_questions + ");return false;\">x</button><div id=\"q_a" + nb_questions + "\"></div></fieldset>");
 
 			answers_nb[nb_questions] = 0;
 		}
@@ -66,7 +66,7 @@
 			var answer_div = document.getElementById("q_a" + qid);
 			aid = answers_nb[qid];
 			answer_div.insertAdjacentHTML('beforeend', "<div id=\"div_q" + qid + "_" + aid +"\"><label for=\"a" + aid + "\">Réponse: </label>" +
-													   "<input type=\"text\" name=\"a" + aid + "_q" + qid + "\" id=\"a" + aid +"\"/><button onclick=\"del_answer(" + qid + ", " + aid + "); return false;\">x</button></div>");
+													   "<input type=\"text\" name=\"a" + aid + "_q" + qid + "\" id=\"a" + aid +"\"/><button class=\"red_button\" onclick=\"del_answer(" + qid + ", " + aid + "); return false;\">x</button></div>");
 		}
 
 		function del_question(qid){
