@@ -18,6 +18,7 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ['last_name', 'first_name']
 
+
 class ProfileForm(forms.ModelForm):
     prefix = 'profile'
 
@@ -35,7 +36,7 @@ class ProfileForm(forms.ModelForm):
         labels = {
             'nickname': 'Surnom',
             'picture': 'Image de profil',
-            'birthdate': 'Année de naissance',
+            'birthdate': 'Date de naissance',
             'family': 'Famille',
             'promo': 'Promo',
             'enib_join_year': 'Date d\'inscription à l\'enib',
@@ -58,3 +59,19 @@ class ImageProfileForm(forms.ModelForm):
         widgets = {
             'picture': WrapperClearableinput
         }
+
+class AddressForm(forms.ModelForm):
+    prefix = "address"
+    class Meta:
+        model = models.Address
+        fields = [
+            'street',
+            'postal_code',
+            'town',
+        ]
+        labels = {
+            'street': 'voie',
+            'postal_code': 'Code postal',
+            'town': 'Ville',
+        }
+

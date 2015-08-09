@@ -38,8 +38,7 @@ class ImapAuth(BaseAuth):
             try:
                 srv.login(username, password)
                 user = User.objects.create_user(username, email, password)
-                user.profile = models.Profile()
-                user.profile.save()
+                user.save()
             except (imaplib.IMAP4.error, IntegrityError):
                 pass
             srv.logout()
