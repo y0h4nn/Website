@@ -1,8 +1,14 @@
 {% extends 'core/base.html' %}
+{% load menu_item %}
 
 {% block header %} Liste des sondages {% endblock %}
-{% block main %}
 
+{% block menu %}
+	{% menu_item "Liste" "poll:index" %}
+	{% menu_item "Administration" "poll:admin" %}
+{% endblock %}
+
+{% block main %}
 	<ul>
 		{% for poll in polls %}
 			{% if poll.is_open %}
@@ -14,6 +20,5 @@
 	</ul>
 
 	<a href="{% url 'poll:admin_add_poll' %}">Ajouter un sondage</a>
-
 {% endblock %}
 

@@ -1,8 +1,15 @@
 {% extends 'core/base.html' %}
 {% load hash %}
 {% load max %}
+{% load menu_item %}
 
 {% block header %} Ajouter un sondage {% endblock %}
+
+{% block menu %}
+	{% menu_item "Liste" "poll:index" %}
+	{% menu_item "Administration" "poll:admin" %}
+{% endblock %}
+
 {% block main %}
 
 	<form method="POST" action="{% url 'poll:admin_add_poll' %}">
