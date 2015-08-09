@@ -3,11 +3,11 @@ import json
 
 
 class QuestionWidget(forms.widgets.TextInput):
-    def __init__(self, qid, answers, data, *args, **kwargs):
+    def __init__(self, parent, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.qid = qid
-        self.answers = answers
-        self.data = data
+        self.qid = parent.qid
+        self.answers = parent.answers
+        self.data = parent.data
 
     def render(self, name="", value="", **kwargs):
         plus = "<button onclick=\"add_response({qid});return false;\">+</button><button onclick=\"del_question({qid});return false;\">x</button><div id=\"q_a{real_qid}\"></div>"
@@ -24,7 +24,7 @@ class QuestionField(forms.Field):
         self.qid = str(qid)
         self.answers = answers
         self.data = data
-        self.widget = QuestionWidget(self.qid, self.answers, self.data)
+        self.widget = QuestionWidget(self)
 
 
 class PollForm(forms.Form):
@@ -66,9 +66,8 @@ class PollForm(forms.Form):
         cleaned_data = super().clean()
         for q, a in self.questions_answers.items():
             if not a:
-                self.add_error(q, "Vous ne pouvez pas ajouter de question sans réponse.")
+                self.add_error(None, "Vous ne pouvez pas ajouter de question sans réponse.")
             for answer in a:
                 cleaned_data[answer] = forms.CharField(required=False).clean(self.data[answer])
                 if not cleaned_data[answer]:
-                    self.add_error(q, "Vous ne pouvez pas avoir de réponse vide")
-
+                    self.add_error(None, "Vous ne pouvez pas avoir de réponse vide")
