@@ -9,29 +9,32 @@
 		{% csrf_token %}
 		{{ form.non_field_errors }}
 
-		<div>
-			{{ form.title.errors }}
-			<p>
-				<label for="{{ form.title.id_for_label }}">Titre: </label>
-				{{ form.title }}
-			</p>
-		</div>
+		<fieldset>
+			<legend>Infos</legend>
+			<div>
+				{{ form.title.errors }}
+				<p>
+					<label for="{{ form.title.id_for_label }}">Titre: </label>
+					{{ form.title }}
+				</p>
+			</div>
 
-		<div>
-			{{ form.start_time.errors }}
-			<p>
-				<label for="{{ form.start_time.id_for_label }}">Début: </label>
-				{{ form.start_time }}
-			</p>
-		</div>
+			<div>
+				{{ form.start_time.errors }}
+				<p>
+					<label for="{{ form.start_time.id_for_label }}">Début: </label>
+					{{ form.start_time }}
+				</p>
+			</div>
 
-		<div>
-			{{ form.end_time.errors }}
-			<p>
-				<label for="{{ form.end_time.id_for_label }}">Fin: </label>
-				{{ form.end_time }}
-			</p>
-		</div>
+			<div>
+				{{ form.end_time.errors }}
+				<p>
+					<label for="{{ form.end_time.id_for_label }}">Fin: </label>
+					{{ form.end_time }}
+				</p>
+			</div>
+		</fieldset>
 
 		<div id="main_form">
 			{% for question, answers in form.questions_answers.items %}
@@ -39,7 +42,7 @@
 			{% endfor %}
 		</div>
 
-		<a href="#" onclick="add_question();">Ajouter une question</a>
+		<a href="#" onclick="add_question();return false;">Ajouter une question</a>
 		<button>Ajouter</button>
 	</form>
 
@@ -51,9 +54,9 @@
 		function add_question(){
 			nb_questions += 1;
 			var main_form = document.getElementById("main_form");
-			main_form.insertAdjacentHTML('beforeend', "<div id=\"div_q" + nb_questions + "\"><label for=\"q" + nb_questions + "\">Question: </label>" +
+			main_form.insertAdjacentHTML('beforeend', "<fieldset id=\"div_q" + nb_questions + "\"><label for=\"q" + nb_questions + "\">Question: </label>" +
 													  "<input type=\"text\" id=\"q" + nb_questions + "\" name=\"q" + nb_questions + "\"/>" +
-													  "<button onclick=\"add_response(" + nb_questions + "); return false;\">+</button><button onclick=\"del_question(" + nb_questions + ");return false;\">x</button><div id=\"q_a" + nb_questions + "\"></div></div>");
+													  "<button onclick=\"add_response(" + nb_questions + "); return false;\">+</button><button class=\"red_button\" onclick=\"del_question(" + nb_questions + ");return false;\">x</button><div id=\"q_a" + nb_questions + "\"></div></fieldset>");
 
 			answers_nb[nb_questions] = 0;
 		}
@@ -63,7 +66,7 @@
 			var answer_div = document.getElementById("q_a" + qid);
 			aid = answers_nb[qid];
 			answer_div.insertAdjacentHTML('beforeend', "<div id=\"div_q" + qid + "_" + aid +"\"><label for=\"a" + aid + "\">Réponse: </label>" +
-													   "<input type=\"text\" name=\"a" + aid + "_q" + qid + "\" id=\"a" + aid +"\"/><button onclick=\"del_answer(" + qid + ", " + aid + "); return false;\">x</button></div>");
+													   "<input type=\"text\" name=\"a" + aid + "_q" + qid + "\" id=\"a" + aid +"\"/><button class=\"red_button\" onclick=\"del_answer(" + qid + ", " + aid + "); return false;\">x</button></div>");
 		}
 
 		function del_question(qid){
@@ -72,8 +75,6 @@
 		}
 
 		function del_answer(qid, aid){
-			console.log(qid);
-			console.log(aid);
 			var a = document.getElementById("div_q" + qid + "_" + aid);
 			a.parentNode.removeChild(a);
 		}

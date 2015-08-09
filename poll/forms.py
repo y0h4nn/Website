@@ -3,19 +3,19 @@ import json
 
 
 class QuestionWidget(forms.widgets.TextInput):
-    def __init__(self, qid, answers, data, *args, **kwargs):
+    def __init__(self, parent, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.qid = qid
-        self.answers = answers
-        self.data = data
+        self.qid = parent.qid
+        self.answers = parent.answers
+        self.data = parent.data
 
     def render(self, name="", value="", **kwargs):
-        plus = "<button onclick=\"add_response({qid});return false;\">+</button><button onclick=\"del_question({qid});return false;\">x</button><div id=\"q_a{real_qid}\"></div>"
+        plus = "<button onclick=\"add_response({qid});return false;\">+</button><button class=\"red_button\" onclick=\"del_question({qid});return false;\">x</button><div id=\"q_a{real_qid}\"></div>"
         plus += "<div id=\"q_a{qid}\">"
         for i, answer in enumerate(self.answers):
-            plus += "<div id=\"div_q" + self.qid[1:] + "_" + str(i + 1) + "\"><label for=\""+ answer +"\">Réponse: </label>" + super().render(name=answer, value=self.data[answer], attrs={"id": answer}) + "<button onclick=\"del_answer(" + self.qid[1:] + "," + str(i + 1) + ");return false;\">x</button></div>"
-        plus += "</div></div>"
-        return "<div id=\"div_q" + self.qid[1:] + "\"><label for=\"" + self.qid + "\">Question: </label>" + super().render(name=name, value=value, **kwargs) + plus.format(qid=self.qid[1:], real_qid=self.qid)
+            plus += "<div id=\"div_q" + self.qid[1:] + "_" + str(i + 1) + "\"><label for=\""+ answer +"\">Réponse: </label>" + super().render(name=answer, value=self.data[answer], attrs={"id": answer}) + "<button class=\"red_button\" onclick=\"del_answer(" + self.qid[1:] + "," + str(i + 1) + ");return false;\">x</button></div>"
+        plus += "</div></fieldset>"
+        return "<fieldset id=\"div_q" + self.qid[1:] + "\"><label for=\"" + self.qid + "\">Question: </label>" + super().render(name=name, value=value, **kwargs) + plus.format(qid=self.qid[1:], real_qid=self.qid)
 
 
 class QuestionField(forms.Field):
@@ -24,7 +24,7 @@ class QuestionField(forms.Field):
         self.qid = str(qid)
         self.answers = answers
         self.data = data
-        self.widget = QuestionWidget(self.qid, self.answers, self.data)
+        self.widget = QuestionWidget(self)
 
 
 class PollForm(forms.Form):
@@ -64,11 +64,15 @@ class PollForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+        err_no_answer = False
+        err_empty_answer = False
         for q, a in self.questions_answers.items():
-            if not a:
-                self.add_error(q, "Vous ne pouvez pas ajouter de question sans réponse.")
+            if not a and not err_no_answer:
+                err_no_answer = True
+                self.add_error(None, "Vous ne pouvez pas ajouter de question sans réponse.")
             for answer in a:
                 cleaned_data[answer] = forms.CharField(required=False).clean(self.data[answer])
-                if not cleaned_data[answer]:
-                    self.add_error(q, "Vous ne pouvez pas avoir de réponse vide")
+                if not cleaned_data[answer] and not err_empty_answer:
+                    err_empty_answer = True
+                    self.add_error(None, "Vous ne pouvez pas avoir de réponse vide")
 
