@@ -29,17 +29,13 @@
 	<div class="flex_container">
 		<div class="flex expand">
 			<h2>Informations générales</h2>
-			{% if user.last_name %}
 			<p class="flex_container" >
 				<strong class="flex expand50">Nom</strong><span class="flex">{{ user.last_name }}</span>
 			</p>
-			{% endif %}
 
-			{% if user.first_name %}
 			<p class="flex_container">
 				<strong class="flex expand50">Prénom</strong><span class="flex">{{ user.first_name }}</span>
 			</p>
-			{% endif %}
 
 			{% if user.profile.nickname %}
 				<p class="flex_container">
@@ -59,17 +55,19 @@
 			{% endif %}
 
 
-			<h2>Scolaritée</h2>
-			{% if user.profile.enib_join_year %}
-			<p class="flex_container">
-				<strong class="flex expand50">Année d'entrée à l'enib</strong><span class="flex">{{ user.profile.enib_join_year }}</span>
-			</p>
-			{% endif %}
+			{% if user.profile.semester or user.profile.enib_join_year %}
+				<h2>Scolaritée</h2>
+				{% if user.profile.enib_join_year %}
+				<p class="flex_container">
+					<strong class="flex expand50">Année d'entrée à l'enib</strong><span class="flex">{{ user.profile.enib_join_year }}</span>
+				</p>
+				{% endif %}
 
-			{% if user.profile.semester %}
-			<p class="flex_container">
-				<strong class="flex expand50">Semestre actuel</strong><span class="flex">{{ user.profile.semester }}</span>
-			</p>
+				{% if user.profile.semester %}
+				<p class="flex_container">
+					<strong class="flex expand50">Semestre actuel</strong><span class="flex">{{ user.profile.semester }}</span>
+				</p>
+				{% endif %}
 			{% endif %}
 
 
