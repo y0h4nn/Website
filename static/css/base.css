@@ -95,6 +95,22 @@ fieldset {
 .center {
   text-align: center; }
 
+.flex_container {
+  display: flex;
+  flex-flow: row;
+  align-items: stretch; }
+
+.flex {
+  flex: 0 1 auto; }
+  .flex.expand {
+    flex: 1 1 auto; }
+  .flex.expand30 {
+    flex: 0 1 30%;
+    min-width: 30%; }
+  .flex.expand50 {
+    flex: 0 1 50%;
+    min-width: 50%; }
+
 #main_container {
   flex: 1 1 auto;
   padding: 2.5em; }
@@ -121,6 +137,8 @@ fieldset {
       background-color: #68B9DE; }
   #main_container main {
     color: #555; }
+    #main_container main h2 {
+      color: #ccc; }
 
 #nav_container {
   min-width: 300px;

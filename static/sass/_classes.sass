@@ -1,2 +1,18 @@
 .center
   text-align: center
+ 
+.flex_container
+  display: flex
+  flex-flow: row
+  align-items: stretch
+
+.flex
+  flex: 0 1 auto
+  &.expand
+    flex: 1 1 auto
+  &.expand30
+    flex: 0 1 30%
+    min-width: 30%
+  &.expand50
+    flex: 0 1 50%
+    min-width: 50%

@@ -37,15 +37,27 @@ def show(request, username):
     except User.DoesNotExist:
         return redirect(reverse('core:index'))
 
+    if user.first_name and user.last_name and user.profile.nickname:
+        display_name_tpl = "{first_name} « {nickname} » {last_name}"
+    elif user.first_name and user.last_name:
+        display_name_tpl = "{first_name} {last_name}"
+    elif user.profile.nickname:
+        display_name_tpl = "{nickname}"
+    else:
+        display_name_tpl = "{uid}"
+
+    display_name = display_name_tpl.format(
+        first_name=user.first_name,
+        last_name=user.last_name,
+        nickname=user.profile.nickname,
+        uid=user.username,
+    )
+
+    print(dir(user.profile.semester))
+
     context = {
-        'username': username,
-        'last_name': user.last_name or "Donnée inconue",
-        'first_name': user.first_name or "Donnée inconue",
-        'email': user.email,
-        'groups': ', '.join(user.groups.all()) or "L'utilisateur n'est pas membre d'un groupe",
-        'perms': ', '.join(user.user_permissions.all()) or "L'utilisateur n'a aucune permissions",
-        'last_login': user.last_login,
-        'date_joined': user.date_joined,
+        'user': user,
+        'display_name': display_name,
     }
     return render(request, 'accounts/show.html', context)
 
@@ -72,26 +84,37 @@ def edit(request, username):
             userform.save()
         elif userform.has_changed():
             error = True
+        else:
+            userform = forms.UserForm(instance=user)
 
         if passwordform.has_changed() and passwordform.is_valid():
             passwordform.save()
         elif passwordform.has_changed() :
             error = True
+        else:
+            passwordform = auth.forms.PasswordChangeForm(request.user)
 
         if profileform.has_changed() and profileform.is_valid():
             profileform.save()
         elif profileform.has_changed():
             error = True
+        else:
+            profileform = forms.ProfileForm(instance=user.profile)
 
         if profileimgform.has_changed() and profileimgform.is_valid():
             profileimgform.save()
         elif profileimgform.has_changed():
             error = True
+        else:
+            profileimgform = forms.ImageProfileForm(instance=user.profile)
 
         if addressform.has_changed() and addressform.is_valid():
             addressform.save()
         elif addressform.has_changed():
             error = True
+        else:
+            addressform = forms.AddressForm(instance=user.profile.address)
+
 
         if error:
             context = {
@@ -99,6 +122,7 @@ def edit(request, username):
                 'passwordform': passwordform.as_p(),
                 'profileform': profileform.as_p(),
                 'profileimgform': profileimgform.as_p(),
+                'addressform': addressform.as_p(),
             }
 
             return render(request, 'accounts/edit.html', context)
