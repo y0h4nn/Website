@@ -64,11 +64,15 @@ class PollForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+        err_no_answer = False
+        err_empty_answer = False
         for q, a in self.questions_answers.items():
-            if not a:
+            if not a and not err_no_answer:
+                err_no_answer = True
                 self.add_error(None, "Vous ne pouvez pas ajouter de question sans réponse.")
             for answer in a:
                 cleaned_data[answer] = forms.CharField(required=False).clean(self.data[answer])
-                if not cleaned_data[answer]:
+                if not cleaned_data[answer] and not err_empty_answer:
+                    err_empty_answer = True
                     self.add_error(None, "Vous ne pouvez pas avoir de réponse vide")
 
