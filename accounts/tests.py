@@ -1,10 +1,12 @@
 import os
 from django.test import TestCase
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from . import backends
 
 
 class NormalAuthTest(TestCase):
+    fixtures = ["fixtures/groups"]
+
     def setUp(self):
         self.auth_backend = backends.NormalAuth()
         self.imap_backend = backends.ImapAuth()
@@ -45,6 +47,9 @@ class NormalAuthTest(TestCase):
         except:
             mail = password = None
         auth_user = self.imap_backend.authenticate(email=mail, password=password)
+        groups = auth_user.groups.all()
         self.assertIsNotNone(auth_user)
         self.assertEqual(auth_user.email, mail)
+        self.assertEqual(groups[0].name, "Tous")
+        self.assertEqual(groups[1].name, "Enib")
 
