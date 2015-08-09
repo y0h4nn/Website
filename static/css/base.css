@@ -42,13 +42,13 @@ form button {
     vertical-align: middle;
     margin: 0 0.5em; }
 form label {
-  flex: 0 1 30%;
-  min-width: 30%;
+  flex: 0 1 35%;
+  min-width: 35%;
   display: inline-block;
   font-weight: bold;
   padding-right: 0.5em; }
 form input {
-  flex: 0 1 70%;
+  flex: 0 1 65%;
   display: inline-block; }
 
 input {
