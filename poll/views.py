@@ -10,8 +10,9 @@ def question(request, pid):
     if not request.user.is_authenticated():
         return HttpResponseForbidden()
     p = get_object_or_404(Poll, id=pid)
+    context = {'poll': p, 'pid': pid, "errors": []}
     if not p.is_open():
-        return redirect(reverse('poll:closed'))
+        return render(request, 'poll/results.html', context)
 
     try:
         already_voted = Voter.objects.get(user=request.user, poll=p)
@@ -20,7 +21,6 @@ def question(request, pid):
     else:
         return redirect(reverse('poll:already'))
 
-    context = {'poll': p, 'pid': pid, "errors": []}
     answers = {q.id: request.POST.get("question{}".format(q.id), None) for q in p.questions.all()}
 
     if all(answers.values()):
@@ -48,15 +48,15 @@ def already(request):
 def closed(request):
     return render(request, 'poll/closed.html', {})
 
+
+def poll_index(request):
+    context = {'polls': Poll.objects.all()}
+    return render(request, 'poll/index.html', context)
+
+
 def admin_index(request):
     context = {'polls': Poll.objects.all()}
     return render(request, 'poll/admin/index.html', context)
-
-
-def admin_view_poll(request, pid):
-    p = get_object_or_404(Poll, id=pid)
-    context = {'poll': p}
-    return render(request, 'poll/admin/view_poll.html', context)
 
 
 def admin_add_poll(request):
