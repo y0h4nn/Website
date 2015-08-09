@@ -7,13 +7,13 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0002_auto_20150808_1447'),
+        ('accounts', '0001_initial'),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='profile',
-            name='picture',
-            field=models.ImageField(upload_to='profile_pictures', null=True, blank=True),
+            model_name='address',
+            name='street',
+            field=models.CharField(blank=True, max_length=512, null=True),
         ),
     ]

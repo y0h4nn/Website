@@ -8,3 +8,10 @@ img{
 .align_left{
 	text-align: left;
 }
+
+
+.addbtn {
+	width: 100%;
+	background-color: #bbb;
+	padding: 0.5em
+}

@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from . import forms
+from . import models
 
 
 def login(request):
@@ -64,6 +65,7 @@ def edit(request, username):
         passwordform = auth.forms.PasswordChangeForm(request.user, request.POST)
         profileform = forms.ProfileForm(request.POST, instance=user.profile)
         profileimgform = forms.ImageProfileForm(request.POST, request.FILES, instance=user.profile)
+        addressform = forms.AddressForm(request.POST, instance=user.profile.address)
 
         error = False
         if userform.has_changed() and userform.is_valid():
@@ -86,6 +88,11 @@ def edit(request, username):
         elif profileimgform.has_changed():
             error = True
 
+        if addressform.has_changed() and addressform.is_valid():
+            addressform.save()
+        elif addressform.has_changed():
+            error = True
+
         if error:
             context = {
                 'userform': userform.as_p(),
@@ -99,16 +106,19 @@ def edit(request, username):
             return redirect(reverse('accounts:edit', kwargs={'username': username}))
 
     else:
+
         userform = forms.UserForm(instance=user)
         passwordform = auth.forms.PasswordChangeForm(request.user)
         profileform = forms.ProfileForm(instance=user.profile)
         profileimgform = forms.ImageProfileForm(instance=user.profile)
+        addressform = forms.AddressForm(instance=user.profile.address)
 
         context = {
             'userform': userform.as_p(),
             'passwordform': passwordform.as_p(),
             'profileform': profileform.as_p(),
             'profileimgform': profileimgform.as_p(),
+            'addressform': addressform.as_p(),
         }
 
         return render(request, 'accounts/edit.html', context)

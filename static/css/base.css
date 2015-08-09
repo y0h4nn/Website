@@ -43,6 +43,7 @@ form button {
     margin: 0 0.5em; }
 form label {
   flex: 0 1 30%;
+  min-width: 30%;
   display: inline-block;
   font-weight: bold;
   padding-right: 0.5em; }

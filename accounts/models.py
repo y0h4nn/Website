@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.conf import settings
 
@@ -38,12 +40,18 @@ class Email(models.Model):
     valid = models.BooleanField(default=False)
 
 
-class Adress(models.Model):
-    profile = models.ForeignKey('Profile', related_name='addresses')
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    street = models.TextField()
-    postal_code = models.IntegerField()
-    town = models.CharField(max_length=255)
-    contry = models.CharField(max_length=255)
+class Address(models.Model):
+    profile = models.OneToOneField('Profile', related_name='address')
+    street = models.CharField(max_length=512, null=True, blank=True)
+    postal_code = models.IntegerField(null=True, blank=True)
+    town = models.CharField(max_length=255, null=True, blank=True)
 
+    def __str__(self):
+        return "{}, {} {}".format(self.streer, self.postal_code, self.town)
+
+
+@receiver(post_save, sender=User)
+def create_favorites(sender, instance, created, **kwargs):
+    if created:
+        p = Profile.objects.create(user=instance)
+        Address.objects.create(profile=p)
