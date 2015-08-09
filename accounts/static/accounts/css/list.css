@@ -18,12 +18,19 @@
 
 .picture_container{
 	flex: 0 1 50px;
+	width: 50px;
 	min-width: 50px;
+	max-width: 50px;
 	margin: 0 1em 0 0;
+	overflow: hidden;
+	text-align: center;
 }
 
 .userlist img{
-	max-width: 50px;
-	max-height: 50px;
+	height: 50px;
 	vertical-align: middle;
+	position: relative;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,0);
 }
