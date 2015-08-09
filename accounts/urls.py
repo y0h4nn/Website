@@ -6,5 +6,6 @@ urlpatterns = [
     url(r'^logout$', views.logout, name='logout'),
     url(r'^(?P<username>[a-zA-Z0-9]+)$', views.show, name='show'),
     url(r'^(?P<username>[a-zA-Z0-9]+)/edit$', views.edit, name='edit'),
+    url(r'^members/$', views.members, name='members'),
 ]
 

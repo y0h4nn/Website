@@ -32,7 +32,21 @@ class Profile(models.Model):
     semester = models.CharField(max_length=2, choices=SEMESTERS, null=True, blank=True)
 
     def __str__(self):
-        return self.nickname
+        if self.user.first_name and self.user.last_name and self.user.profile.nickname:
+            display_name_tpl = "{first_name} « {nickname} » {last_name}"
+        elif self.user.first_name and self.user.last_name:
+            display_name_tpl = "{first_name} {last_name}"
+        elif self.user.profile.nickname:
+            display_name_tpl = "{nickname}"
+        else:
+            display_name_tpl = "{uid}"
+
+        return display_name_tpl.format(
+            first_name=self.user.first_name,
+            last_name=self.user.last_name,
+            nickname=self.user.profile.nickname,
+            uid=self.user.username,
+        )
 
 
 class Email(models.Model):
