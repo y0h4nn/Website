@@ -61,15 +61,26 @@ class PollForm(forms.Form):
             self.fields[q] = QuestionField(qid=q, answers=self.questions_answers[q], data=self.data, initial=self.data[q], label="Question " + str(nb_q))
             nb_q += 1
         self.q_a_nb = json.dumps({q[1:]: len(a) for q, a in self.questions_answers.items()})
+        for f in ['start_time', 'end_time']:
+            self.fields[f].widget.widgets[0].attrs['placeholder'] = "DD/MM/YYYY"
+            self.fields[f].widget.widgets[1].attrs['placeholder'] = "HH:MM"
 
     def clean(self):
         cleaned_data = super().clean()
+        if cleaned_data['start_time'] >= cleaned_data['end_time']:
+            self.add_error('start_time', "Le début du sondage doit etre avant la fin")
         err_no_answer = False
         err_empty_answer = False
+        err_empty_question = False
+        if not self.questions_answers:
+            self.add_error(None, "Il doit y avoir au moins une question")
         for q, a in self.questions_answers.items():
             if not a and not err_no_answer:
                 err_no_answer = True
                 self.add_error(None, "Vous ne pouvez pas ajouter de question sans réponse.")
+            if not self.data[q] and not err_empty_question:
+                err_empty_question = True
+                self.add_error(None, "Vous ne pouvez pas avoir de question vide")
             for answer in a:
                 cleaned_data[answer] = forms.CharField(required=False).clean(self.data[answer])
                 if not cleaned_data[answer] and not err_empty_answer:
