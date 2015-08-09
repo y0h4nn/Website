@@ -67,8 +67,6 @@ class PollForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data['start_time'] >= cleaned_data['end_time']:
-            self.add_error('start_time', "Le début du sondage doit etre avant la fin")
         err_no_answer = False
         err_empty_answer = False
         err_empty_question = False
@@ -86,4 +84,7 @@ class PollForm(forms.Form):
                 if not cleaned_data[answer] and not err_empty_answer:
                     err_empty_answer = True
                     self.add_error(None, "Vous ne pouvez pas avoir de réponse vide")
+        if cleaned_data.get('start_time') and cleaned_data.get('end_time'):
+            if cleaned_data['start_time'] >= cleaned_data['end_time']:
+                self.add_error('start_time', "Le début du sondage doit etre avant la fin")
 
