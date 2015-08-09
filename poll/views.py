@@ -69,6 +69,7 @@ def admin_add_poll(request):
                 for answer in answers:
                     a = Answer(question=q, text=form.cleaned_data[answer], votes=0)
                     a.save()
+        return redirect(reverse('poll:admin'))
     else:
         return HttpResponseNotAllowed()
     context= {'form': form}
