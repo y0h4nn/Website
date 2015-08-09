@@ -16,8 +16,9 @@
 {% block header %}Edition du profil{% endblock %}
 
 {% block menu %}
-	{% menu_item request.user.username 'accounts:show' username=request.user.username %}
-	{% menu_item 'editer' 'accounts:edit' username=request.user.username %}
+	{% menu_item 'Liste des membres' 'accounts:members'  %}
+	{% menu_item 'Mon profil' 'accounts:show' username=request.user.username %}
+	{% menu_item 'Editer mon profil' 'accounts:edit' username=request.user.username %}
 {% endblock %}
 
 {% block main %}

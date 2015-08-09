@@ -37,27 +37,9 @@ def show(request, username):
     except User.DoesNotExist:
         return redirect(reverse('core:index'))
 
-    if user.first_name and user.last_name and user.profile.nickname:
-        display_name_tpl = "{first_name} « {nickname} » {last_name}"
-    elif user.first_name and user.last_name:
-        display_name_tpl = "{first_name} {last_name}"
-    elif user.profile.nickname:
-        display_name_tpl = "{nickname}"
-    else:
-        display_name_tpl = "{uid}"
-
-    display_name = display_name_tpl.format(
-        first_name=user.first_name,
-        last_name=user.last_name,
-        nickname=user.profile.nickname,
-        uid=user.username,
-    )
-
-    print(dir(user.profile.semester))
-
     context = {
         'user': user,
-        'display_name': display_name,
+        'display_name': str(user.profile),
     }
     return render(request, 'accounts/show.html', context)
 
@@ -147,3 +129,10 @@ def edit(request, username):
 
         return render(request, 'accounts/edit.html', context)
 
+
+@login_required()
+def members(request):
+    context = {
+        'users': User.objects.all(),
+    }
+    return render(request, 'accounts/list.html', context)

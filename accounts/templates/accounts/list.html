@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+		<link rel="stylesheet" href="{% static 'accounts/css/list.css' %}" />
+{% endblock %}
+
+{% block title %}
+	Liste des membres
+{% endblock %}
+
+{% block header %}
+	Liste des membres
+{% endblock %}
+
+{% block menu %}
+	{% menu_item 'Liste des membres' 'accounts:members' %}
+	{% menu_item 'Mon profil' 'accounts:show' username=request.user.username %}
+	{% if request.user.username == user.username %}
+		{% menu_item 'Editer mon profil' 'accounts:edit' username=user.username %}
+	{% endif %}
+{% endblock%}
+
+{% block main %}
+	<ul class="userlist">
+		{% for user in users %}
+			<li>
+				<a href="{% url 'accounts:show' username=user.username %}">
+					<div class="picture_container">
+						{% if user.profile.picture %}
+							<img src="{{ user.profile.picture.url }}" alt="picture" />
+						{% else %}
+							<img src="{% static 'images/default_user_icon.png' %}" alt="picture"/>
+						{% endif %}
+					</div>
+					<div>{{ user.profile }}</div>
+				</a>
+			</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}
