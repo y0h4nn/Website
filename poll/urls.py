@@ -6,7 +6,6 @@ urlpatterns = [
     url(r'^/?$', views.poll_index, name='index'),
     url(r'^thanks', views.thanks, name='thanks'),
     url(r'^already', views.already, name='already'),
-    url(r'^closed', views.closed, name='closed'),
     url(r'^admin/add$', views.admin_add_poll, name='admin_add_poll'),
     url(r'^admin', views.admin_index, name='admin'),
 ]

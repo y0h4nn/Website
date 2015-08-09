@@ -45,10 +45,6 @@ def already(request):
     return render(request, 'poll/already.html', {})
 
 
-def closed(request):
-    return render(request, 'poll/closed.html', {})
-
-
 def poll_index(request):
     context = {'polls': Poll.objects.all()}
     return render(request, 'poll/index.html', context)
