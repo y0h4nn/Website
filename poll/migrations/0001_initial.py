@@ -25,8 +25,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
                 ('title', models.TextField()),
-                ('start_date', models.DateField()),
-                ('end_date', models.DateField()),
+                ('start_date', models.DateTimeField()),
+                ('end_date', models.DateTimeField()),
                 ('author', models.ForeignKey(related_name='polls', to=settings.AUTH_USER_MODEL)),
             ],
         ),

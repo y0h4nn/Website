@@ -10,6 +10,9 @@ def question(request, pid):
     if not request.user.is_authenticated():
         return HttpResponseForbidden()
     p = get_object_or_404(Poll, id=pid)
+    if not p.is_open():
+        return redirect(reverse('poll:closed'))
+
     try:
         already_voted = Voter.objects.get(user=request.user, poll=p)
     except Voter.DoesNotExist:
@@ -41,6 +44,9 @@ def thanks(request):
 def already(request):
     return render(request, 'poll/already.html', {})
 
+
+def closed(request):
+    return render(request, 'poll/closed.html', {})
 
 def admin_index(request):
     context = {'polls': Poll.objects.all()}
