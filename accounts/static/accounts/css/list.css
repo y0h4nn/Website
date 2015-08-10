@@ -33,3 +33,9 @@
 	left: 50%;
 	transform: translate(-50%,0);
 }
+
+#userlist input{
+    width: 100%;
+    padding: 0.75em 1em;
+    font-weight: bold;
+}
