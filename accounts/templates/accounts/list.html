@@ -7,6 +7,10 @@
 		<link rel="stylesheet" href="{% static 'accounts/css/list.css' %}" />
 {% endblock %}
 
+{% block scripts %}
+	<script src="{% static 'accounts/js/userlist.js' %}"></script>
+{% endblock %}
+
 {% block title %}
 	Liste des membres
 {% endblock %}
@@ -24,21 +28,12 @@
 {% endblock%}
 
 {% block main %}
-	<ul class="userlist">
-		{% for user in users %}
-			<li>
-				<a href="{% url 'accounts:show' username=user.username %}">
-					<div class="picture_container">
-						{% if user.profile.picture %}
-							<img src="{{ user.profile.picture.url }}" alt="picture" />
-						{% else %}
-							<img src="{% static 'images/default_user_icon.png' %}" alt="picture"/>
-						{% endif %}
-					</div>
-					<div>{{ user.profile }}</div>
-				</a>
-			</li>
-		{% endfor %}
-	</ul>
+	<div id="userlist"><div class="spinner"></div></div>
 
+    <script>
+        window.addEventListener('load', function(){
+            console.log("ok");
+            var userList = new UserList('userlist');
+        });
+    </script>
 {% endblock %}

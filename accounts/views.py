@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
@@ -132,7 +133,15 @@ def edit(request, username):
 
 @login_required()
 def members(request):
-    context = {
-        'users': User.objects.all(),
-    }
-    return render(request, 'accounts/list.html', context)
+    if request.method == 'OPTIONS':
+        users = []
+        for user in User.objects.all():
+            users.append({
+                'display_name': str(user.profile),
+                'picture': user.profile.get_picture_url(),
+                'profile_url': user.profile.get_url(),
+            })
+
+        return JsonResponse({'users': users})
+
+    return render(request, 'accounts/list.html', {})
