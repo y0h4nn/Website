@@ -31,11 +31,17 @@ class PollForm(forms.Form):
     title = forms.CharField(label='Titre')
     start_time = forms.SplitDateTimeField()
     end_time = forms.SplitDateTimeField()
+    group = forms.ChoiceField()
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
+        self.fields['group'].choices = [(x, x) for x in user.groups.all()]
         self.q_a_nb = "{}"
         self.questions_answers = {}
+        for f in ['start_time', 'end_time']:
+            self.fields[f].widget.widgets[0].attrs['placeholder'] = "DD/MM/YYYY"
+            self.fields[f].widget.widgets[1].attrs['placeholder'] = "HH:MM"
         if not len(args):  # If the request is empty
             return
         questions = []
@@ -61,14 +67,9 @@ class PollForm(forms.Form):
             self.fields[q] = QuestionField(qid=q, answers=self.questions_answers[q], data=self.data, initial=self.data[q], label="Question " + str(nb_q))
             nb_q += 1
         self.q_a_nb = json.dumps({q[1:]: len(a) for q, a in self.questions_answers.items()})
-        for f in ['start_time', 'end_time']:
-            self.fields[f].widget.widgets[0].attrs['placeholder'] = "DD/MM/YYYY"
-            self.fields[f].widget.widgets[1].attrs['placeholder'] = "HH:MM"
 
     def clean(self):
         cleaned_data = super().clean()
-        if cleaned_data['start_time'] >= cleaned_data['end_time']:
-            self.add_error('start_time', "Le début du sondage doit etre avant la fin")
         err_no_answer = False
         err_empty_answer = False
         err_empty_question = False
@@ -86,4 +87,7 @@ class PollForm(forms.Form):
                 if not cleaned_data[answer] and not err_empty_answer:
                     err_empty_answer = True
                     self.add_error(None, "Vous ne pouvez pas avoir de réponse vide")
+        if cleaned_data.get('start_time') and cleaned_data.get('end_time'):
+            if cleaned_data['start_time'] >= cleaned_data['end_time']:
+                self.add_error('start_time', "Le début du sondage doit etre avant la fin")
 

@@ -41,6 +41,14 @@
 					{{ form.end_time }}
 				</p>
 			</div>
+
+			<div>
+				{{ form.group.errors }}
+				<p>
+					<label for="{{ form.group.id_for_label }}">Groupe: </label>
+					{{ form.group }}
+				</p>
+			</div>
 		</fieldset>
 
 		<div id="main_form">

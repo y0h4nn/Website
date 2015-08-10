@@ -1,5 +1,5 @@
 import imaplib
-from django.contrib.auth.models import User, check_password
+from django.contrib.auth.models import User, check_password, Group
 from django.db import IntegrityError
 from . import models
 
@@ -38,6 +38,10 @@ class ImapAuth(BaseAuth):
             try:
                 srv.login(username, password)
                 user = User.objects.create_user(username, email, password)
+                g1 = Group.objects.get(name='Enib')
+                g2 = Group.objects.get(name='Tous')
+                g1.user_set.add(user)
+                g2.user_set.add(user)
                 user.save()
             except (imaplib.IMAP4.error, IntegrityError):
                 pass
