@@ -1,0 +1,21 @@
+[{
+  "pk": 1,
+  "model": "auth.user",
+  "fields": {
+    "email": "demo@bananium.fr",
+    "groups": [
+      1
+    ],
+    "user_permissions": [],
+    "last_login": "2015-08-10T18:24:24Z",
+    "is_superuser": true,
+    "first_name": "",
+    "password": "pbkdf2_sha256$20000$PRX1F6icUnUf$1+GFpl/SWbCODYP76FdZYKdSYpC3XLOQZ7t5TKj4AGM=",
+    "last_name": "",
+    "is_active": true,
+    "username": "demo",
+    "date_joined": "2015-08-09T22:44:25Z",
+    "is_staff": true
+  }
+}]
+
