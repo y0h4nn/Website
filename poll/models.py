@@ -1,9 +1,12 @@
 from django.utils import timezone
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import Group
+
 
 class Poll(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='polls')
+    group = models.ForeignKey(Group, related_name='polls')
     title = models.TextField()
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()

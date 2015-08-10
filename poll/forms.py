@@ -31,9 +31,12 @@ class PollForm(forms.Form):
     title = forms.CharField(label='Titre')
     start_time = forms.SplitDateTimeField()
     end_time = forms.SplitDateTimeField()
+    group = forms.ChoiceField()
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
+        self.fields['group'].choices = [(x, x) for x in user.groups.all()]
         self.q_a_nb = "{}"
         self.questions_answers = {}
         if not len(args):  # If the request is empty

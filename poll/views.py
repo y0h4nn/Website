@@ -46,22 +46,26 @@ def already(request):
 
 
 def poll_index(request):
-    context = {'polls': Poll.objects.all()}
+    context = {'polls': Poll.objects.filter(group__in=request.user.groups.all())}
     return render(request, 'poll/index.html', context)
 
 
 def admin_index(request):
-    context = {'polls': Poll.objects.all()}
+    context = {'polls': Poll.objects.filter(group__in=request.user.groups.all())}
     return render(request, 'poll/admin/index.html', context)
 
 
 def admin_add_poll(request):
     if request.method == 'GET':
-        form = PollForm()
+        form = PollForm(user=request.user)
     elif request.method == 'POST':
-        form = PollForm(request.POST)
+        form = PollForm(request.POST, user=request.user)
+
         if form.is_valid():
-            p = Poll(title=form.cleaned_data['title'], author=request.user, start_date=form.cleaned_data['start_time'], end_date=form.cleaned_data['end_time'])
+            if not request.user.groups.filter(name=form.cleaned_data['group']).count():
+                return render(request, 'poll/admin/add.html', {'form': form})
+            g = request.user.groups.get(name=form.cleaned_data['group'])
+            p = Poll(title=form.cleaned_data['title'], author=request.user, start_date=form.cleaned_data['start_time'], end_date=form.cleaned_data['end_time'], group=g)
             p.save()
             for question, answers in form.questions_answers.items():
                 q = Question(poll=p, text=form.cleaned_data[question])
@@ -72,6 +76,5 @@ def admin_add_poll(request):
             return redirect(reverse('poll:admin'))
     else:
         return HttpResponseNotAllowed()
-    context= {'form': form}
-    return render(request, 'poll/admin/add.html', context)
+    return render(request, 'poll/admin/add.html', {'form': form})
 
