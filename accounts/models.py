@@ -1,3 +1,4 @@
+from django.templatetags.static import static
 from django.db import models
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -54,7 +55,7 @@ class Profile(models.Model):
         if self.picture:
             return self.picture.url
         else:
-            return settings.STATIC_ROOT + 'images/default_user_icon.png'
+            return static('images/default_user_icon.png')
 
     def get_url(self):
         return reverse('accounts:show', kwargs={'username': self.user.username})
