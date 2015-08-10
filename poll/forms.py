@@ -39,6 +39,9 @@ class PollForm(forms.Form):
         self.fields['group'].choices = [(x, x) for x in user.groups.all()]
         self.q_a_nb = "{}"
         self.questions_answers = {}
+        for f in ['start_time', 'end_time']:
+            self.fields[f].widget.widgets[0].attrs['placeholder'] = "DD/MM/YYYY"
+            self.fields[f].widget.widgets[1].attrs['placeholder'] = "HH:MM"
         if not len(args):  # If the request is empty
             return
         questions = []
@@ -64,9 +67,6 @@ class PollForm(forms.Form):
             self.fields[q] = QuestionField(qid=q, answers=self.questions_answers[q], data=self.data, initial=self.data[q], label="Question " + str(nb_q))
             nb_q += 1
         self.q_a_nb = json.dumps({q[1:]: len(a) for q, a in self.questions_answers.items()})
-        for f in ['start_time', 'end_time']:
-            self.fields[f].widget.widgets[0].attrs['placeholder'] = "DD/MM/YYYY"
-            self.fields[f].widget.widgets[1].attrs['placeholder'] = "HH:MM"
 
     def clean(self):
         cleaned_data = super().clean()
