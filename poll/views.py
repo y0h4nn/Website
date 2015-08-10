@@ -1,11 +1,13 @@
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from django.shortcuts import render, get_object_or_404, redirect
-from django.core.urlresolvers import reverse
 from .models import Question, Answer, Poll, Voter
 from .forms import PollForm
 
 
+@login_required()
 def question(request, pid):
     if not request.user.is_authenticated():
         return HttpResponseForbidden()
@@ -37,24 +39,29 @@ def question(request, pid):
     return render(request, 'poll/question.html', context)
 
 
+@login_required()
 def thanks(request):
     return render(request, 'poll/thanks.html', {})
 
 
+@login_required()
 def already(request):
     return render(request, 'poll/already.html', {})
 
 
+@login_required()
 def poll_index(request):
     context = {'polls': Poll.objects.filter(group__in=request.user.groups.all())}
     return render(request, 'poll/index.html', context)
 
 
+@login_required()
 def admin_index(request):
     context = {'polls': Poll.objects.filter(group__in=request.user.groups.all())}
     return render(request, 'poll/admin/index.html', context)
 
 
+@login_required()
 def admin_add_poll(request):
     if request.method == 'GET':
         form = PollForm(user=request.user)
