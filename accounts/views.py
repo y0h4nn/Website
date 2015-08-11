@@ -134,14 +134,17 @@ def edit(request, username):
 @login_required()
 def members(request):
     if request.method == 'OPTIONS':
-        users = []
-        for user in User.objects.all():
-            users.append({
+        users = [
+            {
                 'display_name': str(user.profile),
                 'picture': user.profile.get_picture_url(),
                 'profile_url': user.profile.get_url(),
-            })
-
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'username': user.username,
+                'nickname': user.profile.nickname,
+            } for user in User.objects.all()
+        ]
         return JsonResponse({'users': users})
 
     return render(request, 'accounts/list.html', {})
