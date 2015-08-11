@@ -12,6 +12,8 @@ from . import models
 def login(request):
     context = {}
 
+    if request.user.is_authenticated():
+        return redirect(request.POST.get('next', reverse('core:index')))
     if request.POST:
         email = request.POST['email']
         password = request.POST['password']
