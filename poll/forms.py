@@ -1,4 +1,3 @@
-from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 import django.forms as forms
 import json
