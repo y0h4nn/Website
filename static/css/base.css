@@ -27,29 +27,49 @@ nav > ul {
   padding: 0;
   list-style: none; }
 
+button {
+  background-color: #68B9DE; }
+
 form p {
   display: flex;
   flex-flow: row;
   align-items: center; }
-form button {
+  form p label {
+    flex: 0 1 35%;
+    min-width: 35%;
+    display: inline-block;
+    font-weight: bold;
+    padding-right: 0.5em; }
+  form p input, form p .button {
+    flex: 0 1 65%;
+    display: inline-block;
+    border-radius: 0; }
+    form p input:last-child, form p .button:last-child {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px; }
+    form p input + input, form p .button + input {
+      border-left: none; }
+  form p label + input {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px; }
+  form p button, form p .button {
+    padding: 0.25em 0.5em;
+    border-radius: 0; }
+    form p button:last-child, form p .button:last-child {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px; }
+    form p button:first-child, form p .button:first-child {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px; }
+form button, form .button {
   cursor: pointer;
   padding: 0.5em 1em;
-  background-color: #68B9DE;
   border: none;
   border-radius: 3px;
   color: white; }
-  form button i {
+  form button i, form .button i {
     vertical-align: middle;
     margin: 0 0.5em; }
-form label {
-  flex: 0 1 35%;
-  min-width: 35%;
-  display: inline-block;
-  font-weight: bold;
-  padding-right: 0.5em; }
-form input {
-  flex: 0 1 65%;
-  display: inline-block; }
 
 input {
   padding: 0.25em 0.5em;
@@ -129,6 +149,17 @@ fieldset {
     transform: rotate(0); }
   to {
     transform: rotate(1turn); } }
+.expand {
+  width: 100%;
+  display: block; }
+
+.bg_grey {
+  background-color: #bbb; }
+
+.blue {
+  background-color: #68B9DE;
+  color: white; }
+
 #main_container {
   flex: 1 1 auto;
   padding: 2.5em; }
