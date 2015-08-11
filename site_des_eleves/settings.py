@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'core',
     'accounts',
     'poll',
+    'events',
 )
 
 MIDDLEWARE_CLASSES = (
