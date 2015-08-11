@@ -14,7 +14,9 @@ def question(request, pid):
     p = get_object_or_404(Poll, id=pid)
     context = {'poll': p, 'pid': pid, "errors": []}
     if not p.is_open():
-        return render(request, 'poll/results.html', context)
+        if p.is_ended():
+            return render(request, 'poll/results.html', context)
+        return redirect(reverse('poll:index'))
 
     try:
         already_voted = Voter.objects.get(user=request.user, poll=p)
