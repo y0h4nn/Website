@@ -53,7 +53,7 @@
 
 		<div id="main_form">
 			{% for question, answers in form.questions_answers.items %}
-				{{ form.fields | hash_render:question | safe }}
+                {{ form.fields | hash_render:question | safe }}
 			{% endfor %}
 		</div>
 
