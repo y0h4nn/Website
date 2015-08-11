@@ -33,6 +33,7 @@ function queryJson(url, data, cb){
         this.listelement.setAttribute('class', 'userlist');
         this.allUsers = []
         this.matchingUsers = []
+        this.cachedSearchRegex = new RegExp('');
 
         this.populateUsers = function(json){   
             this.users = json['users'];
@@ -55,12 +56,27 @@ function queryJson(url, data, cb){
             }
 
             this.matchingUsers = this.users;
+            this.matchingUsers.sort(function(a, b){
+                var nameA = a['display_name'].toLowerCase();
+                var nameB = b['display_name'].toLowerCase();
+
+                if(nameA > nameB) return 1;
+                else if(nameA < nameB) return -1;
+                else return 0;
+            });
             this.reset();
             this.render();
         };
 
         this.match = function(user){
-            return new RegExp(this.searchInput.value).test(user['display_name']);
+            var match = false;
+            var regex = this.cachedSearchRegex;
+            match |= regex.test(user['last_name']);
+            match |= regex.test(user['first_name']);
+            match |= regex.test(user['nickname']);
+            match |= regex.test(user['username']);
+            match |= regex.test(user['display_name']);
+            return match;
         }
 
         this.reset = function(){
@@ -79,9 +95,14 @@ function queryJson(url, data, cb){
         queryJson('', {}, this.populateUsers.bind(this));
 
         this.searchInput.addEventListener('keyup', function(){
-            console.log(this.searchInput.value);
+            var startDate = new Date();
+
+            var pattern = this.searchInput.value.split('').join('.*?');
+            this.cachedSearchRegex = new RegExp(pattern, 'i');
+
             this.matchingUsers = this.users.filter(this.match, this);
             this.render();
+            console.log("Search update and rendering in " + (new Date() - startDate + "ms"));
         }.bind(this));
     }
 
