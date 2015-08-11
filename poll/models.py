@@ -17,6 +17,9 @@ class Poll(models.Model):
     def is_open(self):
         return self.start_date <= timezone.now() <= self.end_date
 
+    def is_ended(self):
+        return timezone.now() >= self.end_date
+
 
 class Question(models.Model):
     poll = models.ForeignKey('Poll', related_name='questions')

@@ -14,7 +14,11 @@
 			{% if poll.is_open %}
 				<li><a href="{% url 'poll:poll' pid=poll.id %}">{{ poll }} (Fin le {{ poll.end_date }})</a></li>
 			{% else %}
-				<li><a href="{% url 'poll:poll' pid=poll.id %}">{{ poll }} (Terminé le {{ poll.end_date }})</a></li>
+				{% if poll.is_ended %}
+					<li><a href="{% url 'poll:poll' pid=poll.id %}">{{ poll }} (Terminé le {{ poll.end_date }})</a></li>
+				{% else %}
+					<li><a href="{% url 'poll:poll' pid=poll.id %}">{{ poll }} (Ouverture le {{ poll.end_date }})</a></li>
+				{% endif %}
 			{% endif %}
 		{% endfor %}
 	</ul>
