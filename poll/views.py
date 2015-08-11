@@ -59,7 +59,7 @@ def poll_index(request):
 
 @login_required()
 def admin_index(request):
-    context = {'polls': Poll.objects.filter(group__in=request.user.groups.all())}
+    context = {'polls': Poll.objects.filter(author=request.user)}
     return render(request, 'poll/admin/index.html', context)
 
 
