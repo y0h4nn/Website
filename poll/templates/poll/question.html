@@ -1,11 +1,16 @@
 {% extends 'core/base.html' %}
 {% load menu_item %}
+{% load static %}
 
 {% block header %} {{ poll.title }} {% endblock %}
 
 {% block menu %}
 	{% menu_item "Liste" "poll:index" %}
 	{% menu_item "Administration" "poll:admin" %}
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'poll/css/question.css' %}" />
 {% endblock %}
 
 {% block main %}
@@ -20,13 +25,16 @@
 	<form action="{% url 'poll:poll' pid=pid %}" method="POST">
 		{% csrf_token %}
 		{% for question in poll.questions.all %}
-			{{ question }}
-			{% for answer in question.answers.all %}
-				<input type="radio" id="answer{{answer.id}}" name="question{{question.id}}" value="{{answer.id}}"/><label for="answer{{answer.id}}">{{ answer }}</label>
-			{% endfor %}
-			<br>
+            <h3>
+                {{ question }}
+            </h3>
+            <ul>
+                {% for answer in question.answers.all %}
+                    <li><input type="radio" id="answer{{answer.id}}" name="question{{question.id}}" value="{{answer.id}}"/><label for="answer{{answer.id}}">{{ answer }}</label></li>
+                {% endfor %}
+            </ul>
 		{% endfor %}
-	<button>Voter</button>
+        <button>Voter</button>
 	</form>
 	</div>
 
