@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 
 WEBMAIL_URLS = {
     'roundcube': 'http://roundcube.enib.net',
-    'horde': 'http://imp.enib.net',
     'rainloop': 'http://rainloop.enib.net',
+    'horde': 'https://ent.enib.fr/horde/imp',
     'squirrel': 'https://imap-eleves.enib.fr',
 }
 
