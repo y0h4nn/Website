@@ -12,13 +12,12 @@
 
 	{% for question in poll.questions.all %}
 		<div>
-			{{ question }}
-			<div style="margin-left: 50px">
+            <h3>{{ question }}</h3>
+			<ul>
 				{% for answer in question.answers.all %}
-					{{ answer }} => {{ answer.votes }}
-					<br>
+                    <li>{{ answer }} => {{ answer.votes }}</li>
 				{% endfor %}
-			</div>
+			</ul>
 		</div>
 	{% endfor %}
 

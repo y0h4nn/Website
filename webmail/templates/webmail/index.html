@@ -1,0 +1,98 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'webmail/css/index.css' %}" />
+{% endblock %}
+
+{% block title %}
+	Webmail
+{% endblock %}
+
+{% block header %}
+    Webmail
+{% endblock %}
+
+{% block menu %}
+{% endblock%}
+
+{% block main %}
+
+    <h2>Roundcube</h2>
+    <a href="http://roundcube.enib.net">
+        <div class="flex_container center_vertical">
+            <div>
+                <img src="{% static 'webmail/images/roundcube.png' %}" alt="logo-roundcube" />
+            </div>
+            <div class="flex expand">
+                <p>
+                   Roundcube est un webmail en cours de développement qui connaît un succès
+                   de plus en plus grand. Il lui manque plusieurs fonctionnalités que
+                   propose Horde (pas de filtre sur les mails, pas d'agenda, etc...), mais
+                   est néanmoins (plutôt) stable et très agréable à utiliser (drag'n'drop,
+                   ajax, ...). 
+                </p>
+            </div>
+            <i class="fa fa-chevron-right"></i>
+        </div>
+    </a>
+
+    <h2>Rainloop</h2>
+    <a href="http://rainloop.enib.net">
+        <div class="flex_container center_vertical">
+            <div>
+                <img src="{% static 'webmail/images/rainloop.png' %}" alt="logo-roundcube" />
+            </div>
+            <div class="flex expand">
+                <div>
+                    <p>
+                        Webmail moderne et responsive.
+                    </p>
+                </div>
+            </div>
+            <i class="fa fa-chevron-right"></i>
+        </div>
+    </a>
+
+    <h2>Horde</h2>
+    <a href="http://imp.enib.net">
+        <div class="flex_container center_vertical">
+            <div>
+                <img src="{% static 'webmail/images/horde.png' %}" alt="logo-roundcube" />
+            </div>
+            <div class="flex expand">
+                <p>
+                    Plus ancien, plus stable, mais hélas bien plus lourd et à l'habillage
+                    peu avenant, Horde fournit à l'utilisateur de nombreuses
+                    fonctionnalités bien pratiques (agenda, bloc notes, ...). Le filtrage
+                    des mails est géré, ce qui permet d'organiser efficacement son courrier
+                    électronique. 
+                </p>
+            </div>
+            <i class="fa fa-chevron-right"></i>
+        </div>
+    </a>
+
+
+    <h2>Squirrel Mail</h2>
+    <a href="https://imap-eleves.enib.fr/">
+        <div class="flex_container center_vertical">
+            <div>
+                <img src="{% static 'webmail/images/squirrel.png' %}" alt="logo-roundcube" />
+            </div>
+            <div class="flex expand">
+                <p>
+                    Le webmail squirrel mail est fourni par l'ENIB et non pas par
+                    l'association des élèves. C'est le seul webmail qui peut écrire sur les
+                    mailing-lists. 
+                </p>
+                <div class="right">
+                </div>
+            </div>
+            <i class="fa fa-chevron-right"></i>
+        </div>
+    </a>
+{% endblock %}
