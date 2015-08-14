@@ -26,7 +26,12 @@ def admin_view(request, eid):
     return render(request, 'events/admin/view.html', context)
 
 def admin_edit(request, eid):
-    pass
+    e = get_object_or_404(Event, id=eid)
+    form = EventForm(request.POST or None, instance=e)
+    if form.is_valid():
+        form.save()
+    context = {'event': e, 'event_form': form}
+    return render(request, 'events/admin/edit.html', context)
 
 def admin_list_registrations(request):
     pass

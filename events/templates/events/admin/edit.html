@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+
+{% block header %}
+	{{ event.name }}
+{% endblock %}
+
+{% block menu %}
+	{% menu_item "Liste des évènements" "events:admin_index" %}
+	{% menu_item "Liste des inscrits" "events:admin_list_registrations" eid=event.id %}
+	{% menu_item "Editer l'évènement" "events:admin_edit" eid=event.id %}
+{% endblock %}
+
+{% block main %}
+	<form action="{% url 'events:admin_edit' eid=event.id %}" method="POST">
+		{% csrf_token %}
+		{{ event_form.as_p }}
+		<button>Sauvegarder</button>
+	</form>
+{% endblock %}
