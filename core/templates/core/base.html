@@ -94,6 +94,7 @@
 					<nav>
 						<ul>
 							<li><a href="{% url 'accounts:show' username=request.user.username %}"><i class="fa fa-user"></i> Mon profil</a></li>
+							<li><a href="{% url 'core:settings' %}"><i class="fa fa-cog"></i> Paramètres</a></li>
 							<li><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> Deconnexion</a></li>
 						</ul>
 					</nav>

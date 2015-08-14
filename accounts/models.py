@@ -82,3 +82,4 @@ def create_favorites(sender, instance, created, **kwargs):
     if created:
         p = Profile.objects.create(user=instance)
         Address.objects.create(profile=p)
+        WebmailSettings.objects.create(user=instance)
