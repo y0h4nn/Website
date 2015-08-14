@@ -10,6 +10,9 @@ class Event(models.Model):
     description = models.TextField()
     photo = models.ImageField(height_field='height', width_field='width', null=True, blank=True)
 
+    def registrations_number(self):
+        return len(self.inscriptions.all())
+
 
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
