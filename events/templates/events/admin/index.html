@@ -11,8 +11,12 @@ Liste des évènements
 {% endblock %}
 
 {% block main %}
-	{% for event in events %}
-		{{ event }}
-	{% endfor %}
+	<ul>
+		{% for event in events %}
+			<li>
+				<a href="{% url 'events:admin_view' eid=event.id %}">{{ event.name }}</a>
+			</li>
+		{% endfor %}
+	</ul>
 {% endblock %}
 

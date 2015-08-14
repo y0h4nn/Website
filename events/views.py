@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Event
 from .forms import EventForm
 
@@ -20,3 +20,13 @@ def admin_add(request):
     context = {'event_form': form}
     return render(request, 'events/admin/add.html', context)
 
+def admin_view(request, eid):
+    e = get_object_or_404(Event, id=eid)
+    context = {'event': e}
+    return render(request, 'events/admin/view.html', context)
+
+def admin_edit(request, eid):
+    pass
+
+def admin_list_registrations(request):
+    pass
