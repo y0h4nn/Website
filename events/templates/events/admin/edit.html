@@ -7,6 +7,7 @@
 
 {% block menu %}
 	{% menu_item "Liste des évènements" "events:admin_index" %}
+	{% menu_item "Description" "events:admin_view" eid=event.id %}
 	{% menu_item "Liste des inscrits" "events:admin_list_registrations" eid=event.id %}
 	{% menu_item "Editer l'évènement" "events:admin_edit" eid=event.id %}
 {% endblock %}
