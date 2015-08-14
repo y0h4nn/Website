@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+
+{% block header %}
+Liste des évènements
+{% endblock %}
+
+{% block menu %}
+	{% menu_item "Liste des évènements" "events:admin_index" %}
+	{% menu_item "Ajouter un évènement" "events:admin_add" %}
+{% endblock %}
+
+{% block main %}
+	{% for event in events %}
+		{{ event }}
+	{% endfor %}
+{% endblock %}
+

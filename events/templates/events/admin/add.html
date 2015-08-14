@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+
+{% block header %}
+	Ajouter un évènement
+{% endblock %}
+
+{% block menu %}
+	{% menu_item "Liste des évènements" "events:admin_index" %}
+	{% menu_item "Ajouter un evenement" "events:admin_add" %}
+{% endblock %}
+
+{% block main %}
+	<form action="{% url 'events:admin_add' %}" method="POST">
+		{% csrf_token %}
+		{{ event_form.as_p }}
+		<button>Ajouter</button>
+	</form>
+{% endblock %}
+
