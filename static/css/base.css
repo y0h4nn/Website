@@ -27,8 +27,17 @@ nav > ul {
   padding: 0;
   list-style: none; }
 
-button {
-  background-color: #68B9DE; }
+button, .button {
+  background-color: #68B9DE;
+  padding: 0.25em 0.5em;
+  cursor: pointer;
+  padding: 0.5em 1em;
+  border: none;
+  border-radius: 3px;
+  color: white; }
+  button i, .button i {
+    vertical-align: middle;
+    margin: 0 0.5em; }
 
 form p {
   display: flex;
@@ -61,15 +70,6 @@ form p {
     form p button:first-child, form p .button:first-child {
       border-top-left-radius: 3px;
       border-bottom-left-radius: 3px; }
-form button, form .button {
-  cursor: pointer;
-  padding: 0.5em 1em;
-  border: none;
-  border-radius: 3px;
-  color: white; }
-  form button i, form .button i {
-    vertical-align: middle;
-    margin: 0 0.5em; }
 
 input {
   padding: 0.25em 0.5em;
@@ -119,6 +119,13 @@ fieldset {
   display: flex;
   flex-flow: row;
   align-items: stretch; }
+  .flex_container.center_vertical {
+    align-items: center; }
+  .flex_container.start {
+    align-items: flex-start; }
+
+.right {
+  text-align: right; }
 
 .flex {
   flex: 0 1 auto; }

@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^poll/', include('poll.urls', namespace='poll')),
     url(r'^events/', include('events.urls', namespace='events')),
+    url(r'^webmail/', include('webmail.urls', namespace='webmail')),
 ]
