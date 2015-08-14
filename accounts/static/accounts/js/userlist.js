@@ -1,29 +1,5 @@
 'use strict';
 
-
-function queryJson(url, data, cb){
-	var params = JSON.stringify(data);
-	var xhr = new XMLHttpRequest();
-
-	xhr.open('OPTIONS', url);
-	xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-
-	if(cb != undefined){
-		xhr.onreadystatechange = function(){
-			if(xhr.readyState == xhr.DONE){
-                console.log("received datas");
-                console.log(JSON.parse(xhr.responseText));
-				cb(JSON.parse(xhr.responseText));
-			}
-		}
-	}
-
-	xhr.send(params);
-
-	return xhr;
-}
-
-
 (function(){
 
     var UserList = function(containerId){
@@ -35,7 +11,7 @@ function queryJson(url, data, cb){
         this.matchingUsers = []
         this.cachedSearchRegex = new RegExp('');
 
-        this.populateUsers = function(json){   
+        this.populateUsers = function(json){
             this.users = json['users'];
             for(var user of this.users){
                 var link = document.createElement('a');
