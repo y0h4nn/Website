@@ -22,7 +22,7 @@
 				</div>
 				<nav>
 					<ul>
-                        <li><a href="{% url 'webmail:index' %}"><i class="fa fa-envelope"></i></a></li>
+            <li><a href="{% url 'webmail:index' %}"><i class="fa fa-envelope"></i></a></li>
 						<li><a href="#"><i class="fa fa-inbox"></i></a></li>
 						<li><a href="#"><i class="fa fa-question-circle"></i></a></li>
 					</ul>
@@ -45,11 +45,6 @@
 					</ul>
 				</nav>
 			</main>
-			<footer>
-				<p>
-					Made with love by bananium dev team
-				</p>
-			</footer>
 		</section>
 
 		<section id="main_container">
@@ -82,7 +77,7 @@
 						<img src="{% static 'images/default_user_icon.png' %}" alt="picture"/>
 					{% endif %}
 					{% if request.user.first_name and request.user.last_name %}
-						<h1 class="center">
+						<h1 id="username" class="center">
 							{% if request.user.profile.nickname %}
 								«{{ request.user.profile.nickname }}»<br/>
 							{% endif %}
@@ -90,13 +85,13 @@
 							{{ request.user.last_name }}
 						</h1>
 					{% else %}
-						<h1 class="center">{{ request.user.username }}</h1>
+						<h1 id="username" class="center">{{ request.user.username }}</h1>
 					{% endif %}
 					<nav>
 						<ul>
-							<li><a href="{% url 'accounts:show' username=request.user.username %}"><i class="fa fa-user"></i> Mon profil</a></li>
-							<li><a href="{% url 'core:settings' %}"><i class="fa fa-cog"></i> Paramètres</a></li>
-							<li><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> Deconnexion</a></li>
+              <li><a href="{% url 'accounts:show' username=request.user.username %}"><i class="fa fa-user"></i> <span>Mon profil</span></a></li>
+              <li><a href="{% url 'core:settings' %}"><i class="fa fa-cog"></i> <span>Paramètres</span></a></li>
+              <li><a href="{% url 'accounts:logout' %}"><i class="fa fa-sign-out"></i> <span>Deconnexion</span></a></li>
 						</ul>
 					</nav>
 				{% else %}

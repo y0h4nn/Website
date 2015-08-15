@@ -27,6 +27,9 @@ nav > ul {
   padding: 0;
   list-style: none; }
 
+@media screen and (max-width: 640px) {
+  body {
+    flex-flow: column; } }
 button, .button {
   background-color: #68B9DE;
   padding: 0.25em 0.5em;
@@ -79,6 +82,9 @@ input {
   input:focus {
     border-color: #68B9DE; }
 
+select {
+  padding: 0.25em 0.5em; }
+
 legend {
   padding: 1em;
   margin: 0 0 0 2em;
@@ -112,6 +118,37 @@ fieldset {
     .errorlist + p input:focus {
       border-color: red; }
 
+@media screen and (max-width: 768px) {
+  form select {
+    width: 100%; }
+  form input {
+    width: 100%; }
+  form p {
+    flex-flow: column; }
+    form p label, form p input {
+      width: 100%;
+      margin: 0.25em 0; }
+    form p input {
+      padding: 0.25em 0.5em;
+      border-radius: 3px; }
+      form p input + input {
+        border-left: 1px solid #ccc; }
+    form p input, form p .button {
+      flex: 0 1 100%;
+      display: block;
+      border-radius: 3px; }
+      form p input:last-child, form p .button:last-child {
+        border-radius: 3px; }
+      form p input + input, form p .button + input {
+        border-left: 1px solid #ccc; }
+    form p label + input {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px; }
+    form p button, form p .button {
+      padding: 0.25em 0.5em;
+      border-radius: 3px;
+      width: 100%;
+      margin: 0.25em 0; } }
 .center {
   text-align: center; }
 
@@ -177,13 +214,27 @@ fieldset {
     color: #999; }
   #main_container header nav {
     margin: 1em 0 2em 0; }
+    #main_container header nav ul {
+      display: flex;
+      width: 100%; }
   #main_container header li {
-    display: inline-block; }
+    flex: 1 1 auto;
+    align-self: stretch; }
+    #main_container header li:last-child a {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+      text-align: right; }
+    #main_container header li:first-child a {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
+      text-align: left; }
   #main_container header a {
-    display: inline-block;
+    display: block;
+    text-align: center;
+    width: 100%;
+    height: 100%;
     background-color: #B3D6E6;
     padding: 0.5em 1em;
-    border-radius: 3px;
     margin: 0 0.5em 0 0;
     color: white;
     font-weight: bold;
@@ -196,6 +247,12 @@ fieldset {
     #main_container main h2 {
       color: #ccc; }
 
+@media screen and (max-width: 768px) {
+  #main_container header nav li {
+    display: block; }
+    #main_container header nav li a {
+      display: block;
+      margin: 0.5em 0; } }
 #nav_container {
   min-width: 300px;
   flex: 0 1 300px;
@@ -258,6 +315,16 @@ fieldset {
 #logo {
   width: 150px; }
 
+@media screen and (max-width: 1280px) {
+  #nav_container {
+    min-width: 200px;
+    flex: 0 1 200px;
+    padding: 0.75em; }
+    #nav_container header {
+      flex-flow: column;
+      text-align: center; }
+      #nav_container header nav ul li {
+        display: inline-block; } }
 #user_container {
   min-width: 225px;
   flex: 0 1 225px;
@@ -314,5 +381,20 @@ fieldset {
     border-radius: 2em;
     text-align: center;
     color: white; }
+
+@media screen and (max-width: 1280px) {
+  #user_container {
+    flex: 0 1 50px;
+    min-width: 50px;
+    padding: 0.5em; }
+    #user_container header img {
+      width: 100%;
+      border-radius: 2px; }
+    #user_container nav a {
+      text-align: center; }
+      #user_container nav a span {
+        display: none; }
+    #user_container #username {
+      display: none; } }
 
 /*# sourceMappingURL=base.css.map */

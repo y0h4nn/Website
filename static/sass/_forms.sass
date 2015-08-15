@@ -66,6 +66,9 @@ input
   &:focus
     border-color: $blue
 
+select
+  padding: 0.25em 0.5em
+
 legend
   padding: 1em
   margin: 0 0 0 2em
@@ -102,4 +105,45 @@ fieldset
 
     &:focus
       border-color: red
+
+@media screen and (max-width: 768px)
+  form 
+    select
+      width: 100%
+    input
+      width: 100%
+    p
+      flex-flow: column
+
+      label, input
+        width: 100%
+        margin: 0.25em 0
+
+      input
+        padding: 0.25em 0.5em
+        border-radius: 3px
+
+        & + input
+          border-left: 1px solid #ccc
+
+      input, .button
+        flex: 0 1 100%
+        display: block
+        border-radius: 3px
+
+        &:last-child
+          border-radius: $border-radius
+        
+        & + input
+          border-left: 1px solid #ccc
+
+      label + input
+        border-top-left-radius: $border-radius
+        border-bottom-left-radius: $border-radius
+
+      button, .button
+        padding: 0.25em 0.5em
+        border-radius: 3px
+        width: 100%
+        margin: 0.25em 0
 

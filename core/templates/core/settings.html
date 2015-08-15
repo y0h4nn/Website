@@ -19,7 +19,9 @@
 
 {% block menu %}
 	{% menu_item 'Général' 'core:settings' %}
+{% endblock %}
 
+{% block main %}
   <form action="{% url 'core:settings' %}" method="POST">
     {% csrf_token %}
     <fieldset>
@@ -29,7 +31,4 @@
 
     <button><i class="fa fa-check"></i> Sauvegarder</button>
   </form>
-{% endblock%}
-
-{% block main %}
 {% endblock %}
