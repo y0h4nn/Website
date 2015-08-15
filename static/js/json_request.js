@@ -10,8 +10,6 @@ function queryJson(url, data, cb){
 	if(cb != undefined){
 		xhr.onreadystatechange = function(){
 			if(xhr.readyState == xhr.DONE){
-                console.log("received datas");
-                console.log(JSON.parse(xhr.responseText));
 				cb(JSON.parse(xhr.responseText));
 			}
 		}

@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     url(r'^(?P<eid>[0-9]+)$', views.event, name='event'),
+    url(r'^/?$', views.index, name='index'),
     url(r'^admin/$', views.admin_index, name='admin_index'),
     url(r'^admin/add/$', views.admin_add, name='admin_add'),
     url(r'^admin/view/(?P<eid>[0-9]+)$', views.admin_view, name='admin_view'),

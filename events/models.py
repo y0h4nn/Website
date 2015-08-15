@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 
 class Event(models.Model):
@@ -13,8 +14,21 @@ class Event(models.Model):
     def registrations_number(self):
         return len(self.inscriptions.all())
 
+    def is_open(self):
+        return self.start_date <= timezone.now() <= self.end_date
+
+    def is_ended(self):
+        return timezone.now() >= self.end_date
+
+    @staticmethod
+    def to_come(user):
+        return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(start_time__gt=timezone.now())]  # XXX: This mays be slow as hell, it needs some testing.
+
 
 class Inscription(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="inscriptions")
     event = models.ForeignKey(Event, related_name="inscriptions")
+
+    class Meta:
+        unique_together = (('user', 'event'),)
 
