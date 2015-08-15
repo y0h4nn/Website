@@ -343,71 +343,96 @@ fieldset {
   flex: 0 1 225px;
   background-color: #f2f2f2;
   padding: 1em; }
-  #user_container header h1 {
-    font-size: 1em;
-    margin: 0.75em 0; }
-    #user_container header h1 i {
-      color: #bbb; }
-  #user_container header input, #user_container header label {
-    display: block;
-    width: 100%;
-    margin: 0.5em 0; }
-  #user_container header label {
-    padding: 0.25em 0; }
-  #user_container header input {
-    background-color: #fff;
-    border: 1px solid #dfdfdf;
-    padding: 0.4em 0.6em; }
-  #user_container header button {
-    background-color: #FCCD76;
-    width: 100%;
-    border-radius: 3px;
-    border: none;
-    padding: 0.5em 1em;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 0.75em 0;
-    transition: background-color 0.25s;
-    color: white; }
-    #user_container header button i {
-      padding: 0 1em;
-      vertical-align: middle; }
-    #user_container header button:hover {
-      background-color: #FFC458; }
-  #user_container header img {
-    display: block;
-    border-radius: 10px;
-    width: 50%;
-    margin: 1em auto; }
-  #user_container header nav a {
-    display: block;
-    padding: 0.25em 0;
-    background-color: #fccd76;
-    margin: 0.4em 0;
-    color: white;
-    border-radius: 4px;
-    padding: 0.5em;
-    transition: background-color 0.25s; }
-    #user_container header nav a:hover {
-      background-color: #ffc458; }
-  #user_container header nav i {
-    border-radius: 2em;
+  #user_container .displayed_on_retracted {
+    display: none; }
+  #user_container .hidden_on_retracted {
+    display: block; }
+  #user_container #toggle_user_container {
     text-align: center;
-    color: white; }
-
-@media screen and (max-width: 1280px) {
-  #user_container {
-    flex: 0 1 50px;
-    min-width: 50px;
-    padding: 0.5em; }
-    #user_container header img {
+    background-color: #e2e2e2;
+    color: #bbb;
+    margin: -1em;
+    padding: 0.5em;
+    transition: background-color 0.25s, color 0.25s;
+    cursor: pointer;
+    position: fixed;
+    width: 225px; }
+    #user_container #toggle_user_container:hover {
+      background-color: #d2d2d2;
+      color: white; }
+  #user_container header {
+    margin-top: 3em; }
+    #user_container header h1 {
+      font-size: 1em;
+      margin: 0.75em 0; }
+      #user_container header h1 i {
+        color: #bbb; }
+    #user_container header input, #user_container header label {
+      display: block;
       width: 100%;
-      border-radius: 2px; }
-    #user_container nav a {
-      text-align: center; }
-      #user_container nav a span {
-        display: none; }
-    #user_container #username {
-      display: none; } }
+      margin: 0.5em 0; }
+    #user_container header label {
+      padding: 0.25em 0; }
+    #user_container header input {
+      background-color: #fff;
+      border: 1px solid #dfdfdf;
+      padding: 0.4em 0.6em; }
+    #user_container header button {
+      background-color: #FCCD76;
+      width: 100%;
+      border-radius: 3px;
+      border: none;
+      padding: 0.5em 1em;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0.75em 0;
+      transition: background-color 0.25s;
+      color: white; }
+      #user_container header button i {
+        padding: 0 1em;
+        vertical-align: middle; }
+      #user_container header button:hover {
+        background-color: #FFC458; }
+    #user_container header img {
+      display: block;
+      border-radius: 10px;
+      width: 50%;
+      margin: 1em auto; }
+    #user_container header nav a {
+      display: block;
+      padding: 0.25em 0;
+      background-color: #fccd76;
+      margin: 0.4em 0;
+      color: white;
+      border-radius: 4px;
+      padding: 0.5em;
+      transition: background-color 0.25s; }
+      #user_container header nav a:hover {
+        background-color: #ffc458; }
+    #user_container header nav i {
+      border-radius: 2em;
+      text-align: center;
+      color: white; }
+
+#user_container.retracted {
+  flex: 0 1 50px;
+  min-width: 50px;
+  padding: 0.5em; }
+  #user_container.retracted header img {
+    width: 100%;
+    border-radius: 2px; }
+  #user_container.retracted nav a {
+    text-align: center; }
+    #user_container.retracted nav a span {
+      display: none; }
+  #user_container.retracted #username {
+    display: none; }
+  #user_container.retracted #toggle_user_container {
+    width: 50px;
+    margin: -0.5em; }
+  #user_container.retracted .hidden_on_retracted {
+    display: none; }
+  #user_container.retracted .displayed_on_retracted {
+    display: block; }
 
 /*# sourceMappingURL=base.css.map */

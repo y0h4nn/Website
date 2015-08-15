@@ -1,12 +1,35 @@
+$user_container_width: 225px
 
 
 #user_container
-  min-width: 225px
-  flex: 0 1 225px
+  min-width: $user_container_width
+  flex: 0 1 $user_container_width
   background-color: #f2f2f2
   padding: 1em
 
+  .displayed_on_retracted
+    display: none
+
+  .hidden_on_retracted
+    display: block
+
+  #toggle_user_container
+    text-align: center
+    background-color: #e2e2e2
+    color: #bbb
+    margin: -1em
+    padding: 0.5em
+    transition: background-color 0.25s, color 0.25s
+    cursor: pointer
+    position: fixed
+    width: $user_container_width
+
+    &:hover
+      background-color: #d2d2d2
+      color: white
+
   header
+    margin-top: 3em
     h1
       font-size: 1em
       margin: 0.75em 0
@@ -68,19 +91,29 @@
         color: white
 
 
-@media screen and (max-width: 1280px)
-  #user_container 
-    flex: 0 1 50px
-    min-width: 50px
-    padding: 0.5em
+#user_container.retracted
+  flex: 0 1 50px
+  min-width: 50px
+  padding: 0.5em
 
-    header img
-      width: 100%
-      border-radius: 2px
-    nav a
-      text-align: center
-      span
-        display: none
-    #username
+  header img
+    width: 100%
+    border-radius: 2px
+  nav a
+    text-align: center
+    span
       display: none
+
+  #username
+    display: none
+
+  #toggle_user_container
+    width: 50px
+    margin: -0.5em
+
+  .hidden_on_retracted
+    display: none
+
+  .displayed_on_retracted
+    display: block
 
