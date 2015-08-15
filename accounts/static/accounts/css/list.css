@@ -39,3 +39,9 @@
     padding: 0.75em 1em;
     font-weight: bold;
 }
+
+.userlist_right_button {
+	margin-left: auto;
+	margin-right: 5px;
+}
+

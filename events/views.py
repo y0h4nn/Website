@@ -54,6 +54,12 @@ def admin_edit(request, eid):
 
 
 def admin_list_registrations(request, eid):
+    if request.method == "OPTIONS":
+        req = json.loads(request.read().decode())
+        event = get_object_or_404(Event, id=req['eid'])
+        ins = Inscription.objects.get(event=event, user=request.user)
+        ins.delete()
+        return JsonResponse({"status": 1})
     e = get_object_or_404(Event, id=eid)
     reg = Inscription.objects.filter(event=e)
     return render(request, 'events/admin/list_registrations.html', {'reg': reg})

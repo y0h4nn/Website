@@ -1,19 +1,36 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block scripts %}
+	<script src="{% static 'js/json_request.js' %}"></script>
+	<script src="{% static 'events/js/user_list.js' %}"></script>
+{% endblock %}
+
 {% block styles %}
         <link rel="stylesheet" href="{% static 'accounts/css/list.css' %}" />
 {% endblock %}
-
 
 {% block header %}
 	Liste de personnes inscrites
 {% endblock %}
 
+
 {% block main %}
 	<ul class="userlist">
 		{% for registration in reg %}
-			<li><a href="{{ registration.user.profile.get_url }}"><div class="picture_container"><img src="{{ registration.user.profile.get_picture_url }}" alt="profile_picture"/></div><div>{{ registration.user.profile }}</div></a></li>
+			<li>
+				<a href="{{ registration.user.profile.get_url }}">
+					<div class="picture_container">
+						<img src="{{ registration.user.profile.get_picture_url }}" alt="profile_picture"/>
+					</div>
+					<div>
+						{{ registration.user.profile }}
+					</div>
+					<button onclick="del_user({{registration.event.id}}, {{registration.user.id}}, this); return false;" class="red_button userlist_right_button">
+						Supprimer
+					</button>
+				</a>
+			</li>
 		{% endfor %}
 	</ul>
 {% endblock %}
