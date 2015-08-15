@@ -53,7 +53,8 @@ def admin_view(request, eid):
 @login_required
 def admin_edit(request, eid):
     e = get_object_or_404(Event, id=eid)
-    form = EventForm(request.POST or None, instance=e)
+    print(request.FILES)
+    form = EventForm(request.POST or None, request.FILES or None, instance=e)
     if form.is_valid():
         form.save()
     context = {'event': e, 'event_form': form}

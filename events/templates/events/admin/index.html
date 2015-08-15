@@ -1,8 +1,9 @@
 {% extends 'core/base.html' %}
 {% load menu_item %}
+{% load static %}
 
 {% block header %}
-Liste des évènements
+	Liste des évènements
 {% endblock %}
 
 {% block menu %}
@@ -10,11 +11,22 @@ Liste des évènements
 	{% menu_item "Ajouter un évènement" "events:admin_add" %}
 {% endblock %}
 
+{% block styles %}
+        <link rel="stylesheet" href="{% static 'accounts/css/list.css' %}" />
+{% endblock %}
+
 {% block main %}
-	<ul>
+	<ul class="userlist">
 		{% for event in events %}
 			<li>
-				<a href="{% url 'events:admin_view' eid=event.id %}">{{ event.name }}</a>
+				<a href="{% url 'events:admin_view' eid=event.id %}">
+					<div class="picture_container">
+						<img src="{{ event.photo_url }}"/>
+					</div>
+					<div>
+						{{ event.name }}
+					</div>
+				</a>
 			</li>
 		{% endfor %}
 	</ul>

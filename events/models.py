@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.templatetags.static import static
 
 
 class Event(models.Model):
@@ -9,7 +10,7 @@ class Event(models.Model):
     end_time = models.DateTimeField()
     location = models.CharField(max_length=255)
     description = models.TextField()
-    photo = models.ImageField(height_field='height', width_field='width', null=True, blank=True)
+    photo = models.ImageField(null=True, blank=True)
 
     def registrations_number(self):
         return len(self.inscriptions.all())
@@ -19,6 +20,11 @@ class Event(models.Model):
 
     def is_ended(self):
         return timezone.now() >= self.end_date
+
+    def photo_url(self):
+        if self.photo:
+            return self.photo.url
+        return static('images/default_event_icon.png')
 
     @staticmethod
     def to_come(user):
