@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load menu_item %}
 
 {% block scripts %}
 	<script src="{% static 'js/json_request.js' %}"></script>
@@ -8,6 +9,13 @@
 
 {% block styles %}
         <link rel="stylesheet" href="{% static 'accounts/css/list.css' %}" />
+{% endblock %}
+
+{% block menu %}
+	{% menu_item "Liste des évènements" "events:admin_index" %}
+	{% menu_item "Description" "events:admin_view" eid=event.id %}
+	{% menu_item "Liste des inscrits" "events:admin_list_registrations" eid=event.id %}
+	{% menu_item "Editer l'évènement" "events:admin_edit" eid=event.id %}
 {% endblock %}
 
 {% block header %}

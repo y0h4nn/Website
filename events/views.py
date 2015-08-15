@@ -62,5 +62,5 @@ def admin_list_registrations(request, eid):
         return JsonResponse({"status": 1})
     e = get_object_or_404(Event, id=eid)
     reg = Inscription.objects.filter(event=e)
-    return render(request, 'events/admin/list_registrations.html', {'reg': reg})
+    return render(request, 'events/admin/list_registrations.html', {'event': e, 'reg': reg})
 
