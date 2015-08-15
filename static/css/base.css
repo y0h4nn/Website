@@ -218,7 +218,7 @@ fieldset {
       display: flex;
       width: 100%; }
   #main_container header li {
-    flex: 1 1 auto;
+    flex: 1 1 100%;
     align-self: stretch; }
     #main_container header li:last-child a {
       border-top-right-radius: 3px;
@@ -251,8 +251,21 @@ fieldset {
   #main_container header nav li {
     display: block; }
     #main_container header nav li a {
-      display: block;
-      margin: 0.5em 0; } }
+      text-align: left; }
+    #main_container header nav li:last-child a {
+      border-radius: 0;
+      border-bottom-right-radius: 3px;
+      border-bottom-left-radius: 3px;
+      border-top-right-radius: 0;
+      border-top-left-radius: 0;
+      text-align: left; }
+    #main_container header nav li:first-child a {
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+      border-top-right-radius: 3px;
+      border-top-left-radius: 3px; }
+  #main_container header nav ul {
+    flex-flow: column; } }
 #nav_container {
   min-width: 300px;
   flex: 0 1 300px;

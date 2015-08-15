@@ -17,7 +17,7 @@
         width: 100%
 
     li
-      flex: 1 1 auto
+      flex: 1 1 100%
       align-self: stretch
 
       &:last-child a
@@ -53,9 +53,26 @@
       color: #ccc
 
 @media screen and (max-width: 768px)
-  #main_container header nav li
-    display: block
-
-    a
+  #main_container header nav 
+    li
       display: block
-      margin: 0.5em 0
+
+      a
+        text-align: left
+
+      &:last-child a
+        border-radius: 0
+        border-bottom-right-radius: 3px
+        border-bottom-left-radius: 3px
+        border-top-right-radius: 0
+        border-top-left-radius: 0
+        text-align: left
+
+      &:first-child a
+        border-bottom-right-radius: 0
+        border-bottom-left-radius: 0
+        border-top-right-radius: 3px
+        border-top-left-radius: 3px
+
+    ul
+      flex-flow: column
