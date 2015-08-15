@@ -27,6 +27,11 @@ def event(request, eid):
 
 @login_required
 def admin_index(request):
+    if request.method == "OPTIONS":
+        req = json.loads(request.read().decode())
+        event = get_object_or_404(Event, id=req['eid'])
+        event.delete()
+        return JsonResponse({"status": 1})
     context = {'events': Event.objects.all()}
     return render(request, 'events/admin/index.html', context)
 
@@ -53,7 +58,6 @@ def admin_view(request, eid):
 @login_required
 def admin_edit(request, eid):
     e = get_object_or_404(Event, id=eid)
-    print(request.FILES)
     form = EventForm(request.POST or None, request.FILES or None, instance=e)
     if form.is_valid():
         form.save()

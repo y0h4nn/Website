@@ -6,6 +6,11 @@
 	Liste des évènements
 {% endblock %}
 
+{% block scripts %}
+	<script src="{% static 'js/json_request.js' %}"></script>
+	<script src="{% static 'events/js/event_list_admin.js' %}"></script>
+{% endblock %}
+
 {% block menu %}
 	{% menu_item "Liste des évènements" "events:admin_index" %}
 	{% menu_item "Ajouter un évènement" "events:admin_add" %}
@@ -26,6 +31,9 @@
 					<div>
 						{{ event.name }}
 					</div>
+					<button onclick="del_event({{event.id}}, this); return false;" class="red_button userlist_right_button">
+						Supprimer
+					</button>
 				</a>
 			</li>
 		{% endfor %}
