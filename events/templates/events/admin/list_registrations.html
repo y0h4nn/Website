@@ -1,13 +1,19 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+{% block styles %}
+        <link rel="stylesheet" href="{% static 'accounts/css/list.css' %}" />
+{% endblock %}
+
 
 {% block header %}
 	Liste de personnes inscrites
 {% endblock %}
 
 {% block main %}
-	<ul>
+	<ul class="userlist">
 		{% for registration in reg %}
-			<li>{{ registration.user }}</li>
+			<li><a href="{{ registration.user.profile.get_url }}"><div class="picture_container"><img src="{{ registration.user.profile.get_picture_url }}" alt="profile_picture"/></div><div>{{ registration.user.profile }}</div></a></li>
 		{% endfor %}
 	</ul>
 {% endblock %}
