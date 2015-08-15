@@ -1,10 +1,12 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse
-from .models import Event, Inscription
 from .forms import EventForm
+from .models import Event, Inscription
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
 import json
 
 
+@login_required
 def index(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -18,15 +20,18 @@ def index(request):
     return render(request, 'events/index.html', context)
 
 
+@login_required
 def event(request, eid):
     return render(request, 'events/event.html')
 
 
+@login_required
 def admin_index(request):
     context = {'events': Event.objects.all()}
     return render(request, 'events/admin/index.html', context)
 
 
+@login_required
 def admin_add(request):
     if request.method == "POST":
         form = EventForm(request.POST)
@@ -38,12 +43,14 @@ def admin_add(request):
     return render(request, 'events/admin/add.html', context)
 
 
+@login_required
 def admin_view(request, eid):
     e = get_object_or_404(Event, id=eid)
     context = {'event': e}
     return render(request, 'events/admin/view.html', context)
 
 
+@login_required
 def admin_edit(request, eid):
     e = get_object_or_404(Event, id=eid)
     form = EventForm(request.POST or None, instance=e)
@@ -53,6 +60,7 @@ def admin_edit(request, eid):
     return render(request, 'events/admin/edit.html', context)
 
 
+@login_required
 def admin_list_registrations(request, eid):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
