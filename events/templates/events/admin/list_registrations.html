@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+
+{% block header %}
+	Liste de personnes inscrites
+{% endblock %}
+
+{% block main %}
+	<ul>
+		{% for registration in reg %}
+			<li>{{ registration.user }}</li>
+		{% endfor %}
+	</ul>
+{% endblock %}
+
