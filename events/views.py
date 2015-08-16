@@ -2,7 +2,8 @@ from .forms import EventForm
 from .models import Event, Inscription
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.core.urlresolvers import reverse
 import json
 
 
@@ -42,6 +43,7 @@ def admin_add(request):
         form = EventForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect(reverse('events:admin_index'))
     else:
         form = EventForm()
     context = {'event_form': form}
