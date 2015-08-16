@@ -52,14 +52,14 @@ form p {
     display: inline-block;
     font-weight: bold;
     padding-right: 0.5em; }
-  form p input, form p .button {
+  form p input, form p .button, form p textarea {
     flex: 0 1 65%;
     display: inline-block;
     border-radius: 0; }
-    form p input:last-child, form p .button:last-child {
+    form p input:last-child, form p .button:last-child, form p textarea:last-child {
       border-top-right-radius: 3px;
       border-bottom-right-radius: 3px; }
-    form p input + input, form p .button + input {
+    form p input + input, form p .button + input, form p textarea + input {
       border-left: none; }
   form p label + input {
     border-top-left-radius: 3px;
@@ -74,12 +74,12 @@ form p {
       border-top-left-radius: 3px;
       border-bottom-left-radius: 3px; }
 
-input {
+input, textarea {
   padding: 0.25em 0.5em;
   border: 1px solid #ccc;
   background-color: #f5f5f5;
   border-radius: 3px; }
-  input:focus {
+  input:focus, textarea:focus {
     border-color: #68B9DE; }
 
 select {
@@ -121,7 +121,7 @@ fieldset {
 @media screen and (max-width: 768px) {
   form select {
     width: 100%; }
-  form input {
+  form input, form textarea {
     width: 100%; }
   form p {
     flex-flow: column; }
@@ -133,15 +133,15 @@ fieldset {
       border-radius: 3px; }
       form p input + input {
         border-left: 1px solid #ccc; }
-    form p input, form p .button {
+    form p input, form p .button, form p label {
       flex: 0 1 100%;
       display: block;
       border-radius: 3px; }
-      form p input:last-child, form p .button:last-child {
+      form p input:last-child, form p .button:last-child, form p label:last-child {
         border-radius: 3px; }
-      form p input + input, form p .button + input {
+      form p input + input, form p .button + input, form p label + input {
         border-left: 1px solid #ccc; }
-    form p label + input {
+    form p label + input, form p label + textarea {
       border-top-left-radius: 3px;
       border-bottom-left-radius: 3px; }
     form p button, form p .button {

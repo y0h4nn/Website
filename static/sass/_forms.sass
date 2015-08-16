@@ -27,7 +27,7 @@ form
       font-weight: bold
       padding-right: 0.5em
 
-    input, .button
+    input, .button, textarea
       flex: 0 1 65%
       display: inline-block
       border-radius: 0
@@ -58,7 +58,7 @@ form
 
 
 
-input
+input, textarea
   padding: 0.25em 0.5em
   border: 1px solid #ccc
   background-color: #f5f5f5
@@ -110,7 +110,7 @@ fieldset
   form 
     select
       width: 100%
-    input
+    input, textarea
       width: 100%
     p
       flex-flow: column
@@ -126,7 +126,7 @@ fieldset
         & + input
           border-left: 1px solid #ccc
 
-      input, .button
+      input, .button, label
         flex: 0 1 100%
         display: block
         border-radius: 3px
@@ -137,7 +137,7 @@ fieldset
         & + input
           border-left: 1px solid #ccc
 
-      label + input
+      label + input, label + textarea
         border-top-left-radius: $border-radius
         border-bottom-left-radius: $border-radius
 

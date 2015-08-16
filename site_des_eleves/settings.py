@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'poll',
     'events',
     'webmail',
+    'bde',
 )
 
 MIDDLEWARE_CLASSES = (
