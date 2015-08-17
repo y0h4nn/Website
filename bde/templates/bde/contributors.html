@@ -7,6 +7,8 @@
 {% endblock %}
 
 {% block scripts %}
+	<script src="{% static 'js/json_request.js' %}"></script>
+	<script src="{% static 'js/userlist.js' %}"></script>
 {% endblock %}
 
 {% block title %}
@@ -23,4 +25,11 @@
 {% endblock%}
 
 {% block main %}
+	<div id="userlist"></div>
+
+    <script>
+        window.addEventListener('load', function(){
+            var userList = new UserList('userlist');
+        });
+    </script>
 {% endblock %}

@@ -4,12 +4,11 @@
 {% load menu_item %}
 
 {% block styles %}
-		<link rel="stylesheet" href="{% static 'accounts/css/list.css' %}" />
 {% endblock %}
 
 {% block scripts %}
 	<script src="{% static 'js/json_request.js' %}"></script>
-	<script src="{% static 'accounts/js/userlist.js' %}"></script>
+	<script src="{% static 'js/userlist.js' %}"></script>
 {% endblock %}
 
 {% block title %}
@@ -29,7 +28,7 @@
 {% endblock%}
 
 {% block main %}
-	<div id="userlist"><div class="spinner"></div></div>
+	<div id="userlist"></div>
 
     <script>
         window.addEventListener('load', function(){

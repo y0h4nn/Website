@@ -204,6 +204,9 @@ fieldset {
   background-color: #68B9DE;
   color: white; }
 
+.hidden {
+  display: none; }
+
 #main_container {
   flex: 1 1 auto;
   padding: 2.5em; }
@@ -434,5 +437,41 @@ fieldset {
     display: none; }
   #user_container.retracted .displayed_on_retracted {
     display: block; }
+
+.userlist {
+  padding: 0;
+  list-style: none; }
+  .userlist img {
+    height: 50px;
+    vertical-align: middle;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0); }
+  .userlist li a {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    color: #333;
+    height: 50px; }
+    .userlist li a:hover {
+      background-color: #EEE; }
+
+.picture_container {
+  flex: 0 1 50px;
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  margin: 0 1em 0 0;
+  overflow: hidden; }
+
+#userlist input {
+  width: 100%;
+  padding: 0.75em 1em;
+  font-weight: bold; }
+
+.userlist_right_button {
+  margin-left: auto;
+  margin-right: 5px; }
 
 /*# sourceMappingURL=base.css.map */
