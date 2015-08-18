@@ -29,6 +29,15 @@
             }
         };
 
+        this.isToggled = function(){
+            if(this.element.getAttribute('class') == 'toggled'){
+                return true;
+            }
+            else{
+                return false;
+            }
+        };
+
         if(toggled){
             this.setToggled();
         }

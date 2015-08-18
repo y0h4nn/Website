@@ -32,7 +32,18 @@
 
     <script>
         window.addEventListener('load', function(){
-            var userList = new UserList('userlist');
+            var userList = new UserList('userlist', function(user){
+                function sendMail(){
+                    window.location = "mailto:" + user.email;
+                };
+                function viewProfile(){
+                    window.location = user.profile_url;
+                };
+                return [
+                    new UserList.UserAction('Envoyer un email', sendMail),
+                    new UserList.UserAction('Voir le profile', viewProfile),
+                ];
+            });
         });
     </script>
 {% endblock %}

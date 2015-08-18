@@ -31,7 +31,7 @@
         window.addEventListener('load', function(){
             var userList = new UserList('userlist', function(user){
                 var halfContribution = function(){
-                    if(this.toggled){
+                    if(this.isToggled()){
                         console.log(user.id + " perd sa demi cotiz");
                         queryJson('', {'user': user.id, 'action': 'half_contribution_delete'}, function(resp){
                             if(resp.error){
@@ -57,7 +57,7 @@
                 };
 
                 var fullContribution = function(){
-                    if(this.toggled){
+                    if(this.isToggled()){
                         console.log(user.id + " perd sa full cotiz");
                         queryJson('', {'user': user.id, 'action': 'full_contribution_delete'}, function(resp){
                             if(resp.error){
