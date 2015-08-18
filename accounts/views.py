@@ -133,11 +133,19 @@ def edit(request, username):
         return render(request, 'accounts/edit.html', context)
 
 
+from bde.models import Contributor
+def get_contrib(user):
+    try:
+        return user.contribution.type
+    except Contributor.DoesNotExist:
+        return None
+
 @login_required()
 def members(request):
     if request.method == 'OPTIONS':
         users = [
             {
+                'id': user.id,
                 'display_name': str(user.profile),
                 'picture': user.profile.get_picture_url(),
                 'profile_url': user.profile.get_url(),
@@ -145,6 +153,7 @@ def members(request):
                 'last_name': user.last_name,
                 'username': user.username,
                 'nickname': user.profile.nickname,
+                'contribution': get_contrib(user),
             } for user in User.objects.all()
         ]
         return JsonResponse({'users': users})

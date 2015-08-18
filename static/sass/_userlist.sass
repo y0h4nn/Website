@@ -1,0 +1,74 @@
+.userlist
+  padding: 0
+  list-style: none
+
+  img
+    height: 50px
+    vertical-align: middle
+    position: relative
+    top: 50%
+    left: 50%
+    transform: translate(-50%,0)
+
+  li
+    display: flex
+    flex-flow: row
+    align-items: center
+    color: #333
+    height: 50px
+
+    &:hover
+      background-color: #f5f5f5
+
+    &.hidden
+      display: none
+
+    div
+      &:nth-child(2)
+        flex: 1 1 auto
+      &:last-child
+        padding: 0 0.5em
+
+
+    button
+      border-radius: 0
+      background-color: white
+      color: #333
+      border: 1px solid #bbb
+
+      & + button
+        border-left: none
+        transition: background-color 0.25s
+
+      &:first-child
+        border-top-left-radius: 3px
+        border-bottom-left-radius: 3px
+
+      &:last-child
+        border-top-right-radius: 3px
+        border-bottom-right-radius: 3px
+
+      &:hover
+        background-color: #eaeaea
+
+      &:active, &.toggled
+        background-color: #ddd
+
+.picture_container
+  flex: 0 1 50px
+  width: 50px
+  min-width: 50px
+  max-width: 50px
+  margin: 0 1em 0 0
+  overflow: hidden
+
+
+#userlist input
+  width: 100%
+  padding: 0.75em 1em
+  font-weight: bold
+
+.userlist_right_button
+  margin-left: auto
+  margin-right: 5px
+

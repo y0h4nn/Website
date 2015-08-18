@@ -2,7 +2,39 @@
 
 (function(){
 
-    var UserList = function(containerId){
+    var UserAction = function(name, callback, toggled){
+        this.callback = callback;
+        this.element = document.createElement('button');
+        this.element.setAttribute('type', 'button');
+        this.element.innerHTML = name;
+
+        this.element.addEventListener('click', function(event){
+            this.callback(event);
+        }.bind(this));
+
+        this.setToggled = function(){
+            this.element.setAttribute('class', 'toggled');  
+        };
+
+        this.setUntoggled = function(){
+            this.element.setAttribute('class', '');
+        };
+
+        this.toggle = function(){
+            if(this.element.getAttribute('class') == 'toggled'){
+                this.setUntoggled();
+            }
+            else{
+                this.setToggled();
+            }
+        };
+
+        if(toggled){
+            this.setToggled();
+        }
+    }
+
+    var UserList = function(containerId, callback){
         this.element = document.getElementById(containerId);
         this.searchInput = document.createElement('input');
         this.spinner = document.createElement('div');
@@ -16,11 +48,12 @@
         this.element.appendChild(this.spinner);
         this.element.appendChild(this.listelement);
 
+        // hooks
+        this.onUserBuild = callback;
+
         this.populateUsers = function(json){
             this.users = json['users'];
             for(var user of this.users){
-                var link = document.createElement('a');
-                    link.setAttribute('href', user['profile_url']);
                 var img = document.createElement('img');
                     img.setAttribute('src', user['picture']);
                     img.setAttribute('alt', 'profile_picture');
@@ -28,11 +61,19 @@
                     pictureContainer.setAttribute('class', 'picture_container');
                 var nameContainer = document.createElement('div');
                     nameContainer.innerHTML = user['display_name'];
+                var actionContainer = document.createElement('div');
+                    actionContainer.setAttribute('class', 'action_container');
 
-                user['element'] = document.createElement('li');
-                user['element'].appendChild(link);
-                link.appendChild(pictureContainer);
-                link.appendChild(nameContainer);
+
+                user.element = document.createElement('li');
+                user.element.appendChild(pictureContainer);
+                user.element.appendChild(nameContainer);
+                user.element.appendChild(actionContainer);
+                if(this.onUserBuild){
+                    for(var action of this.onUserBuild(user)){
+                        actionContainer.appendChild(action.element);
+                    }
+                }
                 pictureContainer.appendChild(img);
             }
 
@@ -97,5 +138,6 @@
     }
 
     window.UserList = UserList;
+    window.UserList.UserAction = UserAction;
 
 })();
