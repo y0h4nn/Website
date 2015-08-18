@@ -119,10 +119,10 @@
 
             for(var user of this.users){
                 if(this.matchingUsers.indexOf(user) >= 0){
-                    user.element.classNames = '';
+                    user.element.className = '';
                 }
                 else{
-                    user.element.classNames = 'hidden';
+                    user.element.className = 'hidden';
                 }
             }
         };
