@@ -156,7 +156,7 @@ def members(request):
                 'nickname': user.profile.nickname,
                 'contribution': get_contrib(user),
                 'email': user.email,
-            } for user in User.objects.all()
+            } for user in User.objects.select_related('profile').select_related('contribution').all()
         ]
         return JsonResponse({'users': users})
 
