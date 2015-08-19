@@ -5,20 +5,35 @@
  * Base popup
  */
 
-function Popup(){
+function Popup(title){
     // Popup init
     this.container = document.createElement('div');
     this.container.setAttribute('class', this.popupClass);
     this.window = document.createElement('div');
+    this.header = document.createElement('header');
+    this.h1 = document.createElement('h1');
+    this.h1.innerHTML = title;
+    this.closeBtn = document.createElement('button');
+    this.closeBtn.innerHTML = "<i class='fa fa-close'></i>";
+    this.closeBtn.setAttribute('type', 'button');
+    this.main = document.createElement('main');
 
     document.body.insertBefore(this.container, document.body.firstChild);
     this.container.appendChild(this.window);
+    this.window.appendChild(this.header);
+    this.header.appendChild(this.h1);
+    this.header.appendChild(this.closeBtn);
+    this.window.appendChild(this.main);
 
     this.container.addEventListener('click', function(event){
         if(!this.window.contains(event.target)){
             this.close();
             console.log("Close popup");
         }
+    }.bind(this));
+
+    this.closeBtn.addEventListener('click', function(event){
+        this.close();
     }.bind(this));
 }
 
@@ -46,12 +61,8 @@ Popup.prototype = {
  */
 
 function  SelectionPopup(title, choices, callback){
-    Popup.call(this);
+    Popup.call(this, title);
     this.baseClass = 'selection_popup';
-
-    this.title = document.createElement('h1');
-    this.title.innerHTML = title;
-    this.window.appendChild(this.title);
     this.callback = callback;
 
     for(var choice in choices){
@@ -59,7 +70,7 @@ function  SelectionPopup(title, choices, callback){
         button.innerHTML = choices[choice];
         button.setAttribute('data-choice', choice);
         button.setAttribute('type', 'button');
-        this.window.appendChild(button);
+        this.main.appendChild(button);
 
         button.addEventListener('click', function(event){
             var choice = event.target.getAttribute('data-choice');
@@ -81,13 +92,13 @@ SelectionPopup.prototype.constructor = SelectionPopup;
  * takes the remote content url and display fetched content in the popup
  */
 
-function RemoteHtmlPopup(contentUrl){
-    Popup.call(this);
+function RemoteHtmlPopup(title, contentUrl){
+    Popup.call(this, title);
     this.spinner = document.createElement('div');
     this.spinner.setAttribute('class', 'spinner');
     this.spinner.innerHTML = 'Not done yet';
 
-    this.window.appendChild(this.spinner);
+    this.main.appendChild(this.spinner);
     this.fetch(contentUrl);
 }
 
@@ -107,7 +118,7 @@ RemoteHtmlPopup.prototype = Object.create(Popup.prototype, {
 
     updateContent: {
         value: function(rawHtml){
-            this.window.innerHTML = rawHtml;
+            this.main.innerHTML = rawHtml;
         },
     },
 

@@ -12,7 +12,7 @@ var choices = {
 function onUserBuildCallback(user){
 
     var info = function(){
-        var popup = new RemoteHtmlPopup('/bde/contributors/' + user.id);
+        var popup = new RemoteHtmlPopup('Détails de l\'utilisateur ' + user.display_name, '/bde/contributors/' + user.id);
         popup.pop();
     };
 
