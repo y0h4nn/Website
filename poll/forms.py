@@ -78,9 +78,9 @@ class PollForm(forms.Form):
         if not self.questions_answers:
             self.add_error(None, "Il doit y avoir au moins une question")
         for q, a in self.questions_answers.items():
-            if not a and not err_no_answer:
+            if len(a) < 2 and not err_no_answer:
                 err_no_answer = True
-                self.add_error(None, "Vous ne pouvez pas ajouter de question sans réponse.")
+                self.add_error(None, "Chaque question doit avoir au minimum 2 réponses possibles.")
             if not self.data[q] and not err_empty_question:
                 err_empty_question = True
                 self.add_error(None, "Vous ne pouvez pas avoir de question vide")
