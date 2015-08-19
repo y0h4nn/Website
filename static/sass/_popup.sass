@@ -1,0 +1,43 @@
+.popup
+  background-color: hsla(0,0,0,0.3)
+  width: 100%
+  height: 100%
+  position: fixed
+  z-index: 10
+  display: none
+
+  & > div
+    background-color: white
+    box-shadow: 0 0 20px hsla(0,0,0,0.3)
+    min-width: 100px
+    min-height: 100px
+    padding: 2em
+    border-radius: 3px
+
+  &.pop
+    display: flex
+    align-items: center
+    justify-content: center
+
+  h1
+    font-size: 1.2em
+    color: #aaa
+    margin: 0 0 2em 0
+
+.selection_popup
+  @extend .popup
+
+  button
+    display: block
+    width: 100%
+    margin: 1em 0
+    border-radius: 3px
+    background-color: white
+    color: #333
+    border: 1px solid #bbb
+
+    &:hover
+      background-color: #eaeaea
+
+    &:active, &.toggled
+      background-color: #ddd

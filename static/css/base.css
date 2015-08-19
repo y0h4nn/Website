@@ -498,4 +498,40 @@ fieldset {
   margin-left: auto;
   margin-right: 5px; }
 
+.popup, .selection_popup {
+  background-color: rgba(0, 0, 0, 0.3);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 10;
+  display: none; }
+  .popup > div, .selection_popup > div {
+    background-color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    min-width: 100px;
+    min-height: 100px;
+    padding: 2em;
+    border-radius: 3px; }
+  .popup.pop, .pop.selection_popup {
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+  .popup h1, .selection_popup h1 {
+    font-size: 1.2em;
+    color: #aaa;
+    margin: 0 0 2em 0; }
+
+.selection_popup button {
+  display: block;
+  width: 100%;
+  margin: 1em 0;
+  border-radius: 3px;
+  background-color: white;
+  color: #333;
+  border: 1px solid #bbb; }
+  .selection_popup button:hover {
+    background-color: #eaeaea; }
+  .selection_popup button:active, .selection_popup button.toggled {
+    background-color: #ddd; }
+
 /*# sourceMappingURL=base.css.map */

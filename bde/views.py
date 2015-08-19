@@ -59,7 +59,8 @@ def contributors(request):
     
         models.Contributor.objects.update_or_create({
             'end_date': endate,
-            'type': contrib_type
+            'type': contrib_type,
+            'means_of_payment': req.get('mean'),
         }, user=user)
 
         return JsonResponse({'error': None})
