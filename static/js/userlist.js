@@ -13,7 +13,7 @@
         }.bind(this));
 
         this.setToggled = function(){
-            this.element.setAttribute('class', 'toggled');  
+            this.element.setAttribute('class', 'toggled');
         };
 
         this.setUntoggled = function(){
@@ -43,7 +43,7 @@
         }
     }
 
-    var UserList = function(containerId, callback){
+    var UserList = function(containerId, buildCallback, clickCallback){
         this.element = document.getElementById(containerId);
         this.searchInput = document.createElement('input');
         this.spinner = document.createElement('div');
@@ -58,7 +58,8 @@
         this.element.appendChild(this.listelement);
 
         // hooks
-        this.onUserBuild = callback;
+        this.onUserBuild = buildCallback;
+        this.onClick = clickCallback;
 
         this.populateUsers = function(json){
             this.users = json['users'];
@@ -84,6 +85,7 @@
                     }
                 }
                 pictureContainer.appendChild(img);
+                this.listelement.appendChild(user.element);
             }
 
             this.matchingUsers = this.users;
@@ -96,9 +98,6 @@
                 else return 0;
             });
 
-            for(var user of this.users){
-                this.listelement.appendChild(user.element);
-            }
 
             this.render();
         };
