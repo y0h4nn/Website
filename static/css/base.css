@@ -498,4 +498,62 @@ fieldset {
   margin-left: auto;
   margin-right: 5px; }
 
+.popup, .selection_popup {
+  background-color: rgba(0, 0, 0, 0.3);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 10;
+  display: none; }
+  .popup > div, .selection_popup > div {
+    background-color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    min-width: 100px;
+    min-height: 100px;
+    border-radius: 3px;
+    overflow: hidden; }
+  .popup.pop, .pop.selection_popup {
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+  .popup header, .selection_popup header {
+    background-color: white;
+    border-bottom: 1px solid #e2e2e2;
+    display: flex;
+    align-items: center;
+    padding: 0; }
+    .popup header button, .selection_popup header button {
+      margin: 0;
+      padding: 0.8em;
+      background: none;
+      border: none;
+      color: #bbb;
+      border-radius: 0;
+      font-size: 1.2em;
+      background-color: white; }
+      .popup header button:hover, .selection_popup header button:hover {
+        color: red; }
+    .popup header h1, .selection_popup header h1 {
+      font-size: 1.2em;
+      color: #aaa;
+      margin: 0;
+      padding: 0.8em;
+      flex: 1 1 auto; }
+  .popup main, .selection_popup main {
+    padding: 1em 2em;
+    background-color: white; }
+
+.selection_popup main button {
+  display: block;
+  width: 100%;
+  margin: 1em 0;
+  border-radius: 3px;
+  background-color: white;
+  color: #333;
+  border: 1px solid #bbb; }
+  .selection_popup main button:hover {
+    background-color: #eaeaea; }
+  .selection_popup main button:active, .selection_popup main button.toggled {
+    background-color: #ddd; }
+
 /*# sourceMappingURL=base.css.map */

@@ -59,8 +59,33 @@ def contributors(request):
     
         models.Contributor.objects.update_or_create({
             'end_date': endate,
-            'type': contrib_type
+            'type': contrib_type,
+            'means_of_payment': req.get('mean'),
         }, user=user)
 
         return JsonResponse({'error': None})
     return render(request, 'bde/contributors.html', {})
+
+def detail(request, id):
+    user = User.objects.get(id=id);
+
+    try:
+        for mean in models.MEANS_OF_PAYMENT:
+            if mean[0] == user.contribution.means_of_payment:
+                mean_name = mean[1]
+
+        context = {
+            'user': user,
+            'username': str(user.profile),
+            'start': user.contribution.start_date,
+            'end': user.contribution.end_date,
+            'mean': mean_name
+        }
+    except models.Contributor.DoesNotExist:
+        context = {
+            'user': user,
+            'username': str(user.profile),
+            'error': True
+        }
+
+    return render(request, 'bde/contributors_detail.html', context)
