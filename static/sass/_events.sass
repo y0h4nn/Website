@@ -1,0 +1,62 @@
+.event
+  display: flex
+  flex-show: row
+  align-items: stretch
+  margin-bottom: 2em
+
+  & div:nth-child(1)
+    flex: 0 1 11.5em
+    min-width: 11.5em
+    height: 11.5em
+    overflow: hidden
+
+    img
+      height: 200px
+      margin: auto
+      vertical-align: middle
+      position: relative
+      top: 50%
+      left: 50%
+      transform: translate(-50%,-50%)
+
+  & div:nth-child(2)
+    flex: 1 1 auto
+    main p
+      color: #888
+      text-align: justify
+      height: 4.1em
+      font-size: 1em
+      padding: 0.5em
+      overflow: hidden
+      line-height: 1.2
+
+    main a
+      color: $blue
+      padding: 0 0.5em
+
+    header h3
+      border: none
+      padding: 0.25em 0.4em
+      margin: 0
+      font-size: 1.2em
+
+    header p
+      padding: 0 0.5em
+      color: #888
+      margin: 0
+      font-weight: bold
+
+  & div:nth-child(3)
+    flex: 0 1 200px
+    min-width: 200px
+    text-align: center
+    padding: 1em
+
+  .inscription_count
+    font-size: 1.75em
+    padding: 0
+    font-size: bold
+    margin-bottom: 0
+
+  .inscription_count + p
+    margin-top: 0

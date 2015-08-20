@@ -19,23 +19,37 @@
 {% endblock %}
 
 {% block main %}
-	<ul class="userlist">
-		{% for inscription, event in events %}
-			<li>
-				<a href="#">
-					<div>
-						{{ event.name }} ({{ event.start_time }})
-					</div>
-					<div style="margin-left: auto; margin-right:5px">
-						{% if inscription %}
-							<button onclick="inscription(this, {{event.id}});return false;" class="red_button">Se désinscrire</button>
-						{% else %}
-							<button onclick="inscription(this, {{event.id}});return false;">S'inscrire</button>
-						{% endif %}
-					</div>
-				</a>
-			</li>
-		{% endfor %}
-	</ul>
+    {% for inscription, event in events %}
+    <div class="event">
+        <div>
+            {% if envent.photo %}
+                <img src="{{ event.photo.url }}" alt="event-picture"/>
+            {% else %}
+                <img src="{% static 'images/default_event_icon.png' %}" alt="event-picture"/>
+            {% endif %}
+
+        </div>
+        <div>
+            <header>
+                <h3>{{ event.name }}</h3>
+                <p>{{ event.location }}, du {{ event.start_time }} au {{ event.end_time }}</p>
+            </header>
+            <main>
+                <p>{{ event.description }}</p>
+                <a href="#">En savoir plus</a>
+            </main>
+        </div>
+        <div>
+            <p class="inscription_count">250</p>
+            <p>Participants</p>
+
+            {% if inscription %}
+                <button onclick="inscription(this, {{event.id}});return false;" class="red_button">Se désinscrire</button>
+            {% else %}
+                <button onclick="inscription(this, {{event.id}});return false;">S'inscrire</button>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
 
 {% endblock %}

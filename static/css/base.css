@@ -556,4 +556,58 @@ fieldset {
   .selection_popup main button:active, .selection_popup main button.toggled {
     background-color: #ddd; }
 
+.event {
+  display: flex;
+  flex-show: row;
+  align-items: stretch;
+  margin-bottom: 2em; }
+  .event div:nth-child(1) {
+    flex: 0 1 11.5em;
+    min-width: 11.5em;
+    height: 11.5em;
+    overflow: hidden; }
+    .event div:nth-child(1) img {
+      height: 200px;
+      margin: auto;
+      vertical-align: middle;
+      position: relative;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%); }
+  .event div:nth-child(2) {
+    flex: 1 1 auto; }
+    .event div:nth-child(2) main p {
+      color: #888;
+      text-align: justify;
+      height: 4.1em;
+      font-size: 1em;
+      padding: 0.5em;
+      overflow: hidden;
+      line-height: 1.2; }
+    .event div:nth-child(2) main a {
+      color: #68B9DE;
+      padding: 0 0.5em; }
+    .event div:nth-child(2) header h3 {
+      border: none;
+      padding: 0.25em 0.4em;
+      margin: 0;
+      font-size: 1.2em; }
+    .event div:nth-child(2) header p {
+      padding: 0 0.5em;
+      color: #888;
+      margin: 0;
+      font-weight: bold; }
+  .event div:nth-child(3) {
+    flex: 0 1 200px;
+    min-width: 200px;
+    text-align: center;
+    padding: 1em; }
+  .event .inscription_count {
+    font-size: 1.75em;
+    padding: 0;
+    font-size: bold;
+    margin-bottom: 0; }
+  .event .inscription_count + p {
+    margin-top: 0; }
+
 /*# sourceMappingURL=base.css.map */
