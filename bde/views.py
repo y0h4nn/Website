@@ -3,6 +3,7 @@ import datetime
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from . import models
 from . import forms
@@ -12,6 +13,7 @@ def index(request):
     return render(request, 'bde/index.html', {})
 
 
+@login_required
 def contributors(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -56,7 +58,7 @@ def contributors(request):
                 return JsonResponse({'error': 'La fulll cotiz ne peux plus être prise pour l\'année en cours'})
         else:
             return JsonResponse({'error': 'Stop envoyer de la merde. Contactez votre sysadmin.'})
-    
+
         models.Contributor.objects.update_or_create({
             'end_date': endate,
             'type': contrib_type,
@@ -66,6 +68,7 @@ def contributors(request):
         return JsonResponse({'error': None})
     return render(request, 'bde/contributors.html', {})
 
+@login_required
 def detail(request, id):
     user = User.objects.get(id=id);
 
