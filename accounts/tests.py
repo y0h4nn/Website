@@ -53,3 +53,50 @@ class NormalAuthTest(TestCase):
         self.assertEqual(groups[0].name, "Tous")
         self.assertEqual(groups[1].name, "Enib")
 
+
+class ProfilTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('AAA', 'AAA@exemple.com', 'AAA')
+
+    def test_only_nickname(self):
+        self.user.profile.nickname = "Test"
+        self.user.profile.save()
+        self.assertEqual(str(self.user.profile), "Test")
+
+    def test_only_first_name(self):
+        self.user.first_name = "first_name"
+        self.user.profile.save()
+        self.assertEqual(str(self.user.profile), "AAA")
+
+    def test_only_last_name(self):
+        self.user.first_name = "last_name"
+        self.user.profile.save()
+        self.assertEqual(str(self.user.profile), "AAA")
+
+    def test_last_name_and_first_name(self):
+        self.user.last_name = "last_name"
+        self.user.first_name = "first_name"
+        self.user.save()
+        self.assertEqual(str(self.user.profile), "first_name last_name")
+
+    def test_all_names(self):
+        self.user.last_name = "last_name"
+        self.user.first_name = "first_name"
+        self.user.save()
+        self.user.profile.nickname = "Test"
+        self.assertEqual(str(self.user.profile), "first_name « Test » last_name")
+
+    def test_last_name_and_nickname(self):
+        self.user.profile.nickname = "Test"
+        self.user.profile.save()
+        self.user.last_name = "last_name"
+        self.user.save()
+        self.assertEqual(str(self.user.profile), "Test")
+
+    def test_first_name_and_nickname(self):
+        self.user.profile.nickname = "Test"
+        self.user.profile.save()
+        self.user.first_name = "last_name"
+        self.user.save()
+        self.assertEqual(str(self.user.profile), "Test")
+
