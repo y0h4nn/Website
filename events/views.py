@@ -63,6 +63,7 @@ def admin_edit(request, eid):
     form = EventForm(request.POST or None, request.FILES or None, instance=e)
     if form.is_valid():
         form.save()
+        return redirect(reverse('events:admin_index'))
     context = {'event': e, 'event_form': form}
     return render(request, 'events/admin/edit.html', context)
 
