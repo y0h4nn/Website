@@ -1,14 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from . import forms
 from . import models
 
+
+@login_required
 def index(request):
     context = {}
     context['announcements'] = models.Announcement.objects.all()
     print(context)
     return render(request, 'carshare/index.html', context)
 
+
+@login_required
 def show(request, aid):
     announcement = get_object_or_404(models.Announcement, id=aid)
 
@@ -36,6 +41,7 @@ def show(request, aid):
     return render(request, 'carshare/show.html', context)
 
 
+@login_required
 def create(request):
     context = {}
 
@@ -53,6 +59,8 @@ def create(request):
         context['form'] = forms.AnnouncementForm().as_p()
     return render(request, 'carshare/create.html', context)
 
+
+@login_required
 def action(request, aid, rid, state):
     announcement = get_object_or_404(models.Announcement, id=aid)
     registration = get_object_or_404(models.Registration, id=rid)
