@@ -1,0 +1,51 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Covoiturage
+{% endblock %}
+
+{% block header %}
+    Covoiturage
+{% endblock %}
+
+{% block menu %}
+	{% menu_item 'Liste des covoiturages' 'carshare:index' %}
+	{% menu_item 'Créer un covoiturage' 'carshare:create' %}
+{% endblock%}
+
+{% block main %}
+    <table>
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Date</th>
+                <th>Lieu de départ</th>
+                <th>Lieu d'arrivé</th>
+                <th>Nombre de places</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for announcement in announcements %}
+            <tr>
+                <td>{{ announcement.title }}</td>
+                <td>{{ announcement.date }}</td>
+                <td>{{ announcement.source}}</td>
+                <td>{{ announcement.destination }}</td>
+                <td>{{ announcement.available_places }} / {{ announcement.places }}</td>
+                <td><a href="{% url 'carshare:show' aid=announcement.id %}">Voir le covoiturage</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

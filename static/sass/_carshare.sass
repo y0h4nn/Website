@@ -1,0 +1,63 @@
+.comment
+  border: 1px solid #ddd
+  padding: 1em
+  margin: 1em 0
+
+  header
+    display: flex
+    hgroup
+      flex: 1 1 auto
+    h4, h5
+      margin: 0 0 0.5em 0
+
+    h5
+      color: #aaa
+
+    border-bottom: 1px solid #eee
+
+  .profile_picture_container
+    flex: 0 1 150px
+    min-width: 150px
+    max-width: 150px
+    img
+      max-width: 100%
+      max-height: 100%
+
+  .status
+    border-radius: 3px
+    align-self: center
+    display: inline-block
+    padding: 0.5em 1em
+    font-weight: bold
+    margin: 0
+
+  span.status
+    background-color: #ddd
+    color: #8a8a8a
+    border: 2px solid #ddd
+
+    &.accepted
+      background-color: #CAE9C9
+      color: #62A47E
+      border: 2px solid #cae9c9
+
+    &.refused
+      background-color: #E6CDCD
+      color: #C87373
+      border: 2px solid #e6cdcd
+
+  a.status
+    color: #8a8a8a
+    border: 2px solid #ddd
+
+    &.accepted
+      color: #B1CEB0
+      border: 2px solid #B1CEB0
+
+    &.refused
+      color: #DEABAB
+      border: 2px solid #DEABAB
+
+  div:first-child
+    flex: 1 1 auto
+

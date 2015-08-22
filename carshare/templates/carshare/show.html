@@ -1,0 +1,83 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    {{ announcement.title }}
+{% endblock %}
+
+{% block header %}
+    {{ announcement.title }}
+{% endblock %}
+
+{% block menu %}
+	{% menu_item 'Liste des covoiturages' 'carshare:index' %}
+	{% menu_item 'Créer un covoiturage' 'carshare:create' %}
+{% endblock%}
+
+{% block main %}
+
+    <div class="announce">
+        <p>{{ announcement.description }}</p>
+    </div>
+
+    <h2>Demandes et commentaires</h2>
+
+    {% for registration in registrations %}
+    <div class="comment">
+        <div>
+            <header>
+                <hgroup>
+                    <h4>
+                        {{ registration.user.profile }}
+                    </h4>
+                    <h5>{{ registration.pub_date }}</h5>
+                </hgroup>
+                {% if not registration.is_simple_comment %}
+                <div>
+                    {% if request.user == announcement.author %}
+                        {% if registration.status == 'accepted' %}
+                            <a href="{% url 'carshare:action' aid=announcement.id rid=registration.id state='waiting' %}" class="status" >Mettre en attente</a>
+                            <span class="status accepted">{{ registration.status_name }} </span>
+                            <a href="{% url 'carshare:action' aid=announcement.id rid=registration.id state='refused' %}" class="status refused" >Refuser</a>
+                        {% elif registration.status == 'refused' %}
+                            <a href="{% url 'carshare:action' aid=announcement.id rid=registration.id state='waiting' %}" class="status" >Mettre en attente</a>
+                            <a href="{% url 'carshare:action' aid=announcement.id rid=registration.id state='accepted' %}" class="status accepted" >Accepter</a>
+                            <span class="status refused">{{ registration.status_name }} </span>
+                        {% else %}
+                            <span class="status">{{ registration.status_name }} </span>
+                            <a href="{% url 'carshare:action' aid=announcement.id rid=registration.id state='accepted' %}" class="status accepted" >Accepter</a>
+                            <a href="{% url 'carshare:action' aid=announcement.id rid=registration.id state='refused' %}" class="status refused" >Refuser</a>
+                        {% endif %}
+                    {% else %}
+                        <span class="status {{ registration.status }}">{{ registration.status_name }}</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </header>
+            <main>
+                <p>
+                    {{ registration.comment }}
+                </p>
+            </main>
+        </div>
+    </div>
+    {% endfor %}
+
+
+    <h2>Ajouter une demande ou un commentaire</h2>
+    <form action="{% url 'carshare:show' aid=announcement.id %}" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button>Ajouter</button>
+    </form>
+
+{% endblock %}
+
