@@ -149,6 +149,9 @@ fieldset {
       border-radius: 3px;
       width: 100%;
       margin: 0.25em 0; } }
+table {
+  width: 100%; }
+
 .center {
   text-align: center; }
 
@@ -210,28 +213,28 @@ fieldset {
 #main_container {
   flex: 1 1 auto;
   padding: 2.5em; }
-  #main_container header h1 {
+  #main_container #main_header h1 {
     border-bottom: 1px solid #68B9DE;
     padding: 0 0 0.75em 0;
     margin: 1em 0;
     color: #999; }
-  #main_container header nav {
+  #main_container #main_header nav {
     margin: 1em 0 2em 0; }
-    #main_container header nav ul {
+    #main_container #main_header nav ul {
       display: flex;
       width: 100%; }
-  #main_container header li {
+  #main_container #main_header li {
     flex: 1 1 100%;
     align-self: stretch; }
-    #main_container header li:last-child a {
+    #main_container #main_header li:last-child a {
       border-top-right-radius: 3px;
       border-bottom-right-radius: 3px;
       text-align: right; }
-    #main_container header li:first-child a {
+    #main_container #main_header li:first-child a {
       border-top-left-radius: 3px;
       border-bottom-left-radius: 3px;
       text-align: left; }
-  #main_container header a {
+  #main_container #main_header a {
     display: block;
     text-align: center;
     width: 100%;
@@ -243,7 +246,7 @@ fieldset {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.25s; }
-    #main_container header a.selected, #main_container header a:hover {
+    #main_container #main_header a.selected, #main_container #main_header a:hover {
       background-color: #68B9DE; }
   #main_container main {
     color: #555; }
@@ -609,5 +612,56 @@ fieldset {
     margin-bottom: 0; }
   .event .inscription_count + p {
     margin-top: 0; }
+
+.comment {
+  border: 1px solid #ddd;
+  padding: 1em;
+  margin: 1em 0; }
+  .comment header {
+    display: flex;
+    border-bottom: 1px solid #eee; }
+    .comment header hgroup {
+      flex: 1 1 auto; }
+    .comment header h4, .comment header h5 {
+      margin: 0 0 0.5em 0; }
+    .comment header h5 {
+      color: #aaa; }
+  .comment .profile_picture_container {
+    flex: 0 1 150px;
+    min-width: 150px;
+    max-width: 150px; }
+    .comment .profile_picture_container img {
+      max-width: 100%;
+      max-height: 100%; }
+  .comment .status {
+    border-radius: 3px;
+    align-self: center;
+    display: inline-block;
+    padding: 0.5em 1em;
+    font-weight: bold;
+    margin: 0; }
+  .comment span.status {
+    background-color: #ddd;
+    color: #8a8a8a;
+    border: 2px solid #ddd; }
+    .comment span.status.accepted {
+      background-color: #CAE9C9;
+      color: #62A47E;
+      border: 2px solid #cae9c9; }
+    .comment span.status.refused {
+      background-color: #E6CDCD;
+      color: #C87373;
+      border: 2px solid #e6cdcd; }
+  .comment a.status {
+    color: #8a8a8a;
+    border: 2px solid #ddd; }
+    .comment a.status.accepted {
+      color: #B1CEB0;
+      border: 2px solid #B1CEB0; }
+    .comment a.status.refused {
+      color: #DEABAB;
+      border: 2px solid #DEABAB; }
+  .comment div:first-child {
+    flex: 1 1 auto; }
 
 /*# sourceMappingURL=base.css.map */
