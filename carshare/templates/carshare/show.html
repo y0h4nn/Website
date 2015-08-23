@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load menu_item %}
+{% load markdown %}
 
 {% block styles %}
 {% endblock %}
@@ -25,7 +26,7 @@
 {% block main %}
 
     <div class="announce">
-        <p>{{ announcement.description }}</p>
+        <p>{{ announcement.description|markdown }}</p>
     </div>
 
     <h2>Demandes et commentaires</h2>
@@ -64,7 +65,7 @@
             </header>
             <main>
                 <p>
-                    {{ registration.comment }}
+                    {{ registration.comment|markdown }}
                 </p>
             </main>
         </div>
