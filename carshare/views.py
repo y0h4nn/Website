@@ -30,13 +30,15 @@ def show(request, aid):
             registration = form.save(commit=False)
             registration.announcement = announcement
             registration.user = request.user
+            if request.POST['action'] == 'register':
+                registration.is_simple_comment = False
             registration.save()
             form.save()
             return redirect(reverse('carshare:show', kwargs={'aid': announcement.id}))
         else:
-            context['form'] = form.as_p()
+            context['form'] = form
     else:
-        context['form'] = forms.RegistrationForm().as_p()
+        context['form'] = forms.RegistrationForm()
 
     return render(request, 'carshare/show.html', context)
 

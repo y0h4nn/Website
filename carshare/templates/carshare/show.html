@@ -76,8 +76,11 @@
     <h2>Ajouter une demande ou un commentaire</h2>
     <form action="{% url 'carshare:show' aid=announcement.id %}" method="POST">
         {% csrf_token %}
-        {{ form }}
-        <button>Ajouter</button>
+        {{ form.comment.errors }}
+        {{ form.comment }}
+        <br /><br/>
+        <button name="action" value="register">Faire une demande</button>
+        <button name="action" value="comment">Commenter</button>
     </form>
 
 {% endblock %}

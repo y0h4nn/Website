@@ -30,11 +30,9 @@ class RegistrationForm(forms.ModelForm):
         model = models.Registration
         fields = [
             'comment',
-            'is_simple_comment',
         ]
         labels = {
             'comment': 'Demande',
-            'is_simple_comment': "Je ne fait que commenter",
         }
 
 
