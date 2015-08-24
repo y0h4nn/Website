@@ -79,7 +79,9 @@
         {{ form.comment.errors }}
         {{ form.comment }}
         <br /><br/>
-        <button name="action" value="register">Faire une demande</button>
+        {% if request.user != announcement.author %}
+            <button name="action" value="register">Faire une demande</button>
+        {% endif %}
         <button name="action" value="comment">Commenter</button>
     </form>
 
