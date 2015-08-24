@@ -30,7 +30,7 @@ def show(request, aid):
             registration = form.save(commit=False)
             registration.announcement = announcement
             registration.user = request.user
-            if request.POST['action'] == 'register':
+            if request.POST['action'] == 'register' and request.user != announcement.author:
                 registration.is_simple_comment = False
             registration.save()
             form.save()
