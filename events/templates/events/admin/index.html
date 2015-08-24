@@ -8,6 +8,7 @@
 
 {% block scripts %}
 	<script src="{% static 'js/json_request.js' %}"></script>
+	<script src="{% static 'js/list.js' %}"></script>
 	<script src="{% static 'events/js/event_list_admin.js' %}"></script>
 {% endblock %}
 
@@ -21,22 +22,31 @@
 {% endblock %}
 
 {% block main %}
-	<ul class="userlist">
-		{% for event in events %}
-			<li>
-				<a href="{% url 'events:admin_view' eid=event.id %}">
-					<div class="picture_container">
-						<img src="{{ event.photo_url }}"/>
-					</div>
-					<div>
-						{{ event.name }}
-					</div>
-					<button onclick="del_event({{event.id}}, this); return false;" class="red_button userlist_right_button">
-						Supprimer
-					</button>
-				</a>
-			</li>
-		{% endfor %}
-	</ul>
+	<div id="eventlist"></div>
+    <script>
+        window.addEventListener('load', function(){
+            var userList = new EventList('eventlist', function(evt){
+				function update_list(data){
+					if(data['status'] === 1){
+						evt['deleted'] = true;
+					}
+					userList.updateElems();
+					userList.render();
+				}
+
+				function del_event(){
+					queryJson('', {"eid": evt['eid']}, update_list);
+				}
+
+				function details(){
+					window.location = "/events/admin/view/" + evt['eid'];
+				}
+				return [
+					new EventList.Action('Details', details),
+					new EventList.Action('Supprimer', del_event),
+				];
+            });
+        });
+    </script>
 {% endblock %}
 

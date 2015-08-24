@@ -38,6 +38,19 @@ def admin_index(request):
 
 
 @login_required
+def admin_list_events(request):
+    if request.method == "OPTIONS":
+        evts = Event.objects.all()
+        return JsonResponse({'events': [{
+            'eid': evt.id,
+            'name': evt.name,
+            'picture': evt.photo_url(),
+            'start_time': evt.start_time,
+            'deleted': False,
+        } for evt in evts]})
+
+
+@login_required
 def admin_add(request):
     if request.method == "POST":
         form = EventForm(request.POST)
