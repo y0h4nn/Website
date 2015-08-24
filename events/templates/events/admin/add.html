@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load menu_item %}
+{% load static %}
 
 {% block header %}
 	Ajouter un évènement
@@ -8,6 +9,15 @@
 {% block menu %}
 	{% menu_item "Liste des évènements" "events:admin_index" %}
 	{% menu_item "Ajouter un evenement" "events:admin_add" %}
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/rome.min.css' %}" />
+{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'js/moment.min.js' %}"></script>
+	<script src="{% static 'js/rome.standalone.min.js' %}"></script>
 {% endblock %}
 
 {% block main %}
