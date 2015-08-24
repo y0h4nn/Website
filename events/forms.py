@@ -1,4 +1,4 @@
-from django.forms import ModelForm, SplitDateTimeField, ClearableFileInput
+from django.forms import ModelForm, SplitDateTimeField, ClearableFileInput, ValidationError
 from .models import Event
 
 class WrapperClearableinput(ClearableFileInput):
@@ -17,6 +17,15 @@ class EventForm(ModelForm):
             self.fields[f] = SplitDateTimeField(label=label)
             self.fields[f].widget.widgets[0].attrs['placeholder'] = "DD/MM/YYYY"
             self.fields[f].widget.widgets[1].attrs['placeholder'] = "HH:MM"
+
+    def clean_end_time(self):
+        start = self.cleaned_data['start_time']
+        end = self.cleaned_data['end_time']
+
+        if end <= start:
+            raise ValidationError("Le début de l'événement doit se situer avant sa fin...")
+
+        return end
 
     class Meta:
         model = Event
