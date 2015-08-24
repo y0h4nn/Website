@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.utils.safestring import mark_safe
 from . import models
 
 
@@ -21,6 +22,17 @@ class UserForm(forms.ModelForm):
 
 class ProfileForm(forms.ModelForm):
     prefix = 'profile'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['birthdate'].widget.attrs['id'] = 'birth_date'
+
+    def as_p(self):
+        return super().as_p() + mark_safe('''<script>
+            bd = document.getElementById("birth_date");
+            rome(bd, {time: false});
+        </script>
+        ''')
 
     class Meta:
         model = models.Profile
