@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+{% load markdown %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Actualités
+{% endblock %}
+
+{% block header %}
+    Actualités
+{% endblock %}
+
+{% block menu %}
+	{% menu_item 'Actualités' 'news:index' %}
+    {% if request.user.is_active %}
+        {% menu_item 'Ajouter une actualité' 'news:create' %}
+    {% endif %}
+{% endblock%}
+
+{% block main %}
+    {% for new in news %}
+        <article class="news">
+            <header>
+                <h1>{{ new.title }}</h1>
+                <h2>{{ new.pub_date }}</h2>
+            </header>
+            <main>
+                {{ new.content|markdown }}
+            </main>
+        </article>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Ajouter une actualité
+{% endblock %}
+
+{% block header %}
+    Ajouter une actualité
+{% endblock %}
+
+{% block menu %}
+	{% menu_item 'Actualités' 'news:index' %}
+    {% if request.user.is_active %}
+        {% menu_item 'Ajouter une actualité' 'news:create' %}
+    {% endif %}
+{% endblock%}
+
+{% block main %}
+    <form action="{% url 'news:create' %}" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button>Publier</button>
+    </form>
+{% endblock %}

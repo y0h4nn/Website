@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'webmail',
     'bde',
     'carshare',
+    'news',
 )
 
 MIDDLEWARE_CLASSES = (

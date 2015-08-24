@@ -211,6 +211,9 @@ table {
 .hidden {
   display: none; }
 
+.markdown h1, .markdown h2, .markdown h3, .markdown h4, .markdown h5, .markdown h6 {
+  color: #aaa; }
+
 #main_container {
   flex: 1 1 auto;
   padding: 2.5em; }
@@ -251,8 +254,6 @@ table {
       background-color: #68B9DE; }
   #main_container main {
     color: #555; }
-    #main_container main h2 {
-      color: #ccc; }
 
 @media screen and (max-width: 768px) {
   #main_container header nav li {
@@ -664,5 +665,17 @@ table {
       border: 2px solid #DEABAB; }
   .comment div:first-child {
     flex: 1 1 auto; }
+
+.news {
+  margin: 1em 0 5em 0; }
+  .news header {
+    border-bottom: 1px solid #eee; }
+    .news header h1 {
+      font-size: 2em;
+      color: #777;
+      margin: 0; }
+    .news header h2 {
+      font-size: 1em;
+      color: #bbb; }
 
 /*# sourceMappingURL=base.css.map */

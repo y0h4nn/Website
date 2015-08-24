@@ -13,25 +13,25 @@ def login(request):
     context = {}
 
     if request.user.is_authenticated():
-        return redirect(request.POST.get('next', reverse('core:index')))
+        return redirect(request.POST.get('next', reverse('news:index')))
     if request.POST:
         email = request.POST['email']
         password = request.POST['password']
         user = auth.authenticate(email=email, password=password)
         if user:
             auth.login(request, user)
-            return redirect(request.POST.get('next', reverse('core:index')))
+            return redirect(request.POST.get('next', reverse('news:index')))
         else:
             context['error'] = 'Invalid user'
 
-    context['next'] = request.GET.get('next', reverse('core:index'))
+    context['next'] = request.GET.get('next', reverse('news:index'))
     return render(request, 'login.html', context)
 
 
 @login_required()
 def logout(request):
     auth.logout(request)
-    return redirect(reverse('core:index'))
+    return redirect(reverse('news:index'))
 
 
 @login_required()
@@ -39,7 +39,7 @@ def show(request, username):
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
-        return redirect(reverse('core:index'))
+        return redirect(reverse('news:index'))
 
     context = {
         'user': user,
