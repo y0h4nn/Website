@@ -4,9 +4,13 @@
 {% load menu_item %}
 
 {% block styles %}
+    <link rel="stylesheet" href="{% static 'accounts/css/edit.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/rome.min.css' %}" />
 {% endblock %}
 
 {% block scripts %}
+	<script src="{% static 'js/moment.min.js' %}"></script>
+	<script src="{% static 'js/rome.standalone.min.js' %}"></script>
 {% endblock %}
 
 {% block title %}
