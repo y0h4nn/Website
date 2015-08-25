@@ -2,38 +2,37 @@
 
 
 (function(){
-	var EventList = function(containerId, buildCallback, clickCallback){
+	var PollList = function(containerId, buildCallback, clickCallback){
 		BaseList.call(this, containerId, buildCallback, clickCallback);
 		queryJson('list/', {}, this.populate.bind(this));
 	};
 
-	EventList.prototype = Object.create(BaseList.prototype, {
+	PollList.prototype = Object.create(BaseList.prototype, {
 		populate: {
 			value: function(data){
-				this.elems = data['events'];
-				for(var evt of this.elems){
-					var img = document.createElement('img');
-						img.setAttribute('src', evt['picture']);
-						img.setAttribute('alt', 'profile_picture');
+				this.elems = data['polls'];
+				for(var elem of this.elems){
+					var img = document.createElement('i');
+						img.setAttribute('class', elem['icon']);
 					var pictureContainer = document.createElement('div');
 						pictureContainer.setAttribute('class', 'picture_container');
 					var nameContainer = document.createElement('div');
-						nameContainer.innerHTML = evt['name'];
+						nameContainer.innerHTML = elem['title'];
 					var actionContainer = document.createElement('div');
 						actionContainer.setAttribute('class', 'action_container');
 
 
-					evt.element = document.createElement('li');
-					evt.element.appendChild(pictureContainer);
-					evt.element.appendChild(nameContainer);
-					evt.element.appendChild(actionContainer);
+					elem.element = document.createElement('li');
+					elem.element.appendChild(pictureContainer);
+					elem.element.appendChild(nameContainer);
+					elem.element.appendChild(actionContainer);
 					if(this.onElemBuild){
-						for(var action of this.onElemBuild(evt)){
+						for(var action of this.onElemBuild(elem)){
 							actionContainer.appendChild(action.element);
 						}
 					}
 					pictureContainer.appendChild(img);
-					this.listelement.appendChild(evt.element);
+					this.listelement.appendChild(elem.element);
 				}
 				this.matchingElems = this.elems;
 				this.matchingElems.sort(function(a, b){
@@ -51,7 +50,7 @@
 			value: function(elmt) {
 				var match = false;
 				var regex = this.cachedSearchRegex;
-				match |= regex.test(elmt['name']);
+				match |= regex.test(elmt['title']);
 				match &= !elmt['deleted'];
 				return match
 			},
@@ -59,6 +58,7 @@
 
 	});
 
-	window.EventList = EventList;
-    window.EventList.Action = Action;
+	window.PollList = PollList;
+    window.PollList.Action = Action;
 })();
+

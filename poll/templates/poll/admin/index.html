@@ -1,27 +1,46 @@
 {% extends 'core/base.html' %}
 {% load menu_item %}
+{% load static %}
 
 {% block header %} Liste des sondages {% endblock %}
 
 {% block menu %}
 	{% menu_item "Administration" "poll:admin" %}
+	{% menu_item "Ajouter un sondage" 'poll:admin_add_poll' %}
+{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'js/json_request.js' %}"></script>
+	<script src="{% static 'js/list.js' %}"></script>
+	<script src="{% static 'poll/js/poll_list_admin.js' %}"></script>
 {% endblock %}
 
 {% block main %}
-	<ul>
-		{% for poll in polls %}
-			{% if poll.is_open %}
-				<li>{{ poll }} (Fin le {{ poll.end_date }})</li>
-			{% else %}
-				{% if poll.is_ended %}
-					<li><a href="{% url 'poll:poll' pid=poll.id %}">{{ poll }} (Terminé le {{ poll.end_date }})</a></li>
-				{% else %}
-					<li>{{ poll }} (Ouverture le {{ poll.start_date }})</li>
-				{% endif %}
-			{% endif %}
-		{% endfor %}
-	</ul>
+	<div id="polllist"></div>
+	<script>
+		window.addEventListener('load', function(){
+			var pollList = new PollList('polllist', function(evt){
+				function update_list(data){
+					if(data['status'] === 1){
+						evt['deleted'] = true;
+					}
+					pollList.updateElems();
+					pollList.render();
+				}
 
-	<a href="{% url 'poll:admin_add_poll' %}">Ajouter un sondage</a>
+				function details(){
+					window.location = "/poll/admin/view/" + evt['id']
+				}
+
+				function del(){
+					queryJson('delete', {"pid": evt['id']}, update_list);
+				}
+				return [
+					new PollList.Action('Details', details),
+					new PollList.Action('Supprimer', del),
+				];
+			});
+		});
+	</script>
 {% endblock %}
 

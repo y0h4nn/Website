@@ -25,13 +25,13 @@
 	<div id="eventlist"></div>
     <script>
         window.addEventListener('load', function(){
-            var userList = new EventList('eventlist', function(evt){
+            var eventList = new EventList('eventlist', function(evt){
 				function update_list(data){
 					if(data['status'] === 1){
 						evt['deleted'] = true;
 					}
-					userList.updateElems();
-					userList.render();
+					eventList.updateElems();
+					eventList.render();
 				}
 
 				function del_event(){
@@ -41,6 +41,7 @@
 				function details(){
 					window.location = "/events/admin/view/" + evt['eid'];
 				}
+
 				return [
 					new EventList.Action('Details', details),
 					new EventList.Action('Supprimer', del_event),

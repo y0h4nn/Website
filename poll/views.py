@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db.models import F
-from django.http import HttpResponseForbidden, HttpResponseNotAllowed
+from django.http import HttpResponseForbidden, HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
+import json
 from .models import Question, Answer, Poll, Voter
 from .forms import PollForm
 
@@ -58,9 +59,32 @@ def poll_index(request):
 
 
 @login_required()
+def admin_delete(request):
+    if request.method == "OPTIONS":
+        req = json.loads(request.read().decode())
+        print(req)
+        poll = get_object_or_404(Poll, id=req['pid'])
+        poll.delete()
+        return JsonResponse({'status': 1})
+
+
+@login_required()
 def admin_index(request):
     context = {'polls': Poll.objects.filter(author=request.user)}
     return render(request, 'poll/admin/index.html', context)
+
+
+@login_required()
+def admin_list(request):
+    return JsonResponse({'polls': [
+            {
+                'title': p.title,
+                'icon': 'fa fa-pie-chart',
+                'id': p.id,
+                'deleted': False,
+            } for p in Poll.objects.filter(author=request.user)
+        ]
+    })
 
 
 @login_required()
