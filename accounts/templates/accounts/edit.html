@@ -7,10 +7,13 @@
 
 {% block scripts %}
 	<script src="{% static 'accounts/js/edit.js' %}"></script>
+	<script src="{% static 'js/moment.min.js' %}"></script>
+	<script src="{% static 'js/rome.standalone.min.js' %}"></script>
 {% endblock scripts %}
 
 {% block styles %}
 	<link rel="stylesheet" href="{% static 'accounts/css/edit.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/rome.min.css' %}" />
 {% endblock %}
 
 {% block header %}Edition du profil{% endblock %}

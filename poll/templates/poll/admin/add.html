@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load hash %}
+{% load static %}
 {% load max %}
 {% load menu_item %}
 
@@ -8,6 +9,15 @@
 {% block menu %}
 	{% menu_item "Administration" "poll:admin" %}
 	{% menu_item "Ajouter un sondage" "poll:admin_add_poll" %}
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/rome.min.css' %}" />
+{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'js/moment.min.js' %}"></script>
+	<script src="{% static 'js/rome.standalone.min.js' %}"></script>
 {% endblock %}
 
 {% block main %}
@@ -56,7 +66,7 @@
                 {{ form.fields | hash_render:question | safe }}
 			{% endfor %}
 		</div>
-
+		{{ form.js }}
         <a href="#" onclick="add_question();return false;" class="button bg_grey expand center"><i class="fa fa-plus"></i> Ajouter une question</a><br/>
         <button><i class="fa fa-check"></i> Ajouter le sondage</button>
 	</form>

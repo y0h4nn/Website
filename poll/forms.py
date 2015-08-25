@@ -1,4 +1,5 @@
 from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 import django.forms as forms
 import json
 
@@ -31,8 +32,8 @@ class QuestionField(forms.Field):
 
 class PollForm(forms.Form):
     title = forms.CharField(label='Titre')
-    start_time = forms.SplitDateTimeField()
-    end_time = forms.SplitDateTimeField()
+    start_time = forms.DateTimeField()
+    end_time = forms.DateTimeField()
     group = forms.ChoiceField()
 
     def __init__(self, *args, **kwargs):
@@ -42,8 +43,8 @@ class PollForm(forms.Form):
         self.q_a_nb = "{}"
         self.questions_answers = {}
         for f in ['start_time', 'end_time']:
-            self.fields[f].widget.widgets[0].attrs['placeholder'] = "DD/MM/YYYY"
-            self.fields[f].widget.widgets[1].attrs['placeholder'] = "HH:MM"
+            self.fields[f].widget.attrs['id'] = f
+
         if not len(args):  # If the request is empty
             return
         questions = []
@@ -69,6 +70,15 @@ class PollForm(forms.Form):
             self.fields[q] = QuestionField(qid=q, answers=self.questions_answers[q], data=self.data, initial=self.data[q], label="Question " + str(nb_q))
             nb_q += 1
         self.q_a_nb = json.dumps({q[1:]: len(a) for q, a in self.questions_answers.items()})
+
+    def js(self):
+        return mark_safe('''<script>
+            start = document.getElementById("start_time");
+            end = document.getElementById("end_time");
+            rome(start);
+            rome(end, {dateValidator: rome.val.afterEq(start)});
+        </script>
+        ''')
 
     def clean(self):
         cleaned_data = super().clean()

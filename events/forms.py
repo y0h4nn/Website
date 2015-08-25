@@ -1,4 +1,5 @@
-from django.forms import ModelForm, SplitDateTimeField, ClearableFileInput, ValidationError
+from django.forms import ModelForm, TextInput, ClearableFileInput, ValidationError
+from django.utils.safestring import mark_safe
 from .models import Event
 
 class WrapperClearableinput(ClearableFileInput):
@@ -13,10 +14,8 @@ class WrapperClearableinput(ClearableFileInput):
 class EventForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for f, label in {'start_time': "Début", 'end_time': "Fin"}.items():
-            self.fields[f] = SplitDateTimeField(label=label)
-            self.fields[f].widget.widgets[0].attrs['placeholder'] = "DD/MM/YYYY"
-            self.fields[f].widget.widgets[1].attrs['placeholder'] = "HH:MM"
+        self.fields['start_time'].widget.attrs['id'] = 'start_time'
+        self.fields['end_time'].widget.attrs['id'] = 'end_time'
 
     def clean_end_time(self):
         start = self.cleaned_data['start_time']
@@ -26,6 +25,15 @@ class EventForm(ModelForm):
             raise ValidationError("Le début de l'événement doit se situer avant sa fin...")
 
         return end
+
+    def as_p(self):
+        return super().as_p() + mark_safe('''<script>
+            start = document.getElementById("start_time");
+            end = document.getElementById("end_time");
+            rome(start);
+            rome(end, {dateValidator: rome.val.afterEq(start)});
+        </script>
+        ''')
 
     class Meta:
         model = Event
