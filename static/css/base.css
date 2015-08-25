@@ -213,6 +213,8 @@ table {
 
 .markdown h1, .markdown h2, .markdown h3, .markdown h4, .markdown h5, .markdown h6 {
   color: #aaa; }
+.markdown h1 {
+  font-size: 2em; }
 
 #main_container {
   flex: 1 1 auto;
