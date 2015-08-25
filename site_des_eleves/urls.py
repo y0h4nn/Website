@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^webmail/', include('webmail.urls', namespace='webmail')),
     url(r'^bde/', include('bde.urls', namespace='bde')),
     url(r'^covoit/', include('carshare.urls', namespace='carshare')),
+    url(r'^notifications/', include('notifications.urls', namespace='notifications')),
 ]

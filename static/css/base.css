@@ -680,4 +680,46 @@ table {
       font-size: 1em;
       color: #bbb; }
 
+.notification {
+  margin-bottom: 3em; }
+  .notification header {
+    border-bottom: 1px solid #eee; }
+    .notification header h1 {
+      font-size: 1.2em;
+      margin-bottom: 0; }
+    .notification header h2 {
+      font-size: 0.8em;
+      color: #aaa;
+      display: flex;
+      align-items: center; }
+      .notification header h2 span:first-child {
+        flex: 1 1 auto; }
+    .notification header button {
+      padding: 0;
+      margin: 0;
+      background-color: white;
+      color: #888;
+      text-align: right;
+      font-size: 0.8em; }
+    .notification header i {
+      vertical-align: middle; }
+
+#new_notification {
+  position: relative;
+  color: #68B9DE;
+  animation-name: notify_blink;
+  animation-duration: 2s;
+  animation-iteration-count: infinite; }
+
+@keyframes notify_blink {
+  0% {
+    color: white;
+    text-shadow: 0 0 10px #333; }
+  50% {
+    color: orange;
+    text-shadow: 0 0 10px orange; }
+  100% {
+    color: white;
+    text-shadow: 0 0 10px #333; } }
+
 /*# sourceMappingURL=base.css.map */

@@ -1,0 +1,49 @@
+
+.notification
+  margin-bottom: 3em
+  header
+    border-bottom: 1px solid #eee
+    h1
+      font-size: 1.2em
+      margin-bottom: 0
+    h2
+      font-size: 0.8em
+      color: #aaa
+
+      display: flex
+      align-items: center
+
+      & span:first-child
+        flex: 1 1 auto
+
+
+    button
+      padding: 0
+      margin: 0
+      background-color: white
+      color: #888
+      text-align: right
+      font-size: 0.8em
+
+    i
+      vertical-align: middle
+
+
+#new_notification
+  position: relative
+  color: $blue
+  animation-name: notify_blink
+  animation-duration: 2s
+  animation-iteration-count: infinite
+
+
+@keyframes notify_blink
+  0%
+    color: white
+    text-shadow: 0 0 10px #333
+  50%
+    color: orange
+    text-shadow: 0 0 10px orange
+  100%
+    color: white
+    text-shadow: 0 0 10px #333

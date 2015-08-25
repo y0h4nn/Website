@@ -23,8 +23,14 @@
 				</div>
 				<nav>
 					<ul>
-            <li><a href="{% url 'webmail:index' %}"><i class="fa fa-envelope"></i></a></li>
-						<li><a href="#"><i class="fa fa-inbox"></i></a></li>
+                        <li><a href="{% url 'webmail:index' %}"><i class="fa fa-envelope"></i></a></li>
+                        {% if request.user.is_active %}
+                            {% if user_have_notifications %}
+                                <li><a href="{% url 'notifications:index' %}"><i class="fa fa-inbox" id="new_notification"></i></a></li>
+                            {% else %}
+                                <li><a href="{% url 'notifications:index' %}"><i class="fa fa-inbox"></i></a></li>
+                            {% endif %}
+                        {% endif %}
 						<li><a href="#"><i class="fa fa-question-circle"></i></a></li>
 					</ul>
 				</nav>

@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from . import forms
 from . import models
+import notifications
 
 
 @login_required
@@ -32,6 +33,17 @@ def show(request, aid):
             registration.user = request.user
             if request.POST['action'] == 'register' and request.user != announcement.author:
                 registration.is_simple_comment = False
+                notifications.notify(
+                    announcement.author,
+                    "Demande de covoiturage",
+                    "L'utilisateur %s vous a fait une demande de covoiturage" % str(request.user.profile)
+                )
+            elif request.user != announcement.author:
+                notifications.notify(
+                    announcement.author,
+                    "Commentaire sur votre offre de covoiturage",
+                    "L'utilisateur %s commenté votre offre de covoiturage" % str(request.user.profile)
+                )
             registration.save()
             form.save()
             return redirect(reverse('carshare:show', kwargs={'aid': announcement.id}))

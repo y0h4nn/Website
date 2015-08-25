@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+
+{% load staticfiles %}
+{% load menu_item %}
+
+{% block title %}
+    Notifications
+{% endblock %}
+
+{% block header %}
+    Notifications
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'notifications/js/read.js'  %}"></script>
+{% endblock scripts %}
+
+{% block styles %}
+{% endblock %}
+
+
+{% block menu %}
+{% endblock %}
+
+{% block main %}
+    {% if not notifications %}
+        <p>
+            Vous n'avez pas de notifications.
+        </p>
+    {% endif %}
+
+    {% for notification in notifications %}
+        <article class="notification">
+            <header>
+                <h1>{{ notification.title }}</h1>
+                {% if notification.read %}
+                    <h2><span>{{ notification.date }}</span><span><i class="fa fa-check"></i> Lu</span></h2>
+                {% else %}
+                <h2><span>{{ notification.date }}</span><span><button type="button" onclick="read(this);" data-notification-id="{{ notification.id }}"><i class="fa fa-eye"></i>Marquer comme lu</button></span></h2>
+                {% endif %}
+            </header>
+            <p>
+                {{ notification.message }}
+            </p>
+        </article>
+    {% endfor %}
+{% endblock %}
