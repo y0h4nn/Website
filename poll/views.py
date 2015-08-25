@@ -9,6 +9,14 @@ from .forms import PollForm
 
 
 @login_required()
+def admin_question(request, pid):
+    if not request.user.is_authenticated():
+        return HttpResponseForbidden()
+    p = get_object_or_404(Poll, id=pid)
+    context = {'poll': p, 'pid': pid, "errors": []}
+    return render(request, 'poll/admin/results.html', context)
+
+@login_required()
 def question(request, pid):
     if not request.user.is_authenticated():
         return HttpResponseForbidden()
