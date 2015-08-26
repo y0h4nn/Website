@@ -34,15 +34,17 @@ def show(request, aid):
             if request.POST['action'] == 'register' and request.user != announcement.author:
                 registration.is_simple_comment = False
                 notifications.notify(
-                    announcement.author,
-                    "Demande de covoiturage",
-                    "L'utilisateur %s vous a fait une demande de covoiturage" % str(request.user.profile)
+                    "%s a publier une demande de covoiturage." % str(request.user.profile),
+                    "carshare:show", {'aid': aid},
+                    [announcement.author],
                 )
-            elif request.user != announcement.author:
+            else:
+                registrations = models.Registration.objects.filter(announcement=announcement).all()
+                users = set(reg.user for reg in registrations if reg.user != request.user)
                 notifications.notify(
-                    announcement.author,
-                    "Commentaire sur votre offre de covoiturage",
-                    "L'utilisateur %s commenté votre offre de covoiturage" % str(request.user.profile)
+                    "%s a commenté une offre de covoiturage a laquelle vous avez participé" % str(request.user.profile),
+                    "carshare:show", {'aid': aid},
+                    users,
                 )
             registration.save()
             form.save()

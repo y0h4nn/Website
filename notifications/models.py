@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.conf import settings
 
 
@@ -6,9 +7,14 @@ class Notification(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     read = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=255)
-    message = models.TextField()
+    message = models.CharField(max_length=255)
+    backref = models.CharField(max_length=255)
+    backref_args = models.CharField(max_length=1024)
 
     @staticmethod
     def has_notification(user):
         return Notification.objects.filter(user=user,read=False).count() > 0
+
+    def backref_url(self):
+        kwargs = dict([arg.split('=') for arg in self.backref_args.split(';')])
+        return reverse(self.backref, kwargs=kwargs)
