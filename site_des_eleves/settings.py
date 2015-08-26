@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
+    'notifications',
     'accounts',
     'poll',
     'events',
@@ -45,7 +46,6 @@ INSTALLED_APPS = (
     'bde',
     'carshare',
     'news',
-    'notifications',
 )
 
 MIDDLEWARE_CLASSES = (
