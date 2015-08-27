@@ -49,8 +49,6 @@ class PollForm(forms.ModelForm):
             initial_q_a = None
 
         super().__init__(*args, **kwargs)
-        self.fields['title'].initial = "plop"
-
         self.fields['group'].choices = [(x, x) for x in user.groups.all()]
         self.q_a_nb = "{}"
         self.questions_answers = OrderedDict()
