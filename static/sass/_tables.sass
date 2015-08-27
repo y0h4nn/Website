@@ -1,31 +1,30 @@
-table
+table:not(.rd-days)
   width: 100%
   border-collapse: collapse
 
+  thead
+    background-color: white
 
-thead
-  background-color: white
+  th
+    padding: 0.5em 0
+    text-align: left
 
-th
-  padding: 0.5em 0
-  text-align: left
+  tbody
+    tr
+      background-color: #eee
+      transition: background-color 0.25s
+      &:nth-child(2n)
+        background-color: #f5f5f5
 
-tbody
-  tr
-    background-color: #eee
-    transition: background-color 0.25s
-    &:nth-child(2n)
-      background-color: #f5f5f5
+      &:hover
+        background-color: #dfdfdf
 
-    &:hover
-      background-color: #dfdfdf
+  $cell-padding: 0.5em
+  td
+    padding: $cell-padding 0
 
-$cell-padding: 0.5em
-td
-  padding: $cell-padding 0
-
-  &:first-child
-    padding-left: $cell-padding
-  &:last-child
-    padding-right: $cell-padding
+    &:first-child
+      padding-left: $cell-padding
+    &:last-child
+      padding-right: $cell-padding
 
