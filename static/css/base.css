@@ -405,8 +405,8 @@ table {
         background-color: #FFC458; }
     #user_container header img {
       display: block;
-      border-radius: 10px;
-      width: 50%;
+      border-radius: 5px;
+      width: 100%;
       margin: 1em auto; }
     #user_container header nav a {
       display: block;
