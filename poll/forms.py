@@ -1,6 +1,8 @@
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 import django.forms as forms
+from .models import Poll
+from collections import OrderedDict
 import json
 
 
@@ -30,7 +32,10 @@ class QuestionField(forms.Field):
         self.widget = QuestionWidget(self)
 
 
-class PollForm(forms.Form):
+class PollForm(forms.ModelForm):
+    class Meta:
+        model=Poll
+        fields = []
     title = forms.CharField(label='Titre')
     start_time = forms.DateTimeField()
     end_time = forms.DateTimeField()
@@ -38,31 +43,43 @@ class PollForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
+        try:
+            initial_q_a = kwargs.pop('initial_q_a')
+        except KeyError:
+            initial_q_a = None
+
         super().__init__(*args, **kwargs)
+        self.fields['title'].initial = "plop"
+
         self.fields['group'].choices = [(x, x) for x in user.groups.all()]
         self.q_a_nb = "{}"
-        self.questions_answers = {}
+        self.questions_answers = OrderedDict()
         for f in ['start_time', 'end_time']:
             self.fields[f].widget.attrs['id'] = f
 
-        if not len(args):  # If the request is empty
+        if not len(args) and not initial_q_a:  # If the request is empty
             return
-        questions = []
-        answers = []
+
+        self.questions = []
+        self.answers = []
+        if initial_q_a is not None:
+            self._init(initial_q_a)
+
 
         # Build a list of questions and answers out of the request
-        for arg in args[0]:
-            if arg.startswith('q'):
-                questions.append(arg)
-            if arg.startswith('a'):
-                answers.append(arg)
+        if initial_q_a is None:
+            for arg in args[0]:
+                if arg.startswith('q'):
+                    self.questions.append(arg)
+                if arg.startswith('a'):
+                    self.answers.append(arg)
 
         nb_q = 1
         # Association of questions and answers
-        for q in sorted(questions, key=lambda x: int(x[1:])):
+        for q in sorted(self.questions, key=lambda x: int(x[1:])):
             nb_a = 1
             self.questions_answers[q] = []
-            for a in sorted(answers, key=lambda x: int(x[1:].split("_")[0])):
+            for a in sorted(self.answers, key=lambda x: int(x[1:].split("_")[0])):
                 if not a.endswith(q):
                     continue
                 self.questions_answers[q].append(a)
@@ -70,6 +87,16 @@ class PollForm(forms.Form):
             self.fields[q] = QuestionField(qid=q, answers=self.questions_answers[q], data=self.data, initial=self.data[q], label="Question " + str(nb_q))
             nb_q += 1
         self.q_a_nb = json.dumps({q[1:]: len(a) for q, a in self.questions_answers.items()})
+
+    def _init(self, q_a):
+        for i, (q, answers) in enumerate(q_a.items()):
+            qid = "q" + str(i)
+            self.data[qid] = q.text
+            self.questions.append(qid)
+            for j, a in enumerate(answers):
+                aid = "a" + str(j) + "_q" + str(i)
+                self.data[aid] = a.text
+                self.answers.append(aid)
 
     def js(self):
         return mark_safe('''<script>
