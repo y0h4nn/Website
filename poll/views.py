@@ -138,6 +138,7 @@ def admin_edit_poll(request, pid):
             p.end_date = form.cleaned_data['end_time']
             g = request.user.groups.get(name=form.cleaned_data['group'])
             p.group = g
+
             for fq, (question, answers) in zip(p.questions.all(), form.questions_answers.items()):
                 fq.text = form.cleaned_data[question]
                 fq.save()
@@ -146,5 +147,5 @@ def admin_edit_poll(request, pid):
                     fa.save()
             p.save()
 
-    return render(request, 'poll/admin/edit.html', {'form': form, 'pid': pid})
+    return render(request, 'poll/admin/edit.html', {'form': form, 'pid': pid, 'edit_mode': True})
 
