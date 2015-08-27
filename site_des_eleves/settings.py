@@ -57,6 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'notifications.middleware.ReadOnVisit',
 )
 
 ROOT_URLCONF = 'site_des_eleves.urls'

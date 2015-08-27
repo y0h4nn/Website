@@ -32,7 +32,7 @@
     {% for notification in notifications %}
         <article class="notification">
             <header>
-                <h1><a href="{{ notification.backref_url }}" onclick="read(this);" data-notification-id="{{ notification.id }}" >{{ notification.message }}</a></h1>
+                <h1><a href="{{ notification.backref_url }}">{{ notification.message }}</a></h1>
                 {% if notification.read %}
                     <h2><span>{{ notification.date }}</span><span><i class="fa fa-check"></i> Lu</span></h2>
                 {% else %}

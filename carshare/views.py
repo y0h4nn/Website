@@ -86,9 +86,24 @@ def action(request, aid, rid, state):
 
     if state == 'waiting':
         registration.status = None
+        notifications.notify(
+            "Votre demande de covoiturage est en attente.",
+            "carshare:show", {'aid': announcement.id},
+            [registration.user],
+        )
     elif state == 'accepted' and announcement.available_places() > 0:
+        notifications.notify(
+            "Votre demande de covoiturage à été acceptée",
+            "carshare:show", {'aid': announcement.id},
+            [registration.user],
+        )
         registration.status = 'accepted'
     elif state == 'refused':
+        notifications.notify(
+            "Votre demande de covoiturage à été refusée",
+            "carshare:show", {'aid': announcement.id},
+            [registration.user],
+        )
         registration.status = 'refused'
     else:
         return redirect(reverse('carshare:show', kwargs={'aid': aid}))
