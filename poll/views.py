@@ -70,7 +70,6 @@ def poll_index(request):
 def admin_delete(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
-        print(req)
         poll = get_object_or_404(Poll, id=req['pid'])
         poll.delete()
         return JsonResponse({'status': 1})
@@ -118,4 +117,34 @@ def admin_add_poll(request):
     else:
         return HttpResponseNotAllowed()
     return render(request, 'poll/admin/add.html', {'form': form})
+
+
+@login_required()
+def admin_edit_poll(request, pid):
+    if request.method == 'GET':
+        p = get_object_or_404(Poll, id=pid)
+        initial_q_a = {question: [answer for answer in question.answers.all()] for question in p.questions.all()}
+        form = PollForm(user=request.user, initial_q_a=initial_q_a, instance=p)
+        form.fields['title'].initial = p.title
+        form.fields['start_time'].initial = p.start_date
+        form.fields['end_time'].initial = p.end_date
+        form.fields['group'].initial = p.group
+    elif request.method == 'POST':
+        p = get_object_or_404(Poll, id=pid)
+        form = PollForm(request.POST, user=request.user, instance=p)
+        if form.is_valid():
+            p.title = form.cleaned_data['title']
+            p.start_date = form.cleaned_data['start_time']
+            p.end_date = form.cleaned_data['end_time']
+            g = request.user.groups.get(name=form.cleaned_data['group'])
+            p.group = g
+            for fq, (question, answers) in zip(p.questions.all(), form.questions_answers.items()):
+                fq.text = form.cleaned_data[question]
+                fq.save()
+                for fa, answer in zip(fq.answers.all(), answers):
+                    fa.text = form.cleaned_data[answer]
+                    fa.save()
+            p.save()
+
+    return render(request, 'poll/admin/edit.html', {'form': form, 'pid': pid})
 
