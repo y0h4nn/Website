@@ -1,6 +1,7 @@
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 import django.forms as forms
+import django.forms.widgets as widgets
 from .models import Poll
 from collections import OrderedDict
 import json
@@ -35,11 +36,10 @@ class QuestionField(forms.Field):
 class PollForm(forms.ModelForm):
     class Meta:
         model=Poll
-        fields = []
-    title = forms.CharField(label='Titre')
+        fields = ['title', 'group']
+        widgets = {'title': widgets.TextInput}
     start_time = forms.DateTimeField()
     end_time = forms.DateTimeField()
-    group = forms.ChoiceField()
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
@@ -47,9 +47,9 @@ class PollForm(forms.ModelForm):
             initial_q_a = kwargs.pop('initial_q_a')
         except KeyError:
             initial_q_a = None
-
         super().__init__(*args, **kwargs)
-        self.fields['group'].choices = [(x, x) for x in user.groups.all()]
+
+        #self.fields['group'].choices = [(x, x) for x in user.groups.all()]
         self.q_a_nb = "{}"
         self.questions_answers = OrderedDict()
         for f in ['start_time', 'end_time']:
@@ -127,4 +127,6 @@ class PollForm(forms.ModelForm):
         if cleaned_data.get('start_time') and cleaned_data.get('end_time'):
             if cleaned_data['start_time'] >= cleaned_data['end_time']:
                 self.add_error('start_time', "Le début du sondage doit etre avant la fin")
+        return cleaned_data
+
 
