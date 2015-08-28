@@ -2,8 +2,8 @@
     <p>
         <label for="{{ real_qid }}">Question: </label>
         {{ question_form }}
-        <button onclick="add_response({{qid}});return false;"><i class="fa fa-plus"></i></button>
-        <button class="red_button" onclick="del_question({{qid}});return false;"><i class="fa fa-trash-o"></i></button>
+		<button onclick="add_response({{qid}});return false;" class="edit_button"><i class="fa fa-plus"></i></button>
+		<button class="red_button edit_button" onclick="del_question({{qid}});return false;"><i class="fa fa-trash-o"></i></button>
     </p>
 	<div id="q_a{{real_qid}}"></div>
 	<div id="q_a{{qid}}">
@@ -12,7 +12,7 @@
                 <p>
                     <label for="answer">Réponse: </label>
                     {{ answer }}
-                    <button class="red_button" onclick="del_answer({{qid}},{{ forloop.counter }});return false;"><i class="fa fa-minus"></i></button>
+                    <button class="red_button edit_button" onclick="del_answer({{qid}},{{ forloop.counter }});return false;"><i class="fa fa-minus"></i></button>
                 </p>
 			</div>
 		{% endfor %}

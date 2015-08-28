@@ -4,15 +4,25 @@
 {% load max %}
 {% load menu_item %}
 
-{% block header %} Ajouter un sondage {% endblock %}
+{% block header %} Editer un sondage {% endblock %}
 
 {% block menu %}
 	{% menu_item "Administration" "poll:admin" %}
-	{% menu_item "Ajouter un sondage" "poll:admin_add_poll" %}
+	{% menu_item "Détails" "poll:admin_question" pid=pid %}
+	{% if not poll.is_ended %}
+		{% menu_item "Editer" "poll:admin_edit_poll" pid=pid %}
+	{% endif %}
 {% endblock %}
 
 {% block styles %}
     <link rel="stylesheet" href="{% static 'contrib/Rome/rome.min.css' %}" />
+	{% if edit_mode %}
+	<style>
+		.edit_button {
+			display: none;
+		}
+	</style>
+	{% endif %}
 {% endblock %}
 
 {% block scripts %}
@@ -67,44 +77,7 @@
 			{% endfor %}
 		</div>
 		{{ form.js }}
-        <a href="#" onclick="add_question();return false;" class="button bg_grey expand center"><i class="fa fa-plus"></i> Ajouter une question</a><br/>
         <button><i class="fa fa-check"></i> Sauvegarder le sondage</button>
 	</form>
-
-	<script>
-
-		var answers_nb = {{ form.q_a_nb | safe }};
-		var nb_questions = Math.max.apply(null, Object.keys( answers_nb ).map(function ( key ) { return parseInt(key); }));
-		if(nb_questions == '-Infinity'){ nb_questions = 0; }
-		function add_question(){
-			nb_questions += 1;
-			var main_form = document.getElementById("main_form");
-            main_form.insertAdjacentHTML('beforeend', "<fieldset id=\"div_q" + nb_questions + "\"><p><label for=\"q" + nb_questions + "\">Question: </label>" +
-													  "<input type=\"text\" id=\"q" + nb_questions + "\" name=\"q" + nb_questions + "\"/>" +
-                                                      "<button onclick=\"add_response(" + nb_questions + "); return false;\"><i class=\"fa fa-plus\"></i></button><button class=\"red_button\" onclick=\"del_question(" + nb_questions + ");return false;\"><i class=\"fa fa-trash-o\"></i></button><div id=\"q_a" + nb_questions + "\"></div></p<</fieldset>");
-
-			answers_nb[nb_questions] = 0;
-		}
-
-		function add_response(qid){
-			answers_nb[qid] += 1;
-			var answer_div = document.getElementById("q_a" + qid);
-			aid = answers_nb[qid];
-            answer_div.insertAdjacentHTML('beforeend', "<div id=\"div_q" + qid + "_" + aid +"\"><p><label for=\"a" + aid + "\">Réponse: </label>" +
-                                          "<input type=\"text\" name=\"a" + aid + "_q" + qid + "\" id=\"a" + aid +"\"/><button class=\"red_button\" onclick=\"del_answer(" + qid + ", " + aid + "); return false;\"><i class=\"fa fa-minus\"></i></button></p></div>");
-		}
-
-		function del_question(qid){
-			var q = document.getElementById("div_q" + qid);
-			q.parentNode.removeChild(q);
-		}
-
-		function del_answer(qid, aid){
-			var a = document.getElementById("div_q" + qid + "_" + aid);
-			a.parentNode.removeChild(a);
-		}
-
-	</script>
-
 {% endblock %}
 
