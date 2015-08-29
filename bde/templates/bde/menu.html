@@ -1,0 +1,7 @@
+{% load menu_item %}
+
+{% menu_item 'Accueil' 'bde:index' %}
+{% if user_is_bde_member %}
+    {% menu_item 'Cotisants' 'bde:contributors' %}
+    {% menu_item 'Membres' 'bde:members' %}
+{% endif %}

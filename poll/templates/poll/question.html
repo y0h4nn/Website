@@ -6,7 +6,9 @@
 
 {% block menu %}
 	{% menu_item "Liste" "poll:index" %}
-	{% menu_item "Administration" "poll:admin" %}
+    {% if user_is_bde_member %}
+        {% menu_item "Administration" "poll:admin" %}
+    {% endif %}
 {% endblock %}
 
 {% block styles %}

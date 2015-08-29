@@ -4,7 +4,9 @@
 {% block header %} Liste des sondages {% endblock %}
 
 {% block menu %}
-	{% menu_item "Administration" "poll:admin" %}
+    {% if user_is_bde_member %}
+        {% menu_item "Administration" "poll:admin" %}
+    {% endif %}
 {% endblock %}
 
 {% block main %}

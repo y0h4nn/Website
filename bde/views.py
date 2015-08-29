@@ -7,13 +7,14 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from . import models
 from . import forms
+from . import bde_member
 
 
 def index(request):
     return render(request, 'bde/index.html', {})
 
 
-@login_required
+@bde_member
 def contributors(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -68,7 +69,7 @@ def contributors(request):
         return JsonResponse({'error': None})
     return render(request, 'bde/contributors.html', {})
 
-@login_required
+@bde_member
 def detail(request, id):
     user = User.objects.get(id=id);
 
@@ -92,3 +93,8 @@ def detail(request, id):
         }
 
     return render(request, 'bde/contributors_detail.html', context)
+
+@bde_member
+def members(request):
+    context = {}
+    return render(request, 'bde/members.html', context)

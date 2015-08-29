@@ -23,8 +23,7 @@
 {% endblock %}
 
 {% block menu %}
-	{% menu_item 'Accueil' 'bde:index' %}
-	{% menu_item 'Gestion de cotisants' 'bde:contributors' %}
+    {% include 'bde/menu.html' %}
 {% endblock%}
 
 {% block main %}

@@ -19,22 +19,28 @@
 {% endblock %}
 
 {% block menu %}
-	{% menu_item 'Actualités' 'news:index' %}
-    {% if request.user.is_active %}
+    {% if request.user.is_active and user_is_bde_member %}
+        {% menu_item 'Actualités' 'news:index' %}
         {% menu_item 'Ajouter une actualité' 'news:create' %}
     {% endif %}
 {% endblock%}
 
 {% block main %}
-    {% for new in news %}
-        <article class="news">
-            <header>
-                <h1>{{ new.title }}</h1>
-                <h2>{{ new.pub_date }}</h2>
-            </header>
-            <main>
-                {{ new.content|markdown }}
-            </main>
-        </article>
-    {% endfor %}
+    {% if news %}
+        {% for new in news %}
+            <article class="news">
+                <header>
+                    <h1>{{ new.title }}</h1>
+                    <h2>{{ new.pub_date }}</h2>
+                </header>
+                <main>
+                    {{ new.content|markdown }}
+                </main>
+            </article>
+        {% endfor %}
+    {% else %}
+        <p>
+            Il n'y a pas d'actualités.
+        </p>
+    {% endif %}
 {% endblock %}

@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 import json
+from bde import bde_member
 
 
 @login_required
@@ -26,7 +27,7 @@ def event(request, eid):
     return render(request, 'events/event.html')
 
 
-@login_required
+@bde_member
 def admin_index(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -37,7 +38,7 @@ def admin_index(request):
     return render(request, 'events/admin/index.html', context)
 
 
-@login_required
+@bde_member
 def admin_list_events(request):
     if request.method == "OPTIONS":
         evts = Event.objects.all()
@@ -50,7 +51,7 @@ def admin_list_events(request):
         } for evt in evts]})
 
 
-@login_required
+@bde_member
 def admin_add(request):
     if request.method == "POST":
         form = EventForm(request.POST)
@@ -63,14 +64,14 @@ def admin_add(request):
     return render(request, 'events/admin/add.html', context)
 
 
-@login_required
+@bde_member
 def admin_view(request, eid):
     e = get_object_or_404(Event, id=eid)
     context = {'event': e}
     return render(request, 'events/admin/view.html', context)
 
 
-@login_required
+@bde_member
 def admin_edit(request, eid):
     e = get_object_or_404(Event, id=eid)
     form = EventForm(request.POST or None, request.FILES or None, instance=e)
@@ -81,7 +82,7 @@ def admin_edit(request, eid):
     return render(request, 'events/admin/edit.html', context)
 
 
-@login_required
+@bde_member
 def admin_list_registrations(request, eid):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())

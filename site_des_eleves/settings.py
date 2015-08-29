@@ -74,6 +74,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'notifications.context_processors.check_notifications',
+                'bde.context_processors.bde_member',
             ],
         },
     },
@@ -129,3 +130,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 LOGIN_URL = '/accounts/login'
+
+
+# Application settings
+BDE_GROUP_NAME = 'BDE'

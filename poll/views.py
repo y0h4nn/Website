@@ -6,9 +6,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 import json
 from .models import Question, Answer, Poll, Voter
 from .forms import PollForm
+from bde import bde_member
 
 
-@login_required()
+@bde_member
 def admin_question(request, pid):
     if not request.user.is_authenticated():
         return HttpResponseForbidden()
@@ -66,7 +67,7 @@ def poll_index(request):
     return render(request, 'poll/index.html', context)
 
 
-@login_required()
+@bde_member
 def admin_delete(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -75,13 +76,13 @@ def admin_delete(request):
         return JsonResponse({'status': 1})
 
 
-@login_required()
+@bde_member
 def admin_index(request):
     context = {'polls': Poll.objects.filter(author=request.user)}
     return render(request, 'poll/admin/index.html', context)
 
 
-@login_required()
+@bde_member
 def admin_list(request):
     return JsonResponse({'polls': [
             {
@@ -94,7 +95,7 @@ def admin_list(request):
     })
 
 
-@login_required()
+@bde_member
 def admin_add_poll(request):
     if request.method == 'GET':
         form = PollForm(user=request.user)
@@ -119,7 +120,7 @@ def admin_add_poll(request):
     return render(request, 'poll/admin/add.html', {'form': form})
 
 
-@login_required()
+@bde_member
 def admin_edit_poll(request, pid):
     if request.method == 'GET':
         p = get_object_or_404(Poll, id=pid)

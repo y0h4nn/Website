@@ -10,7 +10,9 @@
 {% endblock %}
 
 {% block menu %}
-	{% menu_item "Administration" "events:admin_index" %}
+    {% if user_is_bde_member %}
+        {% menu_item "Administration" "events:admin_index" %}
+    {% endif %}
 {% endblock %}
 
 {% block scripts %}

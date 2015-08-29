@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from . import forms
 from . import models
+from bde import bde_member
 
 
 def index(request):
@@ -12,7 +13,7 @@ def index(request):
     return render(request, "news/index.html", context)
 
 
-@login_required
+@bde_member
 def create(request):
     context = {}
 
