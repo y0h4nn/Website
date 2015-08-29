@@ -11,6 +11,9 @@ class Notification(models.Model):
     backref = models.CharField(max_length=255)
     backref_args = models.CharField(max_length=1024)
 
+    class Meta:
+        app_label = 'notifications'
+
     @staticmethod
     def has_notification(user):
         return Notification.objects.filter(user=user,read=False).count() > 0
