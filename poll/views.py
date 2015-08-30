@@ -63,8 +63,21 @@ def already(request):
 
 @login_required()
 def poll_index(request):
-    context = {'polls': Poll.objects.filter(group__in=request.user.groups.all())}
-    return render(request, 'poll/index.html', context)
+    return render(request, 'poll/index.html')
+
+
+@login_required
+def poll_list(request):
+    if request.method == "OPTIONS":
+        return JsonResponse({'polls': [
+                {
+                    'title': p.title,
+                    'icon': 'fa fa-pie-chart',
+                    'id': p.id,
+                    'start': p.start_date.strftime("%d %B %Y %H:%M"),
+                    'end': p.end_date.strftime("%d %B %Y %H:%M"),
+                } for p in Poll.objects.filter(author=request.user).order_by('-end_date')]
+        })
 
 
 @bde_member
@@ -89,8 +102,10 @@ def admin_list(request):
                 'title': p.title,
                 'icon': 'fa fa-pie-chart',
                 'id': p.id,
+                'start': p.start_date.strftime("%d %B %Y %H:%M"),
+                'end': p.end_date.strftime("%d %B %Y %H:%M"),
                 'deleted': False,
-            } for p in Poll.objects.filter(author=request.user)
+            } for p in Poll.objects.filter(author=request.user).order_by('-end_date')
         ]
     })
 

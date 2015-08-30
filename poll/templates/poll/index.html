@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load menu_item %}
+{% load static %}
 
 {% block header %} Liste des sondages {% endblock %}
 
@@ -9,19 +10,26 @@
     {% endif %}
 {% endblock %}
 
+{% block scripts %}
+	<script src="{% static 'js/json_request.js' %}"></script>
+	<script src="{% static 'js/list.js' %}"></script>
+	<script src="{% static 'poll/js/poll_list.js' %}"></script>
+{% endblock %}
+
 {% block main %}
-	<ul>
-		{% for poll in polls %}
-			{% if poll.is_open %}
-				<li><a href="{% url 'poll:poll' pid=poll.id %}">{{ poll }} (Fin le {{ poll.end_date }})</a></li>
-			{% else %}
-				{% if poll.is_ended %}
-					<li><a href="{% url 'poll:poll' pid=poll.id %}">{{ poll }} (Terminé le {{ poll.end_date }})</a></li>
-				{% else %}
-					<li>{{ poll }} (Ouverture le {{ poll.start_date }})</li>
-				{% endif %}
-			{% endif %}
-		{% endfor %}
-	</ul>
+	<div id="polllist"></div>
+	<script>
+		window.addEventListener('load', function(){
+			var pollList = new PollList('polllist', function(evt){
+				function details(){
+					window.location = evt['id']
+				}
+
+				return [
+					new PollList.Action('Details', details),
+				];
+			});
+		});
+	</script>
 {% endblock %}
 

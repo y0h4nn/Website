@@ -15,9 +15,9 @@
 					var img = document.createElement('i');
 						img.setAttribute('class', elem['icon']);
 					var pictureContainer = document.createElement('div');
-						pictureContainer.setAttribute('class', 'picture_container');
+						pictureContainer.setAttribute('class', 'icon_container');
 					var nameContainer = document.createElement('div');
-						nameContainer.innerHTML = elem['title'];
+						nameContainer.innerHTML = "<span class='bold'>" + elem['title'] + '</span> (' + elem['start'] + ' - ' + elem['end'] + ')';
 					var actionContainer = document.createElement('div');
 						actionContainer.setAttribute('class', 'action_container');
 
