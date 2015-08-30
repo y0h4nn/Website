@@ -236,6 +236,9 @@ table:not(.rd-days) {
 .markdown h1 {
   font-size: 2em; }
 
+.bold {
+  font-weight: bold; }
+
 #main_container {
   flex: 1 1 auto;
   padding: 2.5em; }
@@ -508,13 +511,18 @@ table:not(.rd-days) {
       .userlist li button:active, .userlist li button.toggled {
         background-color: #ddd; }
 
-.picture_container {
+.picture_container, .icon_container {
   flex: 0 1 50px;
   width: 50px;
   min-width: 50px;
   max-width: 50px;
   margin: 0 1em 0 0;
   overflow: hidden; }
+
+.icon_container {
+  font-size: 2em;
+  text-align: center;
+  margin-right: 0; }
 
 #userlist input {
   width: 100%;
