@@ -33,7 +33,7 @@
 
     <script>
         window.addEventListener('load', function(){
-            var userList = new UserList('userlist', function(user){
+            var userList = new UserList('userlist', '/accounts/members/', function(user){
                 function sendMail(){
                     window.location = "mailto:" + user.email;
                 };

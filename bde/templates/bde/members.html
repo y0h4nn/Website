@@ -7,6 +7,9 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'js/list.js' %}"></script>
+    <script src="{% static 'js/userlist.js' %}"></script>
 {% endblock %}
 
 {% block title %}
@@ -22,8 +25,46 @@
 {% endblock%}
 
 {% block main %}
-    <p>
-        Les membres du bureau peuvent gérer les articles, les sondages, la boutique ...
-    </p>
+    <div id="userlist"></div>
 
+    <script>
+        window.addEventListener('load', function(){
+            var userList = new UserList('userlist', '/bde/memberlist', function(user){
+                var toggleMemberShip = function(){
+                    if(this.isToggled()){
+                        queryJson('', {'user': user.id, 'action': 'delete'}, function(resp){
+                            if(resp.error){
+                                alert(resp.error);
+                            }
+                            else{
+                                this.setUntoggled();
+                                this.element.innerHTML = "Ajouter au bureau";
+                            }
+                        }.bind(this));
+                    }
+                    else{
+                        console.log(user)
+                        queryJson('', {'user': user.id, 'action': 'add'}, function(resp){
+                            if(resp.error){
+                                alert(resp.error);
+                            }
+                            else{
+                                this.setToggled();
+                                this.element.innerHTML = "Retirer du bureau";
+                            }
+                        }.bind(this));
+                    }
+                }
+                if(user.is_member){
+                    text = "Retirer du bureau";
+                }
+                else{
+                    text = "Ajouter au bureau";
+                }
+                return [
+                    new UserList.UserAction(text, toggleMemberShip, user.is_member),
+                ];
+            });
+        });
+    </script>
 {% endblock %}

@@ -42,7 +42,7 @@ var Action = function(name, callback, toggled){
 };
 
 
-var BaseList = function(containerId, buildCallback, clickCallback){
+var BaseList = function(containerId, buildCallback){
 	this.element = document.getElementById(containerId);
 	this.searchInput = document.createElement('input');
 	this.spinner = document.createElement('div');
@@ -58,7 +58,6 @@ var BaseList = function(containerId, buildCallback, clickCallback){
 
 	// hooks
 	this.onElemBuild = buildCallback;
-	this.onClick = clickCallback;
 
 	this.render = function(){
 		this.spinner.setAttribute('class', 'spinner hidden');

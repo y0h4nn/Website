@@ -2,9 +2,10 @@ import json
 import datetime
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.conf import settings
 from . import models
 from . import forms
 from . import bde_member
@@ -97,4 +98,48 @@ def detail(request, id):
 @bde_member
 def members(request):
     context = {}
+
+    if request.method == "OPTIONS":
+        req = json.loads(request.read().decode())
+
+        try:
+            user = User.objects.get(id=req.get('user'))
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'Utilisateur inconu. Contactez votre sysadmin.'})
+
+        try:
+            group = Group.objects.get(name=settings.BDE_GROUP_NAME)
+        except Group.DoesNotExist:
+            return JsonResponse({'error': 'Impossible de trouver le group du bde. Contactez votre administrateur systeme'})
+
+        if req.get('action') == 'add':
+            user.groups.add(group)
+        elif req.get('action') == 'delete':
+            user.group.remove(group)
+            pass
+        else:
+            return JsonResponse({'error': 'Action inconue'})
+
+        return JsonResponse({'error': None})
+
     return render(request, 'bde/members.html', context)
+
+
+@bde_member
+def memberlist(request):
+    bde_group = Group.objects.get(name=settings.BDE_GROUP_NAME)
+    users = [
+        {
+            'id': user.id,
+            'display_name': str(user.profile),
+            'picture': user.profile.get_picture_url(),
+            'profile_url': user.profile.get_url(),
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'username': user.username,
+            'nickname': user.profile.nickname,
+            'email': user.email,
+            'is_member': bde_group in user.groups.all(),
+        } for user in User.objects.select_related('profile').all()
+    ]
+    return JsonResponse({'users': users})

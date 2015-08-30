@@ -2,12 +2,12 @@
 
 (function(){
 
-    var UserList = function(containerId, listProvider, buildCallback){
-		BaseList.call(this, containerId, buildCallback);
-        queryJson(listProvider, {}, this.populate.bind(this));
+    var UserList = function(containerId, buildCallback, clickCallback){
+		BaseList.call(this, containerId, buildCallback, clickCallback);
+        queryJson('/accounts/members/', {}, this.populate.bind(this));
 	};
 
-	UserList.prototype = Object.create(BaseList.prototype, {
+	BdeMembers.prototype = Object.create(BaseList.prototype, {
         populate: {
 			value: function(json){
 				this.elems = json['users'];
@@ -46,6 +46,7 @@
 					else return 0;
 				});
 
+
 				this.render();
 			},
 		},
@@ -64,7 +65,7 @@
 		},
     });
 
-    window.UserList = UserList;
-    window.UserList.UserAction = Action;
+    window.BdeMembers = BdeMembers;
+    window.BdeMembers.UserAction = Action;
 
 })();

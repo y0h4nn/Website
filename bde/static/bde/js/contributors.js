@@ -86,7 +86,6 @@ function onUserBuildCallback(user){
     ];
 }
 
-
 window.addEventListener('load', function(){
-    var userList = new UserList('userlist', onUserBuildCallback);
+    var userList = new UserList('userlist', '/accounts/members/', onUserBuildCallback);
 });
