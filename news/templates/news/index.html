@@ -31,7 +31,7 @@
             <article class="news">
                 <header>
                     <h1>{{ new.title }}</h1>
-                    <h2>{{ new.pub_date }}</h2>
+                    <h2>Le {{ new.pub_date }} par {{ new.author.profile }}</h2>
                 </header>
                 <main>
                     {{ new.content|markdown }}
