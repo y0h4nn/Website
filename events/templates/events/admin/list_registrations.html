@@ -26,17 +26,15 @@
 	<ul class="userlist">
 		{% for registration in reg %}
 			<li>
-				<a href="{{ registration.user.profile.get_url }}">
-					<div class="picture_container">
-						<img src="{{ registration.user.profile.get_picture_url }}" alt="profile_picture"/>
-					</div>
-					<div>
-						{{ registration.user.profile }}
-					</div>
-					<button onclick="del_user({{registration.event.id}}, {{registration.user.id}}, this); return false;" class="red_button userlist_right_button">
-						Supprimer
-					</button>
-				</a>
+                <div class="picture_container">
+                    <img src="{{ registration.user.profile.get_picture_url }}" alt="profile_picture"/>
+                </div>
+                <div>
+                    {{ registration.user.profile }}
+                </div>
+                <button onclick="del_user({{registration.event.id}}, {{registration.user.id}}, this); return false;" class="red_button userlist_right_button">
+                    Supprimer
+                </button>
 			</li>
 		{% endfor %}
 	</ul>
