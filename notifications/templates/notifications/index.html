@@ -31,14 +31,12 @@
 
     {% for notification in notifications %}
         <article class="notification">
-            <header>
-                <h1><a href="{{ notification.backref_url }}">{{ notification.message }}</a></h1>
-                {% if notification.read %}
-                    <h2><span>{{ notification.date }}</span><span><i class="fa fa-check"></i> Lu</span></h2>
-                {% else %}
-                <h2><span>{{ notification.date }}</span><span><button type="button" onclick="read(this);" data-notification-id="{{ notification.id }}"><i class="fa fa-eye"></i>Marquer comme lu</button></span></h2>
-                {% endif %}
-            </header>
+            <h1><a href="{{ notification.backref_url }}">{{ notification.message }}</a></h1>
+            {% if notification.read %}
+                <h2><span>{{ notification.date }}</span><span><i class="fa fa-check"></i> Lu</span></h2>
+            {% else %}
+            <h2><span>{{ notification.date }}</span><span><button type="button" onclick="read(this);" data-notification-id="{{ notification.id }}"><i class="fa fa-eye"></i>Marquer comme lu</button></span></h2>
+            {% endif %}
         </article>
     {% endfor %}
 {% endblock %}

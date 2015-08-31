@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from . import forms
 from . import models
 from bde import bde_member
+from notifications import notify
 
 
 @login_required
@@ -43,6 +44,7 @@ def sell(request):
             payment_mean=req.get('payment_mean')
         )
         buy.save()
+        notify("Confirmation de l'achat de «%s»" % product.name, "shop:index", {}, users=[user])
 
         if product.action:
             models.ACTIONS_FNC_MAPPING[product.action](user, product, req.get('payment_mean'))
