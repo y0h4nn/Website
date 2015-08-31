@@ -5,7 +5,7 @@ from bde.models import Contributor
 
 ACTIONS = [
     (None, 'Ne rien faire'),
-    ('fullcontribution', 'Attribuer une contisation complete'),
+    ('fullcontribution', 'Attribuer une cotisation complete'),
     ('halfcontribution', 'Attribuer une demi cotisation'),
 ]
 
@@ -25,7 +25,7 @@ MEANS_OF_PAYMENT = [
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
-    price = models.PositiveIntegerField()
+    price = models.FloatField()
     action = models.CharField(max_length=100, choices=ACTIONS, null=True, blank=True)
 
     def __str__(self):
@@ -35,6 +35,6 @@ class Product(models.Model):
 class BuyingHistory(models.Model):
     username = models.CharField(max_length=80)
     product = models.CharField(max_length=100)
-    price = models.PositiveIntegerField()
+    price = models.FloatField()
     date = models.DateTimeField(auto_now_add=True)
     payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT)

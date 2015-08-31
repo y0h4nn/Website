@@ -14,7 +14,7 @@ class ProductForm(forms.ModelForm):
 
         labels = {
             'name': 'Nom',
-            'price': 'prix',
+            'price': 'Prix',
             'action': 'Action additionelle',
         }
 
