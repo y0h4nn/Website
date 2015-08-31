@@ -10,24 +10,25 @@
 {% endblock %}
 
 {% block title %}
-    Ajouter une actualité
+    Edition
 {% endblock %}
 
 {% block header %}
-    Ajouter une actualité
+    Edition d'une actualité
 {% endblock %}
 
 {% block menu %}
 	{% menu_item 'Actualités' 'news:index' %}
     {% if request.user.is_active %}
-        {% menu_item 'Ajouter une actualité' 'news:create' %}
+        {% menu_item 'Editer une actualité' 'news:edit' nid=news.id %}
     {% endif %}
 {% endblock%}
 
 {% block main %}
-    <form action="{% url 'news:create' %}" method="POST">
+    <form action="{% url 'news:edit' nid=news.id %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <button>Publier</button>
     </form>
 {% endblock %}
+

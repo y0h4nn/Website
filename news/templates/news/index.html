@@ -31,7 +31,7 @@
             <article class="news">
                 <header>
                     <h1>{{ new.title }}</h1>
-                    <h2>Le {{ new.pub_date }} par {{ new.author.profile }}</h2>
+                    <h2>Le {{ new.pub_date }} par {{ new.author.profile }} {% if user_is_bde_member %} <a href="{% url 'news:edit' nid=new.id %}">edit</a> {% endif %} </h2>
                 </header>
                 <main>
                     {{ new.content|markdown }}
