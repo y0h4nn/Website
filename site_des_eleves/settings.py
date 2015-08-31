@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'bde',
     'carshare',
     'news',
+    'shop',
 )
 
 MIDDLEWARE_CLASSES = (

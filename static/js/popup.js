@@ -127,3 +127,97 @@ RemoteHtmlPopup.prototype = Object.create(Popup.prototype, {
 
 RemoteHtmlPopup.prototype.constructor = RemoteHtmlPopup;
 
+
+/*
+ * User selection popup
+ */
+
+function UserSelectionPopup(title, callback){
+    Popup.call(this, title);
+    this.users = [];
+    this.callback = callback;
+    this.baseClass = 'user_selection_popup';
+    this.searchInput = document.createElement('input');
+    this.btnContainer = document.createElement('div');
+    this.spinner = document.createElement('div');
+    this.spinner.setAttribute('class', 'spinner');
+    this.main.appendChild(this.searchInput);
+    this.main.appendChild(this.spinner);
+    this.main.appendChild(this.btnContainer);
+    this.fetchList();
+	this.cachedSearchRegex = new RegExp('');
+    this.matchingUsers = []
+
+
+	this.searchInput.addEventListener('keyup', function(){
+		if(this.timer){
+			clearTimeout(this.timer);
+		}
+		this.timer = setTimeout(function(){
+			this.updateFilter();
+			this.buildUserList(this.matchingUsers);
+		}.bind(this), 100);
+	}.bind(this));
+}
+
+UserSelectionPopup.prototype = Object.create(Popup.prototype, {
+    updateFilter: {
+        value: function(){
+            var pattern = this.searchInput.value.split('').join('.*?');
+            this.cachedSearchRegex = new RegExp(pattern, 'i');
+            this.matchingUsers = this.users.filter(this.match, this);
+        },
+    },
+
+
+    match: {
+        value: function(user){
+            var match = false;
+            var regex = this.cachedSearchRegex;
+            match |= regex.test(user['last_name']);
+            match |= regex.test(user['first_name']);
+            match |= regex.test(user['nickname']);
+            match |= regex.test(user['username']);
+            match |= regex.test(user['display_name']);
+            return match;
+        },
+    },
+
+    buildUserList: {
+        value: function(users){
+            this.btnContainer.innerHTML = "";
+            for(var user of users){
+                var button = document.createElement('button');
+                button.setAttribute('type', 'button');
+                button.setAttribute('data-uid', user.id);
+                button.innerHTML = user.display_name;
+                button.addEventListener('click', function(event){
+                    var uid = event.target.getAttribute('data-uid');
+                    console.log(this);
+                    this.callback(uid);
+                    this.close();
+                }.bind(this));
+                this.btnContainer.appendChild(button);
+            }
+            this.spinner.setAttribute('class', 'hidden');
+        },
+    },
+
+    fetchList: {
+        value: function(){
+            var xhr = new XMLHttpRequest();
+            xhr.open('OPTIONS', '/accounts/members/');
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == xhr.DONE){
+                    this.users = JSON.parse(xhr.responseText)['users']
+                    this.buildUserList(this.users);
+                }
+            }.bind(this);
+            xhr.send();
+        },
+    },
+
+});
+
+UserSelectionPopup.prototype.constructor = UserSelectionPopup;
+

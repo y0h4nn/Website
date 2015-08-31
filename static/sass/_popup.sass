@@ -5,14 +5,16 @@
   position: fixed
   z-index: 10
   display: none
+  padding: 2em
 
   & > div
     background-color: white
     box-shadow: 0 0 20px hsla(0,0,0,0.3)
     min-width: 100px
     min-height: 100px
+    max-height: 100%
+    overflow: auto
     border-radius: 3px
-    overflow: hidden
 
   &.pop
     display: flex
@@ -47,8 +49,9 @@
       flex: 1 1 auto
 
   main
-    padding: 1em 2em
+    padding: 1em
     background-color: white
+    max-height: 100%
 
 .selection_popup
   @extend .popup
@@ -68,3 +71,10 @@
 
       &:active, &.toggled
         background-color: #ddd
+
+.user_selection_popup
+  @extend .selection_popup
+
+  input
+    width: 100%
+    padding: 0.5em
