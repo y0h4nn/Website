@@ -224,6 +224,9 @@ table:not(.rd-days) {
 .bg_grey {
   background-color: #bbb; }
 
+.red {
+  color: #E06060; }
+
 .blue {
   background-color: #68B9DE;
   color: white; }

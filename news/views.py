@@ -45,3 +45,8 @@ def edit(request, nid):
     context = {'form': form, 'news': n}
     return render(request, "news/edit.html", context)
 
+@bde_member
+def delete(request, nid):
+    n = get_object_or_404(models.News, id=nid)
+    n.delete()
+    return redirect(reverse('news:index'))
