@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/json_request.js'%}"></script>
+    <script src="{% static 'js/popup.js' %}"></script>
+    <script src="{% static 'shop/js/sell.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+    Ventes
+{% endblock %}
+
+{% block header %}
+    Ventes
+{% endblock %}
+
+{% block menu %}
+    {% menu_item 'Mes achats' 'shop:index' %}
+    {% if user_is_bde_member %}
+        {% menu_item 'Ventes' 'shop:sell' %}
+        {% menu_item 'Historique' 'shop:history' %}
+        {% menu_item 'Administration' 'shop:admin' %}
+    {% endif %}
+{% endblock%}
+
+{% block main %}
+    {% if products %}
+        <ul id="sell_product_list">
+        {% for product in products %}
+            <li data-pid="{{ product.id }}" onclick="sell({{product.id}})">
+                <span>{{ product.name }}</span>
+                <span>{{ product.price }}€ </span>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>
+            Il n'y a pas de produits en vente, commencez par en ajouter.
+        </p>
+    {% endif %}
+
+{% endblock %}

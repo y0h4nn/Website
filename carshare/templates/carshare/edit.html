@@ -1,0 +1,36 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'accounts/css/edit.css' %}" />
+    <link rel="stylesheet" href="{% static 'contrib/Rome/rome.min.css' %}" />
+{% endblock %}
+
+{% block scripts %}
+	<script src="{% static 'contrib/Moment.js/moment.min.js' %}"></script>
+	<script src="{% static 'contrib/Rome/rome.standalone.min.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+    Covoiturage
+{% endblock %}
+
+{% block header %}
+    Covoiturage
+{% endblock %}
+
+{% block menu %}
+	{% menu_item 'Liste des covoiturages' 'carshare:index' %}
+	{% menu_item 'Créer un covoiturage' 'carshare:create' %}
+{% endblock%}
+
+{% block main %}
+<form action="{% url 'carshare:edit' aid=announcement.id %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Mettra à jour l'offre de covoiturage</button>
+    </form>
+{% endblock %}
+

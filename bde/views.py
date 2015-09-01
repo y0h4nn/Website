@@ -44,28 +44,14 @@ def contributors(request):
                 return JsonResponse({'error': 'L\'utilisateur n\'est pas cotisant'})
 
         elif req.get('action') == 'half_contribution_add':
-            now = datetime.datetime.now()
-            if 1 <= now.month <= 6:
-                endate = datetime.date(now.year, 6, 30)
-            else:
-                endate = datetime.date(now.year, 12, 31)
-            contrib_type = 'half'
+            models.Contributor.take_half_contribution(user, req.get('mean'))
 
         elif req.get('action') == 'full_contribution_add':
-            now = datetime.datetime.now()
-            if 8 <= now.month <= 12:
-                endate = datetime.date(now.year + 1, 6, 30)
-                contrib_type = 'full'
-            else:
+            if not models.Contributor.take_full_contribution(user, req.get('mean')):
                 return JsonResponse({'error': 'La fulll cotiz ne peux plus être prise pour l\'année en cours'})
         else:
             return JsonResponse({'error': 'Stop envoyer de la merde. Contactez votre sysadmin.'})
 
-        models.Contributor.objects.update_or_create({
-            'end_date': endate,
-            'type': contrib_type,
-            'means_of_payment': req.get('mean'),
-        }, user=user)
 
         return JsonResponse({'error': None})
     return render(request, 'bde/contributors.html', {})
@@ -115,7 +101,7 @@ def members(request):
         if req.get('action') == 'add':
             user.groups.add(group)
         elif req.get('action') == 'delete':
-            user.group.remove(group)
+            user.groups.remove(group)
             pass
         else:
             return JsonResponse({'error': 'Action inconue'})

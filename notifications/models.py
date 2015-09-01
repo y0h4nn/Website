@@ -19,5 +19,8 @@ class Notification(models.Model):
         return Notification.objects.filter(user=user,read=False).count() > 0
 
     def backref_url(self):
-        kwargs = dict([arg.split('=') for arg in self.backref_args.split(';')])
-        return reverse(self.backref, kwargs=kwargs)
+        if self.backref_args:
+            kwargs = dict([arg.split('=') for arg in self.backref_args.split(';')])
+            return reverse(self.backref, kwargs=kwargs)
+        else:
+            return reverse(self.backref)

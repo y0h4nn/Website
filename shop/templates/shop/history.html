@@ -1,0 +1,58 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Historique des ventes
+{% endblock %}
+
+{% block header %}
+    Historique des ventes
+{% endblock %}
+
+{% block menu %}
+    {% menu_item 'Mes achats' 'shop:index' %}
+    {% if user_is_bde_member %}
+        {% menu_item 'Ventes' 'shop:sell' %}
+        {% menu_item 'Historique' 'shop:history' %}
+        {% menu_item 'Administration' 'shop:admin' %}
+    {% endif %}
+{% endblock%}
+
+{% block main %}
+    {% if history %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Acheteur</th>
+                    <th>Date</th>
+                    <th>prix</th>
+                    <th>Moyen de paiement</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in history %}
+                <tr>
+                    <td>{{ item.product }}</td>
+                    <td>{{ item.username }}</td>
+                    <td>{{ item.date }}</td>
+                    <td>{{ item.price }} €</td>
+                    <td>{{ item.payment_mean }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>
+            il n'y a eu aucun produit vendu.
+        </p>
+    {% endif %}
+{% endblock %}

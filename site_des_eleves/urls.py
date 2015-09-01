@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^bde/', include('bde.urls', namespace='bde')),
     url(r'^covoit/', include('carshare.urls', namespace='carshare')),
     url(r'^notifications/', include('notifications.urls', namespace='notifications')),
+    url(r'^shop/', include('shop.urls', namespace='shop')),
 ]
