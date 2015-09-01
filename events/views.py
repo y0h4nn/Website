@@ -54,7 +54,7 @@ def admin_list_events(request):
 @bde_member
 def admin_add(request):
     if request.method == "POST":
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, request.FILES or None)
         if form.is_valid():
             form.save()
             return redirect(reverse('events:admin_index'))

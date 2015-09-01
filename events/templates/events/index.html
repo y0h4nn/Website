@@ -24,7 +24,7 @@
     {% for inscription, event in events %}
     <div class="event">
         <div>
-            {% if envent.photo %}
+            {% if event.photo %}
                 <img src="{{ event.photo.url }}" alt="event-picture"/>
             {% else %}
                 <img src="{% static 'images/default_event_icon.png' %}" alt="event-picture"/>
