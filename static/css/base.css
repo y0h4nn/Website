@@ -713,6 +713,26 @@ table a {
   .comment div:first-child {
     flex: 1 1 auto; }
 
+.announce header {
+  border-bottom: 1px solid #eee; }
+  .announce header h2 {
+    color: #bbb;
+    font-size: 1em; }
+.announce .details {
+  text-align: center; }
+  .announce .details div {
+    border: 1px solid #eee;
+    padding: 1em; }
+    .announce .details div + div {
+      border-left: none; }
+  .announce .details p {
+    text-align: center;
+    margin: 0; }
+    .announce .details p:first-child {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: orange; }
+
 .news {
   margin: 1em 0 5em 0; }
   .news header {

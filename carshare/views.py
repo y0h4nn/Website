@@ -10,7 +10,6 @@ import notifications
 def index(request):
     context = {}
     context['announcements'] = models.Announcement.objects.all()
-    print(context)
     return render(request, 'carshare/index.html', context)
 
 
@@ -81,17 +80,10 @@ def action(request, aid, rid, state):
     announcement = get_object_or_404(models.Announcement, id=aid)
     registration = get_object_or_404(models.Registration, id=rid)
 
-    if not request.user == announcement.author:
+    if not request.user == announcement.author or registration.status:
         return redirect(reverse('carshare:show', kwargs={'aid': aid}))
 
-    if state == 'waiting':
-        registration.status = None
-        notifications.notify(
-            "Votre demande de covoiturage est en attente.",
-            "carshare:show", {'aid': announcement.id},
-            [registration.user],
-        )
-    elif state == 'accepted' and announcement.available_places() > 0:
+    if state == 'accepted' and announcement.available_places() > 0:
         notifications.notify(
             "Votre demande de covoiturage à été acceptée",
             "carshare:show", {'aid': announcement.id},
@@ -110,3 +102,40 @@ def action(request, aid, rid, state):
 
     registration.save()
     return redirect(reverse('carshare:show', kwargs={'aid': aid}))
+
+@login_required
+def edit(request, aid):
+    announcement = get_object_or_404(models.Announcement, id=aid)
+    context = {'announcement': announcement}
+
+    if request.method == "POST":
+        form = forms.AnnouncementForm(request.POST, instance=announcement)
+        if form.is_valid():
+            form.save()
+            registrations = models.Registration.objects.filter(announcement=announcement).all()
+            users = set(reg.user for reg in registrations if reg.user != request.user)
+            notifications.notify(
+                "L'offre de covoiturage a été éditée",
+                "carshare:show", {"aid": announcement.id},
+                users
+            )
+            return redirect(reverse('carshare:show', kwargs={'aid': aid}))
+        else:
+            context['form'] = form
+    else:
+        context['form'] = forms.AnnouncementForm(instance=announcement)
+    return render(request, 'carshare/edit.html', context)
+
+@login_required
+def delete(request, aid):
+    announcement = get_object_or_404(models.Announcement, id=aid)
+    if request.user == announcement.author:
+        registrations = models.Registration.objects.filter(announcement=announcement).all()
+        users = set(reg.user for reg in registrations if reg.user != request.user)
+        notifications.notify(
+            "L'offre de covoiturage a été supprimée",
+            "carshare:index", {},
+            users
+        )
+        announcement.delete()
+    return redirect(reverse('carshare:index'))
