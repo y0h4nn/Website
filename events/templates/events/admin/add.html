@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block main %}
-	<form action="{% url 'events:admin_add' %}" method="POST">
+	<form enctype="multipart/form-data" action="{% url 'events:admin_add' %}" method="POST">
 		{% csrf_token %}
 		{{ event_form.as_p }}
 		<button>Ajouter</button>
