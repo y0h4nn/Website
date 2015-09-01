@@ -720,7 +720,10 @@ table a {
     font-size: 1em; }
 .announce .details {
   text-align: center; }
+  .announce .details + .details div {
+    border-top: none; }
   .announce .details div {
+    flex: 1 1 50%;
     border: 1px solid #eee;
     padding: 1em; }
     .announce .details div + div {

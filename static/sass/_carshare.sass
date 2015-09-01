@@ -80,7 +80,13 @@ table
 
   .details
     text-align: center
+
+    & + .details
+      div
+        border-top: none
+
     div
+      flex: 1 1 50%
       border: 1px solid #eee
       padding: 1em
 
