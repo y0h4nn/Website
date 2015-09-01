@@ -33,7 +33,7 @@ class Profile(models.Model):
     family = models.ForeignKey('Family', related_name='members', null=True, blank=True)
     promo = models.ForeignKey('Promo', related_name='members', null=True, blank=True)
     enib_join_year = models.PositiveSmallIntegerField(null=True, blank=True)
-    semester = models.CharField(max_length=2, choices=SEMESTERS, null=True, blank=True)
+    semester = models.CharField(max_length=3, choices=SEMESTERS, null=True, blank=True)
 
     def __str__(self):
         if self.user.first_name and self.user.last_name and self.user.profile.nickname:
