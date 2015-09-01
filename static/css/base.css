@@ -74,6 +74,20 @@ form p {
     form p button:first-child, form p .button:first-child {
       border-top-left-radius: 3px;
       border-bottom-left-radius: 3px; }
+form ul {
+  padding: 0;
+  list-style: none; }
+  form ul label {
+    padding: 0.5em;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 3px; }
+    form ul label:hover {
+      background-color: #eee; }
+  form ul input {
+    width: auto;
+    vertical-align: middle; }
 
 input, textarea {
   padding: 0.25em 0.5em;

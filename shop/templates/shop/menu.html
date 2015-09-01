@@ -1,0 +1,9 @@
+{% load static %}
+{% load menu_item %}
+
+{% menu_item 'Mes achats' 'shop:index' %}
+{% if user_is_bde_member %}
+    {% menu_item 'Ventes' 'shop:sells' %}
+    {% menu_item 'Historique' 'shop:history' %}
+    {% menu_item 'Administration' 'shop:admin' %}
+{% endif %}

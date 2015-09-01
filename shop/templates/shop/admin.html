@@ -18,12 +18,7 @@
 {% endblock %}
 
 {% block menu %}
-    {% menu_item 'Mes achats' 'shop:index' %}
-    {% if user_is_bde_member %}
-        {% menu_item 'Ventes' 'shop:sell' %}
-        {% menu_item 'Historique' 'shop:history' %}
-        {% menu_item 'Administration' 'shop:admin' %}
-    {% endif %}
+    {% include 'shop/menu.html' %}
 {% endblock%}
 
 {% block main %}
@@ -43,7 +38,7 @@
                 <tr>
                     <td>{{product.name }}</td>
                     <td>{{product.price}}€</td>
-                    <td><a href="{% url 'shop:delete' pid=product.id %}" class="flex"><i class="fa fa-trash-o"></i></a></td>
+                    <td><a href="{% url 'shop:product_delete' pid=product.id %}" class="flex"><i class="fa fa-trash-o"></i></a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -53,13 +48,36 @@
             Il n'y a pas de produits en vente.
         </p>
     {% endif %}
+    <p>
+        <a href="{% url 'shop:product_add' %}"><i class="fa fa-plus"></i> Ajouter un produit</a>
+    </p>
 
-    <h2>Ajouter un produit</h2>
-
-
-    <form action="{% url 'shop:admin' %}" method="POST">
-        {% csrf_token %}
-        {{ form }}
-        <button>Ajouter le produit</button>
-    </form>
+    <h2>Packs en vente</h2>
+    {% if packs %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pack in packs %}
+                <tr>
+                    <td>{{ pack.name }}</td>
+                    <td>{{ pack.price }}€</td>
+                    <td><a href="{% url 'shop:pack_delete' pid=pack.id %}" class="flex"><i class="fa fa-trash-o"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>
+            Il n'y a pas de produits en vente.
+        </p>
+    {% endif %}
+    <p>
+        <a href="{% url 'shop:pack_add' %}"><i class="fa fa-plus"></i> Composer un pack</a>
+    </p>
 {% endblock %}

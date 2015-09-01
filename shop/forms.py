@@ -9,12 +9,36 @@ class ProductForm(forms.ModelForm):
         fields = [
             'name',
             'price',
+            'description',
             'action',
         ]
 
         labels = {
             'name': 'Nom',
             'price': 'Prix',
+            'description': 'Description',
             'action': 'Action additionelle',
         }
 
+
+class PackForm(forms.ModelForm):
+    prefix = 'pack'
+    class Meta:
+        model = models.Packs
+        fields = [
+            'name',
+            'price',
+            'description',
+            'products',
+        ]
+
+        labels = {
+            'name': 'Nom',
+            'price': 'Prix',
+            'description': 'Description',
+            'products': 'Produit',
+        }
+
+        widgets = {
+            'products': forms.CheckboxSelectMultiple,
+        }

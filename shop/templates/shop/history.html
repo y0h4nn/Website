@@ -18,12 +18,7 @@
 {% endblock %}
 
 {% block menu %}
-    {% menu_item 'Mes achats' 'shop:index' %}
-    {% if user_is_bde_member %}
-        {% menu_item 'Ventes' 'shop:sell' %}
-        {% menu_item 'Historique' 'shop:history' %}
-        {% menu_item 'Administration' 'shop:admin' %}
-    {% endif %}
+    {% include 'shop/menu.html' %}
 {% endblock%}
 
 {% block main %}
@@ -36,17 +31,30 @@
                     <th>Date</th>
                     <th>prix</th>
                     <th>Moyen de paiement</th>
+                    <th>Type</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in history %}
-                <tr>
-                    <td>{{ item.product }}</td>
-                    <td>{{ item.username }}</td>
-                    <td>{{ item.date }}</td>
-                    <td>{{ item.price }} €</td>
-                    <td>{{ item.payment_mean }}</td>
-                </tr>
+                    {% if item.type == 'pack' %}
+                        <tr>
+                            <td>{{ item.pack.name }}</td>
+                            <td>{{ item.username }}</td>
+                            <td>{{ item.date }}</td>
+                            <td>{{ item.pack.price }} €</td>
+                            <td>{{ item.payment_mean }}</td>
+                            <td>Pack</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.username }}</td>
+                            <td>{{ item.date }}</td>
+                            <td>{{ item.product.price }} €</td>
+                            <td>{{ item.payment_mean }}</td>
+                            <td>Produit</td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>

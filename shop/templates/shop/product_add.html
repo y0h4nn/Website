@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Ajouter un produit
+{% endblock %}
+
+{% block header %}
+    Ajouter un produit
+{% endblock %}
+
+{% block menu %}
+    {% include 'shop/menu.html' %}
+{% endblock%}
+
+{% block main %}
+    <form action="{% url 'shop:product_add' %}" method="POST">
+        {% csrf_token %}
+        {{ form }}
+        <button>Ajouter le produit</button>
+    </form>
+{% endblock %}

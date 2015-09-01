@@ -27,14 +27,35 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.FloatField()
     action = models.CharField(max_length=100, choices=ACTIONS, null=True, blank=True)
+    description = models.TextField()
+    enabled = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
 
 
+class Packs(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.FloatField()
+    description = models.TextField()
+    products = models.ManyToManyField(Product, blank=True)
+    enabled = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+
+TYPES = [
+    ('product', 'Produit'),
+    ('pack', 'Pack'),
+]
+
 class BuyingHistory(models.Model):
     username = models.CharField(max_length=80)
-    product = models.CharField(max_length=100)
-    price = models.FloatField()
+    type = models.CharField(max_length=10, choices=TYPES)
+    product = models.ForeignKey(Product ,null=True, default=None)
+    pack = models.ForeignKey(Packs, null=True, default=None)
     date = models.DateTimeField(auto_now_add=True)
     payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT)
+
+

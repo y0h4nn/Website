@@ -19,9 +19,8 @@ def index(request):
     return render(request, 'shop/index.html', context)
 
 
-
 @bde_member
-def sell(request):
+def sells(request):
     if request.method == 'OPTIONS':
         req = json.loads(request.read().decode())
         try:
@@ -29,32 +28,62 @@ def sell(request):
         except User.DoesNotExist:
             return JsonResponse({'error': 'L\'utilisateur n\'existe pas.'})
 
+
+        item_type = req.get('type')
+
         try:
-            product = models.Product.objects.get(id=req.get('pid'))
+            if item_type == 'pack':
+                item = models.Packs.objects.get(id=req.get('pid'))
+            else:
+                item = models.Product.objects.get(id=req.get('pid'))
         except models.Product.DoesNotExists:
             return JsonResponse({'error': 'Le produit selectionné n\'existe pas.'})
 
         if req.get('payment_mean') not in [p[0] for p in models.MEANS_OF_PAYMENT]:
             return JsonResponse({'error': 'Le moyen de paiement n\'est pas valide'})
 
-        buy = models.BuyingHistory(
-            username=user.username,
-            product=product.name,
-            price=product.price,
-            payment_mean=req.get('payment_mean')
-        )
-        buy.save()
-        notify("Confirmation de l'achat de «%s»" % product.name, "shop:index", {}, users=[user])
 
-        if product.action:
-            models.ACTIONS_FNC_MAPPING[product.action](user, product, req.get('payment_mean'))
+        if item_type == 'pack':
+            buy = models.BuyingHistory(
+                username=user.username,
+                pack=item,
+                type='pack',
+                payment_mean=req.get('payment_mean')
+            )
+            buy.save()
+            notify("Confirmation de l'achat de «%s»" % item.name, "shop:index", {}, users=[user])
+        elif item_type == 'product':
+            buy = models.BuyingHistory(
+                username=user.username,
+                product=item,
+                type='product',
+                payment_mean=req.get('payment_mean')
+            )
+            buy.save()
+            notify("Confirmation de l'achat de «%s»" % item.name, "shop:index", {}, users=[user])
+
+        if item_type == 'product' and item.action:
+            models.ACTIONS_FNC_MAPPING[item.action](user, item, req.get('payment_mean'))
+        elif item_type == 'pack':
+            for product in item.products.all():
+                models.ACTIONS_FNC_MAPPING[product.action](user, product, req.get('payment_mean'))
 
         return JsonResponse({'error': None})
     else:
         context = {
-            'products': models.Product.objects.all()
+            'products': models.Product.objects.filter(enabled=True).all(),
+            'packs': models.Packs.objects.filter(enabled=True).all(),
         }
         return render(request, 'shop/sell.html', context)
+
+
+@bde_member
+def pack(request):
+    context = {
+        'packs': models.Packs.objects.all()
+    }
+    return render(request, 'shop/pack.html', context)
+
 
 @bde_member
 def history(request):
@@ -67,6 +96,17 @@ def history(request):
 
 @bde_member
 def admin(request):
+
+    context = {
+        'products': models.Product.objects.filter(enabled=True).all(),
+        'packs': models.Packs.objects.filter(enabled=True).all()
+    }
+
+    return render(request, 'shop/admin.html', context)
+
+
+@bde_member
+def product_add(request):
     if request.method == "POST":
         form = forms.ProductForm(request.POST)
         if form.is_valid():
@@ -76,15 +116,39 @@ def admin(request):
         form = forms.ProductForm()
 
     context = {
-        'products': models.Product.objects.all(),
         'form': form.as_p()
     }
 
-    return render(request, 'shop/admin.html', context)
+    return render(request, 'shop/product_add.html', context)
 
 
 @bde_member
-def delete(request, pid):
+def product_delete(request, pid):
     product = get_object_or_404(models.Product, id=pid)
-    product.delete()
+    product.enabled = False
+    product.save()
+    return redirect(reverse('shop:admin'))
+
+
+@bde_member
+def pack_add(request):
+    if request.method == "POST":
+        form = forms.PackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('shop:admin'))
+    else:
+        form = forms.PackForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'shop/pack_add.html', context)
+
+@bde_member
+def pack_delete(request, pid):
+    pack = get_object_or_404(models.Packs, id=pid)
+    pack.enabled = False
+    pack.save()
     return redirect(reverse('shop:admin'))
