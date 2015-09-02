@@ -38,7 +38,7 @@ class Packs(models.Model):
     name = models.CharField(max_length=100)
     price = models.FloatField()
     description = models.TextField()
-    products = models.ManyToManyField(Product, blank=True)
+    products = models.ManyToManyField(Product, blank=True, limit_choices_to={'enabled': True})
     enabled = models.BooleanField(default=True)
 
     def __str__(self):
