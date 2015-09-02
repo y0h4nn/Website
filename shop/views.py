@@ -131,6 +131,26 @@ def product_delete(request, pid):
 
 
 @bde_member
+def product_edit(request, pid):
+    product = get_object_or_404(models.Product, id=pid)
+
+    if request.method == "POST":
+        form = forms.ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('shop:admin'))
+    else:
+        form = forms.ProductForm(instance=product)
+
+    context = {
+        'form': form.as_p(),
+        'product': product,
+    }
+
+    return render(request, 'shop/product_edit.html', context)
+
+
+@bde_member
 def pack_add(request):
     if request.method == "POST":
         form = forms.PackForm(request.POST)
@@ -145,6 +165,24 @@ def pack_add(request):
     }
 
     return render(request, 'shop/pack_add.html', context)
+
+@bde_member
+def pack_edit(request, pid):
+    pack = get_object_or_404(models.Packs, id=pid)
+    if request.method == "POST":
+        form = forms.PackForm(request.POST, instance=pack)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('shop:admin'))
+    else:
+        form = forms.PackForm(instance=pack)
+
+    context = {
+        'form': form,
+        'pack': pack,
+    }
+
+    return render(request, 'shop/pack_edit.html', context)
 
 @bde_member
 def pack_delete(request, pid):

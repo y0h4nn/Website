@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Ajouter un pack
+{% endblock %}
+
+{% block header %}
+    Ajouter un pack
+{% endblock %}
+
+{% block menu %}
+    {% include 'shop/menu.html' %}
+{% endblock%}
+
+{% block main %}
+    <h3>Attention</h3>
+    <p>
+        L'édition des produits est la dans le but de <strong>corriger une
+            erreur</strong>. Si vous voulez faire évoluer un produit il est
+        nécéssaire d'en recréer un nouveau. le non respect de cette consigne
+        aura des <strong>conséquences graves</strong> sur l'historique des
+        achats précédents.
+    </p>
+    <p>
+        Si des produit contenant une action sont ajoutés, ces actions ne seront
+        pas executés sur les produits déja achetés.
+    </p>
+    <br/>
+    <form action="{% url 'shop:pack_edit' pid=pack.id %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Enregistrer les modifications</button>
+    </form>
+{% endblock %}

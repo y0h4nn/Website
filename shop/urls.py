@@ -9,8 +9,10 @@ urlpatterns = [
     url(r'^history$', views.history, name='history'),
     url(r'^admin$', views.admin, name='admin'),
     url(r'^admin/product/delete/(?P<pid>[0-9]+)', views.product_delete, name='product_delete'),
+    url(r'^admin/product/edit/(?P<pid>[0-9]+)', views.product_edit, name='product_edit'),
     url(r'^admin/product/add$', views.product_add, name='product_add'),
     url(r'^admin/pack/delete/(?P<pid>[0-9]+)', views.pack_delete, name='pack_delete'),
+    url(r'^admin/pack/edit/(?P<pid>[0-9]+)', views.pack_edit, name='pack_edit'),
     url(r'^admin/pack/add$', views.pack_add, name='pack_add'),
 ]
 
