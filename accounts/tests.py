@@ -53,6 +53,19 @@ class NormalAuthTest(TestCase):
         self.assertEqual(groups[0].name, "Tous")
         self.assertEqual(groups[1].name, "Enib")
 
+    def test_imap_enib_success_with_space(self):
+        try:
+            mail = os.environ['test_mail'] + " "
+            password = os.environ['test_password']
+        except:
+            mail = password = None
+        auth_user = self.imap_backend.authenticate(email=mail, password=password)
+        groups = auth_user.groups.all()
+        self.assertIsNotNone(auth_user)
+        self.assertEqual(auth_user.email, mail.strip())
+        self.assertEqual(groups[0].name, "Tous")
+        self.assertEqual(groups[1].name, "Enib")
+
 
 class ProfilTest(TestCase):
     def setUp(self):

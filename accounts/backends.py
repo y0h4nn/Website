@@ -32,8 +32,8 @@ class ImapAuth(BaseAuth):
             # FIXME when python 3.5 is out
             srv = imaplib.IMAP4_SSL('imap-eleves.enib.fr')
 
-            username = email.split("@")[0]
-            email = email + '@enib.fr' if '@' not in email else email
+            username = email.split("@")[0].strip()
+            email = email.strip() + '@enib.fr' if '@' not in email else email
             user = None
             try:
                 srv.login(username, password)
