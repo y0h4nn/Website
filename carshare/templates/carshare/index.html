@@ -42,7 +42,7 @@
                 <td>{{ announcement.source}}</td>
                 <td>{{ announcement.destination }}</td>
                 <td>{{ announcement.available_places }} / {{ announcement.places }}</td>
-                <td><a href="{% url 'carshare:show' aid=announcement.id %}"><i class="fa fa-chevron-right"></i></a></td>
+                <td class="action_cell"><a href="{% url 'carshare:show' aid=announcement.id %}"><i class="fa fa-chevron-right"></i></a></td>
             </tr>
             {% endfor %}
         </tbody>

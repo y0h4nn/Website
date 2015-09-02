@@ -38,7 +38,10 @@
                 <tr>
                     <td>{{product.name }}</td>
                     <td>{{product.price}}€</td>
-                    <td><a href="{% url 'shop:product_delete' pid=product.id %}" class="flex"><i class="fa fa-trash-o"></i></a></td>
+                    <td class='action_cell'>
+                        <a href="{% url 'shop:product_edit' pid=product.id %}" ><i class="fa fa-pencil"></i></a>
+                        <a href="{% url 'shop:product_delete' pid=product.id %}" ><i class="fa fa-trash-o"></i></a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -67,7 +70,10 @@
                 <tr>
                     <td>{{ pack.name }}</td>
                     <td>{{ pack.price }}€</td>
-                    <td><a href="{% url 'shop:pack_delete' pid=pack.id %}" class="flex"><i class="fa fa-trash-o"></i></a></td>
+                    <td class="action_cell">
+                        <a href="{% url 'shop:pack_edit' pid=pack.id %}" ><i class="fa fa-pencil"></i></a>
+                        <a href="{% url 'shop:pack_delete' pid=pack.id %}" class="flex"><i class="fa fa-trash-o"></i></a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
