@@ -65,7 +65,7 @@ def sells(request):
         if item_type == 'product' and item.action:
             models.ACTIONS_FNC_MAPPING[item.action](user, item, req.get('payment_mean'))
         elif item_type == 'pack':
-            for product in item.products.all():
+            for product in item.products.filter(enabled=True).all():
                 models.ACTIONS_FNC_MAPPING[product.action](user, product, req.get('payment_mean'))
 
         return JsonResponse({'error': None})
