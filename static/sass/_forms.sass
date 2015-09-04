@@ -17,19 +17,19 @@ button, .button
 
 form
   p
-    display: flex
-    flex-flow: row
-    align-items: center
+    @include vendor-prefix(display, flex)
+    @include vendor-prefix(flex-flow, row)
+    @include vendor-prefix(align-items, center)
 
     label
-      flex: 0 1 35%
+      @include vendor-prefix(flex, 0 1 35%)
       min-width: 35%
       display: inline-block
       font-weight: bold
       padding-right: 0.5em
 
     input, .button, textarea
-      flex: 0 1 65%
+      @include vendor-prefix(flex, 0 1 65%)
       display: inline-block
       border-radius: 0
 
@@ -134,7 +134,7 @@ fieldset
     input, textarea
       width: 100%
     p
-      flex-flow: column
+      @include vendor-prefix(flex-flow, column)
 
       label, input
         width: 100%
@@ -148,7 +148,7 @@ fieldset
           border-left: 1px solid #ccc
 
       input, .button, label
-        flex: 0 1 100%
+        @include vendor-prefix(flex, 1 1 auto)
         display: block
         border-radius: 3px
 

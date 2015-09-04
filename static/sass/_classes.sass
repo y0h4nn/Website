@@ -2,28 +2,28 @@
   text-align: center
 
 .flex_container
-  display: flex
-  flex-flow: row
-  align-items: stretch
+  @include vendor-prefix(display, flex)
+  @include vendor-prefix(flex-flow, row)
+  @include vendor-prefix(align-items, stretch)
 
   &.center_vertical
-    align-items: center
+    @include vendor-prefix(align-items, center)
 
   &.start
-    align-items: flex-start
+    @include vendor-prefix(align-items, flex-start)
 
 .right
   text-align: right
 
 .flex
-  flex: 0 1 auto
+  @include vendor-prefix(flex, 0 1 auto)
   &.expand
-    flex: 1 1 auto
+    @include vendor-prefix(flex, 1 1 auto)
   &.expand30
-    flex: 0 1 30%
+    @include vendor-prefix(flex, 0 1 30%)
     min-width: 30%
   &.expand50
-    flex: 0 1 50%
+    @include vendor-prefix(flex, 0 1 50%)
     min-width: 50%
 
 

@@ -1,11 +1,11 @@
 .event
-  display: flex
-  flex-show: row
-  align-items: stretch
+  @include vendor-prefix(display, flex)
+  @include vendor-prefix(flex-show, row)
+  @include vendor-prefix(align-items, stretch)
   margin-bottom: 2em
 
   & div:nth-child(1)
-    flex: 0 1 11.5em
+    @include vendor-prefix(flex, 0 1 11.5em)
     min-width: 11.5em
     height: 11.5em
     overflow: hidden
@@ -20,7 +20,7 @@
       transform: translate(-50%,-50%)
 
   & div:nth-child(2)
-    flex: 1 1 auto
+    @include vendor-prefix(flex, 1 1 auto)
     main p
       color: #888
       text-align: justify
@@ -47,7 +47,7 @@
       font-weight: bold
 
   & div:nth-child(3)
-    flex: 0 1 200px
+    @include vendor-prefix(flex, 0 1 200px)
     min-width: 200px
     text-align: center
     padding: 1em

@@ -3,7 +3,7 @@ $user_container_width: 225px
 
 #user_container
   min-width: $user_container_width
-  flex: 0 1 $user_container_width
+  @include vendor-prefix(flex, 0 1 $user_container_width)
   background-color: #f2f2f2
   padding: 1em
 
@@ -92,7 +92,7 @@ $user_container_width: 225px
 
 
 #user_container.retracted
-  flex: 0 1 50px
+  @include vendor-prefix(flex, 0 1 50px)
   min-width: 50px
   padding: 0.5em
 

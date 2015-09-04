@@ -9,11 +9,11 @@
     font-size: 0.8em
     color: #aaa
 
-    display: flex
-    align-items: center
+    @include vendor-prefix(display, flex)
+    @include vendor-prefix(align-items, center)
 
     & span:first-child
-      flex: 1 1 auto
+      @include vendor-prefix(flex, 1 1 auto)
 
 
     button

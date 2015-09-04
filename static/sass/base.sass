@@ -11,6 +11,10 @@ $blue: #68B9DE
   font-weight: normal
   font-style: normal
 
+@mixin vendor-prefix($name, $value)
+  @each $vendor in ('-webkit-', '-moz-', '-ms-', '-o-', '')
+    #{$vendor}#{$name}: #{$value}
+
 *
   box-sizing: border-box
   font-family: 'Oxygen'
@@ -24,9 +28,10 @@ body
   padding: 0
   min-height: 100%
   background-color: $base-bg
+  display: -webkit-flex
   display: flex
-  flex-flow: row
-  align-items: stretch
+  @include vendor-prefix(flex-flow, row)
+  @include vendor-prefix(align-items, stretch)
 
 a
   text-decoration: none

@@ -1,5 +1,5 @@
 #main_container
-  flex: 1 1 auto
+  @include vendor-prefix(flex, 1 1 auto)
   padding: 2.5em
 
   #main_header
@@ -13,12 +13,12 @@
       margin: 1em 0 2em 0
 
       ul
-        display: flex
+        @include vendor-prefix(display, flex)
         width: 100%
 
     li
-      flex: 1 1 100%
-      align-self: stretch
+      @include vendor-prefix(flex, 1 1 100%)
+      @include vendor-prefix(align-self, stretch)
 
       &:last-child a
         border-top-right-radius: 3px
@@ -50,26 +50,28 @@
     color: #555
 
 @media screen and (max-width: 768px)
-  #main_container header nav
+  #main_container #main_header
     li
       display: block
 
-      a
-        text-align: left
+    nav
+      ul
+        display: block
 
-      &:last-child a
-        border-radius: 0
-        border-bottom-right-radius: 3px
-        border-bottom-left-radius: 3px
-        border-top-right-radius: 0
-        border-top-left-radius: 0
-        text-align: left
+        a
+          text-align: left
 
-      &:first-child a
-        border-bottom-right-radius: 0
-        border-bottom-left-radius: 0
-        border-top-right-radius: 3px
-        border-top-left-radius: 3px
+        &:last-child a
+          border-radius: 0
+          border-bottom-right-radius: 3px
+          border-bottom-left-radius: 3px
+          border-top-right-radius: 0
+          border-top-left-radius: 0
+          text-align: left
 
-    ul
-      flex-flow: column
+        &:first-child a
+          border-bottom-right-radius: 0
+          border-bottom-left-radius: 0
+          border-top-right-radius: 3px
+          border-top-left-radius: 3px
+
