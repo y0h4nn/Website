@@ -1,17 +1,17 @@
 img{
-	display: inline-block;
-	flex:  1 1 auto;
-	max-width: 150px;
+    display: inline-block;
+    flex:  1 1 auto;
+    max-width: 150px;
 }
 
 
 .align_left{
-	text-align: left;
+    text-align: left;
 }
 
 
 .addbtn {
-	width: 100%;
-	background-color: #bbb;
-	padding: 0.5em
+    width: 100%;
+    background-color: #bbb;
+    padding: 0.5em
 }

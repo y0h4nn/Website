@@ -11,25 +11,25 @@
 {% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'js/json_request.js' %}"></script>
-	<script src="{% static 'js/list.js' %}"></script>
-	<script src="{% static 'poll/js/poll_list.js' %}"></script>
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'js/list.js' %}"></script>
+    <script src="{% static 'poll/js/poll_list.js' %}"></script>
 {% endblock %}
 
 {% block main %}
-	<div id="polllist"></div>
-	<script>
-		window.addEventListener('load', function(){
-			var pollList = new PollList('polllist', function(evt){
-				function details(){
-					window.location = evt['id']
-				}
+    <div id="polllist"></div>
+    <script>
+        window.addEventListener('load', function(){
+            var pollList = new PollList('polllist', function(evt){
+                function details(){
+                    window.location = evt['id']
+                }
 
-				return [
-					new PollList.Action('Details', details),
-				];
-			});
-		});
-	</script>
+                return [
+                    new PollList.Action('Details', details),
+                ];
+            });
+        });
+    </script>
 {% endblock %}
 

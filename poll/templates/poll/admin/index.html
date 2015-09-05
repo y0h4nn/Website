@@ -5,42 +5,42 @@
 {% block header %} Liste des sondages {% endblock %}
 
 {% block menu %}
-	{% menu_item "Administration" "poll:admin" %}
-	{% menu_item "Ajouter un sondage" 'poll:admin_add_poll' %}
+    {% menu_item "Administration" "poll:admin" %}
+    {% menu_item "Ajouter un sondage" 'poll:admin_add_poll' %}
 {% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'js/json_request.js' %}"></script>
-	<script src="{% static 'js/list.js' %}"></script>
-	<script src="{% static 'poll/js/poll_list.js' %}"></script>
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'js/list.js' %}"></script>
+    <script src="{% static 'poll/js/poll_list.js' %}"></script>
 {% endblock %}
 
 {% block main %}
-	<div id="polllist"></div>
-	<script>
-		window.addEventListener('load', function(){
-			var pollList = new PollList('polllist', function(evt){
-				function update_list(data){
-					if(data['status'] === 1){
-						evt['deleted'] = true;
-					}
-					pollList.updateElems();
-					pollList.render();
-				}
+    <div id="polllist"></div>
+    <script>
+        window.addEventListener('load', function(){
+            var pollList = new PollList('polllist', function(evt){
+                function update_list(data){
+                    if(data['status'] === 1){
+                        evt['deleted'] = true;
+                    }
+                    pollList.updateElems();
+                    pollList.render();
+                }
 
-				function details(){
-					window.location = "/poll/admin/view/" + evt['id']
-				}
+                function details(){
+                    window.location = "/poll/admin/view/" + evt['id']
+                }
 
-				function del(){
-					queryJson('delete', {"pid": evt['id']}, update_list);
-				}
-				return [
-					new PollList.Action('Details', details),
-					new PollList.Action('Supprimer', del),
-				];
-			});
-		});
-	</script>
+                function del(){
+                    queryJson('delete', {"pid": evt['id']}, update_list);
+                }
+                return [
+                    new PollList.Action('Details', details),
+                    new PollList.Action('Supprimer', del),
+                ];
+            });
+        });
+    </script>
 {% endblock %}
 

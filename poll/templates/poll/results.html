@@ -4,7 +4,7 @@
 {% block header %} {{ poll }} {% endblock %}
 
 {% block menu %}
-	{% menu_item "Liste" "poll:index" %}
+    {% menu_item "Liste" "poll:index" %}
     {% if user_is_bde_member %}
         {% menu_item "Administration" "poll:admin" %}
     {% endif %}
@@ -12,16 +12,16 @@
 
 {% block main %}
 
-	{% for question in poll.questions.all %}
-		<div>
+    {% for question in poll.questions.all %}
+        <div>
             <h3>{{ question }}</h3>
-			<ul>
-				{% for answer in question.answers.all %}
+            <ul>
+                {% for answer in question.answers.all %}
                     <li>{{ answer }} => {{ answer.votes }}</li>
-				{% endfor %}
-			</ul>
-		</div>
-	{% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
 
 {% endblock %}
 

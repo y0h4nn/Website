@@ -2,22 +2,22 @@
 {% load menu_item %}
 
 {% block header %}
-	{{ event.name }}
+    {{ event.name }}
 {% endblock %}
 
 {% block menu %}
-	{% menu_item "Liste des évènements" "events:admin_index" %}
-	{% menu_item "Description" "events:admin_view" eid=event.id %}
-	{% menu_item "Liste des inscrits" "events:admin_list_registrations" eid=event.id %}
-	{% menu_item "Editer l'évènement" "events:admin_edit" eid=event.id %}
+    {% menu_item "Liste des évènements" "events:admin_index" %}
+    {% menu_item "Description" "events:admin_view" eid=event.id %}
+    {% menu_item "Liste des inscrits" "events:admin_list_registrations" eid=event.id %}
+    {% menu_item "Editer l'évènement" "events:admin_edit" eid=event.id %}
 {% endblock %}
 
 {% block main %}
-	<div>
-		<p>Début: {{ event.start_time }}</p>
-		<p>Fin: {{ event.end_time }}</p>
-		<p>Lieu: {{ event.location }}</p>
-		<p>Description: {{ event.description }}</p>
-		<p>Nombre d'inscriptions: {{ event.registrations_number }}</p>
-	</div>
+    <div>
+        <p>Début: {{ event.start_time }}</p>
+        <p>Fin: {{ event.end_time }}</p>
+        <p>Lieu: {{ event.location }}</p>
+        <p>Description: {{ event.description }}</p>
+        <p>Nombre d'inscriptions: {{ event.registrations_number }}</p>
+    </div>
 {% endblock %}

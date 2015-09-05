@@ -3,12 +3,12 @@
 {% load static %}
 
 {% block header %}
-	Ajouter un évènement
+    Ajouter un évènement
 {% endblock %}
 
 {% block menu %}
-	{% menu_item "Liste des évènements" "events:admin_index" %}
-	{% menu_item "Ajouter un evenement" "events:admin_add" %}
+    {% menu_item "Liste des évènements" "events:admin_index" %}
+    {% menu_item "Ajouter un evenement" "events:admin_add" %}
 {% endblock %}
 
 {% block styles %}
@@ -16,15 +16,15 @@
 {% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'contrib/Moment.js/moment.min.js' %}"></script>
-	<script src="{% static 'contrib/Rome/rome.standalone.min.js' %}"></script>
+    <script src="{% static 'contrib/Moment.js/moment.min.js' %}"></script>
+    <script src="{% static 'contrib/Rome/rome.standalone.min.js' %}"></script>
 {% endblock %}
 
 {% block main %}
-	<form enctype="multipart/form-data" action="{% url 'events:admin_add' %}" method="POST">
-		{% csrf_token %}
-		{{ event_form.as_p }}
-		<button>Ajouter</button>
-	</form>
+    <form enctype="multipart/form-data" action="{% url 'events:admin_add' %}" method="POST">
+        {% csrf_token %}
+        {{ event_form.as_p }}
+        <button>Ajouter</button>
+    </form>
 {% endblock %}
 

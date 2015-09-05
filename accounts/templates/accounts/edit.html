@@ -6,49 +6,48 @@
 {% block title %}User edit{% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'contrib/Moment.js/moment.min.js' %}"></script>
-	<script src="{% static 'contrib/Rome/rome.standalone.min.js' %}"></script>
+    <script src="{% static 'contrib/Moment.js/moment.min.js' %}"></script>
+    <script src="{% static 'contrib/Rome/rome.standalone.min.js' %}"></script>
 {% endblock scripts %}
 
 {% block styles %}
-	<link rel="stylesheet" href="{% static 'accounts/css/edit.css' %}" />
+    <link rel="stylesheet" href="{% static 'accounts/css/edit.css' %}" />
     <link rel="stylesheet" href="{% static 'contrib/Rome/rome.min.css' %}" />
 {% endblock %}
 
 {% block header %}Edition du profil{% endblock %}
 
 {% block menu %}
-	{% menu_item 'Liste des membres' 'accounts:members'  %}
-	{% menu_item 'Mon profil' 'accounts:show' username=request.user.username %}
-	{% menu_item 'Editer mon profil' 'accounts:edit' username=request.user.username %}
+    {% menu_item 'Liste des membres' 'accounts:members'  %}
+    {% menu_item 'Mon profil' 'accounts:show' username=request.user.username %}
+    {% menu_item 'Editer mon profil' 'accounts:edit' username=request.user.username %}
 {% endblock %}
 
 {% block main %}
 <form method="POST" enctype="multipart/form-data" action="{% url 'accounts:edit' username=user.username %}">
-	{% csrf_token %}
+    {% csrf_token %}
 
+    <fieldset>
+        <legend>Profil</legend>
+        {{ userform }}
+        {{ profileform }}
+    </fieldset>
 
-	<fieldset>
-		<legend>Profil</legend>
-		{{ userform }}
-		{{ profileform }}
-	</fieldset>
+    <fieldset>
+        <legend>Photo</legend>
+        {{ profileimgform }}
+    </fieldset>
 
-	<fieldset>
-		<legend>Photo</legend>
-		{{ profileimgform }}
-	</fieldset>
+    <fieldset>
+        <legend>Adresse</legend>
+        {{ addressform }}
+    </fieldset>
 
-	<fieldset>
-		<legend>Adresse</legend>
-		{{ addressform }}
-	</fieldset>
+    <fieldset>
+        <legend>Changement de mot de passe</legend>
+        {{ passwordform }}
+    </fieldset>
 
-	<fieldset>
-		<legend>Changement de mot de passe</legend>
-		{{ passwordform }}
-	</fieldset>
-
-	<button>Sauvegarder</button>
+    <button>Sauvegarder</button>
 </form>
 {% endblock %}

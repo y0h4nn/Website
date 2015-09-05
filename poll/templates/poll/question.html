@@ -5,7 +5,7 @@
 {% block header %} {{ poll.title }} {% endblock %}
 
 {% block menu %}
-	{% menu_item "Liste" "poll:index" %}
+    {% menu_item "Liste" "poll:index" %}
     {% if user_is_bde_member %}
         {% menu_item "Administration" "poll:admin" %}
     {% endif %}
@@ -17,16 +17,16 @@
 
 {% block main %}
 
-	<div>
-	{% for error in errors %}
-		<div> {{ error }} </div>
-	{% endfor %}
+    <div>
+    {% for error in errors %}
+        <div> {{ error }} </div>
+    {% endfor %}
 
-	{{ question.text }}
+    {{ question.text }}
 
-	<form action="{% url 'poll:poll' pid=pid %}" method="POST">
-		{% csrf_token %}
-		{% for question in poll.questions.all %}
+    <form action="{% url 'poll:poll' pid=pid %}" method="POST">
+        {% csrf_token %}
+        {% for question in poll.questions.all %}
             <h3>
                 {{ question }}
             </h3>
@@ -35,10 +35,10 @@
                     <li><input type="radio" id="answer{{answer.id}}" name="question{{question.id}}" value="{{answer.id}}"/><label for="answer{{answer.id}}">{{ answer }}</label></li>
                 {% endfor %}
             </ul>
-		{% endfor %}
+        {% endfor %}
         <button>Voter</button>
-	</form>
-	</div>
+    </form>
+    </div>
 
 {% endblock %}
 

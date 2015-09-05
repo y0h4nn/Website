@@ -7,77 +7,77 @@
 {% block header %} Editer un sondage {% endblock %}
 
 {% block menu %}
-	{% menu_item "Administration" "poll:admin" %}
-	{% menu_item "Détails" "poll:admin_question" pid=pid %}
-	{% if not poll.is_ended %}
-		{% menu_item "Editer" "poll:admin_edit_poll" pid=pid %}
-	{% endif %}
+    {% menu_item "Administration" "poll:admin" %}
+    {% menu_item "Détails" "poll:admin_question" pid=pid %}
+    {% if not poll.is_ended %}
+        {% menu_item "Editer" "poll:admin_edit_poll" pid=pid %}
+    {% endif %}
 {% endblock %}
 
 {% block styles %}
     <link rel="stylesheet" href="{% static 'contrib/Rome/rome.min.css' %}" />
-	{% if edit_mode %}
-	<style>
-		.edit_button {
-			display: none;
-		}
-	</style>
-	{% endif %}
+    {% if edit_mode %}
+    <style>
+        .edit_button {
+            display: none;
+        }
+    </style>
+    {% endif %}
 {% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'contrib/Moment.js/moment.min.js' %}"></script>
-	<script src="{% static 'contrib/Rome/rome.standalone.min.js' %}"></script>
+    <script src="{% static 'contrib/Moment.js/moment.min.js' %}"></script>
+    <script src="{% static 'contrib/Rome/rome.standalone.min.js' %}"></script>
 {% endblock %}
 
 {% block main %}
 
-	<form method="POST" action="{% url 'poll:admin_edit_poll' pid=pid%}">
-		{% csrf_token %}
-		{{ form.non_field_errors }}
+    <form method="POST" action="{% url 'poll:admin_edit_poll' pid=pid%}">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
 
-		<fieldset>
-			<legend>Infos</legend>
-			<div>
-				{{ form.title.errors }}
-				<p>
-					<label for="{{ form.title.id_for_label }}">Titre: </label>
-					{{ form.title }}
-				</p>
-			</div>
+        <fieldset>
+            <legend>Infos</legend>
+            <div>
+                {{ form.title.errors }}
+                <p>
+                    <label for="{{ form.title.id_for_label }}">Titre: </label>
+                    {{ form.title }}
+                </p>
+            </div>
 
-			<div>
-				{{ form.start_time.errors }}
-				<p>
-					<label for="{{ form.start_time.id_for_label }}">Début: </label>
-					{{ form.start_time }}
-				</p>
-			</div>
+            <div>
+                {{ form.start_time.errors }}
+                <p>
+                    <label for="{{ form.start_time.id_for_label }}">Début: </label>
+                    {{ form.start_time }}
+                </p>
+            </div>
 
-			<div>
-				{{ form.end_time.errors }}
-				<p>
-					<label for="{{ form.end_time.id_for_label }}">Fin: </label>
-					{{ form.end_time }}
-				</p>
-			</div>
+            <div>
+                {{ form.end_time.errors }}
+                <p>
+                    <label for="{{ form.end_time.id_for_label }}">Fin: </label>
+                    {{ form.end_time }}
+                </p>
+            </div>
 
-			<div>
-				{{ form.group.errors }}
-				<p>
-					<label for="{{ form.group.id_for_label }}">Groupe: </label>
-					{{ form.group }}
-				</p>
-			</div>
-		</fieldset>
+            <div>
+                {{ form.group.errors }}
+                <p>
+                    <label for="{{ form.group.id_for_label }}">Groupe: </label>
+                    {{ form.group }}
+                </p>
+            </div>
+        </fieldset>
 
-		<div id="main_form">
-			{% for question, answers in form.questions_answers.items %}
+        <div id="main_form">
+            {% for question, answers in form.questions_answers.items %}
                 {{ form.fields | hash_render:question | safe }}
-			{% endfor %}
-		</div>
-		{{ form.js }}
+            {% endfor %}
+        </div>
+        {{ form.js }}
         <button><i class="fa fa-check"></i> Sauvegarder le sondage</button>
-	</form>
+    </form>
 {% endblock %}
 

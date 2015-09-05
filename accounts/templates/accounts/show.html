@@ -4,95 +4,95 @@
 {% load menu_item %}
 
 {% block styles %}
-	<link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}" />
+    <link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}" />
 {% endblock %}
 
 
 {% block title %}
-	{{ display_name }}
+    {{ display_name }}
 {% endblock %}
 
 {% block header %}
-	{{ display_name }}
+    {{ display_name }}
 {% endblock %}
 
 {% block menu %}
-	{% menu_item 'Liste des membres' 'accounts:members'  %}
-	{% if request.user.username == user.username %}
-		{% menu_item 'Mon profil' 'accounts:show' username=user.username %}
-		{% menu_item 'Editer mon profil' 'accounts:edit' username=user.username %}
-	{% else %}
-		{% menu_item user.username 'accounts:show' username=user.username %}
-	{% endif %}
+    {% menu_item 'Liste des membres' 'accounts:members'  %}
+    {% if request.user.username == user.username %}
+        {% menu_item 'Mon profil' 'accounts:show' username=user.username %}
+        {% menu_item 'Editer mon profil' 'accounts:edit' username=user.username %}
+    {% else %}
+        {% menu_item user.username 'accounts:show' username=user.username %}
+    {% endif %}
 {% endblock%}
 
 {% block main %}
 
-	<div class="flex_container">
-		<div class="flex expand">
-			<h2>Informations générales</h2>
-			<p class="flex_container" >
-				<strong class="flex expand50">Nom</strong><span class="flex">{{ user.last_name }}</span>
-			</p>
+    <div class="flex_container">
+        <div class="flex expand">
+            <h2>Informations générales</h2>
+            <p class="flex_container" >
+                <strong class="flex expand50">Nom</strong><span class="flex">{{ user.last_name }}</span>
+            </p>
 
-			<p class="flex_container">
-				<strong class="flex expand50">Prénom</strong><span class="flex">{{ user.first_name }}</span>
-			</p>
+            <p class="flex_container">
+                <strong class="flex expand50">Prénom</strong><span class="flex">{{ user.first_name }}</span>
+            </p>
 
-			{% if user.profile.nickname %}
-				<p class="flex_container">
-					<strong class="flex expand50">Surnom</strong><span class="flex">{{ user.profile.nickname }}</span>
-				</p>
-			{% endif %}
+            {% if user.profile.nickname %}
+                <p class="flex_container">
+                    <strong class="flex expand50">Surnom</strong><span class="flex">{{ user.profile.nickname }}</span>
+                </p>
+            {% endif %}
 
-			<h2>Informations de contact</h2>
+            <h2>Informations de contact</h2>
 
-			<p class="flex_container">
-				<strong class="flex expand50">Adresse e-mail</strong><span class="flex"><a href="mailto:{{ user.email }}">{{ user.email }}</a></span>
-			</p>
-			{% if user.profile.phone %}
-			<p class="flex_container">
-				<strong class="flex expand50">Téléphone</strong><span class="flex"><a href="tel:{{ user.profile.phone }}">{{ user.profile.phone }}</a></span>
-			</p>
-			{% endif %}
-
-
-			{% if user.profile.semester or user.profile.enib_join_year %}
-				<h2>Scolaritée</h2>
-				{% if user.profile.enib_join_year %}
-				<p class="flex_container">
-					<strong class="flex expand50">Année d'entrée à l'enib</strong><span class="flex">{{ user.profile.enib_join_year }}</span>
-				</p>
-				{% endif %}
-
-				{% if user.profile.semester %}
-				<p class="flex_container">
-					<strong class="flex expand50">Semestre actuel</strong><span class="flex">{{ user.profile.semester }}</span>
-				</p>
-				{% endif %}
-			{% endif %}
+            <p class="flex_container">
+                <strong class="flex expand50">Adresse e-mail</strong><span class="flex"><a href="mailto:{{ user.email }}">{{ user.email }}</a></span>
+            </p>
+            {% if user.profile.phone %}
+            <p class="flex_container">
+                <strong class="flex expand50">Téléphone</strong><span class="flex"><a href="tel:{{ user.profile.phone }}">{{ user.profile.phone }}</a></span>
+            </p>
+            {% endif %}
 
 
-			{% if user.profile.address.street and user.profile.address.postal_code and user.profile.address.town %}
-			<h2>Résidence</h2>
-			<div class="flex_container">
-				<strong class="flex expand50">Adresse</strong>
-				<div class="flex">
-					<p>{{ user.profile.address.street }}</p>
-					<p>{{ user.profile.address.postal_code }} {{ user.profile.address.town }}</p>
-				</div>
-			</div>
-			{% endif %}
+            {% if user.profile.semester or user.profile.enib_join_year %}
+                <h2>Scolaritée</h2>
+                {% if user.profile.enib_join_year %}
+                <p class="flex_container">
+                    <strong class="flex expand50">Année d'entrée à l'enib</strong><span class="flex">{{ user.profile.enib_join_year }}</span>
+                </p>
+                {% endif %}
 
-		</div>
-		<div class="flex">
-			{% if user.profile.picture %}
-				<img src="{{ user.profile.picture.url }}" alt="photo-profil" />
-			{% else %}
-				<img src="{% static 'images/default_user_icon.png' %}" alt="photo-profil"/>
-			{% endif %}
-		</div>
-	</div>
+                {% if user.profile.semester %}
+                <p class="flex_container">
+                    <strong class="flex expand50">Semestre actuel</strong><span class="flex">{{ user.profile.semester }}</span>
+                </p>
+                {% endif %}
+            {% endif %}
+
+
+            {% if user.profile.address.street and user.profile.address.postal_code and user.profile.address.town %}
+            <h2>Résidence</h2>
+            <div class="flex_container">
+                <strong class="flex expand50">Adresse</strong>
+                <div class="flex">
+                    <p>{{ user.profile.address.street }}</p>
+                    <p>{{ user.profile.address.postal_code }} {{ user.profile.address.town }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+        <div class="flex">
+            {% if user.profile.picture %}
+                <img src="{{ user.profile.picture.url }}" alt="photo-profil" />
+            {% else %}
+                <img src="{% static 'images/default_user_icon.png' %}" alt="photo-profil"/>
+            {% endif %}
+        </div>
+    </div>
 
 
 

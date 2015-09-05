@@ -7,29 +7,29 @@
 {% endblock %}
 
 {% block scripts %}
-	<script src="{% static 'js/json_request.js' %}"></script>
-	<script src="{% static 'js/list.js' %}"></script>
-	<script src="{% static 'js/userlist.js' %}"></script>
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'js/list.js' %}"></script>
+    <script src="{% static 'js/userlist.js' %}"></script>
 {% endblock %}
 
 {% block title %}
-	Liste des membres
+    Liste des membres
 {% endblock %}
 
 {% block header %}
-	Liste des membres
+    Liste des membres
 {% endblock %}
 
 {% block menu %}
-	{% menu_item 'Liste des membres' 'accounts:members' %}
-	{% menu_item 'Mon profil' 'accounts:show' username=request.user.username %}
-	{% if request.user.username == user.username %}
-		{% menu_item 'Editer mon profil' 'accounts:edit' username=user.username %}
-	{% endif %}
+    {% menu_item 'Liste des membres' 'accounts:members' %}
+    {% menu_item 'Mon profil' 'accounts:show' username=request.user.username %}
+    {% if request.user.username == user.username %}
+        {% menu_item 'Editer mon profil' 'accounts:edit' username=user.username %}
+    {% endif %}
 {% endblock%}
 
 {% block main %}
-	<div id="userlist"></div>
+    <div id="userlist"></div>
 
     <script>
         window.addEventListener('load', function(){

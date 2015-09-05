@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block menu %}
-	{% menu_item 'Actualités' 'news:index' %}
+    {% menu_item 'Actualités' 'news:index' %}
     {% if request.user.is_active %}
         {% menu_item 'Ajouter une actualité' 'news:create' %}
     {% endif %}

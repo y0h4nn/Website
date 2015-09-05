@@ -145,19 +145,19 @@ function UserSelectionPopup(title, callback){
     this.main.appendChild(this.spinner);
     this.main.appendChild(this.btnContainer);
     this.fetchList();
-	this.cachedSearchRegex = new RegExp('');
+    this.cachedSearchRegex = new RegExp('');
     this.matchingUsers = []
 
 
-	this.searchInput.addEventListener('keyup', function(){
-		if(this.timer){
-			clearTimeout(this.timer);
-		}
-		this.timer = setTimeout(function(){
-			this.updateFilter();
-			this.buildUserList(this.matchingUsers);
-		}.bind(this), 100);
-	}.bind(this));
+    this.searchInput.addEventListener('keyup', function(){
+        if(this.timer){
+            clearTimeout(this.timer);
+        }
+        this.timer = setTimeout(function(){
+            this.updateFilter();
+            this.buildUserList(this.matchingUsers);
+        }.bind(this), 100);
+    }.bind(this));
 }
 
 UserSelectionPopup.prototype = Object.create(Popup.prototype, {
