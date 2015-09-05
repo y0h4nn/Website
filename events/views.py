@@ -26,7 +26,9 @@ def index(request):
 
 @login_required
 def event(request, eid):
-    return render(request, 'events/event.html')
+    e = get_object_or_404(Event, id=eid)
+    context = {'event': e}
+    return render(request, 'events/event.html', context)
 
 
 @bde_member
@@ -64,13 +66,6 @@ def admin_add(request):
         form = EventForm()
     context = {'event_form': form}
     return render(request, 'events/admin/add.html', context)
-
-
-@bde_member
-def admin_view(request, eid):
-    e = get_object_or_404(Event, id=eid)
-    context = {'event': e}
-    return render(request, 'events/admin/view.html', context)
 
 
 @bde_member
