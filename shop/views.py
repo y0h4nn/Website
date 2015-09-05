@@ -42,31 +42,7 @@ def sells(request):
         if req.get('payment_mean') not in [p[0] for p in models.MEANS_OF_PAYMENT]:
             return JsonResponse({'error': 'Le moyen de paiement n\'est pas valide'})
 
-
-        if item_type == 'pack':
-            buy = models.BuyingHistory(
-                username=user.username,
-                pack=item,
-                type='pack',
-                payment_mean=req.get('payment_mean')
-            )
-            buy.save()
-            notify("Confirmation de l'achat de «%s»" % item.name, "shop:index", {}, users=[user])
-        elif item_type == 'product':
-            buy = models.BuyingHistory(
-                username=user.username,
-                product=item,
-                type='product',
-                payment_mean=req.get('payment_mean')
-            )
-            buy.save()
-            notify("Confirmation de l'achat de «%s»" % item.name, "shop:index", {}, users=[user])
-
-        if item_type == 'product' and item.action:
-            models.ACTIONS_FNC_MAPPING[item.action](user, item, req.get('payment_mean'))
-        elif item_type == 'pack':
-            for product in item.products.filter(enabled=True).all():
-                models.ACTIONS_FNC_MAPPING[product.action](user, product, req.get('payment_mean'))
+        item.buy(user, req.get('payment_mean'))
 
         return JsonResponse({'error': None})
     else:

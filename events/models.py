@@ -26,6 +26,9 @@ class Event(models.Model):
             return self.photo.url
         return static('images/default_event_icon.png')
 
+    def __str__(self):
+        return self.name
+
     @staticmethod
     def to_come(user):
         return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(start_time__gt=timezone.now())]  # XXX: This mays be slow as hell, it needs some testing.
