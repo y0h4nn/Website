@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^admin/add/$', views.admin_add, name='admin_add'),
     url(r'^admin/view/(?P<eid>[0-9]+)$', views.admin_view, name='admin_view'),
     url(r'^admin/edit/(?P<eid>[0-9]+)$', views.admin_edit, name='admin_edit'),
-    url(r'^admin/export/(?P<eid>[0-9]+)$', views.admin_export_csv, name='admin_export'),
+    url(r'^admin/export/(?P<eid>[0-9]+)$', views.admin_export_csv, name='admin_export_csv'),
     url(r'^admin/view/(?P<eid>[0-9]+)/registrations$', views.admin_list_registrations, name='admin_list_registrations'),
 ]
 

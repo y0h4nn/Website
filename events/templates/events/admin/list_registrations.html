@@ -23,7 +23,9 @@
 
 
 {% block main %}
-    <a href="{% url 'events:admin_export' eid=event.id %}">Exporter en CSV</a>
+    <h2>Exporter</h2>
+    <a href="{% url 'events:admin_export_csv' eid=event.id %}">CSV</a>
+    <h2>Liste des inscrits</h2>
     <ul class="userlist">
         {% for registration in reg %}
             <li>
