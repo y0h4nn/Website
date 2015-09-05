@@ -1,10 +1,11 @@
 from .forms import EventForm
 from .models import Event, Inscription
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 import json
+import csv
 from bde import bde_member
 
 
@@ -94,3 +95,16 @@ def admin_list_registrations(request, eid):
     reg = Inscription.objects.filter(event=e)
     return render(request, 'events/admin/list_registrations.html', {'event': e, 'reg': reg})
 
+@bde_member
+def admin_export_csv(request, eid):
+    event = get_object_or_404(Event, id=eid)
+    reg = Inscription.objects.filter(event=event)
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(event.name)
+
+    writer = csv.writer(response)
+    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail'])
+    for r in reg:
+        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email]
+        writer.writerow(line)
+    return response
