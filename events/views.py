@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 import json
 import csv
 from bde import bde_member
@@ -88,7 +89,8 @@ def admin_list_registrations(request, eid):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
         event = get_object_or_404(Event, id=req['eid'])
-        ins = Inscription.objects.get(event=event, user=request.user)
+        user = get_object_or_404(User, id=req['uid'])
+        ins = Inscription.objects.get(event=event, user=user)
         ins.delete()
         return JsonResponse({"status": 1})
     e = get_object_or_404(Event, id=eid)

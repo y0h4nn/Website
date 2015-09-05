@@ -2,7 +2,7 @@
 
 function update_list(data){
     if(data['status'] === 1){
-        this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);
+        this.parentNode.parentNode.removeChild(this.parentNode);
     }
 }
 
