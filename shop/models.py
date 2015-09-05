@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.db import models, IntegrityError
+from django.db import models, IntegrityError, transaction
 from django.conf import settings
 from bde.models import Contributor
 from events.models import Event, Inscription
@@ -24,7 +24,6 @@ MEANS_OF_PAYMENT = [
     ('check', 'Chèque'),
     ('card', 'Carte de crédit'),
 ]
-
 
 
 class Product(models.Model):
@@ -66,10 +65,30 @@ class Product(models.Model):
             pass
 
     def create_event_registration(self, user):
-        try:
-            Inscription.objects.create(user=user, event=self.event)
-        except IntegrityError:
-            pass
+        if not self.event:
+            return
+        print(Inscription.objects.update_or_create({
+            'user': user,
+            'event': self.event
+        }, user=user, event=self.event))
+
+    def update_event_registrations(self, old_event):
+        """ Unsubscribe user from old event and subscribe them to the curretn one
+        """
+        if self.event != old_event:
+            # Unsubscribe user from old event
+            users = BuyingHistory.get_product_buyers(self)
+            Inscription.objects.filter(user__in=users, event=old_event).delete()
+            # subscribe user to new event
+            with transaction.atomic():
+                print(users)
+                for user in users:
+                    self.create_event_registration(user)
+
+    def delete(self):
+        users = BuyingHistory.get_product_buyers(self)
+        Inscription.objects.filter(user__in=users, event=self.event).delete()
+        super().delete()
 
 
 class Packs(models.Model):
@@ -100,10 +119,24 @@ class Packs(models.Model):
             fnc = ACTIONS_FNC_MAPPING[product.action]
             fnc(user, product, payment_mean)
             if product.event:
-                try:
-                    Inscription.objects.create(user=user, event=product.event)
-                except IntegrityError:
-                    pass
+                product.create_event_registration(user)
+
+    def update_event_registrations(self, old_events):
+        current_products = self.products.filter(enabled=True).all()
+        current_event = [p.event for p in current_products if p.event]
+
+        removed_event = list(set(old_events) - set(current_event))
+        for event in removed_event:
+            users = BuyingHistory.get_pack_buyers(self)
+            Inscription.objects.filter(user__in=users, event=event).delete()
+
+        with transaction.atomic():
+            for product in current_products:
+                users = BuyingHistory.get_product_buyers(product)
+                for user in users:
+                    product.create_event_registration(user)
+
+
 
 TYPES = [
     ('product', 'Produit'),
@@ -117,5 +150,18 @@ class BuyingHistory(models.Model):
     pack = models.ForeignKey(Packs, null=True, default=None)
     date = models.DateTimeField(auto_now_add=True)
     payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT)
+
+
+    @staticmethod
+    def get_product_buyers(product):
+        packs = [p for p in Packs.objects.prefetch_related('products').all() if product in p.products.all()]
+        users = [item.user for item in BuyingHistory.objects.filter(models.Q(product=product) | models.Q(pack__in=packs)).all()]
+        return users
+
+    @staticmethod
+    def get_pack_buyers(pack):
+        users = [item.user for item in BuyingHistory.objects.filter(pack=pack)]
+        return users
+
 
 
