@@ -13,7 +13,7 @@ from notifications import notify
 @login_required
 def index(request):
     context = {
-        'history': models.BuyingHistory.objects.filter(username=request.user.username).order_by('date').all().reverse()
+        'history': models.BuyingHistory.objects.filter(user=request.user).order_by('date').all().reverse()
     }
 
     return render(request, 'shop/index.html', context)

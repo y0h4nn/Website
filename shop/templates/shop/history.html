@@ -39,7 +39,7 @@
                     {% if item.type == 'pack' %}
                         <tr>
                             <td>{{ item.pack.name }}</td>
-                            <td>{{ item.username }}</td>
+                            <td>{{ item.user.profile }}</td>
                             <td>{{ item.date }}</td>
                             <td>{{ item.pack.price }} €</td>
                             <td>{{ item.payment_mean }}</td>
@@ -48,7 +48,7 @@
                     {% else %}
                         <tr>
                             <td>{{ item.product.name }}</td>
-                            <td>{{ item.username }}</td>
+                            <td>{{ item.user.profile }}</td>
                             <td>{{ item.date }}</td>
                             <td>{{ item.product.price }} €</td>
                             <td>{{ item.payment_mean }}</td>

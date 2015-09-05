@@ -40,7 +40,7 @@ class Product(models.Model):
 
     def buy(self, user, payment_mean):
         buy = BuyingHistory(
-            username=user.username,
+            user=user,
             product=self,
             type='product',
             payment_mean=payment_mean
@@ -84,7 +84,7 @@ class Packs(models.Model):
 
     def buy(self, user, payment_mean):
         buy = BuyingHistory(
-            username=user.username,
+            user=user,
             pack=self,
             type='pack',
             payment_mean=payment_mean
@@ -111,7 +111,7 @@ TYPES = [
 ]
 
 class BuyingHistory(models.Model):
-    username = models.CharField(max_length=80)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     type = models.CharField(max_length=10, choices=TYPES)
     product = models.ForeignKey(Product ,null=True, default=None)
     pack = models.ForeignKey(Packs, null=True, default=None)
