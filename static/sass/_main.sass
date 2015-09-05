@@ -2,76 +2,79 @@
   @include vendor-prefix(flex, 1 1 auto)
   padding: 2.5em
 
-  #main_header
-    h1
-      border-bottom: 1px solid #68B9DE
-      padding:  0 0 0.75em 0
-      margin: 1em 0
-      color: #999
+#main_header
+  h1
+    border-bottom: 1px solid #68B9DE
+    padding:  0 0 0.75em 0
+    margin: 1em 0
+    color: #999
 
-    nav
-      margin: 1em 0 2em 0
+  nav
+    margin: 1em 0 2em 0
 
-      ul
-        @include vendor-prefix(display, flex)
-        width: 100%
-
-    li
-      @include vendor-prefix(flex, 1 1 100%)
-      @include vendor-prefix(align-self, stretch)
-
-      &:last-child a
-        border-top-right-radius: 3px
-        border-bottom-right-radius: 3px
-        text-align: right
-
-      &:first-child a
-        border-top-left-radius: 3px
-        border-bottom-left-radius: 3px
-        text-align: left
-
-    a
-      display: block
-      text-align: center
+    ul
+      @include vendor-prefix(display, flex)
       width: 100%
-      height: 100%
-      background-color: #B3D6E6
-      padding: 0.5em 1em
-      margin: 0 0.5em 0 0
-      color: white
-      font-weight: bold
-      cursor: pointer
-      transition: background-color 0.25s
 
-      &.selected, &:hover
-        background-color: #68B9DE
+  li
+    @include vendor-prefix(flex, 1 1 100%)
+    @include vendor-prefix(align-self, stretch)
+
+    &:last-child a
+      border-top-right-radius: 3px
+      border-bottom-right-radius: 3px
+      text-align: right
+
+    &:first-child a
+      border-top-left-radius: 3px
+      border-bottom-left-radius: 3px
+      text-align: left
+
+  a
+    display: block
+    text-align: center
+    width: 100%
+    height: 100%
+    background-color: #B3D6E6
+    padding: 0.5em 1em
+    margin: 0 0.5em 0 0
+    color: white
+    font-weight: bold
+    cursor: pointer
+    transition: background-color 0.25s
+
+    &.selected, &:hover
+      background-color: #68B9DE
 
   main
     color: #555
 
-@media screen and (max-width: 768px)
-  #main_container #main_header
-    li
-      display: block
 
+@media screen and (max-width: 768px)
+  #main_header
     nav
       ul
         display: block
 
-        a
-          text-align: left
+        li
+          display: block
+          a
+            border-radius: 0
+            text-align: left
 
-        &:last-child a
-          border-radius: 0
-          border-bottom-right-radius: 3px
-          border-bottom-left-radius: 3px
-          border-top-right-radius: 0
-          border-top-left-radius: 0
-          text-align: left
+          &:first-child a
+            border-top-right-radius: 3px
+            border-top-left-radius: 3px
+            border-bottom-right-radius: 0
+            border-bottom-left-radius: 0
 
-        &:first-child a
-          border-bottom-right-radius: 0
-          border-bottom-left-radius: 0
-          border-top-right-radius: 3px
-          border-top-left-radius: 3px
+          &:last-child a
+            border-top-right-radius: 0
+            border-top-left-radius: 0
+            border-bottom-right-radius: 3px
+            border-bottom-left-radius: 3px
+            text-align: left
+
+          &:first-child:last-child a
+            border-radius: 3px
 

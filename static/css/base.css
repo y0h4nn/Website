@@ -39,7 +39,7 @@ nav > ul {
 
 @media screen and (max-width: 640px) {
   body {
-    flex-flow: column; } }
+    display: block; } }
 button, .button {
   background-color: #68B9DE;
   padding: 0.25em 0.5em;
@@ -182,7 +182,7 @@ fieldset {
       border-radius: 3px; }
       form p input + input {
         border-left: 1px solid #ccc; }
-    form p input, form p .button, form p label {
+    form p input, form p .button, form p label, form p textarea {
       -webkit-flex: 1 1 auto;
       -moz-flex: 1 1 auto;
       -ms-flex: 1 1 auto;
@@ -190,9 +190,9 @@ fieldset {
       flex: 1 1 auto;
       display: block;
       border-radius: 3px; }
-      form p input:last-child, form p .button:last-child, form p label:last-child {
+      form p input:last-child, form p .button:last-child, form p label:last-child, form p textarea:last-child {
         border-radius: 3px; }
-      form p input + input, form p .button + input, form p label + input {
+      form p input + input, form p .button + input, form p label + input, form p textarea + input {
         border-left: 1px solid #ccc; }
     form p label + input, form p label + textarea {
       border-top-left-radius: 3px;
@@ -349,75 +349,78 @@ table:not(.rd-days) {
   -o-flex: 1 1 auto;
   flex: 1 1 auto;
   padding: 2.5em; }
-  #main_container #main_header h1 {
-    border-bottom: 1px solid #68B9DE;
-    padding: 0 0 0.75em 0;
-    margin: 1em 0;
-    color: #999; }
-  #main_container #main_header nav {
-    margin: 1em 0 2em 0; }
-    #main_container #main_header nav ul {
-      -webkit-display: flex;
-      -moz-display: flex;
-      -ms-display: flex;
-      -o-display: flex;
-      display: flex;
-      width: 100%; }
-  #main_container #main_header li {
-    -webkit-flex: 1 1 100%;
-    -moz-flex: 1 1 100%;
-    -ms-flex: 1 1 100%;
-    -o-flex: 1 1 100%;
-    flex: 1 1 100%;
-    -webkit-align-self: stretch;
-    -moz-align-self: stretch;
-    -ms-align-self: stretch;
-    -o-align-self: stretch;
-    align-self: stretch; }
-    #main_container #main_header li:last-child a {
-      border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px;
-      text-align: right; }
-    #main_container #main_header li:first-child a {
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px;
-      text-align: left; }
-  #main_container #main_header a {
-    display: block;
-    text-align: center;
-    width: 100%;
-    height: 100%;
-    background-color: #B3D6E6;
-    padding: 0.5em 1em;
-    margin: 0 0.5em 0 0;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.25s; }
-    #main_container #main_header a.selected, #main_container #main_header a:hover {
-      background-color: #68B9DE; }
-  #main_container main {
-    color: #555; }
+
+#main_header h1 {
+  border-bottom: 1px solid #68B9DE;
+  padding: 0 0 0.75em 0;
+  margin: 1em 0;
+  color: #999; }
+#main_header nav {
+  margin: 1em 0 2em 0; }
+  #main_header nav ul {
+    -webkit-display: flex;
+    -moz-display: flex;
+    -ms-display: flex;
+    -o-display: flex;
+    display: flex;
+    width: 100%; }
+#main_header li {
+  -webkit-flex: 1 1 100%;
+  -moz-flex: 1 1 100%;
+  -ms-flex: 1 1 100%;
+  -o-flex: 1 1 100%;
+  flex: 1 1 100%;
+  -webkit-align-self: stretch;
+  -moz-align-self: stretch;
+  -ms-align-self: stretch;
+  -o-align-self: stretch;
+  align-self: stretch; }
+  #main_header li:last-child a {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    text-align: right; }
+  #main_header li:first-child a {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    text-align: left; }
+#main_header a {
+  display: block;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  background-color: #B3D6E6;
+  padding: 0.5em 1em;
+  margin: 0 0.5em 0 0;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.25s; }
+  #main_header a.selected, #main_header a:hover {
+    background-color: #68B9DE; }
+#main_header main {
+  color: #555; }
 
 @media screen and (max-width: 768px) {
-  #main_container #main_header li {
+  #main_header nav ul {
     display: block; }
-  #main_container #main_header nav ul {
-    display: block; }
-    #main_container #main_header nav ul a {
-      text-align: left; }
-    #main_container #main_header nav ul:last-child a {
-      border-radius: 0;
-      border-bottom-right-radius: 3px;
-      border-bottom-left-radius: 3px;
-      border-top-right-radius: 0;
-      border-top-left-radius: 0;
-      text-align: left; }
-    #main_container #main_header nav ul:first-child a {
-      border-bottom-right-radius: 0;
-      border-bottom-left-radius: 0;
-      border-top-right-radius: 3px;
-      border-top-left-radius: 3px; } }
+    #main_header nav ul li {
+      display: block; }
+      #main_header nav ul li a {
+        border-radius: 0;
+        text-align: left; }
+      #main_header nav ul li:first-child a {
+        border-top-right-radius: 3px;
+        border-top-left-radius: 3px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0; }
+      #main_header nav ul li:last-child a {
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        text-align: left; }
+      #main_header nav ul li:first-child:last-child a {
+        border-radius: 3px; } }
 #nav_container {
   min-width: 300px;
   -webkit-flex: 0 1 300px;
@@ -508,11 +511,11 @@ table:not(.rd-days) {
 @media screen and (max-width: 1280px) {
   #nav_container {
     min-width: 200px;
-    -webkit-flex: 1 1 auto;
-    -moz-flex: 1 1 auto;
-    -ms-flex: 1 1 auto;
-    -o-flex: 1 1 auto;
-    flex: 1 1 auto;
+    -webkit-flex: 0 1 200px;
+    -moz-flex: 0 1 200px;
+    -ms-flex: 0 1 200px;
+    -o-flex: 0 1 200px;
+    flex: 0 1 200px;
     padding: 0.75em; }
     #nav_container header {
       -webkit-flex-flow: column;
@@ -1023,7 +1026,7 @@ table:not(.rd-days) {
 
 #new_notification {
   position: relative;
-  color: #68B9DE;
+  color: orange;
   animation-name: notify_blink;
   animation-duration: 2s;
   animation-iteration-count: infinite; }

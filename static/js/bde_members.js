@@ -11,7 +11,9 @@
         populate: {
 			value: function(json){
 				this.elems = json['users'];
-				for(var user of this.elems){
+				for(var i in this.elems){
+                    var user =  this.elems[i];
+
 					var img = document.createElement('img');
 						img.setAttribute('src', user['picture']);
 						img.setAttribute('alt', 'profile_picture');
