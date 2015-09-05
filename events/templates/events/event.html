@@ -2,7 +2,7 @@
 {% load menu_item %}
 
 {% block header %}
-    {{ event.name }}
+    Evenement
 {% endblock %}
 
 {% block menu %}
@@ -19,12 +19,31 @@
 {% endblock %}
 
 {% block main %}
-    <div>
-        <p>Début: {{ event.start_time }}</p>
-        <p>Fin: {{ event.end_time }}</p>
-        <p>Lieu: {{ event.location }}</p>
-        <p>Description: {{ event.description }}</p>
-        <p>Nombre d'inscriptions: {{ event.registrations_number }}</p>
+    <div class="announce">
+    <header>
+        <h1>{{ event.name }}</h1>
+    </header>
+        <p>{{ event.description }}</p>
+        <div class="flex_container details">
+            <div class="flex expand">
+                <p>{{ event.start_time }}</p>
+                <p>Début</p>
+            </div>
+            <div class="flex expand">
+                <p>{{ event.end_time }}</p>
+                <p>Fin</p>
+            </div>
+        </div>
+        <div class="flex_container details">
+            <div class="flex expand">
+                <p>{{ event.location }}</p>
+                <p>Lieu</p>
+            </div>
+            <div class="flex expand">
+                <p>{{ event.registrations_number }}</p>
+                <p>Inscrit(s)</p>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
