@@ -1,3 +1,28 @@
+"""
+
+Product and packs
+=================
+
+
+Warning this file is really easy to break and since there is not test yet so I
+heavely discourage you from editing it.
+
+Anyway if you must edit it be aware that whether event registration update are
+done before or after product edition is not clear and may vary depending of the
+item type. This implies that when checking if there is valid registration left
+(another product bought by the user register for the same event) you must be
+cautious to remove or not the deleted product from your count.
+
+Good luck,
+Arnaud
+
+"""
+
+#TODO add unit testing
+#FIXME add unit testing
+#XXX add unit testing
+
+
 from collections import Counter
 from django.contrib.auth.models import User
 from django.db import models, IntegrityError, transaction
@@ -127,25 +152,13 @@ class Packs(models.Model):
         current_products = self.products.filter(enabled=True).all()
         removed_products = list(set(old_products) - set(current_products))
 
-        old_products_refs = Counter(old_products)
-        current_products_refs = Counter(current_products)
-        diff = {}
-        for a in old_products_refs:
-            for b in current_products_refs:
-                if a == b:
-                    diff[a] = old_products_refs[a] - current_products_refs[a]
-
         with transaction.atomic():
             users = BuyingHistory.get_pack_buyers(self)
             for product in removed_products:
                 for user in users:
-                    count = BuyingHistory.count_bought_products_of_kind(product, user)
-                    if product in diff:
-                        if count <= 0:
-                            Inscription.objects.filter(user=user, event=product.event).delete()
-                    elif product in old_products_refs:
-                        if count <= 0:
-                            Inscription.objects.filter(user=user, event=product.event).delete()
+                    count = BuyingHistory.count_event_participations(product.event, user)
+                    if count <= 0:
+                        Inscription.objects.filter(user=user, event=product.event).delete()
 
         with transaction.atomic():
             for product in current_products:
@@ -195,22 +208,19 @@ class BuyingHistory(models.Model):
         return products
 
     @staticmethod
-    def count_bought_products_of_kind(product, user):
+    def count_event_participations(event, user):
+        """ Count event participation grandet buy user buying history.
+        """
         packs_entries = BuyingHistory.objects.filter(user=user,type='pack').all()
         products_entries = BuyingHistory.objects.filter(user=user, type='product').all()
 
-        print(product.event)
         count = 0
         for item in packs_entries:
             print("pack %s " % str(item.pack))
             for p in item.pack.products.all():
-                print(p.event)
-                if product.event == p.event:
+                if event == p.event:
                     count += 1
-
         for item in products_entries:
-            if product.event == item.product.event:
+            if event == item.product.event:
                 count += 1
-
-        print(count)
         return count
