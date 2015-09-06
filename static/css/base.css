@@ -106,17 +106,36 @@ form p {
 form ul {
   padding: 0;
   list-style: none; }
+  form ul li {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    -o-align-items: center;
+    align-items: center;
+    padding: 0; }
+    form ul li:hover {
+      background-color: #eee; }
   form ul label {
+    -webkit-flex: 1 1 auto;
+    -moz-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    -o-flex: 1 1 auto;
+    flex: 1 1 auto;
     padding: 0.5em;
     display: block;
-    width: 100%;
     cursor: pointer;
     border-radius: 3px; }
-    form ul label:hover {
-      background-color: #eee; }
-  form ul input {
+  form ul input[type=checkbox], form ul input[type=radio] {
     width: auto;
-    vertical-align: middle; }
+    text-align: center;
+    vertical-align: middle;
+    margin: 0 0.5em; }
+  form ul input[type=radio] {
+    margin-left: 1em; }
+  form ul input[type=radio] + label {
+    margin-left: 0; }
 
 input, textarea {
   padding: 0.25em 0.5em;

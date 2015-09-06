@@ -61,20 +61,32 @@ form
     padding: 0
     list-style: none
 
-    label
-      padding: 0.5em
-      display: block
-      width: 100%
-      cursor: pointer
-      border-radius: 3px
-
+    li
+      display: -webkit-flex
+      display: flex
+      @include vendor-prefix('align-items', center)
+      padding: 0
       &:hover
         background-color: #eee
 
-    input
-      width: auto
-      vertical-align: middle
+    label
+      @include vendor-prefix('flex', 1 1 auto)
+      padding: 0.5em
+      display: block
+      cursor: pointer
+      border-radius: 3px
 
+    input[type=checkbox], input[type=radio]
+      width: auto
+      text-align: center
+      vertical-align: middle
+      margin:  0 0.5em
+
+    input[type=radio]
+      margin-left: 1em
+
+    input[type=radio] + label
+      margin-left: 0
 
 
 
