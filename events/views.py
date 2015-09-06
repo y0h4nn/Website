@@ -89,13 +89,13 @@ def admin_list_registrations(request, eid):
         ins.delete()
         return JsonResponse({"status": 1})
     e = get_object_or_404(Event, id=eid)
-    reg = Inscription.objects.filter(event=e)
+    reg = Inscription.objects.filter(event=e).select_related("user__profile")
     return render(request, 'events/admin/list_registrations.html', {'event': e, 'reg': reg})
 
 @bde_member
 def admin_export_csv(request, eid):
     event = get_object_or_404(Event, id=eid)
-    reg = Inscription.objects.filter(event=event)
+    reg = Inscription.objects.filter(event=event).select_related("user__profile")
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(event.name)
 
