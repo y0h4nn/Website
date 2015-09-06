@@ -1,3 +1,4 @@
+from collections import Counter
 from django.contrib.auth.models import User
 from django.db import models, IntegrityError, transaction
 from django.conf import settings
@@ -122,14 +123,29 @@ class Packs(models.Model):
             if product.event:
                 product.create_event_registration(user)
 
-    def update_event_registrations(self, old_events):
+    def update_event_registrations(self, old_products):
         current_products = self.products.filter(enabled=True).all()
-        current_event = [p.event for p in current_products if p.event]
+        removed_products = list(set(old_products) - set(current_products))
 
-        removed_event = list(set(old_events) - set(current_event))
-        for event in removed_event:
+        old_products_refs = Counter(old_products)
+        current_products_refs = Counter(current_products)
+        diff = {}
+        for a in old_products_refs:
+            for b in current_products_refs:
+                if a == b:
+                    diff[a] = old_products_refs[a] - current_products_refs[a]
+
+        with transaction.atomic():
             users = BuyingHistory.get_pack_buyers(self)
-            Inscription.objects.filter(user__in=users, event=event).delete()
+            for product in removed_products:
+                for user in users:
+                    count = BuyingHistory.count_bought_products_of_kind(product, user)
+                    if product in diff:
+                        if count <= 0:
+                            Inscription.objects.filter(user=user, event=product.event).delete()
+                    elif product in old_products_refs:
+                        if count <= 0:
+                            Inscription.objects.filter(user=user, event=product.event).delete()
 
         with transaction.atomic():
             for product in current_products:
@@ -170,10 +186,31 @@ class BuyingHistory(models.Model):
 
         products = []
         for item in packs_entries:
-            products += list(item.pack.products.filter(enbaled=True).all())
+            products += list(item.pack.products.filter(enabled=True).all())
 
         for item in products_entries:
             if item.product.enabled:
                 products.append(item.product)
 
         return products
+
+    @staticmethod
+    def count_bought_products_of_kind(product, user):
+        packs_entries = BuyingHistory.objects.filter(user=user,type='pack').all()
+        products_entries = BuyingHistory.objects.filter(user=user, type='product').all()
+
+        print(product.event)
+        count = 0
+        for item in packs_entries:
+            print("pack %s " % str(item.pack))
+            for p in item.pack.products.all():
+                print(p.event)
+                if product.event == p.event:
+                    count += 1
+
+        for item in products_entries:
+            if product.event == item.product.event:
+                count += 1
+
+        print(count)
+        return count

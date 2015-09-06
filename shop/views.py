@@ -150,11 +150,10 @@ def pack_edit(request, pid):
     pack = get_object_or_404(models.Packs, id=pid)
     if request.method == "POST":
         old_products = list(pack.products.filter(enabled=True).all())
-        old_events = [p.event for p in old_products if p.event]
         form = forms.PackForm(request.POST, instance=pack)
         if form.is_valid():
             form.save()
-            pack.update_event_registrations(old_events)
+            pack.update_event_registrations(old_products)
             return redirect(reverse('shop:admin'))
     else:
         form = forms.PackForm(instance=pack)
