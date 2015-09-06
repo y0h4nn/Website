@@ -14,9 +14,12 @@ class WrapperClearableinput(ClearableFileInput):
 class EventForm(ModelForm):
     def clean(self):
         super().clean()
-        start = self.cleaned_data['start_time']
-        end = self.cleaned_data['end_time']
+        start = self.cleaned_data.get('start_time')
+        end = self.cleaned_data.get('end_time')
         end_ins = self.cleaned_data.get('end_inscriptions')
+
+        if start is None or end is None or end_ins is None:
+            return
 
         if end <= start:
             self.add_error('start_time', "Le début de l'événement doit se situer avant sa fin...")
