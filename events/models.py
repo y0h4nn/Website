@@ -7,6 +7,7 @@ from django.db.models import Q
 
 class Event(models.Model):
     name = models.CharField(max_length=255)
+    end_inscriptions = models.DateTimeField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     location = models.CharField(max_length=255)
@@ -33,7 +34,7 @@ class Event(models.Model):
 
     @staticmethod
     def to_come(user):
-        return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(Q(start_time__gt=timezone.now()) & (Q(inscriptions__user=user) | Q(private=False)))]  # XXX: This mays be slow as hell, it needs some testing.
+        return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(Q(end_inscriptions__gt=timezone.now()) & (Q(inscriptions__user=user) | Q(private=False)))]  # XXX: This mays be slow as hell, it needs some testing.
 
 
 class Inscription(models.Model):

@@ -12,25 +12,24 @@ class WrapperClearableinput(ClearableFileInput):
 
 
 class EventForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['start_time'].widget.attrs['id'] = 'start_time'
-        self.fields['end_time'].widget.attrs['id'] = 'end_time'
-
-    def clean_end_time(self):
+    def clean(self):
+        super().clean()
         start = self.cleaned_data['start_time']
         end = self.cleaned_data['end_time']
+        end_ins = self.cleaned_data.get('end_inscriptions')
 
         if end <= start:
-            raise ValidationError("Le début de l'événement doit se situer avant sa fin...")
-
-        return end
+            self.add_error('start_time', "Le début de l'événement doit se situer avant sa fin...")
+        if end_ins > start:
+            self.add_error('end_inscriptions', "La fin des inscriptions doit se situer avant le début de l'évènement")
 
     def as_p(self):
         return super().as_p() + mark_safe('''<script>
-            start = document.getElementById("start_time");
-            end = document.getElementById("end_time");
-            rome(start);
+            start = document.getElementById("id_start_time");
+            end = document.getElementById("id_end_time");
+            end_ins = document.getElementById("id_end_inscriptions");
+            rome(start, {dateValidator: rome.val.beforeEq(end)});
+            rome(end_ins, {dateValidator: rome.val.beforeEq(start)});
             rome(end, {dateValidator: rome.val.afterEq(start)});
         </script>
         ''')
@@ -38,6 +37,6 @@ class EventForm(ModelForm):
     class Meta:
         model = Event
         fields = "__all__"
-        labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin", 'location': "Lieu", 'private': "Privé"}
+        labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin", 'location': "Lieu", 'private': "Privé", 'end_inscriptions': "Fin des inscriptions"}
         widgets = {'photo': WrapperClearableinput}
 
