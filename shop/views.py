@@ -64,7 +64,7 @@ def pack(request):
 @bde_member
 def history(request):
     context = {
-        'history': models.BuyingHistory.objects.order_by('date').all().reverse()
+        'history': models.BuyingHistory.objects.select_related('user__profile').select_related('pack').select_related('product').order_by('date').all().reverse()
     }
 
     return render(request, 'shop/history.html', context)
@@ -101,6 +101,7 @@ def product_add(request):
 @bde_member
 def product_delete(request, pid):
     product = get_object_or_404(models.Product, id=pid)
+    product.reset_event_registrations()
     product.enabled = False
     product.save()
     return redirect(reverse('shop:admin'))
@@ -111,9 +112,11 @@ def product_edit(request, pid):
     product = get_object_or_404(models.Product, id=pid)
 
     if request.method == "POST":
+        old_event = product.event
         form = forms.ProductForm(request.POST, instance=product)
         if form.is_valid():
             form.save()
+            product.update_event_registrations(old_event)
             return redirect(reverse('shop:admin'))
     else:
         form = forms.ProductForm(instance=product)
@@ -146,9 +149,11 @@ def pack_add(request):
 def pack_edit(request, pid):
     pack = get_object_or_404(models.Packs, id=pid)
     if request.method == "POST":
+        old_products = list(pack.products.filter(enabled=True).all())
         form = forms.PackForm(request.POST, instance=pack)
         if form.is_valid():
             form.save()
+            pack.update_event_registrations(old_products)
             return redirect(reverse('shop:admin'))
     else:
         form = forms.PackForm(instance=pack)
@@ -163,6 +168,7 @@ def pack_edit(request, pid):
 @bde_member
 def pack_delete(request, pid):
     pack = get_object_or_404(models.Packs, id=pid)
+    pack.reset_event_registrations()
     pack.enabled = False
     pack.save()
     return redirect(reverse('shop:admin'))

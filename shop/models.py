@@ -1,5 +1,32 @@
+"""
+
+Product and packs
+=================
+
+
+Warning this file is really easy to break and since there is not test yet so I
+heavely discourage you from editing it.
+
+Anyway if you must edit it be aware that whether event registration update are
+done before or after product edition is not clear and may vary depending of the
+item type. This implies that when checking if there is valid registration left
+(another product bought by the user register for the same event) you must be
+cautious to remove or not the deleted product from your count.
+
+Good luck,
+Arnaud
+
+"""
+
+#TODO add unit testing
+#FIXME add unit testing
+#XXX add unit testing
+
+
+from django.utils import timezone
+from collections import Counter
 from django.contrib.auth.models import User
-from django.db import models, IntegrityError
+from django.db import models, IntegrityError, transaction
 from django.conf import settings
 from bde.models import Contributor
 from events.models import Event, Inscription
@@ -26,12 +53,11 @@ MEANS_OF_PAYMENT = [
 ]
 
 
-
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.FloatField()
     action = models.CharField(max_length=100, choices=ACTIONS, null=True, blank=True)
-    event = models.ForeignKey(Event, null=True, blank=True, on_delete=models.SET_NULL)
+    event = models.ForeignKey(Event, null=True, blank=True, on_delete=models.SET_NULL, limit_choices_to={'start_time__gt': timezone.now})
     description = models.TextField()
     enabled = models.BooleanField(default=True)
 
@@ -58,18 +84,36 @@ class Product(models.Model):
             self.create_event_registration(user)
 
 
-    def reset_event_registration(self, user):
-        try:
-            inscription = Inscription.objects.get(user=user, event=self.event)
-            inscription.delete()
-        except Inscription.DoesNotExists:
-            pass
-
     def create_event_registration(self, user):
-        try:
-            Inscription.objects.create(user=user, event=self.event)
-        except IntegrityError:
-            pass
+        if not self.event:
+            return
+        Inscription.objects.update_or_create({
+            'user': user,
+            'event': self.event
+        }, user=user, event=self.event)
+
+    def update_event_registrations(self, old_event):
+        """ Unsubscribe user from old event and subscribe them to the curretn one
+        """
+        if self.event != old_event:
+            # Unsubscribe user from old event
+            with transaction.atomic():
+                users = BuyingHistory.get_product_buyers(self)
+                for user in users:
+                    products = BuyingHistory.get_all_bought_products(user)
+                    event_products = [p for p in products if p.event == old_event]
+                    if not len(event_products):
+                        Inscription.objects.filter(user=user, event=old_event).delete()
+                    self.create_event_registration(user)
+
+    def reset_event_registrations(self):
+        with transaction.atomic():
+            users = BuyingHistory.get_product_buyers(self)
+            for user in users:
+                count = BuyingHistory.count_event_participations(self.event, user)
+                print("%s; %s" % (user, count))
+                if count <= 0:
+                    Inscription.objects.filter(user=user, event=self.event).delete()
 
 
 class Packs(models.Model):
@@ -100,10 +144,40 @@ class Packs(models.Model):
             fnc = ACTIONS_FNC_MAPPING[product.action]
             fnc(user, product, payment_mean)
             if product.event:
-                try:
-                    Inscription.objects.create(user=user, event=product.event)
-                except IntegrityError:
-                    pass
+                product.create_event_registration(user)
+
+    def update_event_registrations(self, old_products):
+        current_products = self.products.filter(enabled=True).all()
+        removed_products = list(set(old_products) - set(current_products))
+
+        with transaction.atomic():
+            users = BuyingHistory.get_pack_buyers(self)
+            for product in removed_products:
+                for user in users:
+                    count = BuyingHistory.count_event_participations(product.event, user)
+                    if count <= 0:
+                        Inscription.objects.filter(user=user, event=product.event).delete()
+
+        with transaction.atomic():
+            for product in current_products:
+                users = BuyingHistory.get_product_buyers(product)
+                for user in users:
+                    product.create_event_registration(user)
+
+    def reset_event_registrations(self):
+        with transaction.atomic():
+            users = BuyingHistory.get_pack_buyers(self)
+            events = []
+            for product in self.products.filter(enabled=True).all():
+                if product.event:
+                    events.append(product.event)
+            events_count = Counter(events)
+            for event, count in events_count.items():
+                for user in users:
+                    event_participations = BuyingHistory.count_event_participations(event, user)
+                    if count <= event_participations:
+                        Inscription.objects.filter(user=user, event=event).delete()
+
 
 TYPES = [
     ('product', 'Produit'),
@@ -119,3 +193,47 @@ class BuyingHistory(models.Model):
     payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT)
 
 
+    @staticmethod
+    def get_product_buyers(product):
+        packs = [p for p in Packs.objects.prefetch_related('products').filter(enabled=True).all() if product in p.products.filter(enabled=True).all()]
+        users = [item.user for item in BuyingHistory.objects.filter(models.Q(product=product) | models.Q(pack__in=packs)).all()]
+        return users
+
+    @staticmethod
+    def get_pack_buyers(pack):
+        users = [item.user for item in BuyingHistory.objects.filter(pack=pack)]
+        return users
+
+    @staticmethod
+    def get_all_bought_products(user):
+        packs_entries = BuyingHistory.objects.filter(user=user,type='pack').all()
+        products_entries = BuyingHistory.objects.filter(user=user, type='product').all()
+
+        products = []
+        for item in packs_entries:
+            products += list(item.pack.products.filter(enabled=True).all())
+
+        for item in products_entries:
+            if item.product.enabled:
+                products.append(item.product)
+
+        return products
+
+    @staticmethod
+    def count_event_participations(event, user):
+        """ Count event participation grandet buy user buying history.
+        """
+        packs_entries = BuyingHistory.objects.filter(user=user,type='pack').all()
+        products_entries = BuyingHistory.objects.filter(user=user, type='product').all()
+
+        count = 0
+        for item in packs_entries:
+            if not item.pack.enabled:
+                continue
+            for p in item.pack.products.filter(enabled=True).all():
+                if event == p.event:
+                    count += 1
+        for item in products_entries:
+            if event == item.product.event and item.product.enabled:
+                count += 1
+        return count
