@@ -1,15 +1,17 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from . import forms
 from . import models
+from datetime import timedelta
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 import notifications
 
 
 @login_required
 def index(request):
     context = {}
-    context['announcements'] = models.Announcement.objects.all()
+    context['announcements'] = models.Announcement.objects.filter(date__gt=timezone.now() - timedelta(hours=12))
     return render(request, 'carshare/index.html', context)
 
 
