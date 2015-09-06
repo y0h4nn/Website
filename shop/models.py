@@ -108,13 +108,10 @@ class Product(models.Model):
     def reset_event_registrations(self):
         with transaction.atomic():
             users = BuyingHistory.get_product_buyers(self)
-            print(users)
             for user in users:
-                products = BuyingHistory.get_all_bought_products(user)
-                print(products)
-                event_products = [p for p in products if p.event == self.event]
-                print(event_products)
-                if len(event_products) <= 1:
+                count = BuyingHistory.count_event_participations(self.event, user)
+                print("%s; %s" % (user, count))
+                if count <= 0:
                     Inscription.objects.filter(user=user, event=self.event).delete()
 
 
@@ -166,6 +163,20 @@ class Packs(models.Model):
                 for user in users:
                     product.create_event_registration(user)
 
+    def reset_event_registrations(self):
+        with transaction.atomic():
+            users = BuyingHistory.get_pack_buyers(self)
+            events = []
+            for product in self.products.filter(enabled=True).all():
+                if product.event:
+                    events.append(product.event)
+            events_count = Counter(events)
+            for event, count in events_count.items():
+                for user in users:
+                    event_participations = BuyingHistory.count_event_participations(event, user)
+                    if count <= event_participations:
+                        Inscription.objects.filter(user=user, event=event).delete()
+
 
 TYPES = [
     ('product', 'Produit'),
@@ -183,7 +194,7 @@ class BuyingHistory(models.Model):
 
     @staticmethod
     def get_product_buyers(product):
-        packs = [p for p in Packs.objects.prefetch_related('products').all() if product in p.products.all()]
+        packs = [p for p in Packs.objects.prefetch_related('products').filter(enabled=True).all() if product in p.products.filter(enabled=True).all()]
         users = [item.user for item in BuyingHistory.objects.filter(models.Q(product=product) | models.Q(pack__in=packs)).all()]
         return users
 
@@ -216,11 +227,12 @@ class BuyingHistory(models.Model):
 
         count = 0
         for item in packs_entries:
-            print("pack %s " % str(item.pack))
-            for p in item.pack.products.all():
+            if not item.pack.enabled:
+                continue
+            for p in item.pack.products.filter(enabled=True).all():
                 if event == p.event:
                     count += 1
         for item in products_entries:
-            if event == item.product.event:
+            if event == item.product.event and item.product.enabled:
                 count += 1
         return count
