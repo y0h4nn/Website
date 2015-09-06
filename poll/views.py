@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.db.models import F
+from django.db.models import F, Q
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils import timezone
 import json
 from .models import Question, Answer, Poll, Voter
 from .forms import PollForm
@@ -76,7 +77,7 @@ def poll_list(request):
                     'id': p.id,
                     'start': p.start_date.strftime("%d %B %Y %H:%M"),
                     'end': p.end_date.strftime("%d %B %Y %H:%M"),
-                } for p in Poll.objects.filter(author=request.user).order_by('-end_date')]
+                } for p in Poll.objects.filter(Q(group__in=request.user.groups.all()) & Q(start_date__lt=timezone.now())).order_by('-end_date')]
         })
 
 
