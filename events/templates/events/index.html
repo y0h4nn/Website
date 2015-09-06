@@ -38,7 +38,7 @@
             </header>
             <main>
                 <p>{{ event.description }}</p>
-                <a href="#">En savoir plus</a>
+                <a href="{% url 'events:event' eid=event.id %}">En savoir plus</a>
             </main>
         </div>
         <div>

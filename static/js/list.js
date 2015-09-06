@@ -60,6 +60,7 @@ var BaseList = function(containerId, buildCallback){
     this.onElemBuild = buildCallback;
 
     this.render = function(){
+        this.searchInput.focus();
         this.spinner.setAttribute('class', 'spinner hidden');
 
         for(var elem of this.elems){

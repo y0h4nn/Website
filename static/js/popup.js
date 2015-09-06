@@ -28,7 +28,6 @@ function Popup(title){
     this.container.addEventListener('click', function(event){
         if(!this.window.contains(event.target)){
             this.close();
-            console.log("Close popup");
         }
     }.bind(this));
 
@@ -41,8 +40,6 @@ Popup.prototype = {
     baseClass: 'popup',
     pop: function(){
         this.container.setAttribute('class', this.baseClass + ' pop');
-        console.log("POPUP!");
-        console.log(this.container.getAttribute('class'));
     },
 
     close: function(){
@@ -193,13 +190,13 @@ UserSelectionPopup.prototype = Object.create(Popup.prototype, {
                 button.innerHTML = user.display_name;
                 button.addEventListener('click', function(event){
                     var uid = event.target.getAttribute('data-uid');
-                    console.log(this);
                     this.callback(uid);
                     this.close();
                 }.bind(this));
                 this.btnContainer.appendChild(button);
             }
             this.spinner.setAttribute('class', 'hidden');
+            this.searchInput.focus();
         },
     },
 

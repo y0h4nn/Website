@@ -1,2 +1,49 @@
 {% extends 'core/base.html' %}
+{% load menu_item %}
+
+{% block header %}
+    Evenement
+{% endblock %}
+
+{% block menu %}
+    {% if user_is_bde_member %}
+        {% menu_item "Liste des évènements" "events:admin_index" %}
+    {% else %}
+        {% menu_item "Liste des évènements" "events:index" %}
+    {% endif %}
+    {% menu_item "Description" "events:event" eid=event.id %}
+    {% if user_is_bde_member %}
+        {% menu_item "Liste des inscrits" "events:admin_list_registrations" eid=event.id %}
+        {% menu_item "Editer l'évènement" "events:admin_edit" eid=event.id %}
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    <div class="announce">
+    <header>
+        <h1>{{ event.name }}</h1>
+    </header>
+        <p>{{ event.description }}</p>
+        <div class="flex_container details">
+            <div class="flex expand">
+                <p>{{ event.start_time }}</p>
+                <p>Début</p>
+            </div>
+            <div class="flex expand">
+                <p>{{ event.end_time }}</p>
+                <p>Fin</p>
+            </div>
+        </div>
+        <div class="flex_container details">
+            <div class="flex expand">
+                <p>{{ event.location }}</p>
+                <p>Lieu</p>
+            </div>
+            <div class="flex expand">
+                <p>{{ event.registrations_number }}</p>
+                <p>Inscrit(s)</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 

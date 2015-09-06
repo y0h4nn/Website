@@ -26,6 +26,14 @@ class ProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['birthdate'].widget.attrs['id'] = 'birth_date'
+        self.fields['phone'].widget.attrs['maxlength'] = 14
+        self.fields['phone'].validators = []
+
+    def clean_phone(self):
+        phone = self.cleaned_data['phone'].replace(' ', '').replace('-', '')
+        if len(phone) != 10 or not phone.isdecimal():
+            raise forms.ValidationError("Mauvais numéro de téléphone")
+        return phone
 
     def as_p(self):
         return super().as_p() + mark_safe('''<script>
