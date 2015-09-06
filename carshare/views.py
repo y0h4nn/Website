@@ -33,7 +33,7 @@ def show(request, aid):
             if request.POST['action'] == 'register' and request.user != announcement.author:
                 registration.is_simple_comment = False
                 notifications.notify(
-                    "%s a publier une demande de covoiturage." % str(request.user.profile),
+                    "%s a publié une demande de covoiturage." % str(request.user.profile),
                     "carshare:show", {'aid': aid},
                     [announcement.author],
                 )
@@ -41,7 +41,7 @@ def show(request, aid):
                 registrations = models.Registration.objects.filter(announcement=announcement).all()
                 users = set(reg.user for reg in registrations if reg.user != request.user)
                 notifications.notify(
-                    "%s a commenté une offre de covoiturage a laquelle vous avez participé" % str(request.user.profile),
+                    "%s a commenté une offre de covoiturage à laquelle vous avez participé" % str(request.user.profile),
                     "carshare:show", {'aid': aid},
                     users,
                 )
@@ -85,14 +85,14 @@ def action(request, aid, rid, state):
 
     if state == 'accepted' and announcement.available_places() > 0:
         notifications.notify(
-            "Votre demande de covoiturage à été acceptée",
+            "Votre demande de covoiturage a été acceptée",
             "carshare:show", {'aid': announcement.id},
             [registration.user],
         )
         registration.status = 'accepted'
     elif state == 'refused':
         notifications.notify(
-            "Votre demande de covoiturage à été refusée",
+            "Votre demande de covoiturage a été refusée",
             "carshare:show", {'aid': announcement.id},
             [registration.user],
         )
@@ -139,3 +139,4 @@ def delete(request, aid):
         )
         announcement.delete()
     return redirect(reverse('carshare:index'))
+
