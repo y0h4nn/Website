@@ -18,21 +18,20 @@ class Announcement(models.Model):
         return self.places - Registration.objects.filter(models.Q(announcement=self) & models.Q(status='accepted') & ~models.Q(is_simple_comment=True)).count()
 
 
-REGISTRATION_STATUS = [
-    (None, 'En attente'),
-    ('accepted', 'Acceptée'),
-    ('refused', 'Refusée'),
-]
+REGISTRATION_STATUS = {
+    None: 'En attente',
+    'accepted': 'Acceptée',
+    'refused': 'Refusée',
+}
 
 class Registration(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     announcement = models.ForeignKey(Announcement)
-    status = models.CharField(max_length=8, null=True, default=None)
+    status = models.CharField(max_length=8, null=True, default=None, choices=REGISTRATION_STATUS.items())
     is_simple_comment = models.BooleanField(default=True)
     comment = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True)
 
     def status_name(self):
-        for reg_status in REGISTRATION_STATUS:
-            if reg_status[0] == self.status:
-                return reg_status[1]
+        return REGISTRATION_STATUS[self.status]
+
