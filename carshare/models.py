@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from collections import OrderedDict
 
 class Announcement(models.Model):
     title = models.CharField(max_length=255)
@@ -18,11 +19,11 @@ class Announcement(models.Model):
         return self.places - Registration.objects.filter(models.Q(announcement=self) & models.Q(status='accepted') & ~models.Q(is_simple_comment=True)).count()
 
 
-REGISTRATION_STATUS = {
-    None: 'En attente',
-    'accepted': 'Acceptée',
-    'refused': 'Refusée',
-}
+REGISTRATION_STATUS = OrderedDict([
+    (None, 'En attente'),
+    ('accepted', 'Acceptée'),
+    ('refused', 'Refusée'),
+])
 
 class Registration(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
