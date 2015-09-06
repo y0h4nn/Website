@@ -44,6 +44,16 @@
                 <p>Inscrit(s)</p>
             </div>
         </div>
+        <div class="flex_container details">
+            <div class="flex expand">
+                {% if event.price != 0 %}
+                    <p>{{ event.price }}€</p>
+                    <p>Prix</p>
+                {% else %}
+                    <p>Gratuit</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 {% endblock %}
 

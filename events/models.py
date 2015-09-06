@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.templatetags.static import static
+from django.core.validators import MinValueValidator
 from django.db.models import Q
 
 
@@ -12,6 +13,7 @@ class Event(models.Model):
     end_time = models.DateTimeField()
     location = models.CharField(max_length=255)
     description = models.TextField()
+    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     photo = models.ImageField(null=True, blank=True)
     private = models.BooleanField(default=False)
 
