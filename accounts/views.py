@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from bde.models import Contributor
 from . import forms
-from . import models
 
 
 def login(request):
@@ -75,7 +75,7 @@ def edit(request, username):
 
         if passwordform.has_changed() and passwordform.is_valid():
             passwordform.save()
-        elif passwordform.has_changed() :
+        elif passwordform.has_changed():
             error = True
         else:
             passwordform = auth.forms.PasswordChangeForm(request.user)
@@ -134,7 +134,6 @@ def edit(request, username):
         return render(request, 'accounts/edit.html', context)
 
 
-from bde.models import Contributor
 def get_contrib(user):
     try:
         return user.contribution.type

@@ -5,12 +5,12 @@ from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
-from django.conf import settings
 from webmail.models import WebmailSettings
 
 
-SEMESTERS = [(None, 'Aucun'),]
-SEMESTERS += [('S{}'.format(i), 'Semestre {}'.format(i)) for i in range(1,11)]
+SEMESTERS = [(None, 'Aucun'), ]
+SEMESTERS += [('S{}'.format(i), 'Semestre {}'.format(i)) for i in range(1, 11)]
+
 
 class Family(models.Model):
     name = models.CharField(max_length=255)
@@ -84,3 +84,4 @@ def create_favorites(sender, instance, created, **kwargs):
         p = Profile.objects.create(user=instance)
         Address.objects.create(profile=p)
         WebmailSettings.objects.create(user=instance)
+
