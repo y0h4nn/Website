@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.templatetags.static import static
+from django.db.models import Q
 
 
 class Event(models.Model):
@@ -11,6 +12,7 @@ class Event(models.Model):
     location = models.CharField(max_length=255)
     description = models.TextField()
     photo = models.ImageField(null=True, blank=True)
+    private = models.BooleanField(default=False)
 
     def registrations_number(self):
         return len(self.inscriptions.all())
@@ -31,7 +33,7 @@ class Event(models.Model):
 
     @staticmethod
     def to_come(user):
-        return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(start_time__gt=timezone.now())]  # XXX: This mays be slow as hell, it needs some testing.
+        return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(Q(start_time__gt=timezone.now()) & (Q(inscriptions__user=user) | Q(private=False)))]  # XXX: This mays be slow as hell, it needs some testing.
 
 
 class Inscription(models.Model):

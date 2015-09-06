@@ -38,6 +38,6 @@ class EventForm(ModelForm):
     class Meta:
         model = Event
         fields = "__all__"
-        labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin", 'location': "Lieu"}
+        labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin", 'location': "Lieu", 'private': "Privé"}
         widgets = {'photo': WrapperClearableinput}
 
