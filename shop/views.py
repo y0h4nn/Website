@@ -64,7 +64,7 @@ def pack(request):
 @bde_member
 def history(request):
     context = {
-        'history': models.BuyingHistory.objects.select_related('user__profile').order_by('date').all().reverse()
+        'history': models.BuyingHistory.objects.prefetch_related('user__profile').prefetch_related('pack').prefetch_related('product').order_by('date').all().reverse()
     }
 
     return render(request, 'shop/history.html', context)
