@@ -101,6 +101,7 @@ def product_add(request):
 @bde_member
 def product_delete(request, pid):
     product = get_object_or_404(models.Product, id=pid)
+    product.reset_event_registrations()
     product.enabled = False
     product.save()
     return redirect(reverse('shop:admin'))

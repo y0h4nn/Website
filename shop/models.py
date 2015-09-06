@@ -57,38 +57,39 @@ class Product(models.Model):
             self.create_event_registration(user)
 
 
-    def reset_event_registration(self, user):
-        try:
-            inscription = Inscription.objects.get(user=user, event=self.event)
-            inscription.delete()
-        except Inscription.DoesNotExists:
-            pass
-
     def create_event_registration(self, user):
         if not self.event:
             return
-        print(Inscription.objects.update_or_create({
+        Inscription.objects.update_or_create({
             'user': user,
             'event': self.event
-        }, user=user, event=self.event))
+        }, user=user, event=self.event)
 
     def update_event_registrations(self, old_event):
         """ Unsubscribe user from old event and subscribe them to the curretn one
         """
         if self.event != old_event:
             # Unsubscribe user from old event
-            users = BuyingHistory.get_product_buyers(self)
-            Inscription.objects.filter(user__in=users, event=old_event).delete()
-            # subscribe user to new event
             with transaction.atomic():
-                print(users)
+                users = BuyingHistory.get_product_buyers(self)
                 for user in users:
+                    products = BuyingHistory.get_all_bought_products(user)
+                    event_products = [p for p in products if p.event == old_event]
+                    if not len(event_products):
+                        Inscription.objects.filter(user=user, event=old_event).delete()
                     self.create_event_registration(user)
 
-    def delete(self):
-        users = BuyingHistory.get_product_buyers(self)
-        Inscription.objects.filter(user__in=users, event=self.event).delete()
-        super().delete()
+    def reset_event_registrations(self):
+        with transaction.atomic():
+            users = BuyingHistory.get_product_buyers(self)
+            print(users)
+            for user in users:
+                products = BuyingHistory.get_all_bought_products(user)
+                print(products)
+                event_products = [p for p in products if p.event == self.event]
+                print(event_products)
+                if len(event_products) <= 1:
+                    Inscription.objects.filter(user=user, event=self.event).delete()
 
 
 class Packs(models.Model):
@@ -137,7 +138,6 @@ class Packs(models.Model):
                     product.create_event_registration(user)
 
 
-
 TYPES = [
     ('product', 'Produit'),
     ('pack', 'Pack'),
@@ -163,5 +163,17 @@ class BuyingHistory(models.Model):
         users = [item.user for item in BuyingHistory.objects.filter(pack=pack)]
         return users
 
+    @staticmethod
+    def get_all_bought_products(user):
+        packs_entries = BuyingHistory.objects.filter(user=user,type='pack').all()
+        products_entries = BuyingHistory.objects.filter(user=user, type='product').all()
 
+        products = []
+        for item in packs_entries:
+            products += list(item.pack.products.filter(enbaled=True).all())
 
+        for item in products_entries:
+            if item.product.enabled:
+                products.append(item.product)
+
+        return products
