@@ -28,12 +28,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='uuid',
-            field=django_extensions.db.fields.UUIDField(editable=False, null=True),
+            field=models.UUIDField(editable=False, null=True),
         ),
         migrations.RunPython(migrate_data),
         migrations.AlterField(
             model_name='event',
             name='uuid',
-            field=django_extensions.db.fields.UUIDField(editable=False),
+            field=models.UUIDField(editable=False),
         )
     ]
