@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 import json
 import csv
+import uuid
 from bde import bde_member
 
 
@@ -72,7 +73,9 @@ def admin_add(request):
     if request.method == "POST":
         form = EventForm(request.POST, request.FILES or None)
         if form.is_valid():
-            form.save()
+            event = form.save(commit=False)
+            event.uuid = uuid.uuid4()
+            event.save()
             return redirect(reverse('events:admin_index'))
     else:
         form = EventForm()

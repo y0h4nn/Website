@@ -39,7 +39,7 @@ class EventForm(ModelForm):
 
     class Meta:
         model = Event
-        fields = "__all__"
+        exclude = ["uuid"]
         labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin",
                   'location': "Lieu", 'private': "Privé", 'end_inscriptions': "Fin des inscriptions",
                   'allow_extern': "Autoriser les exterieurs"}
