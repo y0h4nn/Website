@@ -120,7 +120,6 @@ def product_add(request):
 @bde_member
 def product_delete(request, pid):
     product = get_object_or_404(models.Product, id=pid)
-    product.reset_event_registrations()
     product.enabled = False
     product.save()
     return redirect(reverse('shop:admin'))
@@ -187,7 +186,6 @@ def pack_edit(request, pid):
 @bde_member
 def pack_delete(request, pid):
     pack = get_object_or_404(models.Packs, id=pid)
-    pack.reset_event_registrations()
     pack.enabled = False
     pack.save()
     return redirect(reverse('shop:admin'))
