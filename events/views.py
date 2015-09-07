@@ -114,6 +114,7 @@ def admin_list_registrations(request, eid):
 def admin_export_csv(request, eid):
     event = get_object_or_404(Event, id=eid)
     reg = Inscription.objects.filter(event=event).select_related("user__profile")
+    ext_reg = ExternInscription.objects.filter(event=event)
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(event.name)
 
@@ -121,5 +122,8 @@ def admin_export_csv(request, eid):
     writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail'])
     for r in reg:
         line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email]
+        writer.writerow(line)
+    for r in ext_reg:
+        line = ["", "", r.first_name, r.last_name, r.mail]
         writer.writerow(line)
     return response
