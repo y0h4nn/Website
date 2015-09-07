@@ -97,3 +97,14 @@ class AddressForm(forms.ModelForm):
             'town': 'Ville',
         }
 
+class UserRequestForm(forms.ModelForm):
+    prefix = 'user_request'
+    class Meta:
+        model = models.UserRequest
+        fields = '__all__'
+        labels = {
+            'username': 'Nom d\'utilisateur',
+            'first_name': 'Prénom',
+            'last_name': 'Nom de famille',
+            'email': 'Email',
+        }

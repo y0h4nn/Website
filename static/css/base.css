@@ -1090,4 +1090,10 @@ table:not(.rd-days) {
       font-weight: bold;
       font-size: 1.2em; }
 
+.request_list {
+  list-style: none;
+  padding: 0; }
+  .request_list span:last-child {
+    margin-left: 0.5em; }
+
 /*# sourceMappingURL=base.css.map */

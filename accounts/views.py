@@ -1,12 +1,18 @@
+import uuid
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.core.mail import send_mail
+from django.shortcuts import render, get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
+from django.db import transaction
 from django.contrib.auth.models import User
 from bde.models import Contributor
+from bde import bde_member
 from . import forms
+from . import models
 
 
 def login(request):
@@ -160,3 +166,101 @@ def members(request):
         return JsonResponse({'users': users})
 
     return render(request, 'accounts/list.html', {})
+
+def account_request(request):
+    if request.user.is_authenticated():
+        return redirect(reverse('news:index'))
+
+    if request.method == 'POST':
+        form = forms.UserRequestForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('accounts:confirmation'))
+    else:
+        form = forms.UserRequestForm()
+
+
+    context = {
+        'form': form
+    }
+    return render(request, 'accounts/request.html', context)
+
+
+@bde_member
+def list_request(request):
+    context = {
+        'requests': models.UserRequest.objects.all()
+    }
+
+    return render(request, 'accounts/list-request.html', context)
+
+
+ACCEPT_MAIL_TPL="""Bonjour {first_name} {last_name},
+
+Votre compte enib.net à été créé.
+Vous pouvez dés maintenant vous connecter avec votre adresse email et le mot de
+passe suivant:
+
+{password}
+
+Pour garantir la sécurité de votre compte nous vous conseillons
+fortement de le changer dès votre premierre conexion.
+"""
+
+
+REJECT_MAIL_TPL="""Bonjour {first_name} {last_name},
+
+Votre demande de création de compte sur enib.net à été rejetée.
+"""
+
+@bde_member
+def accept_request(request, rid):
+    user_request = get_object_or_404(models.UserRequest, id=rid)
+
+    with transaction.atomic():
+        user = User.objects.create(
+            username=user_request.username,
+            email=user_request.email,
+            first_name=user_request.first_name,
+            last_name=user_request.last_name,
+        )
+
+        password = str(uuid.uuid4())
+        user.set_password(password)
+        user.save()
+        user_request.delete()
+
+        send_mail(
+            'Création de votre compte enib.net',
+            ACCEPT_MAIL_TPL.format(
+                first_name=user_request.first_name,
+                last_name=user_request.last_name,
+                password=password,
+            ),
+            'bde@enib.fr',
+            [user.email],
+            fail_silently=False
+        )
+
+    return redirect(reverse('accounts:list_request'))
+
+
+@bde_member
+def reject_request(request, rid):
+    user_request = get_object_or_404(models.UserRequest, id=rid)
+    user_request.delete()
+
+    send_mail(
+        'Rejet de votre demande de création de compte enib.net',
+        REJECT_MAIL_TPL.format(
+            first_name=user_request.first_name,
+            last_name=user_request.last_name,
+        ),
+        'bde@enib.fr',
+        [user_request.email],
+        fail_silently=False
+    )
+    return redirect(reverse('accounts:list_request'))
+
+def confirmation_request(request):
+    return render(request, 'accounts/confirmation.html')

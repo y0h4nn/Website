@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Effectuer une demande de création de compte
+{% endblock %}
+
+{% block header %}
+    Effectuer une demande de création de compte
+{% endblock %}
+
+{% block menu %}
+{% endblock%}
+
+{% block main %}
+    <h3>Procédure</h3>
+    <p>
+        Veuillez remplir le formulaire ci dessous pour effectuer une demande de
+        création de compte. Un membre du bureau validera ou non la demande en
+        fonction des informations fournies. Si les membres du bureau ne vous
+        connaissent pas prenez contacte avec eux avant de faire une demande.
+    </p>
+    <p>
+        Une fois votre demande validé vous recevrez un email avec vos informations de connexion.
+    </p>
+
+    <h3>Effectuer une demande</h3>
+
+    <form action="{% url 'accounts:request' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Demander un compte</button>
+    </form>
+{% endblock %}

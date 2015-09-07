@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'js/list.js' %}"></script>
+    <script src="{% static 'js/userlist.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+    Confirmation de demande
+{% endblock %}
+
+{% block header %}
+    Confirmation de demande
+{% endblock %}
+
+{% block menu %}
+{% endblock%}
+
+{% block main %}
+    <p>
+        Votre demande à bien été émise et sera validée ou rejetée d'ici peu.
+    </p>
+{% endblock %}

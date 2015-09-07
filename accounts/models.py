@@ -78,6 +78,16 @@ class Address(models.Model):
         return "{}, {} {}".format(self.streer, self.postal_code, self.town)
 
 
+class UserRequest(models.Model):
+    username = models.CharField(max_length=30)
+    email = models.EmailField()
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.username
+
+
 @receiver(post_save, sender=User)
 def create_favorites(sender, instance, created, **kwargs):
     if created:

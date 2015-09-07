@@ -133,5 +133,13 @@ AUTHENTICATION_BACKENDS = (
 LOGIN_URL = '/accounts/login'
 
 
+# Mails
+
+EMAIL_HOST=""
+EMAIL_PORT=587
+EMAIL_HOSt_USER=""
+EMAIL_HOST_PASSWORD=""
+EMAIL_USE_TLS=True
+
 # Application settings
 BDE_GROUP_NAME = 'BDE'
