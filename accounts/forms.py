@@ -103,7 +103,6 @@ class UserRequestForm(forms.ModelForm):
         model = models.UserRequest
         fields = '__all__'
         labels = {
-            'username': 'Nom d\'utilisateur',
             'first_name': 'Prénom',
             'last_name': 'Nom de famille',
             'email': 'Email',

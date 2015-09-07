@@ -216,10 +216,11 @@ Votre demande de création de compte sur enib.net à été rejetée.
 @bde_member
 def accept_request(request, rid):
     user_request = get_object_or_404(models.UserRequest, id=rid)
+    username = ("%s_%s" % (user_request.first_name[0], user_request.last_name[:6])).lower()
 
     with transaction.atomic():
         user = User.objects.create(
-            username=user_request.username,
+            username=username,
             email=user_request.email,
             first_name=user_request.first_name,
             last_name=user_request.last_name,
