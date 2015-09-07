@@ -1,4 +1,4 @@
-from .forms import EventForm
+from .forms import EventForm, ExternInscriptionForm
 from .models import Event, Inscription
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
@@ -29,6 +29,18 @@ def event(request, eid):
     e = get_object_or_404(Event, id=eid)
     context = {'event': e}
     return render(request, 'events/event.html', context)
+
+
+def event_extern(request, uuid):
+    e = get_object_or_404(Event, uuid=uuid)
+    form = ExternInscriptionForm(request.POST or None, initial={"event": e})
+    if form.is_valid():
+        ins = form.save(commit=False)
+        ins.event = e
+        ins.save()
+        return redirect('news:index')
+    context = {'event': e, 'form': form}
+    return render(request, 'events/event_extern.html', context)
 
 
 @bde_member

@@ -48,3 +48,13 @@ class Inscription(models.Model):
     class Meta:
         unique_together = (('user', 'event'),)
 
+
+class ExternInscription(models.Model):
+    mail = models.EmailField()
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    event = models.ForeignKey(Event, related_name="extern_inscriptions")
+
+    class Meta:
+        unique_together = (('mail', 'event'),)
+
