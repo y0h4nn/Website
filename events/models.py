@@ -1,9 +1,9 @@
-from django.db import models
 from django.conf import settings
-from django.utils import timezone
-from django.templatetags.static import static
 from django.core.validators import MinValueValidator
+from django.db import models
 from django.db.models import Q
+from django.templatetags.static import static
+from django.utils import timezone
 
 
 class Event(models.Model):
@@ -16,9 +16,11 @@ class Event(models.Model):
     price = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     photo = models.ImageField(null=True, blank=True)
     private = models.BooleanField(default=False)
+    uuid = models.UUIDField()
+    allow_extern = models.BooleanField(default=False)
 
     def registrations_number(self):
-        return len(self.inscriptions.all())
+        return self.inscriptions.all().count() + self.extern_inscriptions.all().count()
 
     def is_open(self):
         return self.start_date <= timezone.now() <= self.end_date
@@ -36,7 +38,7 @@ class Event(models.Model):
 
     @staticmethod
     def to_come(user):
-        return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(Q(end_inscriptions__gt=timezone.now()) & (Q(inscriptions__user=user) | Q(private=False)))]  # XXX: This mays be slow as hell, it needs some testing.
+        return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(Q(end_inscriptions__gt=timezone.now()) & (Q(inscriptions__user=user) | Q(private=False))).distinct()]  # XXX: This mays be slow as hell, it needs some testing.
 
 
 class Inscription(models.Model):
@@ -45,4 +47,14 @@ class Inscription(models.Model):
 
     class Meta:
         unique_together = (('user', 'event'),)
+
+
+class ExternInscription(models.Model):
+    mail = models.EmailField()
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    event = models.ForeignKey(Event, related_name="extern_inscriptions")
+
+    class Meta:
+        unique_together = (('mail', 'event'),)
 

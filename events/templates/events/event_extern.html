@@ -6,16 +6,6 @@
 {% endblock %}
 
 {% block menu %}
-    {% if user_is_bde_member %}
-        {% menu_item "Liste des évènements" "events:admin_index" %}
-    {% else %}
-        {% menu_item "Liste des évènements" "events:index" %}
-    {% endif %}
-    {% menu_item "Description" "events:event" eid=event.id %}
-    {% if user_is_bde_member %}
-        {% menu_item "Liste des inscrits" "events:admin_list_registrations" eid=event.id %}
-        {% menu_item "Editer l'évènement" "events:admin_edit" eid=event.id %}
-    {% endif %}
 {% endblock %}
 
 {% block main %}
@@ -54,13 +44,12 @@
                 {% endif %}
             </div>
         </div>
-        {% if user_is_bde_member and event.allow_extern %}
-            <div class="flex_container details">
-                <div class="flex expand">
-                    <p><a href="{% url 'events:extern' uuid=event.uuid %}">Lien pour les inscriptions externes</a></p>
-                </div>
-            </div>
-        {% endif %}
     </div>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>S'inscrire</button>
+    </form>
 {% endblock %}
+
 

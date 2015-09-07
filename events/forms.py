@@ -1,6 +1,6 @@
-from django.forms import ModelForm, TextInput, ClearableFileInput, ValidationError
+from django.forms import ModelForm, ClearableFileInput
 from django.utils.safestring import mark_safe
-from .models import Event
+from .models import Event, ExternInscription
 
 class WrapperClearableinput(ClearableFileInput):
     template_with_initial = (
@@ -39,7 +39,16 @@ class EventForm(ModelForm):
 
     class Meta:
         model = Event
-        fields = "__all__"
-        labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin", 'location': "Lieu", 'private': "Privé", 'end_inscriptions': "Fin des inscriptions"}
+        exclude = ["uuid"]
+        labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin",
+                  'location': "Lieu", 'private': "Privé", 'end_inscriptions': "Fin des inscriptions",
+                  'allow_extern': "Autoriser les exterieurs"}
         widgets = {'photo': WrapperClearableinput}
+
+
+class ExternInscriptionForm(ModelForm):
+    class Meta:
+        model = ExternInscription
+        labels = {'first_name': "Prénom", 'last_name': "Nom"}
+        exclude = ["event"]
 
