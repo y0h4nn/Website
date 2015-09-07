@@ -1,11 +1,13 @@
 import json
 from django.core.urlresolvers import reverse
+from django.db import transaction
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from . import forms
 from . import models
+from events.models import Inscription
 from bde import bde_member
 from notifications import notify
 
@@ -68,6 +70,21 @@ def history(request):
     }
 
     return render(request, 'shop/history.html', context)
+
+
+@bde_member
+def history_delete(request, hid):
+    entry = get_object_or_404(models.BuyingHistory, id=hid)
+
+    with transaction.atomic():
+        for product in entry.get_products():
+            if not product.event:
+                continue
+            if entry.count_event_participations(product.event, entry.user) == 1:
+                Inscription.objects.filter(user=entry.user, event=product.event).delete()
+
+        entry.delete()
+    return redirect(reverse('shop:history'))
 
 
 @bde_member

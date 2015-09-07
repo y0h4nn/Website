@@ -237,3 +237,11 @@ class BuyingHistory(models.Model):
             if event == item.product.event and item.product.enabled:
                 count += 1
         return count
+
+    def get_products(self):
+        products = []
+        if self.type == 'pack':
+            products = self.pack.products.all()
+        elif self.type == 'product':
+            products.append(self.product)
+        return products

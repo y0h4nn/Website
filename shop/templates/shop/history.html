@@ -32,6 +32,7 @@
                     <th>prix</th>
                     <th>Moyen de paiement</th>
                     <th>Type</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -44,6 +45,7 @@
                             <td>{{ item.pack.price }} €</td>
                             <td>{{ item.payment_mean }}</td>
                             <td>Pack</td>
+                            <td><a href="{% url 'shop:history_delete' hid=item.id %}"><i class="fa fa-trash-o red"></i></a></td>
                         </tr>
                     {% else %}
                         <tr>
@@ -53,6 +55,7 @@
                             <td>{{ item.product.price }} €</td>
                             <td>{{ item.payment_mean }}</td>
                             <td>Produit</td>
+                            <td><a href="{% url 'shop:history_delete' hid=item.id %}"><i class="fa fa-trash-o red"></i></a></td>
                         </tr>
                     {% endif %}
                 {% endfor %}
