@@ -6,6 +6,11 @@ function update_list(data){
     }
 }
 
-function del_user(eid, uid, elmt){
-    queryJson('', {"uid": uid, "eid": eid}, update_list.bind(elmt));
+function del_ins(iid, ext, elmt){
+    if(ext){
+        queryJson('', {"iid": iid, 'ext': true}, update_list.bind(elmt));
+    }
+    else{
+        queryJson('', {"iid": iid}, update_list.bind(elmt));
+    }
 }

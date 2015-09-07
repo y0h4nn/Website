@@ -36,7 +36,20 @@
                 <div>
                     {{ registration.user.profile }}
                 </div>
-                <button onclick="del_user({{registration.event.id}}, {{registration.user.id}}, this); return false;" class="red_button userlist_right_button">
+                <button onclick="del_ins({{registration.id}}, false, this); return false;" class="red_button userlist_right_button">
+                    Supprimer
+                </button>
+            </li>
+        {% endfor %}
+    </ul>
+    <h1>Externes</h1>
+    <ul class="userlist">
+        {% for registration in ext_reg %}
+            <li>
+                <div>
+                    {{ registration.first_name }} {{ registration.last_name }}
+                </div>
+                <button onclick="del_ins({{registration.id}}, true, this); return false;" class="red_button userlist_right_button">
                     Supprimer
                 </button>
             </li>

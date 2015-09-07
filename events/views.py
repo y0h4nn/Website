@@ -1,5 +1,5 @@
 from .forms import EventForm, ExternInscriptionForm
-from .models import Event, Inscription
+from .models import Event, Inscription, ExternInscription
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -95,14 +95,20 @@ def admin_edit(request, eid):
 def admin_list_registrations(request, eid):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
-        event = get_object_or_404(Event, id=req['eid'])
-        user = get_object_or_404(User, id=req['uid'])
-        ins = Inscription.objects.get(event=event, user=user)
-        ins.delete()
-        return JsonResponse({"status": 1})
+        if 'iid' in req:
+            if 'ext' not in req:
+                ins = Inscription.objects.get(id=req['iid'])
+                ins.delete()
+            else:
+                ins = ExternInscription.objects.get(id=req['iid'])
+                ins.delete()
+            return JsonResponse({"status": 1})
+        return JsonResponse({"status": 0})
     e = get_object_or_404(Event, id=eid)
     reg = Inscription.objects.filter(event=e).select_related("user__profile").select_related('event')
-    return render(request, 'events/admin/list_registrations.html', {'event': e, 'reg': reg})
+    ext_reg = ExternInscription.objects.filter(event=e).select_related('event')
+    return render(request, 'events/admin/list_registrations.html', {'event': e, 'reg': reg, 'ext_reg': ext_reg})
+
 
 @bde_member
 def admin_export_csv(request, eid):
