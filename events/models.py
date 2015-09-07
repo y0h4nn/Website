@@ -20,7 +20,7 @@ class Event(models.Model):
     allow_extern = models.BooleanField(default=False)
 
     def registrations_number(self):
-        return len(self.inscriptions.all())
+        return self.inscriptions.all().count() + self.extern_inscriptions.all().count()
 
     def is_open(self):
         return self.start_date <= timezone.now() <= self.end_date
