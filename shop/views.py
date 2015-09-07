@@ -1,4 +1,5 @@
 import json
+from collections import Counter
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http import JsonResponse
@@ -77,11 +78,12 @@ def history_delete(request, hid):
     entry = get_object_or_404(models.BuyingHistory, id=hid)
 
     with transaction.atomic():
-        for product in entry.get_products():
-            if not product.event:
-                continue
-            if entry.count_event_participations(product.event, entry.user) == 1:
-                Inscription.objects.filter(user=entry.user, event=product.event).delete()
+        events = [p.event for p in entry.get_products() if p.event]
+        events_cout = Counter(events)
+
+        for event in events:
+            if entry.count_event_participations(event, entry.user) <= events_cout[event]:
+                Inscription.objects.filter(user=entry.user, event=event).delete()
 
         entry.delete()
     return redirect(reverse('shop:history'))

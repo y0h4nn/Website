@@ -239,9 +239,7 @@ class BuyingHistory(models.Model):
         return count
 
     def get_products(self):
-        products = []
         if self.type == 'pack':
-            products = self.pack.products.all()
+            return self.pack.products.all()
         elif self.type == 'product':
-            products.append(self.product)
-        return products
+            return [self.product]
