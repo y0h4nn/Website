@@ -38,7 +38,7 @@ class Event(models.Model):
 
     @staticmethod
     def to_come(user):
-        return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(Q(end_inscriptions__gt=timezone.now()) & (Q(inscriptions__user=user) | Q(private=False)))]  # XXX: This mays be slow as hell, it needs some testing.
+        return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(Q(end_inscriptions__gt=timezone.now()) & (Q(inscriptions__user=user) | Q(private=False))).distinct()]  # XXX: This mays be slow as hell, it needs some testing.
 
 
 class Inscription(models.Model):
