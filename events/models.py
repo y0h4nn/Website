@@ -1,9 +1,10 @@
-from django.db import models
 from django.conf import settings
-from django.utils import timezone
-from django.templatetags.static import static
 from django.core.validators import MinValueValidator
+from django.db import models
 from django.db.models import Q
+from django.templatetags.static import static
+from django.utils import timezone
+from django_extensions.db.fields import UUIDField
 
 
 class Event(models.Model):
@@ -16,6 +17,8 @@ class Event(models.Model):
     price = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     photo = models.ImageField(null=True, blank=True)
     private = models.BooleanField(default=False)
+    uuid = UUIDField()
+    allow_extern = models.BooleanField(default=False)
 
     def registrations_number(self):
         return len(self.inscriptions.all())
