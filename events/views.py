@@ -89,7 +89,7 @@ def admin_list_registrations(request, eid):
         ins.delete()
         return JsonResponse({"status": 1})
     e = get_object_or_404(Event, id=eid)
-    reg = Inscription.objects.filter(event=e).select_related("user__profile")
+    reg = Inscription.objects.filter(event=e).select_related("user__profile").select_related('event')
     return render(request, 'events/admin/list_registrations.html', {'event': e, 'reg': reg})
 
 @bde_member
