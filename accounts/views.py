@@ -187,9 +187,10 @@ def account_request(request):
 
 
 @bde_member
-def list_request(request):
+def list_request(request, error=None):
     context = {
-        'requests': models.UserRequest.objects.all()
+        'requests': models.UserRequest.objects.all(),
+        'error': error,
     }
 
     return render(request, 'accounts/list-request.html', context)
@@ -217,6 +218,11 @@ Votre demande de création de compte sur enib.net à été rejetée.
 def accept_request(request, rid):
     user_request = get_object_or_404(models.UserRequest, id=rid)
     username = ("%s_%s" % (user_request.first_name[0], user_request.last_name[:6])).lower()
+
+    if User.objects.filter(email=user_request.email).count() != 0:
+        return redirect('accounts:list_request', error='email')
+    if User.objects.filter(username=username).count() != 0:
+        return redirect('accounts:list_request', error='username')
 
     with transaction.atomic():
         user = User.objects.create(
@@ -262,6 +268,7 @@ def reject_request(request, rid):
         fail_silently=False
     )
     return redirect(reverse('accounts:list_request'))
+
 
 def confirmation_request(request):
     return render(request, 'accounts/confirmation.html')

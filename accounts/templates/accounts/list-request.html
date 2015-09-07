@@ -21,6 +21,17 @@
 {% endblock%}
 
 {% block main %}
+    {% if error == 'username' %}
+        <p class="error">
+            Le nom d'utilisateur est déja utilisé.
+        </p>
+    {% elif error == 'email' %}
+        <p class="error">
+            L'adresse email est déja utilisée.
+        </p>
+    {% endif %}
+
+
     {% if requests %}
         <ul class='request_list'>
             {% for request in requests %}

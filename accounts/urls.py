@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^logout$', views.logout, name='logout'),
     url(r'^request$', views.account_request, name='request'),
     url(r'^list-request$', views.list_request, name='list_request'),
+    url(r'^list-request/error/(?P<error>[a-z]+)$', views.list_request, name='list_request'),
     url(r'^confirmation-request$', views.confirmation_request, name='confirmation'),
     url(r'^accept-request/(?P<rid>[0-9]+)', views.accept_request, name='accept-request'),
     url(r'^reject-request/(?P<rid>[0-9]+)', views.reject_request, name='reject-request'),

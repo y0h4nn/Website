@@ -343,6 +343,11 @@ table:not(.rd-days) {
 .bg_grey {
   background-color: #bbb; }
 
+.error {
+  background-color: #E06060;
+  color: white;
+  padding: 1em; }
+
 .red {
   color: #E06060; }
 
