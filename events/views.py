@@ -34,6 +34,8 @@ def event(request, eid):
 
 def event_extern(request, uuid):
     e = get_object_or_404(Event, uuid=uuid)
+    if not e.places_left():
+        return render(request, 'events/no_places.html')
     form = ExternInscriptionForm(request.POST or None, initial={"event": e})
     if form.is_valid():
         ins = form.save(commit=False)
