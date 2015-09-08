@@ -13,14 +13,18 @@ class Event(models.Model):
     end_time = models.DateTimeField()
     location = models.CharField(max_length=255)
     description = models.TextField()
-    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    price = models.DecimalField(max_digits=19, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     photo = models.ImageField(null=True, blank=True)
     private = models.BooleanField(default=False)
     uuid = models.UUIDField()
     allow_extern = models.BooleanField(default=False)
+    max_extern = models.IntegerField(default=0)
 
     def registrations_number(self):
         return self.inscriptions.all().count() + self.extern_inscriptions.all().count()
+
+    def places_left(self):
+        return not self.max_extern or self.registrations_number() < self.max_extern
 
     def is_open(self):
         return self.start_date <= timezone.now() <= self.end_date

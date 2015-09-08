@@ -42,7 +42,7 @@ class EventForm(ModelForm):
         exclude = ["uuid"]
         labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin",
                   'location': "Lieu", 'private': "Privé", 'end_inscriptions': "Fin des inscriptions",
-                  'allow_extern': "Autoriser les exterieurs"}
+                  'allow_extern': "Autoriser les exterieurs", 'max_extern': "Nombre maximum d'éxterieurs"}
         widgets = {'photo': WrapperClearableinput}
 
 

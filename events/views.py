@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
 import json
 import csv
 import uuid
@@ -34,6 +33,10 @@ def event(request, eid):
 
 def event_extern(request, uuid):
     e = get_object_or_404(Event, uuid=uuid)
+    if not e.allow_extern:
+        return HttpResponse(status=404)
+    if not e.places_left():
+        return render(request, 'events/no_places.html')
     form = ExternInscriptionForm(request.POST or None, initial={"event": e})
     if form.is_valid():
         ins = form.save(commit=False)
