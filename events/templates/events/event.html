@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load menu_item %}
+{% load markdown %}
 
 {% block header %}
     Evenement
@@ -23,7 +24,7 @@
     <header>
         <h1>{{ event.name }}</h1>
     </header>
-        <p>{{ event.description }}</p>
+        {{ event.description|markdown }}
         <div class="flex_container details">
             <div class="flex expand">
                 <p>{{ event.start_time }}</p>
