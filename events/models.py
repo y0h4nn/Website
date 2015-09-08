@@ -13,7 +13,7 @@ class Event(models.Model):
     end_time = models.DateTimeField()
     location = models.CharField(max_length=255)
     description = models.TextField()
-    price = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    price = models.DecimalField(max_digits=19, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     photo = models.ImageField(null=True, blank=True)
     private = models.BooleanField(default=False)
     uuid = models.UUIDField()
