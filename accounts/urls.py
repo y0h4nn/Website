@@ -10,8 +10,8 @@ urlpatterns = [
     url(r'^confirmation-request$', views.confirmation_request, name='confirmation'),
     url(r'^accept-request/(?P<rid>[0-9]+)', views.accept_request, name='accept-request'),
     url(r'^reject-request/(?P<rid>[0-9]+)', views.reject_request, name='reject-request'),
-    url(r'^(?P<username>[a-zA-Z0-9éèÃ©®§«´‰¯¨¢œ\\\'@,. -]+)$', views.show, name='show'),
-    url(r'^(?P<username>[a-zA-Z0-9éèÃ©®§«´‰¯¨¢œ\\\'@,. -]+)/edit$', views.edit, name='edit'),
+    url(r'^(?P<username>[_a-zA-Z0-9éèÃ©®§«´‰¯¨¢œ\\\'@,. -]+)$', views.show, name='show'),
+    url(r'^(?P<username>[_a-zA-Z0-9éèÃ©®§«´‰¯¨¢œ\\\'@,. -]+)/edit$', views.edit, name='edit'),
     url(r'^members/$', views.members, name='members'),
 ]
 
