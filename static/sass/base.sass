@@ -16,7 +16,7 @@ $blue: #68B9DE
     #{$vendor}#{$name}: #{$value}
 
 *
-  box-sizing: border-box
+  @include vendor-prefix(box-sizing, border-box)
   font-family: 'Oxygen'
 
 html
