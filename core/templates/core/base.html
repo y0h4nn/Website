@@ -16,6 +16,7 @@
         {% block scripts %}{% endblock %}
     </head>
     <body>
+
         <section id="nav_container" class="">
             <header>
                 <div>
@@ -60,24 +61,31 @@
         </section>
 
         <section id="main_container">
-            <header id="main_header">
-                <h1>
-                    {% block header %}
-                        Default title
-                    {% endblock header %}
-                </h1>
+            {% if messages %}
+                {% for message in messages %}
+                    <div{% if message.tags %} class="message {{ message.tags }}"{% endif %}>{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            <div id="main_div">
+                <header id="main_header">
+                    <h1>
+                        {% block header %}
+                            Default title
+                        {% endblock header %}
+                    </h1>
 
-                <nav>
-                    <ul>
-                        {% block menu %}
-                        {% endblock menu %}
-                    </ul>
-                </nav>
-            </header>
-            <main id="main">
-                {% block main %}
-                {% endblock main %}
-            </main>
+                    <nav>
+                        <ul>
+                            {% block menu %}
+                            {% endblock menu %}
+                        </ul>
+                    </nav>
+                </header>
+                <main id="main">
+                    {% block main %}
+                    {% endblock main %}
+                </main>
+            </div>
         </section>
 
         <section id="user_container" class="">

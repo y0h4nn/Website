@@ -4,10 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
+from django.db import IntegrityError
 import json
 import csv
 import uuid
 from bde import bde_member
+from django.contrib import messages
 
 
 @login_required
@@ -41,7 +43,12 @@ def event_extern(request, uuid):
     if form.is_valid():
         ins = form.save(commit=False)
         ins.event = e
-        ins.save()
+        try:
+            ins.save()
+        except IntegrityError:
+            messages.add_message(request, messages.WARNING, 'Vous êtes déjà inscrit à cet évènement')
+        else:
+            messages.add_message(request, messages.INFO, 'Vous avez bien été inscrit à l\'évènement')
         return redirect('news:index')
     context = {'event': e, 'form': form}
     return render(request, 'events/event_extern.html', context)

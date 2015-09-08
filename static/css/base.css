@@ -371,8 +371,10 @@ table:not(.rd-days) {
   -moz-flex: 1 1 auto;
   -ms-flex: 1 1 auto;
   -o-flex: 1 1 auto;
-  flex: 1 1 auto;
-  padding: 2.5em; }
+  flex: 1 1 auto; }
+
+#main_div {
+  margin: 2.5em; }
 
 #main_header h1 {
   border-bottom: 1px solid #68B9DE;
@@ -1100,5 +1102,18 @@ table:not(.rd-days) {
   padding: 0; }
   .request_list span:last-child {
     margin-left: 0.5em; }
+
+.message {
+  width: 100%;
+  padding: 1em;
+  text-align: center;
+  z-index: 11; }
+  .message.error {
+    background-color: #E06060; }
+  .message.warning {
+    background-color: orange; }
+  .message.info {
+    background-color: #33993b;
+    color: white; }
 
 /*# sourceMappingURL=base.css.map */
