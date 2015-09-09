@@ -32,7 +32,7 @@
             <li data-pid="{{ pack.id }}" onclick="sell_pack({{ pack.id }})">
                 <span>{{ pack.name }}</span>
                 <span>{{ pack.price }}€ </span>
-            </div>
+            </li>
         {% endfor %}
         </ul>
     {% else %}
@@ -48,7 +48,7 @@
             <li data-pid="{{ product.id }}" onclick="sell_product({{product.id}})">
                 <span>{{ product.name }}</span>
                 <span>{{ product.price }}€ </span>
-            </div>
+            </li>
         {% endfor %}
         </ul>
     {% else %}
