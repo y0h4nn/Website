@@ -1,5 +1,6 @@
 #main_container
   @include vendor-prefix(flex, 1 1 auto)
+  @include vendor-prefix(order, 2)
 
 #main_div
   margin: 2.5em
@@ -80,3 +81,7 @@
           &:first-child:last-child a
             border-radius: 3px
 
+@media screen and (max-width: 640px)
+  #main_container
+    @include vendor-prefix(flex, 1 1 auto)
+    @include vendor-prefix(order, 3)
