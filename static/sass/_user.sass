@@ -4,6 +4,7 @@ $user_container_width: 225px
 #user_container
   min-width: $user_container_width
   @include vendor-prefix(flex, 0 1 $user_container_width)
+  @include vendor-prefix(order, 3)
   background-color: #f2f2f2
   padding: 1em
 
@@ -116,4 +117,26 @@ $user_container_width: 225px
 
   .displayed_on_retracted
     display: block
+
+
+@media screen and (max-width: 640px)
+  #toggle_user_container
+    display: none
+
+  #user_container.retracted
+    @include vendor-prefix(flex, 1 1 auto)
+    @include vendor-prefix(order, 2)
+
+    header
+      margin: 1em 2em
+      img
+        display: none
+
+    ul
+      display: -webkit-flex
+      display: flex
+      @include vendor-prefix(justify-content, space-around)
+
+      a
+        padding: 1em 2em
 

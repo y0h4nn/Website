@@ -1,15 +1,33 @@
 .message
   width: 100%
-  padding: 1em
-  text-align: center
-  z-index: 11
+  padding: 1em 2em
+  font-weight: bold
+  color: white
+
+  i
+    vertical-align: middle
+    font-size: 3em
+
+  span
+    margin-left: 1em
+    vertical-align: middle
 
   &.error
     background-color: #E06060
+    i
+      color: #FFABAB
 
   &.warning
-    background-color: orange
+    background-color: #FFC06E
+    i
+      color: #FEE5B3
+
+  &.success
+    background-color: #63C56B
+    i
+      color: #A4EAA4
 
   &.info
-    background-color: hsl(125,50%,40%)
-    color: white
+    background-color: #96CAE1
+    i
+      color: #C9E6F0
