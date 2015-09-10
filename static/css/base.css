@@ -1177,15 +1177,30 @@ table:not(.rd-days) {
 
 .message {
   width: 100%;
-  padding: 1em;
-  text-align: center;
-  z-index: 11; }
+  padding: 1em 2em;
+  font-weight: bold;
+  color: white; }
+  .message i {
+    vertical-align: middle;
+    font-size: 3em; }
+  .message span {
+    margin-left: 1em;
+    vertical-align: middle; }
   .message.error {
     background-color: #E06060; }
+    .message.error i {
+      color: #FFABAB; }
   .message.warning {
-    background-color: orange; }
+    background-color: #FFC06E; }
+    .message.warning i {
+      color: #FEE5B3; }
+  .message.success {
+    background-color: #63C56B; }
+    .message.success i {
+      color: #A4EAA4; }
   .message.info {
-    background-color: #33993b;
-    color: white; }
+    background-color: #96CAE1; }
+    .message.info i {
+      color: #C9E6F0; }
 
 /*# sourceMappingURL=base.css.map */

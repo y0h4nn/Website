@@ -63,7 +63,16 @@
         <section id="main_container">
             {% if messages %}
                 {% for message in messages %}
-                    <div{% if message.tags %} class="message {{ message.tags }}"{% endif %}>{{ message }}</div>
+                    <div{% if message.tags %} class="message {{ message.tags }}"{% endif %}>
+                        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR or message.level == DEFAULT_MESSAGE_LEVELS.WARNING%}
+                            <i class="fa fa-exclamation-circle"></i>
+                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                            <i class="fa fa-check-circle"></i>
+                        {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                            <i class="fa fa-info-circle"></i>
+                        {% endif %}
+                        <span>{{ message }}</span>
+                    </div>
                 {% endfor %}
             {% endif %}
             <div id="main_div">
