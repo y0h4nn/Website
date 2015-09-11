@@ -1,6 +1,5 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
-from django.contrib.auth.models import Group
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 
@@ -9,10 +8,8 @@ def bde_member(fnc):
         if not request.user.is_authenticated():
             return redirect_to_login(request.path)
 
-        bde_group = Group.objects.get(name=settings.BDE_GROUP_NAME)
+        if request.user_is_staff or request.user.groups.filter(name=settings.BDE_GROUP_NAME).count():
+            return fnc(request, *args, **kwargs)
 
-        if bde_group not in request.user.groups.all() and not request.user.is_staff:
-            return redirect(reverse('news:index'))
-
-        return fnc(request, *args, **kwargs)
+        return redirect(reverse('news:index'))
     return wrapper
