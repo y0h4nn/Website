@@ -31,7 +31,7 @@ class ProfileForm(forms.ModelForm):
 
     def clean_phone(self):
         phone = self.cleaned_data['phone'].replace(' ', '').replace('-', '')
-        if len(phone) != 10 or not phone.isdecimal():
+        if phone and (len(phone) != 10 or not phone.isdecimal()):
             raise forms.ValidationError("Mauvais numéro de téléphone")
         return phone
 
