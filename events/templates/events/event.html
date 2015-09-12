@@ -56,10 +56,20 @@
             </div>
         </div>
         {% if user_is_bde_member and event.allow_extern %}
-            <div class="flex_container details">
-                <div class="flex expand">
-                    <p><a href="{% url 'events:extern' uuid=event.uuid %}">Lien pour les inscriptions externes</a></p>
+            {% for link in links %}
+                <div class="flex_container details">
+                    <div class="flex expand">
+                        <p><a href="{% url 'events:extern' uuid=link.uuid %}">Lien pour {{ link.name }}</a></p>
+                    </div>
                 </div>
+            {% endfor %}
+            <header><h1>Lien pour les inscriptions externe</h1></header>
+            <div>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    {{ link_form.as_p }}
+                    <button>Nouveau lien</button>
+                </form>
             </div>
         {% endif %}
     </div>

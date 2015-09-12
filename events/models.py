@@ -16,21 +16,19 @@ class Event(models.Model):
     price = models.DecimalField(max_digits=19, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     photo = models.ImageField(null=True, blank=True)
     private = models.BooleanField(default=False)
-    uuid = models.UUIDField()
     allow_extern = models.BooleanField(default=False)
-    max_extern = models.IntegerField(default=0)
 
     def registrations_number(self):
         return self.inscriptions.all().count() + self.extern_inscriptions.all().count()
-
-    def places_left(self):
-        return not self.max_extern or self.registrations_number() < self.max_extern
 
     def is_open(self):
         return self.start_date <= timezone.now() <= self.end_date
 
     def is_ended(self):
         return timezone.now() >= self.end_date
+
+    def closed(self):
+        return timezone.now() >= self.end_inscriptions
 
     def photo_url(self):
         if self.photo:
@@ -48,6 +46,19 @@ class Event(models.Model):
         ).distinct()]
 
 
+class ExternLink(models.Model):
+    event = models.ForeignKey(Event, related_name="extern_links")
+    uuid = models.UUIDField()
+    maximum = models.IntegerField(validators=[MinValueValidator(1)])
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        unique_together = (('name', 'event'),)
+
+    def places_left(self):
+        return self.maximum > self.inscriptions.all().count()
+
+
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="inscriptions")
     event = models.ForeignKey(Event, related_name="inscriptions")
@@ -61,6 +72,7 @@ class ExternInscription(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     event = models.ForeignKey(Event, related_name="extern_inscriptions")
+    via = models.ForeignKey(ExternLink, related_name="inscriptions")
 
     class Meta:
         unique_together = (('mail', 'event'),)

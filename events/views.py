@@ -1,5 +1,5 @@
-from .forms import EventForm, ExternInscriptionForm
-from .models import Event, Inscription, ExternInscription
+from .forms import EventForm, ExternInscriptionForm, ExternLinkForm
+from .models import Event, Inscription, ExternInscription, ExternLink
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -29,20 +29,38 @@ def index(request):
 @login_required
 def event(request, eid):
     e = get_object_or_404(Event, id=eid)
-    context = {'event': e}
+    context = {'event': e, 'links': []}
+    if e.allow_extern:
+        if request.method == "POST":
+            form = ExternLinkForm(request.POST)
+            if form.is_valid():
+                link = form.save(commit=False)
+                link.event = e
+                link.uuid = uuid.uuid4()
+                try:
+                    link.save()
+                except IntegrityError:
+                    messages.add_message(request, messages.ERROR, 'Un lien porte déjà ce nom.')
+        else:
+            form = ExternLinkForm()
+        links = ExternLink.objects.filter(event=e)
+        context['link_form'] = form
+        context['links'] = links
     return render(request, 'events/event.html', context)
 
 
 def event_extern(request, uuid):
-    e = get_object_or_404(Event, uuid=uuid)
-    if not e.allow_extern:
-        return HttpResponse(status=404)
-    if not e.places_left():
+    link = get_object_or_404(ExternLink, uuid=uuid)
+    e = link.event
+    if e.closed():
+        return render(request, 'events/closed.html')
+    if not link.places_left():
         return render(request, 'events/no_places.html')
     form = ExternInscriptionForm(request.POST or None, initial={"event": e})
     if form.is_valid():
         ins = form.save(commit=False)
         ins.event = e
+        ins.via = link
         try:
             ins.save()
         except IntegrityError:
