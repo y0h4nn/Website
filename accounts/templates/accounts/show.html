@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load menu_item %}
+{% load phone %}
 
 {% block styles %}
     <link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}" />
@@ -52,7 +53,7 @@
             </p>
             {% if user.profile.phone %}
             <p class="flex_container">
-                <strong class="flex expand50">Téléphone</strong><span class="flex"><a href="tel:{{ user.profile.phone }}">{{ user.profile.phone }}</a></span>
+                <strong class="flex expand50">Téléphone</strong><span class="flex"><a href="tel:{{ user.profile.phone }}">{{ user.profile.phone|phone }}</a></span>
             </p>
             {% endif %}
 
