@@ -1,11 +1,11 @@
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from . import models
 
 def notify(message, backref, backref_args=None, users=None, groups=None):
     targets = []
 
     for group in groups or []:
-        targets += [u for u in group.users]
+        targets += list(User.objects.filter(groups__name=group.name).all())
 
     if users is not None:
         targets += users

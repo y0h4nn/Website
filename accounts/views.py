@@ -8,9 +8,11 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from django.conf import settings
 from bde.models import Contributor
 from bde import bde_member
+from notifications import notify
 from . import forms
 from . import models
 
@@ -167,6 +169,7 @@ def members(request):
 
     return render(request, 'accounts/list.html', {})
 
+
 def account_request(request):
     if request.user.is_authenticated():
         return redirect(reverse('news:index'))
@@ -175,6 +178,11 @@ def account_request(request):
         form = forms.UserRequestForm(request.POST)
         if form.is_valid():
             form.save()
+            notify(
+                'Une demande de création de compte à été déposée.',
+                'accounts:list_request',
+                groups=Group.objects.filter(name=settings.BDE_GROUP_NAME)
+            )
             return redirect(reverse('accounts:confirmation'))
     else:
         form = forms.UserRequestForm()
