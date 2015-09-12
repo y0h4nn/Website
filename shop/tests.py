@@ -21,7 +21,6 @@ class ModelsTest(TestCase):
             end_time=timezone.make_aware(datetime.datetime(3000, 5, 15, 15, 44)),
             location='Enib',
             description='Description',
-            uuid=uuid.uuid4()
         )
 
 
@@ -58,7 +57,6 @@ class ModelsTest(TestCase):
                 end_time=timezone.make_aware(datetime.datetime(3000, 5, 15, 15, 44)),
                 location='Enib',
                 description='Description',
-                uuid=uuid.uuid4()
             ) for i in range(event_count)
         ]
 
