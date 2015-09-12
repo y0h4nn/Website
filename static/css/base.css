@@ -1202,4 +1202,39 @@ table:not(.rd-days) {
     .message.info i {
       color: #C9E6F0; }
 
+.cal {
+  border: black solid 1px;
+  position: fixed;
+  width: 250px;
+  z-index: 1;
+  background-color: white;
+  padding: 5px; }
+  .cal a {
+    font-weight: bold;
+    text-decoration: none;
+    color: #4D83CF;
+    font-size: 1em;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin: 0 10px; }
+  .cal td {
+    padding: 3px;
+    cursor: pointer;
+    border: none;
+    text-align: center; }
+    .cal td:hover {
+      background-color: #EFEFEF; }
+  .cal tr, .cal th {
+    border: none; }
+  .cal table {
+    font-size: 1em; }
+  .cal input {
+    width: 50px;
+    margin: 0 0 0 5px; }
+
+.cal_title {
+  padding: 5px;
+  text-align: center; }
+
 /*# sourceMappingURL=base.css.map */

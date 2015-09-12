@@ -31,7 +31,6 @@ def sells(request):
         except User.DoesNotExist:
             return JsonResponse({'error': 'L\'utilisateur n\'existe pas.'})
 
-
         item_type = req.get('type')
 
         try:
