@@ -1,4 +1,4 @@
-from django.forms import ModelForm, ClearableFileInput
+from django.forms import ModelForm, ClearableFileInput, SplitDateTimeWidget
 from django.utils.safestring import mark_safe
 from .models import Event, ExternInscription
 
@@ -28,12 +28,9 @@ class EventForm(ModelForm):
 
     def as_p(self):
         return super().as_p() + mark_safe('''<script>
-            start = document.getElementById("id_start_time");
-            end = document.getElementById("id_end_time");
-            end_ins = document.getElementById("id_end_inscriptions");
-            rome(start, {dateValidator: rome.val.beforeEq(end)});
-            rome(end_ins, {dateValidator: rome.val.beforeEq(start)});
-            rome(end, {dateValidator: rome.val.afterEq(start)});
+            create_calendar("id_end_inscriptions_0")
+            create_calendar("id_start_time_0")
+            create_calendar("id_end_time_0")
         </script>
         ''')
 
@@ -43,7 +40,11 @@ class EventForm(ModelForm):
         labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin",
                   'location': "Lieu", 'private': "Privé", 'end_inscriptions': "Fin des inscriptions",
                   'allow_extern': "Autoriser les exterieurs", 'max_extern': "Nombre maximum d'éxterieurs"}
-        widgets = {'photo': WrapperClearableinput}
+        widgets = {'photo': WrapperClearableinput,
+                   'start_time': SplitDateTimeWidget(),
+                   'end_time': SplitDateTimeWidget(),
+                   'end_inscriptions': SplitDateTimeWidget(),
+                  }
 
 
 class ExternInscriptionForm(ModelForm):
