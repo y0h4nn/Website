@@ -31,8 +31,8 @@ class AnnouncementForm(forms.ModelForm):
 
         labels = {
             'title': 'Titre',
-            'source': 'Lieux de départ',
-            'destination': 'Lieux d\'arrivé',
+            'source': 'Lieu de départ',
+            'destination': 'Lieu d\'arrivé',
             'places': 'Nombre de places',
             'price': 'Prix',
         }
