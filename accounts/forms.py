@@ -37,8 +37,7 @@ class ProfileForm(forms.ModelForm):
 
     def as_p(self):
         return super().as_p() + mark_safe('''<script>
-            bd = document.getElementById("birth_date");
-            rome(bd, {time: false});
+            create_calendar("birth_date")
         </script>
         ''')
 

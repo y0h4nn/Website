@@ -12,8 +12,7 @@ class AnnouncementForm(forms.ModelForm):
 
     def as_p(self):
         return super().as_p() + mark_safe('''<script>
-            date= document.getElementById("date");
-            rome(date);
+            create_calendar("date_0")
         </script>
         ''')
 
@@ -35,6 +34,10 @@ class AnnouncementForm(forms.ModelForm):
             'destination': 'Lieu d\'arrivé',
             'places': 'Nombre de places',
             'price': 'Prix',
+        }
+
+        widgets = {
+            "date": forms.SplitDateTimeWidget(),
         }
 
 

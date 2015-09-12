@@ -37,9 +37,12 @@ class PollForm(forms.ModelForm):
     class Meta:
         model=Poll
         fields = ['title', 'group']
-        widgets = {'title': widgets.TextInput}
-    start_time = forms.DateTimeField()
-    end_time = forms.DateTimeField()
+        widgets = {'title': widgets.TextInput,
+                   'start_time': forms.SplitDateTimeWidget,
+                   'end_time': forms.SplitDateTimeWidget,
+                    }
+    start_time = forms.SplitDateTimeField()
+    end_time = forms.SplitDateTimeField()
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
@@ -98,10 +101,8 @@ class PollForm(forms.ModelForm):
 
     def js(self):
         return mark_safe('''<script>
-            start = document.getElementById("start_time");
-            end = document.getElementById("end_time");
-            rome(start);
-            rome(end, {dateValidator: rome.val.afterEq(start)});
+            create_calendar("start_time_0");
+            create_calendar("end_time_0");
         </script>
         ''')
 
