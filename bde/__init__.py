@@ -8,7 +8,7 @@ def bde_member(fnc):
         if not request.user.is_authenticated():
             return redirect_to_login(request.path)
 
-        if request.user_is_staff or request.user.groups.filter(name=settings.BDE_GROUP_NAME).count():
+        if request.user.is_staff or request.user.groups.filter(name=settings.BDE_GROUP_NAME).count():
             return fnc(request, *args, **kwargs)
 
         return redirect(reverse('news:index'))
