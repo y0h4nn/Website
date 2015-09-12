@@ -21,8 +21,6 @@ function addEvent(obj, event_type, callback){
 }
 
 function debounce(method, delay){
-    console.log(method)
-    console.log(delay)
     clearTimeout(method._tId);
     method._tId = setTimeout(function(){
         method();
