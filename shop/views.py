@@ -47,7 +47,7 @@ def sells(request):
 
         item.buy(user, req.get('payment_mean'))
 
-        return JsonResponse({'error': None})
+        return JsonResponse({'error': None, 'name': item.name, 'user': str(user.profile)})
     else:
         context = {
             'products': models.Product.objects.filter(enabled=True).all(),
