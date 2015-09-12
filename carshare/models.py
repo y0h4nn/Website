@@ -11,6 +11,7 @@ class Announcement(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     places = models.PositiveSmallIntegerField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='carshares')
+    price = models.DecimalField(max_digits=5, decimal_places=2)
 
     def __str__(self):
         return self.title

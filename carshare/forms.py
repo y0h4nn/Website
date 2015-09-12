@@ -25,6 +25,7 @@ class AnnouncementForm(forms.ModelForm):
             'destination',
             'date',
             'places',
+            'price',
             'description',
         ]
 
@@ -33,6 +34,7 @@ class AnnouncementForm(forms.ModelForm):
             'source': 'Lieux de départ',
             'destination': 'Lieux d\'arrivé',
             'places': 'Nombre de places',
+            'price': 'Prix',
         }
 
 
