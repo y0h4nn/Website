@@ -2,6 +2,7 @@ from django.forms import ModelForm, ClearableFileInput, SplitDateTimeWidget
 from django.utils.safestring import mark_safe
 from .models import Event, ExternInscription, ExternLink
 
+
 class WrapperClearableinput(ClearableFileInput):
     template_with_initial = (
         '<span id="pic"><img src="%(initial_url)s" alt="event photo" /></span</p><p>'
@@ -39,7 +40,8 @@ class EventForm(ModelForm):
         exclude = ["uuid"]
         labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin",
                   'location': "Lieu", 'private': "Privé", 'end_inscriptions': "Fin des inscriptions",
-                  'allow_extern': "Autoriser les exterieurs", 'max_extern': "Nombre maximum d'éxterieurs"}
+                  'allow_extern': "Autoriser les exterieurs", 'limited': "Nombre d'inscriptions limité",
+                  'max_inscriptions': "Nombre maximum d'inscriptions"}
         widgets = {'photo': WrapperClearableinput,
                    'start_time': SplitDateTimeWidget(),
                    'end_time': SplitDateTimeWidget(),

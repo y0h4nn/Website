@@ -16,10 +16,15 @@ class Event(models.Model):
     price = models.DecimalField(max_digits=19, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     photo = models.ImageField(null=True, blank=True)
     private = models.BooleanField(default=False)
+    limited = models.BooleanField(default=False)
+    max_inscriptions = models.IntegerField(validators=[MinValueValidator(0)], default=0)
     allow_extern = models.BooleanField(default=False)
 
     def registrations_number(self):
         return self.inscriptions.all().count() + self.extern_inscriptions.all().count()
+
+    def can_subscribe(self):
+        return self.limited and (self.inscriptions.all().count() < self.max_inscriptions)
 
     def is_open(self):
         return self.start_date <= timezone.now() <= self.end_date
