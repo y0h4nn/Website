@@ -1,29 +1,61 @@
 .cal
-  border: black solid 1px
+
+  .cal_title
+    display: -webkit-flex
+    display: flex
+    @include vendor-prefix(align-items, center)
+    text-align: center
+    padding: 0.5em 0 1em 0
+    border-bottom: 1px solid #eee
+
+    span
+      @include vendor-prefix(flex, 1 1 auto)
+
+    input
+      @include vendor-prefix(flex, 0 1 auto)
+      background-color: white
+      border: none
+      width: 4em
+      background-color: #f5f5f5
+      margin-right: 1em
+
+
   position: fixed
-  width: 250px
   z-index: 1
   background-color: white
-  padding: 5px
+  padding: 0.5em
+  border-radius: 5px
+  box-shadow: 0 0 10px hsla(0, 0, 0, 0.25)
 
   a
     font-weight: bold
     text-decoration: none
-    color: #4D83CF
     font-size: 1em
     display: inline-block
     width: 1em
     height: 1em
-    margin: 0 10px
 
   td
-    padding: 3px
+    padding: 0.75em
     cursor: pointer
     border: none
     text-align: center
+    font-family: monospace
 
     &:hover
       background-color: #EFEFEF
+      border-radius: 3px
+
+    &.selected
+      background-color: $blue
+      border-radius: 3px
+      color: white
+      font-weight: bold
+
+  th
+    color: #aaa
+    text-align: center
+    padding: 1em 0
 
   tr, th
     border: none
@@ -31,12 +63,5 @@
 
   table
     font-size: 1em
-
-  input
-    width: 50px
-    margin: 0 0 0 5px
-
-.cal_title
-  padding: 5px
-  text-align: center
+    font-family: monospace
 

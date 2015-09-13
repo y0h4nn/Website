@@ -230,9 +230,9 @@ table:not(.rd-days) {
   border-collapse: collapse; }
   table:not(.rd-days) thead {
     background-color: white; }
-  table:not(.rd-days) th {
-    padding: 0.5em 0;
-    text-align: left; }
+    table:not(.rd-days) thead th {
+      padding: 0.5em 0;
+      text-align: left; }
   table:not(.rd-days) tbody tr {
     background-color: #eee;
     transition: background-color 0.25s; }
@@ -240,6 +240,12 @@ table:not(.rd-days) {
       background-color: #f5f5f5; }
     table:not(.rd-days) tbody tr:hover {
       background-color: #dfdfdf; }
+  table:not(.rd-days) tbody td {
+    padding: 0.5em 0; }
+    table:not(.rd-days) tbody td:first-child {
+      padding-left: 0.5em; }
+    table:not(.rd-days) tbody td:last-child {
+      padding-right: 0.5em; }
   table:not(.rd-days) .action_cell {
     text-align: right; }
     table:not(.rd-days) .action_cell a {
@@ -253,12 +259,6 @@ table:not(.rd-days) {
         border-radius: 3px 0 0 3px; }
       table:not(.rd-days) .action_cell a:last-child {
         border-radius: 0 3px 3px 0; }
-  table:not(.rd-days) td {
-    padding: 0.5em 0; }
-    table:not(.rd-days) td:first-child {
-      padding-left: 0.5em; }
-    table:not(.rd-days) td:last-child {
-      padding-right: 0.5em; }
 
 .center {
   text-align: center; }
@@ -1203,38 +1203,69 @@ table:not(.rd-days) {
       color: #C9E6F0; }
 
 .cal {
-  border: black solid 1px;
   position: fixed;
-  width: 250px;
   z-index: 1;
   background-color: white;
-  padding: 5px; }
+  padding: 0.5em;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25); }
+  .cal .cal_title {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    -o-align-items: center;
+    align-items: center;
+    text-align: center;
+    padding: 0.5em 0 1em 0;
+    border-bottom: 1px solid #eee; }
+    .cal .cal_title span {
+      -webkit-flex: 1 1 auto;
+      -moz-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+      -o-flex: 1 1 auto;
+      flex: 1 1 auto; }
+    .cal .cal_title input {
+      -webkit-flex: 0 1 auto;
+      -moz-flex: 0 1 auto;
+      -ms-flex: 0 1 auto;
+      -o-flex: 0 1 auto;
+      flex: 0 1 auto;
+      background-color: white;
+      border: none;
+      width: 4em;
+      background-color: #f5f5f5;
+      margin-right: 1em; }
   .cal a {
     font-weight: bold;
     text-decoration: none;
-    color: #4D83CF;
     font-size: 1em;
     display: inline-block;
     width: 1em;
-    height: 1em;
-    margin: 0 10px; }
+    height: 1em; }
   .cal td {
-    padding: 3px;
+    padding: 0.75em;
     cursor: pointer;
     border: none;
-    text-align: center; }
+    text-align: center;
+    font-family: monospace; }
     .cal td:hover {
-      background-color: #EFEFEF; }
+      background-color: #EFEFEF;
+      border-radius: 3px; }
+    .cal td.selected {
+      background-color: #68B9DE;
+      border-radius: 3px;
+      color: white;
+      font-weight: bold; }
+  .cal th {
+    color: #aaa;
+    text-align: center;
+    padding: 1em 0; }
   .cal tr, .cal th {
     border: none; }
   .cal table {
-    font-size: 1em; }
-  .cal input {
-    width: 50px;
-    margin: 0 0 0 5px; }
-
-.cal_title {
-  padding: 5px;
-  text-align: center; }
+    font-size: 1em;
+    font-family: monospace; }
 
 /*# sourceMappingURL=base.css.map */

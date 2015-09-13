@@ -61,11 +61,11 @@ function create_calendar(id){
     yearInput.type = "text";
     yearInput.value = year;
 
-    prevButton.innerHTML = "< ";
+    prevButton.innerHTML = "<i class='fa fa-chevron-left'></i> ";
     prevButton.href = "#";
     monthSpan.innerHTML = full_months[month];
     nextButton.href = "#";
-    nextButton.innerHTML = " >";
+    nextButton.innerHTML = "<i class='fa fa-chevron-right'></i>";
 
     titleBar.appendChild(prevButton);
     titleBar.appendChild(monthSpan);
@@ -200,7 +200,7 @@ function refresh(cal_div, first_day, input){
             if((i != 0 || j + 1 > first_day.getDay() -1) && (i*7 +j - u) < last_day.getDate() && (i*7+j+1-u) > 0){
                 td.innerHTML = (i*7 + j + 1) -  u;
                 if(can_be_hl && parseInt(td.innerHTML) == day){
-                    td.setAttribute("style", "background-color: #537fba");
+                    td.setAttribute('class', 'selected');
                 }
                 addEvent(td, "click", function(event){
                     if(event.srcElement){
