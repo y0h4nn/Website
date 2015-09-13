@@ -87,7 +87,11 @@ def admin_index(request):
 @bde_member
 def admin_list_events(request):
     if request.method == "OPTIONS":
-        evts = Event.objects.filter(start_time__gt=timezone.now())
+        req = json.loads(request.read().decode())
+        if req['arg'] == "new":
+            evts = Event.objects.filter(start_time__gt=timezone.now())
+        else:
+            evts = Event.objects.filter(start_time__lt=timezone.now())
         return JsonResponse({'events': [{
             'eid': evt.id,
             'name': evt.name,
@@ -96,17 +100,6 @@ def admin_list_events(request):
             'deleted': False,
         } for evt in evts]})
 
-@bde_member
-def admin_list_old_events(request):
-    if request.method == "OPTIONS":
-        evts = Event.objects.filter(start_time__lt=timezone.now())
-        return JsonResponse({'events': [{
-            'eid': evt.id,
-            'name': evt.name,
-            'picture': evt.photo_url(),
-            'start_time': evt.start_time,
-            'deleted': False,
-        } for evt in evts]})
 
 @bde_member
 def admin_add(request):

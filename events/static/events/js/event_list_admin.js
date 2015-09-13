@@ -2,9 +2,9 @@
 
 
 (function(){
-    var EventList = function(containerId, url, buildCallback, clickCallback){
+    var EventList = function(containerId, arg, buildCallback, clickCallback){
         BaseList.call(this, containerId, buildCallback, clickCallback);
-        queryJson(url, {}, this.populate.bind(this));
+        queryJson('list/', {"arg": arg}, this.populate.bind(this));
     };
 
     EventList.prototype = Object.create(BaseList.prototype, {
