@@ -28,4 +28,5 @@ urlpatterns = [
     url(r'^covoit/', include('carshare.urls', namespace='carshare')),
     url(r'^notifications/', include('notifications.urls', namespace='notifications')),
     url(r'^shop/', include('shop.urls', namespace='shop')),
+    url(r'^pizzas/', include('pizza.urls', namespace='pizza')),
 ]
