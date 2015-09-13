@@ -33,13 +33,13 @@ function create_calendar(id){
     var parsed_date = date.split('/');
     if(date){
         var year = parsed_date[2];
-        var month = parsed_date[1] - 1;
+        var month = parsed_date[1];
         var day = parsed_date[0];
     }
     else{
         var d = new Date()
         var year = d.getFullYear();
-        var month = d.getMonth() - 1;
+        var month = d.getMonth();
         var day = d.getDate();
     }
     var current_date = new Date(year, month, 1, 1, 0, 0);
