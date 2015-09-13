@@ -18,14 +18,16 @@
 {% endblock %}
 
 {% block styles %}
-        <link rel="stylesheet" href="{% static 'accounts/css/list.css' %}" />
 {% endblock %}
 
 {% block main %}
+    <header><h1>Évènements à venir</h1></header>
     <div id="eventlist"></div>
+    <header><h1>Évènements passés</h1></header>
+    <div id="eventlist_old"></div>
     <script>
-        window.addEventListener('load', function(){
-            var eventList = new EventList('eventlist', function(evt){
+        function add_list(id, url){
+            var eventList = new EventList(id, url, function(evt){
                 function update_list(data){
                     if(data['status'] === 1){
                         evt['deleted'] = true;
@@ -47,6 +49,10 @@
                     new EventList.Action('Supprimer', del_event),
                 ];
             });
+        }
+        window.addEventListener('load', function(){
+            add_list('eventlist', 'new');
+            add_list('eventlist_old', 'old');
         });
     </script>
 {% endblock %}

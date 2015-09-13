@@ -5,6 +5,7 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
+from django.utils import timezone
 import json
 import csv
 import uuid
@@ -86,7 +87,11 @@ def admin_index(request):
 @bde_member
 def admin_list_events(request):
     if request.method == "OPTIONS":
-        evts = Event.objects.all()
+        req = json.loads(request.read().decode())
+        if req['arg'] == "new":
+            evts = Event.objects.filter(start_time__gt=timezone.now())
+        else:
+            evts = Event.objects.filter(start_time__lt=timezone.now())
         return JsonResponse({'events': [{
             'eid': evt.id,
             'name': evt.name,
@@ -158,3 +163,4 @@ def admin_export_csv(request, eid):
         line = ["", "", r.first_name, r.last_name, r.mail, r.via.name]
         writer.writerow(line)
     return response
+

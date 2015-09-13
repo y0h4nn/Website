@@ -2,9 +2,9 @@
 
 
 (function(){
-    var EventList = function(containerId, buildCallback, clickCallback){
+    var EventList = function(containerId, arg, buildCallback, clickCallback){
         BaseList.call(this, containerId, buildCallback, clickCallback);
-        queryJson('list/', {}, this.populate.bind(this));
+        queryJson('list/', {"arg": arg}, this.populate.bind(this));
     };
 
     EventList.prototype = Object.create(BaseList.prototype, {
@@ -18,7 +18,8 @@
                     var pictureContainer = document.createElement('div');
                         pictureContainer.setAttribute('class', 'picture_container');
                     var nameContainer = document.createElement('div');
-                        nameContainer.innerHTML = evt['name'];
+                    var d = new Date(evt['start_time']);
+                        nameContainer.innerHTML = evt['name'] + '<span style="color:#BBB;"> (' + d.getDay() + '/' + d.getMonth() + '/' + d.getFullYear() + ')</span>';
                     var actionContainer = document.createElement('div');
                         actionContainer.setAttribute('class', 'action_container');
 
@@ -37,8 +38,8 @@
                 }
                 this.matchingElems = this.elems;
                 this.matchingElems.sort(function(a, b){
-                    var nameA = a['start_time'];
-                    var nameB = b['start_time'];
+                    var nameA = new Date(a['start_time']);
+                    var nameB = new Date(b['start_time']);
 
                     if(nameA > nameB) return 1;
                     else if(nameA < nameB) return -1;
