@@ -131,7 +131,7 @@ def admin_list_registrations(request, eid):
                 ins = Inscription.objects.get(id=req['iid'])
                 ins.delete()
             else:
-                ins = ExternInscription.objects.get(id=req['iid'])
+                ins = ExternInscription.objects.get(id=req['iid']).select_related('via')
                 ins.delete()
             return JsonResponse({"status": 1})
         return JsonResponse({"status": 0})
@@ -145,16 +145,16 @@ def admin_list_registrations(request, eid):
 def admin_export_csv(request, eid):
     event = get_object_or_404(Event, id=eid)
     reg = Inscription.objects.filter(event=event).select_related("user__profile")
-    ext_reg = ExternInscription.objects.filter(event=event)
+    ext_reg = ExternInscription.objects.filter(event=event).select_related("via")
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(event.name)
 
     writer = csv.writer(response)
-    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail'])
+    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From'])
     for r in reg:
-        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email]
+        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB"]
         writer.writerow(line)
     for r in ext_reg:
-        line = ["", "", r.first_name, r.last_name, r.mail]
+        line = ["", "", r.first_name, r.last_name, r.mail, r.via.name]
         writer.writerow(line)
     return response
