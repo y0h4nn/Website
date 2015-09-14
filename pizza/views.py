@@ -17,6 +17,9 @@ def index(request):
 
     try:
         ins = Inscription.objects.get(user=request.user, command=com)
+        if request.method == 'POST':
+            ins.delete()
+            return redirect('pizza:index')
         return render(request, 'pizza/already.html', {'command': com})
     except Inscription.DoesNotExist:
         pass
