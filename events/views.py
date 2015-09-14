@@ -18,11 +18,17 @@ def index(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
         event = get_object_or_404(Event, id=req['eid'])
-        ins, created = Inscription.objects.get_or_create(event=event, user=request.user)
-        if not created:
+        try:
+            ins = Inscription.objects.get(event=event, user=request.user)
             ins.delete()
-            return JsonResponse({'registered': 0})
-        return JsonResponse({'registered': 1})
+            return JsonResponse({'registered': 0, 'full': 0})
+        except Inscription.DoesNotExist:
+            if event.can_subscribe():
+                ins = Inscription(event=event, user=request.user)
+                ins.save()
+                return JsonResponse({'registered': 1, 'full': 0})
+            else:
+                return JsonResponse({'registered': 0, 'full': 1})
     context = {'events': Event.to_come(request.user)}
     return render(request, 'events/index.html', context)
 
@@ -136,7 +142,7 @@ def admin_list_registrations(request, eid):
                 ins = Inscription.objects.get(id=req['iid'])
                 ins.delete()
             else:
-                ins = ExternInscription.objects.get(id=req['iid']).select_related('via')
+                ins = ExternInscription.objects.get(id=req['iid'])
                 ins.delete()
             return JsonResponse({"status": 1})
         return JsonResponse({"status": 0})

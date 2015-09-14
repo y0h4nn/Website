@@ -10,7 +10,12 @@ function update_button(data){
     else{
         this.className = "";
         this.innerHTML = "S'inscrire";
-        cur_nb -= 1;
+        if(!data['full']){
+            cur_nb -= 1;
+        }
+        else{
+            add_message('warning', "Il ne reste plus de place à cet évènement")
+        }
     }
     this.parentNode.getElementsByClassName("inscription_count")[0].innerHTML = cur_nb;
 }
