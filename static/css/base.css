@@ -181,6 +181,8 @@ fieldset {
   list-style: none;
   padding: 1em;
   margin-bottom: 0; }
+  .errorlist li:hover {
+    background-color: #E06060; }
 
 .errorlist + p {
   background-color: #EA9797;
