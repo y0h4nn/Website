@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+{% load sum_list %}
+
+{% load menu_item %}
+
+{% block menu %}
+    {% menu_item "Administration" 'pizza:admin_index' %}
+    {% menu_item "Gerer les pizzas" 'pizza:admin_manage' %}
+{% endblock %}
+{% block main %}
+    {% if commands.has_previous %}
+        <a href="?page={{ commands.previous_page_number }}">&lt;</a>
+    {% endif %}
+    {% if commands.has_next %}
+        <a href="?page={{ commands.next_page_number }}">&gt;</a>
+    {% endif %}
+
+    {% for command in commands %}
+        <header><h1>Commande du {{ command.date }}</h1></header>
+        <h2>Total</h2>
+        <table>
+            <thead>
+                <tr><th>Pizza</th><th>Nombre</th></tr>
+            </thead>
+            <tbody>
+                {% for pizza, nb in pizzas.items %}
+                    <tr><td>{{ pizza }}</td><td>{{ nb }}</td></tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr><td>Total</td><td>{{ pizzas.values|sum_list }}</td></tr>
+            </tfoot>
+        </table>
+
+        <h2>Détail</h2>
+        <table>
+            <thead>
+                <tr><th>Nom</th><th>Pizza</th></tr>
+            </thead>
+            <tbody>
+                {% for inscription in command.inscriptions.all %}
+                    <tr><td>{{ inscription.user.profile }}</td><td>{{ inscription.pizza }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+{% endblock %}
+

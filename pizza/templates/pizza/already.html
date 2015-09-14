@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+
+{% block menu %}
+    {% if user_is_bde_member %}
+        {% menu_item "Administration" 'pizza:admin_index' %}
+    {% endif %}
+{% endblock %}
+
+{% block header %}
+    Commande du {{ command.date }}
+{% endblock %}
+
+{% block main %}
+    Vous avez déjà commandé.
+{% endblock %}
