@@ -1,13 +1,16 @@
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
-import json
-from .models import Pizza, Inscription, Command
 from .forms import PizzaAddingForm, PizzaTakingForm
-from django.contrib import messages
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .models import Pizza, Inscription, Command
 from collections import Counter
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from bde import bde_member
+import json
 
 
+@login_required
 def index(request):
     pizzas = Pizza.objects.filter(deleted=False)
     com = Command.get_current()
@@ -33,6 +36,7 @@ def index(request):
     return render(request, 'pizza/index.html', context)
 
 
+@bde_member
 def admin_index(request):
     command_list = Command.objects.all().prefetch_related('inscriptions__pizza').prefetch_related('inscriptions__user__profile')
     paginator = Paginator(command_list, 1)
@@ -52,6 +56,7 @@ def admin_index(request):
     return render(request, 'pizza/admin/index.html', {'commands': commands, 'pizzas': dict(pizzas.items())})
 
 
+@bde_member
 def admin_manage_pizzas(request):
     if request.method == 'POST':
         form = PizzaAddingForm(request.POST)
