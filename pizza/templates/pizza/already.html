@@ -12,7 +12,9 @@
 {% endblock %}
 
 {% block main %}
-    Vous avez déjà commandé.
+    <p>
+        Vous avez déjà commandé.
+    </p>
     <form action="" method="POST">
         {% csrf_token %}
         <button>Annuler ma commande</button>
