@@ -47,7 +47,8 @@ INSTALLED_APPS = (
     'carshare',
     'news',
     'shop',
-    'pizza'
+    'pizza',
+    'help',
 )
 
 MIDDLEWARE_CLASSES = (

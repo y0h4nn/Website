@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^notifications/', include('notifications.urls', namespace='notifications')),
     url(r'^shop/', include('shop.urls', namespace='shop')),
     url(r'^pizzas/', include('pizza.urls', namespace='pizza')),
+    url(r'^help/', include('help.urls', namespace='help')),
 ]
