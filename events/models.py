@@ -24,7 +24,7 @@ class Event(models.Model):
         return self.inscriptions.all().count() + self.extern_inscriptions.all().count()
 
     def can_subscribe(self):
-        return self.limited and (self.inscriptions.all().count() < self.max_inscriptions)
+        return not self.limited or self.inscriptions.all().count() < self.max_inscriptions
 
     def is_open(self):
         return self.start_date <= timezone.now() <= self.end_date
