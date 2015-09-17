@@ -1,8 +1,9 @@
+import csv
 import json
 from collections import Counter
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -70,6 +71,36 @@ def history(request):
     }
 
     return render(request, 'shop/history.html', context)
+
+
+@bde_member
+def history_export_csv(request):
+
+    history = models.BuyingHistory.objects.select_related('user').select_related('pack').select_related('product').order_by('date').all().reverse()
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="historique.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['Date', 'Produit', 'Type', 'Prix', 'Moyen de paiment', 'Prenom', 'Nom', 'Mail'])
+
+    for h in history:
+        if h.type == 'pack':
+            item = h.pack
+        else:
+            item = h.product
+
+        writer.writerow([
+            h.date.strftime("%d/%m/%Y %H:%M"),
+            item.name,
+            h.type,
+            item.price,
+            h.payment_mean,
+            h.user.first_name,
+            h.user.last_name,
+            h.user.email,
+        ])
+
+    return response
 
 
 @bde_member

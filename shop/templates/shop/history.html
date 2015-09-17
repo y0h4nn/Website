@@ -23,6 +23,9 @@
 
 {% block main %}
     {% if history %}
+        <div class="toolbar">
+            <a href="{% url 'shop:history_export' %}"><i class="fa fa-download"></i></a>
+        </div>
         <table>
             <thead>
                 <tr>

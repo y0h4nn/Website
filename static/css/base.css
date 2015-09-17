@@ -379,6 +379,41 @@ table:not(.rd-days) {
 .bold {
   font-weight: bold; }
 
+.toolbar {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  -webkit-justify-content: flex-end;
+  -moz-justify-content: flex-end;
+  -ms-justify-content: flex-end;
+  -o-justify-content: flex-end;
+  justify-content: flex-end;
+  text-align: right;
+  margin-bottom: 1em; }
+  .toolbar a {
+    display: block;
+    border-radius: 0;
+    background-color: white;
+    color: #333;
+    border: 1px solid #bbb;
+    padding: 1em 1.25em;
+    margin: 0; }
+    .toolbar a + a {
+      border-left: none;
+      transition: background-color 0.25s; }
+    .toolbar a:first-child {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px; }
+    .toolbar a:last-child {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px; }
+    .toolbar a:hover {
+      background-color: #eaeaea; }
+    .toolbar a:active, .toolbar a.toggled {
+      background-color: #ddd; }
+
 #main_container {
   -webkit-flex: 1 1 auto;
   -moz-flex: 1 1 auto;
