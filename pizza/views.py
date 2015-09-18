@@ -14,6 +14,8 @@ import json
 def index(request):
     pizzas = Pizza.objects.filter(deleted=False)
     com = Command.get_current()
+    if com is None or not com.is_valid():
+        return render(request, 'pizza/no_command.html')
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
         ins = Inscription.objects.get(user=request.user, id=req['iid'])
