@@ -1,4 +1,4 @@
-from .forms import PizzaAddingForm, PizzaTakingForm
+from .forms import PizzaAddingForm, PizzaTakingForm, CommandForm
 from .models import Pizza, Inscription, Command
 from collections import Counter
 from django.contrib import messages
@@ -48,7 +48,10 @@ def admin_index(request):
         commands = paginator.page(paginator.num_pages)
 
     # As we have only one command by page this is always true.
-    command = commands[0]
+    try:
+        command = commands[0]
+    except IndexError:
+        return render(request, 'pizza/admin/no_command.html')
     pizzas = Counter([ins.pizza for ins in command.inscriptions.all().select_related('pizza')])
 
     return render(request, 'pizza/admin/index.html', {'commands': commands, 'pizzas': dict(pizzas.items())})
@@ -71,3 +74,19 @@ def admin_manage_pizzas(request):
     pizzas = Pizza.objects.filter(deleted=False)
     context = {'form': form, 'pizzas': pizzas}
     return render(request, 'pizza/admin/manage_pizzas.html', context)
+
+
+@bde_member
+def admin_manage_commands(request):
+    com = Command.get_current()
+    if com is not None and com.is_valid():
+        form = CommandForm(request.POST or None, initial=com.__dict__)
+    else:
+        form = CommandForm(request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+
+    return render(request, 'pizza/admin/manage_commands.html', {'form': form})
+

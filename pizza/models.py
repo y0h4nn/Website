@@ -1,38 +1,23 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-import datetime
-
-
-def next_weekday(d, weekday):
-    ahead = weekday - d.weekday()
-    while ahead <= 0:
-        ahead += 7
-    return d + datetime.timedelta(ahead)
 
 
 class Command(models.Model):
-    date = models.DateField()
+    date = models.DateTimeField()
 
     @classmethod
     def get_current(cls):
         try:
-            last = cls.objects.latest('id')
-            nex = next_weekday(timezone.now(), 2)
-            if nex.date() != last.date:
-                if nex.time() > datetime.time(hour=17, minute=30):
-                    com = cls(date=nex)
-                    com.save()
-                    return com
-                else:
-                    return last
-            else:
-                return last
+            return cls.objects.latest('id')
         except cls.DoesNotExist:
-            nex = next_weekday(timezone.now(), 2)
-            com = cls(date=nex)
-            com.save()
-            return com
+            return None
+
+    def is_valid(self):
+        try:
+            return self.date > timezone.now()
+        except:
+            return False
 
 
 class Pizza(models.Model):
