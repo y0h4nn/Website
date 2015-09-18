@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 import notifications
+from bde import is_bde_member, bde_member
 
 
 @login_required
@@ -105,6 +106,7 @@ def action(request, aid, rid, state):
     registration.save()
     return redirect(reverse('carshare:show', kwargs={'aid': aid}))
 
+
 @login_required
 def edit(request, aid):
     announcement = get_object_or_404(models.Announcement, id=aid)
@@ -128,10 +130,11 @@ def edit(request, aid):
         context['form'] = forms.AnnouncementForm(instance=announcement)
     return render(request, 'carshare/edit.html', context)
 
+
 @login_required
 def delete(request, aid):
     announcement = get_object_or_404(models.Announcement, id=aid)
-    if request.user == announcement.author:
+    if request.user == announcement.author or is_bde_member(request.user):
         registrations = models.Registration.objects.filter(announcement=announcement).all()
         users = set(reg.user for reg in registrations if reg.user != request.user)
         notifications.notify(
@@ -142,3 +145,11 @@ def delete(request, aid):
         announcement.delete()
     return redirect(reverse('carshare:index'))
 
+
+@bde_member
+def delete_registration(request, rid):
+    if is_bde_member(request.user):
+        registration = get_object_or_404(models.Registration, id=rid)
+        announcement = registration.announcement
+        registration.delete()
+    return redirect('carshare:show', aid=announcement.id)

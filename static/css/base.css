@@ -414,6 +414,9 @@ table:not(.rd-days) {
     .toolbar a:active, .toolbar a.toggled {
       background-color: #ddd; }
 
+.float_right {
+  float: right; }
+
 #main_container {
   -webkit-flex: 1 1 auto;
   -moz-flex: 1 1 auto;

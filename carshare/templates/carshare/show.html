@@ -30,7 +30,7 @@
             <h1>{{ announcement.title }}</h1>
             <h2>
                 Proposé par {{ announcement.author.profile }} le {{ announcement.pub_date }}
-                {% if announcement.author == request.user %}
+                {% if announcement.author == request.user or user_is_bde_member %}
                     <a href="{% url 'carshare:edit' aid=announcement.id %}" title="Editer"><i class="fa fa-pencil"></i></a>
                     <a href="{% url 'carshare:delete' aid=announcement.id %}" class="red" title="Supprimer"><i class="fa fa-trash-o"></i></a>
                 {% endif %}
@@ -61,7 +61,12 @@
                         <h4>
                             {{ registration.user.profile }}
                         </h4>
-                        <h5>{{ registration.pub_date }}</h5>
+                        <h5>
+                            {{ registration.pub_date }}
+                            {% if user_is_bde_member %}
+                                <a href="{% url 'carshare:delete_registration' rid=registration.id %}" class="red float_right" title="Supprimer" ><i class="fa fa-trash-o"></i></a>
+                            {% endif %}
+                        </h5>
                     </hgroup>
                     {% if not registration.is_simple_comment %}
                     <div>

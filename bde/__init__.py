@@ -13,3 +13,10 @@ def bde_member(fnc):
 
         return redirect(reverse('news:index'))
     return wrapper
+
+
+def is_bde_member(user):
+    if user.is_staff or user.groups.filter(name=settings.BDE_GROUP_NAME).count():
+        return True
+    else:
+        return False
