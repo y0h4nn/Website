@@ -14,34 +14,29 @@ import json
 def index(request):
     pizzas = Pizza.objects.filter(deleted=False)
     com = Command.get_current()
-
-    try:
-        ins = Inscription.objects.get(user=request.user, command=com)
-        if request.method == 'POST':
-            ins.delete()
-            return redirect('pizza:index')
-        return render(request, 'pizza/already.html', {'command': com})
-    except Inscription.DoesNotExist:
-        pass
-
-    if request.method == "POST":
+    if request.method == "OPTIONS":
+        req = json.loads(request.read().decode())
+        ins = Inscription.objects.get(user=request.user, id=req['iid'])
+        ins.delete()
+        return JsonResponse({"status": 1})
+    elif request.method == "POST":
         form = PizzaTakingForm(request.POST, pizzas=pizzas)
         if form.is_valid():
             chosen = Pizza.objects.get(id=form.cleaned_data['pizza'])
-            command = Command.get_current()
             ins = Inscription(user=request.user, pizza=chosen, command=com)
             ins.save()
             messages.add_message(request, messages.INFO, "Votre commande a bien été prise en compte")
-            return redirect('news:index')
+            return redirect('pizza:index')
 
+    ins = Inscription.objects.filter(user=request.user).select_related("pizza")
     form = PizzaTakingForm(pizzas=pizzas)
-    context = {"pizzas": pizzas, 'form': form, 'command': com}
+    context = {"pizzas": pizzas, 'form': form, 'command': com, 'inscriptions': ins}
     return render(request, 'pizza/index.html', context)
 
 
 @bde_member
 def admin_index(request):
-    command_list = Command.objects.all().prefetch_related('inscriptions__pizza').prefetch_related('inscriptions__user__profile')
+    command_list = Command.objects.all().prefetch_related('inscriptions__pizza').prefetch_related('inscriptions__user__profile').order_by("inscriptions__user")
     paginator = Paginator(command_list, 1)
 
     page = request.GET.get('page')

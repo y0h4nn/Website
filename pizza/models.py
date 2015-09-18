@@ -48,5 +48,3 @@ class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     pizza = models.ForeignKey(Pizza)
 
-    class Meta:
-        unique_together = (('command', 'user'),)
