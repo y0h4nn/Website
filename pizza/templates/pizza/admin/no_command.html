@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+
+{% block menu %}
+    {% menu_item "Administration" 'pizza:admin_index' %}
+    {% menu_item "Gérer les pizzas" 'pizza:admin_manage' %}
+    {% menu_item "Gérer la commande" 'pizza:admin_command' %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block main %}
+    Il n'y a aucune commande pour le moment
+{% endblock %}
+
