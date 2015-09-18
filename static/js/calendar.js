@@ -33,7 +33,7 @@ function create_calendar(id){
     var parsed_date = date.split('/');
     if(date){
         var year = parsed_date[2];
-        var month = parsed_date[1];
+        var month = parsed_date[1] - 1;
         var day = parsed_date[0];
     }
     else{
