@@ -89,6 +89,7 @@ def admin_manage_commands(request):
     if request.method == "POST":
         if form.is_valid():
             form.save()
+            messages.add_message(request, messages.INFO, "La commande a été sauvegardée")
 
     return render(request, 'pizza/admin/manage_commands.html', {'form': form})
 
