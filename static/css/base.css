@@ -86,11 +86,12 @@ form p {
     font-weight: bold;
     padding-right: 0.5em; }
   form p input, form p .button, form p textarea {
-    -webkit-flex: 0 1 65%;
-    -moz-flex: 0 1 65%;
-    -ms-flex: 0 1 65%;
-    -o-flex: 0 1 65%;
-    flex: 0 1 65%;
+    -webkit-flex: 1 1 auto;
+    -moz-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    -o-flex: 1 1 auto;
+    flex: 1 1 auto;
+    min-width: 0;
     display: inline-block;
     border-radius: 0; }
     form p input:last-child, form p .button:last-child, form p textarea:last-child {
