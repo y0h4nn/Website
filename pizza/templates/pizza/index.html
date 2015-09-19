@@ -34,7 +34,7 @@
                 <tr><th>Pizza</th><th>Supprimer</th></tr>
             </thead>
             {% for ins in inscriptions %}
-                <tr><td style="width: 100%">{{ ins.pizza }}</td><td style="text-align: center"><a href="#" onclick="del_pizza('{{ins.id}}', this); return false;"><i class="fa fa-trash-o red"></i></a></td></tr>
+                <tr><td style="width: 100%">{{ ins.pizza.name }}</td><td style="text-align: center"><a href="#" onclick="del_pizza('{{ins.id}}', this); return false;"><i class="fa fa-trash-o red"></i></a></td></tr>
             {% endfor %}
         </table>
     {% endif %}

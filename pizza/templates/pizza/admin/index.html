@@ -25,7 +25,7 @@
             </thead>
             <tbody>
                 {% for pizza, nb in pizzas.items %}
-                    <tr><td>{{ pizza }}</td><td>{{ nb }}</td></tr>
+                    <tr><td>{{ pizza.name }}</td><td>{{ nb }}</td></tr>
                 {% endfor %}
             </tbody>
             <tfoot>
@@ -40,7 +40,7 @@
             </thead>
             <tbody>
                 {% for inscription in command.inscriptions.all %}
-                    <tr><td>{{ inscription.user.profile }}</td><td>{{ inscription.pizza }}</td></tr>
+                    <tr><td>{{ inscription.user.profile }}</td><td>{{ inscription.pizza.name }}</td></tr>
                 {% endfor %}
             </tbody>
         </table>
