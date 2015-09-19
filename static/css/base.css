@@ -865,7 +865,7 @@ table:not(.rd-days) {
   margin-left: auto;
   margin-right: 5px; }
 
-.popup, .selection_popup, .user_selection_popup {
+.popup, .selection_popup, .user_selection_popup, .permission_popup {
   background-color: rgba(0, 0, 0, 0.3);
   width: 100%;
   height: 100%;
@@ -873,7 +873,7 @@ table:not(.rd-days) {
   z-index: 10;
   display: none;
   padding: 2em; }
-  .popup > div, .selection_popup > div, .user_selection_popup > div {
+  .popup > div, .selection_popup > div, .user_selection_popup > div, .permission_popup > div {
     background-color: white;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     min-width: 100px;
@@ -881,7 +881,7 @@ table:not(.rd-days) {
     max-height: 100%;
     overflow: auto;
     border-radius: 3px; }
-  .popup.pop, .pop.selection_popup, .pop.user_selection_popup {
+  .popup.pop, .pop.selection_popup, .pop.user_selection_popup, .pop.permission_popup {
     -webkit-display: flex;
     -moz-display: flex;
     -ms-display: flex;
@@ -897,7 +897,7 @@ table:not(.rd-days) {
     -ms-justify-content: center;
     -o-justify-content: center;
     justify-content: center; }
-  .popup header, .selection_popup header, .user_selection_popup header {
+  .popup header, .selection_popup header, .user_selection_popup header, .permission_popup header {
     background-color: white;
     border-bottom: 1px solid #e2e2e2;
     -webkit-display: flex;
@@ -911,7 +911,7 @@ table:not(.rd-days) {
     -o-align-items: center;
     align-items: center;
     padding: 0; }
-    .popup header button, .selection_popup header button, .user_selection_popup header button {
+    .popup header button, .selection_popup header button, .user_selection_popup header button, .permission_popup header button {
       margin: 0;
       padding: 0.8em;
       background: none;
@@ -920,9 +920,9 @@ table:not(.rd-days) {
       border-radius: 0;
       font-size: 1.2em;
       background-color: white; }
-      .popup header button:hover, .selection_popup header button:hover, .user_selection_popup header button:hover {
+      .popup header button:hover, .selection_popup header button:hover, .user_selection_popup header button:hover, .permission_popup header button:hover {
         color: red; }
-    .popup header h1, .selection_popup header h1, .user_selection_popup header h1 {
+    .popup header h1, .selection_popup header h1, .user_selection_popup header h1, .permission_popup header h1 {
       font-size: 1.2em;
       color: #aaa;
       margin: 0;
@@ -932,7 +932,7 @@ table:not(.rd-days) {
       -ms-flex: 1 1 auto;
       -o-flex: 1 1 auto;
       flex: 1 1 auto; }
-  .popup main, .selection_popup main, .user_selection_popup main {
+  .popup main, .selection_popup main, .user_selection_popup main, .permission_popup main {
     padding: 1em;
     background-color: white;
     max-height: 100%; }
@@ -953,6 +953,10 @@ table:not(.rd-days) {
 .user_selection_popup input {
   width: 100%;
   padding: 0.5em; }
+
+.permission_popup input[type=checkbox] {
+  width: auto;
+  vertical-align: middle; }
 
 .event {
   -webkit-display: flex;

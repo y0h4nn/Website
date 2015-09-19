@@ -8,7 +8,7 @@
 function Popup(title){
     // Popup init
     this.container = document.createElement('div');
-    this.container.setAttribute('class', this.popupClass);
+    this.container.setAttribute('class', this.baseClass);
     this.window = document.createElement('div');
     this.header = document.createElement('header');
     this.h1 = document.createElement('h1');
@@ -45,7 +45,6 @@ Popup.prototype = {
     close: function(){
         this.container.setAttribute('class', this.baseClass);
     }
-
 }
 
 
@@ -54,7 +53,7 @@ Popup.prototype = {
  *
  * Open a pupop with the given choices and call the callback with the selected
  * one as it's first argument. choises is an array with a key as the choice
- * name and the value as the choice displayed 
+ * name and the value as the choice displayed
  */
 
 function  SelectionPopup(title, choices, callback){
