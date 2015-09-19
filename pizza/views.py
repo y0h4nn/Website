@@ -4,9 +4,10 @@ from collections import Counter
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from bde import bde_member
+import csv
 import json
 
 
@@ -92,4 +93,19 @@ def admin_manage_commands(request):
             messages.add_message(request, messages.INFO, "La commande a été sauvegardée")
 
     return render(request, 'pizza/admin/manage_commands.html', {'form': form})
+
+@bde_member
+def admin_export_csv(request, cid):
+    command = get_object_or_404(Command, id=cid)
+    reg = Inscription.objects.filter(command=command).select_related("user__profile").order_by('user')
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="pizzas_{}.csv"'.format(command.date)
+
+    writer = csv.writer(response)
+    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From', 'Pizza'])
+    for r in reg:
+        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB", r.pizza.name]
+        writer.writerow(line)
+    return response
 
