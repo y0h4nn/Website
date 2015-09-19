@@ -151,6 +151,6 @@ EMAIL_USE_TLS=True
 BDE_GROUP_NAME = 'BDE'
 
 try:
-    from . import local_settings
+    from .local_settings import *
 except:
     pass
