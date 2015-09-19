@@ -126,6 +126,6 @@ def memberlist(request):
             'nickname': user.profile.nickname,
             'email': user.email,
             'is_member': bde_group in user.groups.all(),
-        } for user in User.objects.select_related('profile').all()
+        } for user in User.objects.select_related('profile').prefetch_related('groups').all()
     ]
     return JsonResponse({'users': users})
