@@ -149,3 +149,8 @@ EMAIL_USE_TLS=True
 
 # Application settings
 BDE_GROUP_NAME = 'BDE'
+
+try:
+    from . import local_settings
+except:
+    pass
