@@ -22,7 +22,7 @@ class Command(models.Model):
 
 class Pizza(models.Model):
     name = models.CharField(max_length=255, error_messages={'unique': 'Une pizza avec ce nom existe déjà'})
-    ingredients = models.CharField(max_length=255, null=True)
+    ingredients = models.CharField(max_length=255)
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
