@@ -7,7 +7,7 @@ from bde import bde_member
 
 def index(request):
     context = {
-        'news': models.News.objects.order_by('pub_date').all().reverse()[:10],
+        'news': models.News.objects.order_by('pub_date').all().reverse().select_related('author__profile')[:10],
     }
     return render(request, "news/index.html", context)
 
