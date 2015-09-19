@@ -6,7 +6,7 @@ from django.utils import timezone
 class PizzaAddingForm(forms.ModelForm):
     class Meta:
         model = Pizza
-        fields = ['name']
+        fields = ['name', 'ingredients']
         labels = {'name': "Nom"}
 
 class CommandForm(forms.ModelForm):

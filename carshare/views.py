@@ -18,11 +18,11 @@ def index(request):
 
 @login_required
 def show(request, aid):
-    announcement = get_object_or_404(models.Announcement, id=aid)
+    announcement = get_object_or_404(models.Announcement.objects.select_related('author__profile'), id=aid)
 
     context = {
         'announcement': announcement,
-        'registrations': models.Registration.objects.filter(announcement=announcement).all(),
+        'registrations': models.Registration.objects.filter(announcement=announcement).all().select_related('user__profile'),
         'user_is_author': request.user == announcement.author,
     }
 
