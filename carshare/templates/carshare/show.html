@@ -64,7 +64,7 @@
                         <h5>
                             {{ registration.pub_date }}
                             {% if user_is_bde_member %}
-                                <a href="{% url 'carshare:delete_registration' rid=registration.id %}" class="red float_right" title="Supprimer" ><i class="fa fa-trash-o"></i></a>
+                                <a href="{% url 'carshare:delete_registration' rid=registration.id %}" class="red" title="Supprimer" ><i class="fa fa-trash-o"></i></a>
                             {% endif %}
                         </h5>
                     </hgroup>
