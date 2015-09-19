@@ -17,7 +17,7 @@ from notifications import notify
 @login_required
 def index(request):
     context = {
-        'history': models.BuyingHistory.objects.filter(user=request.user).order_by('date').all().reverse()
+        'history': models.BuyingHistory.objects.filter(user=request.user).order_by('date').select_related('user__profile').all().reverse()
     }
 
     return render(request, 'shop/index.html', context)
