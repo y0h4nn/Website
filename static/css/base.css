@@ -1254,6 +1254,7 @@ table:not(.rd-days) {
       color: #C9E6F0; }
 
 .cal {
+  color: #333;
   position: fixed;
   z-index: 1;
   background-color: white;
