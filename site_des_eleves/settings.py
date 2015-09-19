@@ -154,3 +154,18 @@ try:
     from .local_settings import *
 except:
     pass
+
+import sys
+import os
+
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': 'localhost',
+            'NAME': 'sde_tests',
+            'USER': 'root',
+            'PASSWORD': os.environ['test_mysql_password'],
+        }
+    }
+
