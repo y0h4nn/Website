@@ -12,7 +12,7 @@ class TestNotifications(TestCase):
         user_count = 10
         for i in range(user_count):
             user = User.objects.create_user(
-                str(uuid.uuid4()),
+                    str(uuid.uuid4())[:30],
                 'user@exemple.com',
                 'password'
             )
@@ -30,7 +30,7 @@ class TestNotifications(TestCase):
 
     def test_user_notification(self):
         user = User.objects.create_user(
-            str(uuid.uuid4()),
+            str(uuid.uuid4())[:30],
             'user@exemple.com',
             'password'
         )
