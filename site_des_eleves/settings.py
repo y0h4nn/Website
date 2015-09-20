@@ -162,10 +162,12 @@ if 'test' in sys.argv:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'HOST': 'localhost',
+            'HOST': '/tmp/mysql_sde.socket',
             'NAME': 'sde_tests',
             'USER': 'root',
-            'PASSWORD': os.environ['test_mysql_password'],
+            'PASSWORD': "",
+            'PORT': 4569,
+
         }
     }
 
