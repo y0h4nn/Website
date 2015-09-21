@@ -59,6 +59,11 @@ PermSection.prototype = {
         perm.appendTo(this.element);
         this.perms.push(perm);
     },
+
+    clear: function(){
+        this.element.parentNode.removeChild(this.element);
+    },
+
 };
 
 
@@ -73,17 +78,40 @@ function UserPermissionPopup(title, user){
     //this.spinner.setAttribute('class', 'hidden');
 
     this.main.appendChild(this.spinner);
+    this.isSuperuserContainer = document.createElement('div');
+    this.isSuperuserCheckbox = document.createElement('input');
+    this.isSuperuserCheckbox.setAttribute('id', 'is_superuser');
+    this.isSuperuserCheckbox.setAttribute('type', 'checkbox');
+    this.isSuperuserLabel = document.createElement('label');
+    this.isSuperuserLabel.innerHTML = 'Le member est super utilisateur';
+    this.isSuperuserLabel.setAttribute('for', 'is_superuser');
+    this.main.appendChild(this.isSuperuserContainer);
+    this.isSuperuserContainer.appendChild(this.isSuperuserCheckbox);
+    this.isSuperuserContainer.appendChild(this.isSuperuserLabel);
+
+
+
+    this.isSuperuserCheckbox.addEventListener('change', function(){
+        queryJson('', {'uid': user.id, 'action': 'superuser', superuser: this.isSuperuserCheckbox.checked}, this.fillContent.bind(this));
+    }.bind(this));
 
     queryJson('', {'uid': user.id, 'action': 'list'}, this.fillContent.bind(this));
 }
 
 UserPermissionPopup.prototype = Object.create(Popup.prototype, {
 
+    clear: {
+        value: function(){
+            for(var i in this.sections){
+                this.sections[i].clear();
+            }
+            this.sections = [];
+        },
+    },
+
     fillContent: {
         value: function(json){
-
-            console.log(json['perms'].length);
-            console.log(json['perms']);
+            this.clear();
             for(var name  in json['perms']){
                 var section = this.getOrCreateSection(name);
                 for(var i in json['perms'][name]){
@@ -91,11 +119,28 @@ UserPermissionPopup.prototype = Object.create(Popup.prototype, {
                     section.addPerm(perm.name, perm.codename, perm.state, this.user);
                 }
             }
-
+            this.setSuperuser(json['superuser']);
             this.spinner.setAttribute('class', 'hidden');
         },
     },
 
+    setSuperuser: {
+        value: function(superuser){
+            for(var i in this.sections){
+                for(var j in this.sections[i].perms){
+                    // We can't simply set disabled to false to enable
+                    // checkbox, attribute must be removed.
+                    if(superuser){
+                        this.sections[i].perms[j].checkbox.setAttribute('disabled', true);
+                    }
+                    else{
+                        this.sections[i].perms[j].checkbox.removeAttribute('disabled');
+                    }
+                }
+            }
+            this.isSuperuserCheckbox.checked = superuser;
+        },
+    },
 
     getOrCreateSection: {
         value: function(name){

@@ -9,7 +9,7 @@ def list_perms(request_json, user):
 
     response = {
         'perms': {},
-        'staff': user.is_staff,
+        'superuser': user.is_superuser,
     }
     for perm in perms:
         if perm.content_type.app_label not in response['perms']:
@@ -41,9 +41,20 @@ def set_perm(request_json, user):
 
     return JsonResponse({})
 
+
+def set_superuser(request_json, user):
+    if request_json['superuser']:
+        user.is_superuser = True
+    else:
+        user.is_superuser = False
+    user.save()
+
+    return list_perms(request_json, user)
+
 ACTIONS = {
     'list': list_perms,
     'set': set_perm,
+    'superuser': set_superuser,
 }
 
 def index(request):
