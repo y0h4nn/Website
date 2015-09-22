@@ -65,7 +65,6 @@ def event(request, eid):
 
     if e.can_invite(request.user):
         context['user_can_invite'] = True
-        context['invitations'] = e.invitations.filter(user=request.user)
         if request.method == "POST" and 'btn_invit' in request.POST:
             form = InvitForm(request.POST)
             if form.is_valid():
@@ -79,6 +78,7 @@ def event(request, eid):
         else:
             form = InvitForm()
         context['invit_form'] = form
+    context['invitations'] = e.invitations.filter(user=request.user)
 
     return render(request, 'events/event.html', context)
 
