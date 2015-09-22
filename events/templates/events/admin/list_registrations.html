@@ -55,5 +55,18 @@
             </li>
         {% endfor %}
     </ul>
+    <h1>Invitations</h1>
+    <ul class="userlist">
+        {% for registration in invits %}
+            <li>
+                <div>
+                    {{ registration.first_name }} {{ registration.last_name }} (Invité par {{registration.user.profile}})
+                </div>
+                <button onclick="del_ins({{registration.id}}, true, this); return false;" class="red_button userlist_right_button">
+                    Supprimer
+                </button>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}
 

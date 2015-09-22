@@ -176,7 +176,8 @@ def admin_list_registrations(request, eid):
     e = get_object_or_404(Event, id=eid)
     reg = Inscription.objects.filter(event=e).select_related("user__profile").select_related('event')
     ext_reg = ExternInscription.objects.filter(event=e).select_related('event')
-    return render(request, 'events/admin/list_registrations.html', {'event': e, 'reg': reg, 'ext_reg': ext_reg})
+    invits = Invitation.objects.filter(event=e).select_related('event').select_related('user__profile')
+    return render(request, 'events/admin/list_registrations.html', {'event': e, 'reg': reg, 'ext_reg': ext_reg, 'invits': invits})
 
 
 @bde_member
@@ -184,6 +185,7 @@ def admin_export_csv(request, eid):
     event = get_object_or_404(Event, id=eid)
     reg = Inscription.objects.filter(event=event).select_related("user__profile")
     ext_reg = ExternInscription.objects.filter(event=event).select_related("via")
+    invits = Invitation.objects.filter(event=event).select_related('user__profile')
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(event.name)
 
@@ -194,6 +196,9 @@ def admin_export_csv(request, eid):
         writer.writerow(line)
     for r in ext_reg:
         line = ["", "", r.first_name, r.last_name, r.mail, r.via.name]
+        writer.writerow(line)
+    for r in invits:
+        line = ["", "", r.first_name, r.last_name, r.mail, str(r.user.profile)]
         writer.writerow(line)
     return response
 
