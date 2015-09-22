@@ -1,6 +1,23 @@
 {% extends 'core/base.html' %}
 {% load menu_item %}
 {% load markdown %}
+{% load static %}
+
+
+{% block scripts %}
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script>
+        function update_list(data){
+            if(data["status"] == 1){
+                this.parentNode.parentNode.removeChild(this.parentNode);
+            }
+        }
+
+        function del_ins(elem, iid){
+            queryJson('', {'iid': iid}, update_list.bind(elem));
+        }
+    </script>
+{% endblock %}
 
 {% block header %}
     Evenement
@@ -55,6 +72,7 @@
                 {% endif %}
             </div>
         </div>
+
         {% if user_is_bde_member and event.allow_extern %}
             {% for link in links %}
                 <div class="flex_container details">
@@ -68,7 +86,31 @@
                 <form action="" method="POST">
                     {% csrf_token %}
                     {{ link_form.as_p }}
-                    <button>Nouveau lien</button>
+                    <button name='btn_link'>Nouveau lien</button>
+                </form>
+            </div>
+        {% endif %}
+
+        {% if user_can_invite or invitations %}
+            <header><h1>Invitations</h1></header>
+        {% endif %}
+        {% if invitations %}
+            <ul class="userlist">
+            {% for invit in invitations %}
+                <li>
+                    <div class="picture_container"><img alt="profile picture" src="{% static 'images/default_user_icon.png' %}"/></div>
+                    <div>{{ invit.first_name }} {{ invit.last_name }}</div>
+                    <button onclick="del_ins(this, {{ invit.id }}); return false;" class="userlist_right_button">Supprimer</button>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% if user_can_invite %}
+            <div>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    {{ invit_form.as_p }}
+                    <button name='btn_invit'>Inviter</button>
                 </form>
             </div>
         {% endif %}

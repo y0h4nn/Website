@@ -1,16 +1,19 @@
-from .forms import EventForm, ExternInscriptionForm, ExternLinkForm
-from .models import Event, Inscription, ExternInscription, ExternLink
+from .forms import EventForm, ExternInscriptionForm, ExternLinkForm, InvitForm
+from .models import Event, Inscription, ExternInscription, ExternLink, Invitation
+from bde import bde_member
+from bde import is_bde_member
+
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-import json
+
 import csv
+import json
 import uuid
-from bde import bde_member
-from django.contrib import messages
 
 
 @login_required
@@ -36,9 +39,15 @@ def index(request):
 @login_required
 def event(request, eid):
     e = get_object_or_404(Event, id=eid)
-    context = {'event': e, 'links': []}
-    if e.allow_extern:
-        if request.method == "POST":
+    context = {'event': e, 'links': [], 'user_can_invite': False}
+    if request.method == "OPTIONS":
+        req = json.loads(request.read().decode())
+        inv = Invitation.objects.get(id=req['iid'], user=request.user)
+        inv.delete()
+        return JsonResponse({'status': 1})
+
+    if e.allow_extern and is_bde_member(request.user):
+        if request.method == "POST" and 'btn_link' in request.POST:
             form = ExternLinkForm(request.POST)
             if form.is_valid():
                 link = form.save(commit=False)
@@ -53,6 +62,24 @@ def event(request, eid):
         links = ExternLink.objects.filter(event=e)
         context['link_form'] = form
         context['links'] = links
+
+    if e.can_invite(request.user):
+        context['user_can_invite'] = True
+        context['invitations'] = e.invitations.filter(user=request.user)
+        if request.method == "POST" and 'btn_invit' in request.POST:
+            form = InvitForm(request.POST)
+            if form.is_valid():
+                ins = form.save(commit=False)
+                ins.event = e
+                ins.user = request.user
+                try:
+                    ins.save()
+                except IntegrityError:
+                    messages.add_message(request, messages.ERROR, "Vous ne pouvez pas inviter 2 fois la meme personne avec la meme adresse email")
+        else:
+            form = InvitForm()
+        context['invit_form'] = form
+
     return render(request, 'events/event.html', context)
 
 

@@ -16,15 +16,26 @@ class Event(models.Model):
     price = models.DecimalField(max_digits=19, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     photo = models.ImageField(null=True, blank=True)
     private = models.BooleanField(default=False)
+
     limited = models.BooleanField(default=False)
     max_inscriptions = models.IntegerField(validators=[MinValueValidator(0)], default=0)
+
     allow_extern = models.BooleanField(default=False)
+
+    allow_invitations = models.BooleanField(default=False)
+    max_invitations = models.IntegerField(validators=[MinValueValidator(0)], default=0)
+    max_invitations_by_person = models.IntegerField(validators=[MinValueValidator(0)], default=0)
 
     def registrations_number(self):
         return self.inscriptions.all().count() + self.extern_inscriptions.all().count()
 
     def can_subscribe(self):
         return not self.limited or self.inscriptions.all().count() < self.max_inscriptions
+
+    def can_invite(self, user):
+        return self.allow_invitations and (self.max_invitations == 0 or (self.invitations.all().count() < self.max_invitations
+            and (self.max_invitations_by_person == 0 or
+            self.invitations.filter(user=user).count() < self.max_invitations_by_person)))
 
     def closed(self):
         return timezone.now() >= self.end_inscriptions
@@ -76,3 +87,12 @@ class ExternInscription(models.Model):
     class Meta:
         unique_together = (('mail', 'event'),)
 
+
+class Invitation(models.Model):
+    mail = models.EmailField()
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    event = models.ForeignKey(Event, related_name="invitations")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="invitations")
+    class Meta:
+        unique_together = (('mail', 'event'),)

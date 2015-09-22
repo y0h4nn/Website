@@ -1,6 +1,6 @@
 from freezegun import freeze_time
 from django.test import TestCase
-from .models import Event, Inscription, ExternInscription, ExternLink
+from .models import Event, Inscription, ExternInscription, ExternLink, Invitation
 from django.contrib.auth.models import User
 import datetime
 import uuid
@@ -122,4 +122,29 @@ class TestEvent(TestCase):
 
         self.assertEqual(Event.to_come(u), [(0, self.event), (0, e1), (1, e2)])
         self.assertEqual(Event.to_come(u2), [(0, self.event), (0, e1)])
+
+    def test_invitations(self):
+        u = User.objects.create_user(str(uuid.uuid4())[:30], 'BBB@exemple.com', 'AAA')
+        self.assertFalse(self.event.can_invite(u))
+
+        self.event.allow_invitations = True
+        self.event.save()
+        u = User.objects.create_user(str(uuid.uuid4())[:30], 'BBB@exemple.com', 'AAA')
+        self.assertTrue(self.event.can_invite(u))
+
+        self.event.max_invitations = 1
+        self.event.save()
+        self.assertTrue(self.event.can_invite(u))
+        Invitation.objects.create(mail="coucou@lol.com",
+                                  first_name="f",
+                                  last_name="l",
+                                  event=self.event,
+                                  user=u)
+        self.assertFalse(self.event.can_invite(u))
+
+        self.event.max_invitations = 2
+        self.event.save()
+        self.assertTrue(self.event.can_invite(u))
+        self.event.max_invitations_by_person = 1
+        self.assertFalse(self.event.can_invite(u))
 

@@ -1,6 +1,6 @@
 from django.forms import ModelForm, ClearableFileInput, SplitDateTimeWidget
 from django.utils.safestring import mark_safe
-from .models import Event, ExternInscription, ExternLink
+from .models import Event, ExternInscription, ExternLink, Invitation
 
 
 class WrapperClearableinput(ClearableFileInput):
@@ -60,3 +60,10 @@ class ExternLinkForm(ModelForm):
         model = ExternLink
         labels = {"name": "Pour", "maximum": "Nombre de places"}
         fields = ["name", "maximum"]
+
+class InvitForm(ModelForm):
+    class Meta:
+        model = Invitation
+        labels = {'first_name': "Prénom", 'last_name': "Nom"}
+        fields = ["mail", "first_name", "last_name"]
+
