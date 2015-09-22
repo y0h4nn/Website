@@ -41,7 +41,8 @@ class EventForm(ModelForm):
         labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin",
                   'location': "Lieu", 'private': "Privé", 'end_inscriptions': "Fin des inscriptions",
                   'allow_extern': "Autoriser les exterieurs", 'limited': "Nombre d'inscriptions limité",
-                  'max_inscriptions': "Nombre maximum d'inscriptions"}
+                  'max_inscriptions': "Nombre maximum d'inscriptions", 'allow_invitations': "Autoriser les invitations",
+                  'max_invitations': "Nombre maximum d'invitations", 'max_invitations_by_person': "Nombre maximum d'invitations par personne"}
         widgets = {'photo': WrapperClearableinput,
                    'start_time': SplitDateTimeWidget(),
                    'end_time': SplitDateTimeWidget(),
