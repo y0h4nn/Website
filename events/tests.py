@@ -148,3 +148,7 @@ class TestEvent(TestCase):
         self.event.max_invitations_by_person = 1
         self.assertFalse(self.event.can_invite(u))
 
+        self.event.max_invitations = 0
+        self.event.save()
+        self.assertFalse(self.event.can_invite(u))
+

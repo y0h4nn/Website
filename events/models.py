@@ -33,9 +33,9 @@ class Event(models.Model):
         return not self.limited or self.inscriptions.all().count() < self.max_inscriptions
 
     def can_invite(self, user):
-        return self.allow_invitations and (self.max_invitations == 0 or (self.invitations.all().count() < self.max_invitations
+        return self.allow_invitations and ((self.max_invitations == 0 or (self.invitations.all().count() < self.max_invitations))
             and (self.max_invitations_by_person == 0 or
-            self.invitations.filter(user=user).count() < self.max_invitations_by_person)))
+            self.invitations.filter(user=user).count() < self.max_invitations_by_person))
 
     def closed(self):
         return timezone.now() >= self.end_inscriptions
