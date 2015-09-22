@@ -27,7 +27,7 @@ class Event(models.Model):
     max_invitations_by_person = models.IntegerField(validators=[MinValueValidator(0)], default=0)
 
     def registrations_number(self):
-        return self.inscriptions.all().count() + self.extern_inscriptions.all().count()
+        return self.inscriptions.all().count() + self.extern_inscriptions.all().count() + self.invitations.all().count()
 
     def can_subscribe(self):
         return not self.limited or self.inscriptions.all().count() < self.max_inscriptions
