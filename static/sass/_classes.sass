@@ -114,3 +114,38 @@
 
 .float_right
   float: right
+
+
+.pagination
+  width: 100%
+  text-align: center
+  margin: 2em 0
+  @include display_flex()
+  @include vendor-prefix('justify-content', center)
+
+  .page
+    display: block
+    border-radius: 0
+    background-color: white
+    color: #333
+    border: 1px solid #bbb
+    padding: 1em 1.25em
+    margin: 0
+
+    & + .page
+      border-left: none
+      transition: background-color 0.25s
+
+    &:first-child
+      border-top-left-radius: 3px
+      border-bottom-left-radius: 3px
+
+    &:last-child
+      border-top-right-radius: 3px
+      border-bottom-right-radius: 3px
+
+    &:hover
+      background-color: #eaeaea
+
+    &:active, &.toggled
+      background-color: #ddd

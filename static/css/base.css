@@ -418,6 +418,42 @@ table:not(.rd-days) {
 .float_right {
   float: right; }
 
+.pagination {
+  width: 100%;
+  text-align: center;
+  margin: 2em 0;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -o-justify-content: center;
+  justify-content: center; }
+  .pagination .page {
+    display: block;
+    border-radius: 0;
+    background-color: white;
+    color: #333;
+    border: 1px solid #bbb;
+    padding: 1em 1.25em;
+    margin: 0; }
+    .pagination .page + .page {
+      border-left: none;
+      transition: background-color 0.25s; }
+    .pagination .page:first-child {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px; }
+    .pagination .page:last-child {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px; }
+    .pagination .page:hover {
+      background-color: #eaeaea; }
+    .pagination .page:active, .pagination .page.toggled {
+      background-color: #ddd; }
+
 #main_container {
   -webkit-flex: 1 1 auto;
   -moz-flex: 1 1 auto;
