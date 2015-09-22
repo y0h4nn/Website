@@ -154,6 +154,8 @@ def admin_edit(request, eid):
     e = get_object_or_404(Event, id=eid)
     form = EventForm(request.POST or None, request.FILES or None, instance=e)
     if form.is_valid():
+        if not form.cleaned_data['allow_invitations']:
+            Invitation.objects.filter(event=e).delete()
         form.save()
         return redirect(reverse('events:admin_index'))
     context = {'event': e, 'event_form': form}
