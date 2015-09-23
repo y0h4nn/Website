@@ -7,6 +7,12 @@ from django.utils import timezone
 
 
 class Event(models.Model):
+    GESTION_WAF = "WAF"
+    GESTION_NOLIMIT = "NL"
+    GESTION_CHOICES = [(None, 'Pas de gestion'),
+                       (GESTION_WAF, 'Gestion style WAF'),
+                       (GESTION_NOLIMIT, 'Gestion style no-limit')]
+
     name = models.CharField(max_length=255)
     end_inscriptions = models.DateTimeField()
     start_time = models.DateTimeField()
@@ -25,6 +31,8 @@ class Event(models.Model):
     allow_invitations = models.BooleanField(default=False)
     max_invitations = models.IntegerField(validators=[MinValueValidator(0)], default=0)
     max_invitations_by_person = models.IntegerField(validators=[MinValueValidator(0)], default=0)
+
+    gestion = models.CharField(max_length=3, choices=GESTION_CHOICES, default=None, null=True, blank=True)
 
     def registrations_number(self):
         return self.inscriptions.all().count() + self.extern_inscriptions.all().count() + self.invitations.all().count()
@@ -96,3 +104,4 @@ class Invitation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="invitations")
     class Meta:
         unique_together = (('mail', 'event'),)
+

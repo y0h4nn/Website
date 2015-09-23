@@ -13,7 +13,6 @@
 
 {% block scripts %}
     <script src="{% static 'js/calendar.js' %}"></script>
-    <script src="{% static 'events/js/events_form.js' %}"></script>
 {% endblock %}
 
 {% block menu %}
@@ -27,9 +26,4 @@
 {% endblock %}
 
 {% block main %}
-    <form enctype="multipart/form-data" action="{% url 'events:admin_edit' eid=event.id %}" method="POST">
-        {% csrf_token %}
-        {{ event_form.as_p }}
-        <button>Sauvegarder</button>
-    </form>
 {% endblock %}

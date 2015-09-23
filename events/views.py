@@ -204,3 +204,9 @@ def admin_export_csv(request, eid):
         writer.writerow(line)
     return response
 
+@bde_member
+def admin_management(request, eid):
+    event = get_object_or_404(Event, id=eid)
+    context = {'event': event}
+
+    return render(request, 'events/admin/management_index.html', context)
