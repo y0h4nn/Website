@@ -43,7 +43,7 @@
         </article>
         <div id="comments">
             {% if comments %}
-                <h1>Commentaires</h1>
+                <h3>Commentaires</h3>
             {% endif %}
             {% for comment in comments %}
                 <div class="comment">
@@ -76,7 +76,10 @@
                 {{ comment_form.content.errors }}
                 {{ comment_form.content }}
                 <br/><br/>
-                <button>Commenter</button>
+                <button>
+                    <i class="fa fa-comments"></i>
+                    Commenter
+                </button>
             </form>
         </div>
 {% endblock %}

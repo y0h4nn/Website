@@ -41,8 +41,17 @@
                 </header>
                 <main>
                     {{ new.content|markdown }}
-                    <a href="{% url 'news:comment' nid=new.id %}">Commenter</a>
                 </main>
+                <footer>
+                    <a href="{% url 'news:comment' nid=new.id %}">
+                    <i class="fa fa-comments-o"></i>
+                    {% if new.comments_count %}
+                        {{ new.comments_count }} commentaires.
+                    {% else %}
+                        Il n'y a pas de commentaire.
+                    {% endif %}
+                    </a>
+                </footer>
             </article>
         {% endfor %}
     {% else %}

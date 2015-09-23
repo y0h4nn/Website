@@ -1174,6 +1174,13 @@ table:not(.rd-days) {
     .news header h2 {
       font-size: 1em;
       color: #bbb; }
+  .news footer {
+    border-top: 1px solid #eee;
+    padding: 1em 0 0 0; }
+    .news footer a {
+      color: #bbb; }
+      .news footer a:hover {
+        color: #68B9DE; }
 
 .notification {
   margin-bottom: 3em;
