@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 from . import forms
 from . import models
-from bde import bde_member
+from bde import bde_member, is_bde_member
+import json
 
 
 def index(request):
@@ -50,3 +52,35 @@ def delete(request, nid):
     n = get_object_or_404(models.News, id=nid)
     n.delete()
     return redirect(reverse('news:index'))
+
+
+@login_required
+def comment(request, nid):
+    n = get_object_or_404(models.News, id=nid)
+    coms = models.Comment.objects.filter(news=n).select_related('user__profile')
+    context = {"news": n, "comments": coms}
+
+    if request.method == "POST":
+        form = forms.CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.news = n
+            comment.user = request.user
+            comment.save()
+    else:
+        form = forms.CommentForm()
+    context['comment_form'] = form
+
+
+    return render(request, "news/comment.html", context)
+
+@login_required
+def del_comment(request, cid):
+    if is_bde_member(request.user):
+        c = get_object_or_404(models.Comment, id=cid)
+    else:
+        c = get_object_or_404(models.Comment, id=cid, user=request.user)
+    red = c.news_id
+    c.delete()
+    return redirect(reverse('news:comment', kwargs={'nid': red}))
+

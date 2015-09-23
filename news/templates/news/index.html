@@ -41,6 +41,7 @@
                 </header>
                 <main>
                     {{ new.content|markdown }}
+                    <a href="{% url 'news:comment' nid=new.id %}">Commenter</a>
                 </main>
             </article>
         {% endfor %}
