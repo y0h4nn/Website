@@ -185,10 +185,11 @@ UserSelectionPopup.prototype = Object.create(Popup.prototype, {
             this.btnContainer.innerHTML = "";
             for(var i in users){
                 var user = users[i];
+                var text = document.createTextNode(user.display_name);
                 var button = document.createElement('button');
+                button.appendChild(text);
                 button.setAttribute('type', 'button');
                 button.setAttribute('data-uid', user.id);
-                button.innerHTML = user.display_name;
                 button.addEventListener('click', function(event){
                     var uid = event.target.getAttribute('data-uid');
                     this.callback(uid);
