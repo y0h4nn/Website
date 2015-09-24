@@ -19,7 +19,11 @@
                         pictureContainer.setAttribute('class', 'picture_container');
                     var nameContainer = document.createElement('div');
                     var d = new Date(evt['start_time']);
-                        nameContainer.innerHTML = evt['name'] + '<span style="color:#BBB;"> (' + d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + ')</span>';
+                    var dateContainer = document.createElement('span');
+                        dateContainer.setAttribute('style', 'color: #BBB');
+                        dateContainer.innerHTML = ' (' + d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + ')';
+                        nameContainer.appendChild(document.createTextNode(evt['name']));
+                        nameContainer.appendChild(dateContainer);
                     var actionContainer = document.createElement('div');
                         actionContainer.setAttribute('class', 'action_container');
 

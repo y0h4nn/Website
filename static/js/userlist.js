@@ -18,7 +18,7 @@
                     var pictureContainer = document.createElement('div');
                         pictureContainer.setAttribute('class', 'picture_container');
                     var nameContainer = document.createElement('div');
-                        nameContainer.innerHTML = user['display_name'];
+                        nameContainer.appendChild(document.createTextNode(user['display_name']));
                     var actionContainer = document.createElement('div');
                         actionContainer.setAttribute('class', 'action_container');
 
