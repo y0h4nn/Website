@@ -20,6 +20,9 @@ class Contributor(models.Model):
     type = models.CharField(max_length=4, choices=CONTRIBUTION_TYPES)
     means_of_payment = models.CharField(max_length=5, choices=MEANS_OF_PAYMENT)
 
+    class Meta:
+        app_label = 'bde'
+
     @staticmethod
     def take_half_contribution(user, mean):
         now = datetime.datetime.now()
