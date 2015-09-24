@@ -1069,6 +1069,16 @@ table:not(.rd-days) {
   .event .inscription_count + p {
     margin-top: 0; }
 
+.bg-red {
+  background-color: #FBE1E1 !important; }
+  .bg-red:hover {
+    background-color: #F5C1C1 !important; }
+
+.bg-green {
+  background-color: #C4ECC4 !important; }
+  .bg-green:hover {
+    background-color: #95EC95 !important; }
+
 .comment {
   border: 1px solid #ddd;
   padding: 1em;

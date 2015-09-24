@@ -80,6 +80,7 @@ class ExternLink(models.Model):
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="inscriptions")
     event = models.ForeignKey(Event, related_name="inscriptions")
+    in_date = models.DateTimeField(null=True, blank=True, default=None)
 
     class Meta:
         unique_together = (('user', 'event'),)
@@ -91,6 +92,7 @@ class ExternInscription(models.Model):
     last_name = models.CharField(max_length=255)
     event = models.ForeignKey(Event, related_name="extern_inscriptions")
     via = models.ForeignKey(ExternLink, related_name="inscriptions")
+    in_date = models.DateTimeField(null=True, blank=True, default=None)
 
     class Meta:
         unique_together = (('mail', 'event'),)
@@ -102,6 +104,7 @@ class Invitation(models.Model):
     last_name = models.CharField(max_length=255)
     event = models.ForeignKey(Event, related_name="invitations")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="invitations")
+    in_date = models.DateTimeField(null=True, blank=True, default=None)
     class Meta:
         unique_together = (('mail', 'event'),)
 

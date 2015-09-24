@@ -12,5 +12,8 @@ urlpatterns = [
     url(r'^admin/export/(?P<eid>[0-9]+)$', views.admin_export_csv, name='admin_export_csv'),
     url(r'^admin/view/(?P<eid>[0-9]+)/registrations$', views.admin_list_registrations, name='admin_list_registrations'),
     url(r'^admin/management/(?P<eid>[0-9]+)$', views.admin_management, name='admin_management'),
+    url(r'^admin/management/list_registrations/(?P<eid>[0-9]+)$', views.management_list_users, name='admin_management_list'),
+    url(r'^admin/management/(?P<eid>[0-9]+)/info/(?P<type>[a-zA-Z_]+)/(?P<iid>[0-9]+)$', views.management_info_user, name='admin_management_list'),
+    url(r'^admin/management/(?P<eid>[0-9]+)/ack/(?P<type>[a-zA-Z_]+)/(?P<iid>[0-9]+)$', views.management_ack, name='admin_management_list'),
 ]
 

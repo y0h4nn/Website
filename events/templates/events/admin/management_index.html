@@ -8,11 +8,13 @@
 {% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'accounts/css/edit.css' %}" />
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'js/calendar.js' %}"></script>
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'js/list.js' %}"></script>
+    <script src="{% static 'js/popup.js' %}"></script>
+    <script src="{% static 'events/js/management_list.js' %}"></script>
 {% endblock %}
 
 {% block menu %}
@@ -26,4 +28,23 @@
 {% endblock %}
 
 {% block main %}
+<div id="userlist">
+</div>
+<script>
+        function ack_in(eid, type, iid){
+           document.popup.close();
+           queryJson(eid + "/ack/" + type + '/' + iid);
+        }
+        {% if event.gestion == "WAF" %}
+            url = "/events/admin/management/list_registrations/{{event.id}}"
+        {% endif %}
+        var event_id = {{event.id}};
+        window.addEventListener('load', function(){
+            var userList = new UserList('userlist', url, function(user){
+                return [
+                ];
+            });
+        });
+</script>
+
 {% endblock %}

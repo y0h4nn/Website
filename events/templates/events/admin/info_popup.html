@@ -1,0 +1,11 @@
+<p>{{ display_name }}</p>
+<p>Produits:
+  {% for prod in products %}
+    {{ prod }}
+  {% endfor %}
+</p>
+{% if ins.in_date %}
+  Entré le {{ ins.in_date }}
+{% else %}
+  <button onclick="ack_in('{{event.id}}', '{{type}}', '{{ins.id}}')">Entré</button>
+{% endif %}

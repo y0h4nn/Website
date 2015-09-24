@@ -65,10 +65,10 @@ var BaseList = function(containerId, buildCallback){
 
         for(var elem of this.elems){
             if(this.matchingElems.indexOf(elem) >= 0){
-                elem.element.className = '';
+                elem.element.className = '' + elem.klass;
             }
             else{
-                elem.element.className = 'hidden';
+                elem.element.className = 'hidden ' + elem.klass;
             }
         }
     };
