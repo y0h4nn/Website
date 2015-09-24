@@ -11,7 +11,8 @@
         populate: {
             value: function(data){
                 this.elems = data['events'];
-                for(var evt of this.elems){
+                for(var i in this.elems){
+                    var evt = this.elems[i];
                     var img = document.createElement('img');
                         img.setAttribute('src', evt['picture']);
                         img.setAttribute('alt', 'profile_picture');
@@ -33,8 +34,9 @@
                     evt.element.appendChild(nameContainer);
                     evt.element.appendChild(actionContainer);
                     if(this.onElemBuild){
-                        for(var action of this.onElemBuild(evt)){
-                            actionContainer.appendChild(action.element);
+                        var actions = this.onElemBuild(evt);
+                        for(var i in actions ){
+                            actionContainer.appendChild(actions[i].element);
                         }
                     }
                     pictureContainer.appendChild(img);
