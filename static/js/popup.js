@@ -183,7 +183,8 @@ UserSelectionPopup.prototype = Object.create(Popup.prototype, {
     buildUserList: {
         value: function(users){
             this.btnContainer.innerHTML = "";
-            for(var user of users){
+            for(var i in users){
+                var user = users[i];
                 var button = document.createElement('button');
                 button.setAttribute('type', 'button');
                 button.setAttribute('data-uid', user.id);

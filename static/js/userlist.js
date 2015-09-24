@@ -2,6 +2,8 @@
 
 (function(){
 
+    alert("ufck you");
+
     var UserList = function(containerId, listProvider, buildCallback){
         BaseList.call(this, containerId, buildCallback);
         queryJson(listProvider, {}, this.populate.bind(this));
@@ -11,7 +13,8 @@
         populate: {
             value: function(json){
                 this.elems = json['users'];
-                for(var user of this.elems){
+                for(var i in this.elems){
+                    var user = this.elems[i];
                     var img = document.createElement('img');
                         img.setAttribute('src', user['picture']);
                         img.setAttribute('alt', 'profile_picture');
@@ -28,8 +31,9 @@
                     user.element.appendChild(nameContainer);
                     user.element.appendChild(actionContainer);
                     if(this.onElemBuild){
-                        for(var action of this.onElemBuild(user)){
-                            actionContainer.appendChild(action.element);
+                        var actions = this.onElemBuild(user);
+                        for(var i in actions){
+                            actionContainer.appendChild(actions[i].element);
                         }
                     }
                     pictureContainer.appendChild(img);

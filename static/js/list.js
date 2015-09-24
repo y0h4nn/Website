@@ -63,7 +63,8 @@ var BaseList = function(containerId, buildCallback){
         this.searchInput.focus();
         this.spinner.setAttribute('class', 'spinner hidden');
 
-        for(var elem of this.elems){
+        for(var i in this.elems){
+            var elem = this.elems[i];
             if(this.matchingElems.indexOf(elem) >= 0){
                 elem.element.className = '' + elem.klass;
             }
