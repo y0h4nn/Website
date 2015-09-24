@@ -2,8 +2,6 @@
 
 (function(){
 
-    alert("ufck you");
-
     var UserList = function(containerId, listProvider, buildCallback){
         BaseList.call(this, containerId, buildCallback);
         queryJson(listProvider, {}, this.populate.bind(this));
