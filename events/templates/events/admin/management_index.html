@@ -32,12 +32,11 @@
 </div>
 <script>
         function acked(data){
-            if(data["status"] == 1){
-                document.popup.element.setAttribute("class", "bg-blue");
-                input =  document.getElementById('search_input');
-                input.value = "";
-                input.focus();
-            }
+            document.popup.element.setAttribute("class", "bg-blue");
+            document.popup.user.klass = "bg-blue";
+            input =  document.getElementById('search_input');
+            input.value = "";
+            input.focus();
         }
         function ack_in(eid, type, iid){
            document.popup.close();
