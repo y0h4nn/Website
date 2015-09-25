@@ -4,6 +4,7 @@
 
     var UserList = function(containerId, listProvider, buildCallback){
         BaseList.call(this, containerId, buildCallback);
+        this.searchInput.id = "search_input";
         queryJson(listProvider, {}, this.populate.bind(this));
     };
 
