@@ -4,6 +4,7 @@
 
     var UserList = function(containerId, listProvider, buildCallback){
         BaseList.call(this, containerId, buildCallback);
+        this.searchInput.id = "search_input";
         queryJson(listProvider, {}, this.populate.bind(this));
     };
 
@@ -27,12 +28,7 @@
 
 
                     user.element = document.createElement('li');
-                    if(user['contributor'] === true){
-                        user.klass = "bg-green";
-                    }
-                    else if(user['contributor'] === false){
-                        user.klass = "bg-red";
-                    }
+                    user.klass = user['color'];
                     user.element.appendChild(pictureContainer);
                     user.element.appendChild(nameContainer);
                     user.element.appendChild(actionContainer);
@@ -45,6 +41,7 @@
                     pictureContainer.appendChild(img);
                     user.element.addEventListener("click", (function(){
                         document.popup = new RemoteHtmlPopup("Info", event_id + "/info/" + this['type'] + '/' + this['id']);
+                        document.popup.element = this.element;
                         document.popup.pop();
                     }).bind(user));
                     this.listelement.appendChild(user.element);
