@@ -11,7 +11,8 @@
         populate: {
             value: function(data){
                 this.elems = data['polls'];
-                for(var elem of this.elems){
+                for(var i in this.elems){
+                    var elem = this.elems[i];
                     var img = document.createElement('i');
                         img.setAttribute('class', elem['icon']);
                     var pictureContainer = document.createElement('div');
@@ -31,8 +32,9 @@
                     elem.element.appendChild(nameContainer);
                     elem.element.appendChild(actionContainer);
                     if(this.onElemBuild){
-                        for(var action of this.onElemBuild(elem)){
-                            actionContainer.appendChild(action.element);
+                        var actions = this.onElemBuild(elem);
+                        for(var i in actions){
+                            actionContainer.appendChild(actions[i].element);
                         }
                     }
                     pictureContainer.appendChild(img);
