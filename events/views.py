@@ -227,7 +227,7 @@ def management_list_users(request, eid):
                 "color": "bg-blue" if ins.in_date is not None else "bg-green" if is_contributor(ins.user) else "bg-red",
                 "type": "reg",
                 "id": ins.id,
-            } for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').order_by('user__last_name', 'user__first_name', 'user__profile__nickname', 'user__username')
+            } for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').select_related("user__contribution").order_by('user__last_name', 'user__first_name', 'user__profile__nickname', 'user__username')
         ]
         ret['ext_reg'] = [{
                 "display_name": "{} {} ({})".format(ins.last_name, ins.first_name, ins.via.name),
