@@ -13,7 +13,8 @@
                 // Registrations
                 this.elems = json['reg'].concat(json['ext_reg']).concat(json['invits']);
 
-                for(var user of this.elems){
+                for(var i in this.elems){
+                    var user = this.elems[i];
                     var img = document.createElement('img');
                         img.setAttribute('src', user['picture']);
                         img.setAttribute('alt', 'profile_picture');
@@ -36,8 +37,9 @@
                     user.element.appendChild(nameContainer);
                     user.element.appendChild(actionContainer);
                     if(this.onElemBuild){
-                        for(var action of this.onElemBuild(user)){
-                            actionContainer.appendChild(action.element);
+                        var actions = this.onElemBuild(user);
+                        for(var i in actions){
+                            actionContainer.appendChild(actions[i].element);
                         }
                     }
                     pictureContainer.appendChild(img);
