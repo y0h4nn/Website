@@ -38,6 +38,7 @@
                     pictureContainer.appendChild(img);
                     user.element.addEventListener("click", (function(){
                         document.popup = new RemoteHtmlPopup("Info", event_id + "/info/" + this['type'] + '/' + this['id']);
+                        document.popup.element = this.element;
                         document.popup.pop();
                     }).bind(user));
                     this.listelement.appendChild(user.element);

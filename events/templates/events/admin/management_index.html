@@ -31,9 +31,14 @@
 <div id="userlist">
 </div>
 <script>
+        function acked(data){
+            if(data["status"] == 1){
+                document.popup.element.setAttribute("class", "bg-blue");
+            }
+        }
         function ack_in(eid, type, iid){
            document.popup.close();
-           queryJson(eid + "/ack/" + type + '/' + iid);
+           queryJson(eid + "/ack/" + type + '/' + iid, {}, acked);
         }
         {% if event.gestion == "WAF" %}
             url = "/events/admin/management/list_registrations/{{event.id}}"
