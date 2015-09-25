@@ -26,12 +26,7 @@
 
 
                     user.element = document.createElement('li');
-                    if(user['contributor'] === true){
-                        user.klass = "bg-green";
-                    }
-                    else if(user['contributor'] === false){
-                        user.klass = "bg-red";
-                    }
+                    user.klass = user['color'];
                     user.element.appendChild(pictureContainer);
                     user.element.appendChild(nameContainer);
                     user.element.appendChild(actionContainer);

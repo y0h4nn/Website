@@ -224,7 +224,7 @@ def management_list_users(request, eid):
         ret['reg'] = [{
                 "display_name": str(ins.user.profile),
                 "picture": ins.user.profile.get_picture_url(),
-                "contributor": is_contributor(ins.user),
+                "color": "bg-blue" if ins.in_date is not None else "bg-green" if is_contributor(ins.user) else "bg-red",
                 "type": "reg",
                 "id": ins.id,
             } for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').order_by('user__last_name', 'user__first_name', 'user__profile__nickname', 'user__username')
@@ -232,7 +232,7 @@ def management_list_users(request, eid):
         ret['ext_reg'] = [{
                 "display_name": "{} {} ({})".format(ins.last_name, ins.first_name, ins.via.name),
                 "picture": static('images/default_user_icon.png'),
-                "contributor": None,
+                "color": "",
                 "type": "ext_reg",
                 "id": ins.id,
             } for ins in ExternInscription.objects.filter(event=e).select_related('event').select_related('via').order_by('last_name', 'first_name')
@@ -240,7 +240,7 @@ def management_list_users(request, eid):
         ret['invits'] = [{
                 "display_name": "{} {} (invité par {})".format(ins.first_name, ins.last_name, str(ins.user.profile)),
                 "picture": static('images/default_user_icon.png'),
-                "contributor": None,
+                "color": "",
                 "type": "invit",
                 "id": ins.id,
             } for ins in Invitation.objects.filter(event=e).select_related('event').select_related('user__profile').order_by('last_name', 'first_name')
@@ -255,7 +255,6 @@ def management_info_user(request, eid, type, iid):
     if type == "reg":
         ins = Inscription.objects.select_related('user__profile').get(event=e, id=iid)
         context['ins'] = ins
-        print(ins.in_date)
         context['display_name'] = str(ins.user.profile)
         context['products'] = [prod for prod in BuyingHistory.get_all_bought_products(ins.user) if prod.event == e]
     elif type == "ext_reg":

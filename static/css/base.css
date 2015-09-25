@@ -1079,6 +1079,11 @@ table:not(.rd-days) {
   .bg-green:hover {
     background-color: #95EC95 !important; }
 
+.bg-blue {
+  background-color: #9FD3F3 !important; }
+  .bg-blue:hover {
+    background-color: #7AB3D7 !important; }
+
 .comment {
   border: 1px solid #ddd;
   padding: 1em;
