@@ -1,6 +1,6 @@
 .event
   @include vendor-prefix(display, flex)
-  @include vendor-prefix(flex-show, row)
+  @include vendor-prefix(flex-flow, row)
   @include vendor-prefix(align-items, stretch)
   margin-bottom: 2em
 
@@ -75,3 +75,7 @@
   background-color: #9FD3F3 !important
   &:hover
     background-color: #7AB3D7 !important
+
+@media screen and (max-width: $mobile_view_treshold)
+  .event
+    display: block

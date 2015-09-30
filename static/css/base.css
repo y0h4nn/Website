@@ -997,11 +997,11 @@ table:not(.rd-days) {
   -ms-display: flex;
   -o-display: flex;
   display: flex;
-  -webkit-flex-show: row;
-  -moz-flex-show: row;
-  -ms-flex-show: row;
-  -o-flex-show: row;
-  flex-show: row;
+  -webkit-flex-flow: row;
+  -moz-flex-flow: row;
+  -ms-flex-flow: row;
+  -o-flex-flow: row;
+  flex-flow: row;
   -webkit-align-items: stretch;
   -moz-align-items: stretch;
   -ms-align-items: stretch;
@@ -1084,6 +1084,9 @@ table:not(.rd-days) {
   .bg-blue:hover {
     background-color: #7AB3D7 !important; }
 
+@media screen and (max-width: 640px) {
+  .event {
+    display: block; } }
 .comment {
   border: 1px solid #ddd;
   padding: 1em;

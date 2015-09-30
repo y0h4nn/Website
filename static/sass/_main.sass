@@ -81,7 +81,7 @@
           &:first-child:last-child a
             border-radius: 3px
 
-@media screen and (max-width: 640px)
+@media screen and (max-width: $mobile_view_treshold)
   #main_container
     @include vendor-prefix(flex, 1 1 auto)
     @include vendor-prefix(order, 3)
