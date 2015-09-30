@@ -31,7 +31,7 @@ def index(request):
             messages.add_message(request, messages.INFO, "Votre commande a bien été prise en compte")
             return redirect('pizza:index')
 
-    ins = Inscription.objects.filter(user=request.user).select_related("pizza")
+    ins = Inscription.objects.filter(user=request.user, command=com).select_related("pizza")
     form = PizzaTakingForm(pizzas=pizzas)
     context = {"pizzas": pizzas, 'form': form, 'command': com, 'inscriptions': ins}
     return render(request, 'pizza/index.html', context)
