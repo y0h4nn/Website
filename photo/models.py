@@ -1,3 +1,20 @@
 from django.db import models
 
-# Create your models here.
+
+class Album(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(default="")
+    parent = models.ForeignKey('Album', null=True, blank=True, default=None)
+
+    def __str__(self):
+        return self.name
+
+class Photo(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(default="")
+    Album = models.ForeignKey(Album)
+    image = models.ImageField(height_field="height", width_field="width")
+
+    def __str__(self):
+        return self.name
+

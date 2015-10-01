@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Ajouter un album photo
+{% endblock %}
+
+{% block header %}
+    Ajouter un album photo
+{% endblock %}
+
+{% block menu %}
+{% endblock%}
+
+{% block main %}
+    <form action="{% url 'photo:add_album' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Ajouter l'album</button>
+    </form>
+{% endblock %}
