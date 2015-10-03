@@ -4,13 +4,12 @@ from . import models
 
 def index(request):
     context = {
-        'albums': models.Album.objects.all()
+        'albums': models.Album.get_childs(None).all()
     }
     return render(request, 'photo/index.html', context)
 
 
 def add_album(request):
-
     if request.method == 'POST':
         form = forms.AlbumForm(request.POST)
         if form.is_valid():

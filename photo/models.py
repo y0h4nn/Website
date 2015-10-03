@@ -9,6 +9,10 @@ class Album(models.Model):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def get_childs(album):
+        return Album.objects.filter(parent=album)
+
 class Photo(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(default="")
