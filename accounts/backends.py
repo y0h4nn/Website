@@ -27,25 +27,23 @@ class NormalAuth(BaseAuth):
 class ImapAuth(BaseAuth):
     def authenticate(self, email=None, password=None):
         if email and password:
-            # TODO use context manager when python 3.5 is out (sept 2015)
-            # FIXME when python 3.5 is out
-            srv = imaplib.IMAP4_SSL('imap-eleves.enib.fr')
+            with imaplib.IMAP4_SSL('imap-eleves.enib.fr') as srv:
+                srv._mode_utf8()
 
-            username = email.split("@")[0].strip()
-            email = email.strip() + '@enib.fr' if '@' not in email else email
-            user = None
-            try:
-                srv.login(username, password)
-                user = User.objects.create_user(username, email, password)
+                username = email.split("@")[0].strip()
+                email = email.strip() + '@enib.fr' if '@' not in email else email
+                user = None
+                try:
+                    srv.login(username, password)
+                    user = User.objects.create_user(username, email, password)
 
-                enib_group = Group.objects.get(name='Enib')
-                all_group = Group.objects.get(name='Tous')
-                enib_group.user_set.add(user)
-                all_group.user_set.add(user)
+                    enib_group = Group.objects.get(name='Enib')
+                    all_group = Group.objects.get(name='Tous')
+                    enib_group.user_set.add(user)
+                    all_group.user_set.add(user)
 
-                user.save()
-            except (imaplib.IMAP4.error, IntegrityError):
-                pass
-            srv.logout()
-            return user
+                    user.save()
+                except (imaplib.IMAP4.error, IntegrityError):
+                    pass
+                return user
 
