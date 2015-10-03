@@ -1,5 +1,6 @@
 import imaplib
-from django.contrib.auth.models import User, check_password, Group
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.hashers import check_password
 from django.db import IntegrityError
 
 
