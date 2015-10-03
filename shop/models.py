@@ -187,8 +187,8 @@ TYPES = [
 class BuyingHistory(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     type = models.CharField(max_length=10, choices=TYPES)
-    product = models.ForeignKey(Product ,null=True, default=None)
-    pack = models.ForeignKey(Packs, null=True, default=None)
+    product = models.ForeignKey(Product ,null=True)
+    pack = models.ForeignKey(Packs, null=True)
     date = models.DateTimeField(auto_now_add=True)
     payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT)
 
