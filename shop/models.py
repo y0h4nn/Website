@@ -30,7 +30,7 @@ from django.db import models, IntegrityError, transaction
 from django.conf import settings
 from bde.models import Contributor
 from events.models import Event, Inscription
-from notifications import notify
+from notifications.shortcuts import notify
 
 
 ACTIONS = [

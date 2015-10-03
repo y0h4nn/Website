@@ -7,7 +7,7 @@ from django.utils import timezone
 import json
 from .models import Question, Answer, Poll, Voter
 from .forms import PollForm
-from bde import bde_member
+from bde.shortcuts import bde_member
 
 
 @bde_member

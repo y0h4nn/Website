@@ -1,6 +1,6 @@
 from .forms import EventForm, ExternInscriptionForm, ExternLinkForm, InvitForm
 from .models import Event, Inscription, ExternInscription, ExternLink, Invitation
-from bde import bde_member, is_bde_member, is_contributor
+from bde.shortcuts import bde_member, is_bde_member, is_contributor
 from shop.models import BuyingHistory
 
 from django.contrib import messages
