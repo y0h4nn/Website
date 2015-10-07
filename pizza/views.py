@@ -39,7 +39,7 @@ def index(request):
 
 @bde_member
 def admin_index(request):
-    command_list = Command.objects.all().prefetch_related('inscriptions__pizza').prefetch_related('inscriptions__user__profile').order_by("inscriptions__user")
+    command_list = Command.objects.all().prefetch_related('inscriptions__pizza').prefetch_related('inscriptions__user__profile').order_by("-date")
     paginator = Paginator(command_list, 1)
 
     page = request.GET.get('page')
@@ -82,7 +82,6 @@ def admin_manage_pizzas(request):
 @bde_member
 def admin_manage_commands(request):
     com = Command.get_current()
-    print(com)
     if com is not None and com.is_valid():
         form = CommandForm(request.POST or None, instance=com)
     else:
