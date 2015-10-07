@@ -82,8 +82,9 @@ def admin_manage_pizzas(request):
 @bde_member
 def admin_manage_commands(request):
     com = Command.get_current()
+    print(com)
     if com is not None and com.is_valid():
-        form = CommandForm(request.POST or None, initial=com.__dict__)
+        form = CommandForm(request.POST or None, instance=com)
     else:
         form = CommandForm(request.POST or None)
 
