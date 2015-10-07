@@ -935,6 +935,19 @@ table:not(.rd-days) {
   margin-left: auto;
   margin-right: 5px; }
 
+@media screen and (max-width: 900px) {
+  .userlist li {
+    display: block;
+    height: auto;
+    padding: 1em;
+    text-align: center;
+    border-bottom: 1px solid #ddd; }
+    .userlist li div:nth-child(2) {
+      display: inline-block;
+      padding: 1em; }
+    .userlist li .picture_container, .userlist li .icon_container {
+      display: none;
+      text-align: center; } }
 .popup, .selection_popup, .user_selection_popup {
   background-color: rgba(0, 0, 0, 0.3);
   width: 100%;
