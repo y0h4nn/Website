@@ -54,7 +54,7 @@ class ExternInscriptionForm(ModelForm):
     class Meta:
         model = ExternInscription
         labels = {'first_name': "Prénom", 'last_name': "Nom"}
-        exclude = ["event", "via"]
+        exclude = ["event", "via", "in_date"]
 
 class ExternLinkForm(ModelForm):
     class Meta:
