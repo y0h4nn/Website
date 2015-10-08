@@ -1,4 +1,4 @@
-from django.forms import ModelForm, ClearableFileInput, SplitDateTimeWidget
+from django.forms import ModelForm, ClearableFileInput, SplitDateTimeField
 from django.utils.safestring import mark_safe
 from .models import Event, ExternInscription, ExternLink, Invitation
 
@@ -43,11 +43,11 @@ class EventForm(ModelForm):
                   'allow_extern': "Autoriser les exterieurs", 'limited': "Nombre d'inscriptions limité",
                   'max_inscriptions': "Nombre maximum d'inscriptions", 'allow_invitations': "Autoriser les invitations",
                   'max_invitations': "Nombre maximum d'invitations", 'max_invitations_by_person': "Nombre maximum d'invitations par personne"}
-        widgets = {'photo': WrapperClearableinput,
-                   'start_time': SplitDateTimeWidget(),
-                   'end_time': SplitDateTimeWidget(),
-                   'end_inscriptions': SplitDateTimeWidget(),
-                  }
+        widgets = {'photo': WrapperClearableinput,}
+
+    start_time = SplitDateTimeField()
+    end_time = SplitDateTimeField()
+    end_inscriptions = SplitDateTimeField()
 
 
 class ExternInscriptionForm(ModelForm):
