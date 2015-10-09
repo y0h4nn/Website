@@ -40,14 +40,15 @@ class Event(models.Model):
         return self.inscriptions.all().count() + self.extern_inscriptions.all().count() + self.invitations.all().count()
 
     def can_subscribe(self):
-        return not self.limited or self.inscriptions.all().count() < self.max_inscriptions
+        return not self.limited or self.registrations_number() < self.max_inscriptions
 
     def can_invite(self, user):
         return (self.allow_invitations and
                 (self.invitations_start is None or self.invitations_start <= timezone.now()) and
                 ((self.max_invitations == 0 or (self.invitations.all().count() < self.max_invitations))and
                 (self.max_invitations_by_person == 0 or self.invitations.filter(user=user).count() < self.max_invitations_by_person)) and
-                is_contributor(user))
+                is_contributor(user) and
+                self.can_subscribe())
 
     def closed(self):
         return timezone.now() >= self.end_inscriptions
@@ -78,7 +79,7 @@ class ExternLink(models.Model):
         unique_together = (('name', 'event'),)
 
     def places_left(self):
-        return self.maximum > self.inscriptions.all().count()
+        return self.event.can_subscribe() and self.maximum > self.inscriptions.all().count()
 
 
 class Inscription(models.Model):
