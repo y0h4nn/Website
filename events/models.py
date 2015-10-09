@@ -5,7 +5,6 @@ from django.db.models import Q
 from django.templatetags.static import static
 from django.utils import timezone
 from bde.shortcuts import is_contributor
-import datetime
 
 
 class Event(models.Model):
@@ -33,6 +32,7 @@ class Event(models.Model):
     allow_invitations = models.BooleanField(default=False)
     max_invitations = models.IntegerField(validators=[MinValueValidator(0)], default=0)
     max_invitations_by_person = models.IntegerField(validators=[MinValueValidator(0)], default=0)
+    invitations_start = models.DateTimeField(null=True, blank=True)
 
     gestion = models.CharField(max_length=3, choices=GESTION_CHOICES, default=None, null=True, blank=True)
 
@@ -43,9 +43,11 @@ class Event(models.Model):
         return not self.limited or self.inscriptions.all().count() < self.max_inscriptions
 
     def can_invite(self, user):
-        return is_contributor(user) and self.allow_invitations and ((self.max_invitations == 0 or (self.invitations.all().count() < self.max_invitations))
-            and (self.max_invitations_by_person == 0 or
-            self.invitations.filter(user=user).count() < self.max_invitations_by_person))
+        return (self.allow_invitations and
+                (self.invitations_start is None or self.invitations_start <= timezone.now()) and
+                ((self.max_invitations == 0 or (self.invitations.all().count() < self.max_invitations))and
+                (self.max_invitations_by_person == 0 or self.invitations.filter(user=user).count() < self.max_invitations_by_person)) and
+                is_contributor(user))
 
     def closed(self):
         return timezone.now() >= self.end_inscriptions

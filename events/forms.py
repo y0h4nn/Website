@@ -32,22 +32,23 @@ class EventForm(ModelForm):
             create_calendar("id_end_inscriptions_0")
             create_calendar("id_start_time_0")
             create_calendar("id_end_time_0")
+            create_calendar("id_invitations_start_0")
         </script>
         ''')
 
+    start_time = SplitDateTimeField(label="Début")
+    end_time = SplitDateTimeField(label="Fin")
+    end_inscriptions = SplitDateTimeField(label="Fin des inscriptions")
+    invitations_start = SplitDateTimeField(label="Début des invitations")
     class Meta:
         model = Event
         exclude = ["uuid"]
-        labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin",
-                  'location': "Lieu", 'private': "Privé", 'end_inscriptions': "Fin des inscriptions",
+        labels = {'name': "Nom", 'location': "Lieu", 'private': "Privé",
                   'allow_extern': "Autoriser les exterieurs", 'limited': "Nombre d'inscriptions limité",
                   'max_inscriptions': "Nombre maximum d'inscriptions", 'allow_invitations': "Autoriser les invitations",
                   'max_invitations': "Nombre maximum d'invitations", 'max_invitations_by_person': "Nombre maximum d'invitations par personne"}
         widgets = {'photo': WrapperClearableinput,}
 
-    start_time = SplitDateTimeField()
-    end_time = SplitDateTimeField()
-    end_inscriptions = SplitDateTimeField()
 
 
 class ExternInscriptionForm(ModelForm):
