@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.templatetags.static import static
 from django.utils import timezone
 from bde.shortcuts import is_contributor
+import datetime
 
 
 class Event(models.Model):
@@ -93,6 +94,7 @@ class ExternInscription(models.Model):
     last_name = models.CharField(max_length=255)
     event = models.ForeignKey(Event, related_name="extern_inscriptions")
     via = models.ForeignKey(ExternLink, related_name="inscriptions")
+    birth_date = models.DateField(null=True)
     in_date = models.DateTimeField(null=True, blank=True, default=None)
 
     class Meta:
@@ -103,6 +105,7 @@ class Invitation(models.Model):
     mail = models.EmailField()
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
+    birth_date = models.DateField(null=True)
     event = models.ForeignKey(Event, related_name="invitations")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="invitations")
     in_date = models.DateTimeField(null=True, blank=True, default=None)

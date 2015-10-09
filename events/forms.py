@@ -53,8 +53,9 @@ class EventForm(ModelForm):
 class ExternInscriptionForm(ModelForm):
     class Meta:
         model = ExternInscription
-        labels = {'first_name': "Prénom", 'last_name': "Nom"}
+        labels = {'first_name': "Prénom", 'last_name': "Nom", 'birth_date': "Date de naissance"}
         exclude = ["event", "via", "in_date"]
+
 
 class ExternLinkForm(ModelForm):
     class Meta:
@@ -62,9 +63,10 @@ class ExternLinkForm(ModelForm):
         labels = {"name": "Pour", "maximum": "Nombre de places"}
         fields = ["name", "maximum"]
 
+
 class InvitForm(ModelForm):
     class Meta:
         model = Invitation
-        labels = {'first_name': "Prénom", 'last_name': "Nom"}
-        fields = ["mail", "first_name", "last_name"]
+        labels = {'first_name': "Prénom", 'last_name': "Nom", 'birth_date': "Date de naissance"}
+        fields = ["mail", "birth_date", "first_name", "last_name"]
 

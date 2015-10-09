@@ -17,6 +17,7 @@
             queryJson('', {'iid': iid}, update_list.bind(elem));
         }
     </script>
+    <script src="{% static 'js/calendar.js' %}"></script>
 {% endblock %}
 
 {% block header %}
@@ -115,6 +116,9 @@
                     {{ invit_form.as_p }}
                     <button name='btn_invit'>Inviter</button>
                 </form>
+                <script>
+                    create_calendar("id_birth_date");
+                </script>
             </div>
         {% endif %}
     </div>

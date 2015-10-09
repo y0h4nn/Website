@@ -1,11 +1,16 @@
 {% extends 'core/base.html' %}
 {% load menu_item %}
+{% load static %}
 
 {% block header %}
     Evenement
 {% endblock %}
 
 {% block menu %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/calendar.js' %}"></script>
 {% endblock %}
 
 {% block main %}
@@ -48,6 +53,9 @@
     <form action="" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
+        <script>
+            create_calendar("id_birth_date");
+        </script>
         <button>S'inscrire</button>
     </form>
 {% endblock %}

@@ -162,8 +162,9 @@ function create_calendar(id){
 function replace_cal(input, contentDiv){
     pos = input.getBoundingClientRect();
     scroll = document.body.scrollTop
+    var height = window.innerHeight;
     contentDiv.style.left = pos.x + scroll + 'px';
-    contentDiv.style.top = pos.y + 'px';
+    contentDiv.style.top = Math.min(pos.y, height-266) + 'px';
 }
 
 function refresh(cal_div, first_day, input){
