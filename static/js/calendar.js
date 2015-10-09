@@ -156,7 +156,7 @@ function create_calendar(id){
     });
 
     refresh(calendarDiv, current_date, input);
-    replace_cal(input, contentDiv)
+    debounce(replace_cal.bind(null, input, contentDiv), 10)
 }
 
 function replace_cal(input, contentDiv){
