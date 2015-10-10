@@ -251,11 +251,11 @@ table:not(.rd-days) {
     table:not(.rd-days) tbody tr:hover {
       background-color: #dfdfdf; }
   table:not(.rd-days) tbody td {
-    padding: 0.5em 0; }
+    padding: 1em; }
     table:not(.rd-days) tbody td:first-child {
-      padding-left: 0.5em; }
+      padding-left: 1em; }
     table:not(.rd-days) tbody td:last-child {
-      padding-right: 0.5em; }
+      padding-right: 1em; }
   table:not(.rd-days) .action_cell {
     text-align: right; }
     table:not(.rd-days) .action_cell a {
@@ -1201,7 +1201,8 @@ table:not(.rd-days) {
     flex: 1 1 auto; }
 
 .news {
-  margin: 1em 0 5em 0; }
+  margin: 1em 0 5em 0;
+  width: 100%; }
   .news header {
     border-bottom: 1px solid #eee; }
     .news header h1 {
@@ -1218,6 +1219,8 @@ table:not(.rd-days) {
       color: #bbb; }
       .news footer a:hover {
         color: #68B9DE; }
+  .news img {
+    max-width: 100%; }
 
 .notification {
   margin-bottom: 3em;
