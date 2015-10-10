@@ -1,4 +1,4 @@
-from django.forms import ModelForm, ClearableFileInput, SplitDateTimeWidget
+from django.forms import ModelForm, ClearableFileInput, SplitDateTimeField
 from django.utils.safestring import mark_safe
 from .models import Event, ExternInscription, ExternLink, Invitation
 
@@ -32,29 +32,31 @@ class EventForm(ModelForm):
             create_calendar("id_end_inscriptions_0")
             create_calendar("id_start_time_0")
             create_calendar("id_end_time_0")
+            create_calendar("id_invitations_start_0")
         </script>
         ''')
 
+    start_time = SplitDateTimeField(label="Début")
+    end_time = SplitDateTimeField(label="Fin")
+    end_inscriptions = SplitDateTimeField(label="Fin des inscriptions")
+    invitations_start = SplitDateTimeField(label="Début des invitations")
     class Meta:
         model = Event
         exclude = ["uuid"]
-        labels = {'name': "Nom", 'start_time': "Début", 'end_time': "Fin",
-                  'location': "Lieu", 'private': "Privé", 'end_inscriptions': "Fin des inscriptions",
+        labels = {'name': "Nom", 'location': "Lieu", 'private': "Privé",
                   'allow_extern': "Autoriser les exterieurs", 'limited': "Nombre d'inscriptions limité",
                   'max_inscriptions': "Nombre maximum d'inscriptions", 'allow_invitations': "Autoriser les invitations",
                   'max_invitations': "Nombre maximum d'invitations", 'max_invitations_by_person': "Nombre maximum d'invitations par personne"}
-        widgets = {'photo': WrapperClearableinput,
-                   'start_time': SplitDateTimeWidget(),
-                   'end_time': SplitDateTimeWidget(),
-                   'end_inscriptions': SplitDateTimeWidget(),
-                  }
+        widgets = {'photo': WrapperClearableinput,}
+
 
 
 class ExternInscriptionForm(ModelForm):
     class Meta:
         model = ExternInscription
-        labels = {'first_name': "Prénom", 'last_name': "Nom"}
-        exclude = ["event", "via"]
+        labels = {'first_name': "Prénom", 'last_name': "Nom", 'birth_date': "Date de naissance"}
+        exclude = ["event", "via", "in_date"]
+
 
 class ExternLinkForm(ModelForm):
     class Meta:
@@ -62,9 +64,10 @@ class ExternLinkForm(ModelForm):
         labels = {"name": "Pour", "maximum": "Nombre de places"}
         fields = ["name", "maximum"]
 
+
 class InvitForm(ModelForm):
     class Meta:
         model = Invitation
-        labels = {'first_name': "Prénom", 'last_name': "Nom"}
-        fields = ["mail", "first_name", "last_name"]
+        labels = {'first_name': "Prénom", 'last_name': "Nom", 'birth_date': "Date de naissance"}
+        fields = ["mail", "birth_date", "first_name", "last_name"]
 

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 import datetime
 import uuid
 from datetime import timezone
+from bde.models import Contributor
 from django.templatetags.static import static
 
 
@@ -129,7 +130,9 @@ class TestEvent(TestCase):
 
         self.event.allow_invitations = True
         self.event.save()
-        u = User.objects.create_user(str(uuid.uuid4())[:30], 'BBB@exemple.com', 'AAA')
+        self.assertFalse(self.event.can_invite(u))
+        Contributor.take_full_contribution(u, 'cash')
+
         self.assertTrue(self.event.can_invite(u))
 
         self.event.max_invitations = 1

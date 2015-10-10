@@ -5,6 +5,7 @@ window.addEventListener('load', function(){
     invits = document.getElementById('id_allow_invitations');
     max1 = document.getElementById('id_max_invitations').parentNode;
     max2 = document.getElementById('id_max_invitations_by_person').parentNode;
+    is_start = document.getElementById('id_invitations_start_0').parentNode;
     function check_max(){
         if(limited.checked){
             max.style.display = "flex";
@@ -18,10 +19,12 @@ window.addEventListener('load', function(){
         if(invits.checked){
             max1.style.display = "flex";
             max2.style.display = "flex";
+            is_start.style.display = "flex"
         }
         else{
             max1.style.display = "none";
             max2.style.display = "none";
+            is_start.style.display = "none"
         }
     }
 
