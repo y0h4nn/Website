@@ -168,7 +168,7 @@ def admin_list_registrations(request, eid):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
         if 'iid' in req:
-            if 'ext' not in req:
+            if 'ext' in req:
                 ins = ExternInscription.objects.get(id=req['iid'])
             elif 'inv' in req:
                 ins = Invitation.objects.get(id=req['iid'])
