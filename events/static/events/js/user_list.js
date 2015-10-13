@@ -7,7 +7,7 @@ function update_list(data){
 }
 
 function del_ins(iid, type, elmt){
-        params = {"iid": iid};
+        var params = {"iid": iid};
         params[type] = true;
         queryJson('', params, update_list.bind(elmt));
 }
