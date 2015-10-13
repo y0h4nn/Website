@@ -169,11 +169,12 @@ def admin_list_registrations(request, eid):
         req = json.loads(request.read().decode())
         if 'iid' in req:
             if 'ext' not in req:
-                ins = Inscription.objects.get(id=req['iid'])
-                ins.delete()
-            else:
                 ins = ExternInscription.objects.get(id=req['iid'])
-                ins.delete()
+            elif 'inv' in req:
+                ins = Invitation.objects.get(id=req['iid'])
+            else:
+                ins = Inscription.objects.get(id=req['iid'])
+            ins.delete()
             return JsonResponse({"status": 1})
         return JsonResponse({"status": 0})
     e = get_object_or_404(Event, id=eid)
