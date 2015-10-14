@@ -8,7 +8,7 @@ from django.db import IntegrityError
 from django.conf import settings
 from django.http import HttpResponse
 from . import models
-from . import bde_member
+from .shortcuts import bde_member
 import csv
 
 

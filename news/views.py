@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from . import forms
 from . import models
-from bde import bde_member, is_bde_member
+from bde.shortcuts import bde_member, is_bde_member
 import json
 
 

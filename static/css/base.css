@@ -251,11 +251,11 @@ table:not(.rd-days) {
     table:not(.rd-days) tbody tr:hover {
       background-color: #dfdfdf; }
   table:not(.rd-days) tbody td {
-    padding: 0.5em 0; }
+    padding: 1em; }
     table:not(.rd-days) tbody td:first-child {
-      padding-left: 0.5em; }
+      padding-left: 1em; }
     table:not(.rd-days) tbody td:last-child {
-      padding-right: 0.5em; }
+      padding-right: 1em; }
   table:not(.rd-days) .action_cell {
     text-align: right; }
     table:not(.rd-days) .action_cell a {
@@ -454,6 +454,39 @@ table:not(.rd-days) {
     .pagination .page:active, .pagination .page.toggled {
       background-color: #ddd; }
 
+.announce header {
+  border-bottom: 1px solid #eee; }
+  .announce header h2 {
+    color: #bbb;
+    font-size: 1em; }
+.announce .details {
+  text-align: center; }
+  .announce .details + .details div {
+    border-top: none; }
+  .announce .details div {
+    -webkit-flex: 1 1 50%;
+    -moz-flex: 1 1 50%;
+    -ms-flex: 1 1 50%;
+    -o-flex: 1 1 50%;
+    flex: 1 1 50%;
+    border: 1px solid #eee;
+    padding: 1em; }
+    .announce .details div + div {
+      border-left: none; }
+  .announce .details p {
+    text-align: center;
+    margin: 0; }
+    .announce .details p:first-child {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: orange; }
+
+@media screen and (max-width: 640px) {
+  .flex_container {
+    display: block; }
+
+  .announce div {
+    border: none !important; } }
 #main_container {
   -webkit-flex: 1 1 auto;
   -moz-flex: 1 1 auto;
@@ -902,6 +935,19 @@ table:not(.rd-days) {
   margin-left: auto;
   margin-right: 5px; }
 
+@media screen and (max-width: 900px) {
+  .userlist li {
+    display: block;
+    height: auto;
+    padding: 1em;
+    text-align: center;
+    border-bottom: 1px solid #ddd; }
+    .userlist li div:nth-child(2) {
+      display: inline-block;
+      padding: 1em; }
+    .userlist li .picture_container, .userlist li .icon_container {
+      display: none;
+      text-align: center; } }
 .popup, .selection_popup, .user_selection_popup {
   background-color: rgba(0, 0, 0, 0.3);
   width: 100%;
@@ -1154,35 +1200,9 @@ table:not(.rd-days) {
     -o-flex: 1 1 auto;
     flex: 1 1 auto; }
 
-.announce header {
-  border-bottom: 1px solid #eee; }
-  .announce header h2 {
-    color: #bbb;
-    font-size: 1em; }
-.announce .details {
-  text-align: center; }
-  .announce .details + .details div {
-    border-top: none; }
-  .announce .details div {
-    -webkit-flex: 1 1 50%;
-    -moz-flex: 1 1 50%;
-    -ms-flex: 1 1 50%;
-    -o-flex: 1 1 50%;
-    flex: 1 1 50%;
-    border: 1px solid #eee;
-    padding: 1em; }
-    .announce .details div + div {
-      border-left: none; }
-  .announce .details p {
-    text-align: center;
-    margin: 0; }
-    .announce .details p:first-child {
-      font-size: 1.5em;
-      font-weight: bold;
-      color: orange; }
-
 .news {
-  margin: 1em 0 5em 0; }
+  margin: 1em 0 5em 0;
+  width: 100%; }
   .news header {
     border-bottom: 1px solid #eee; }
     .news header h1 {
@@ -1199,6 +1219,8 @@ table:not(.rd-days) {
       color: #bbb; }
       .news footer a:hover {
         color: #68B9DE; }
+  .news img {
+    max-width: 100%; }
 
 .notification {
   margin-bottom: 3em;

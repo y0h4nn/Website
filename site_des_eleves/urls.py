@@ -19,7 +19,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'^', include('news.urls', namespace="news")),
-    url(r'^settings$', include('core.urls', namespace="core")),
+    url(r'^settings/', include('core.urls', namespace="core")),
     url(r'^accounts/', include('accounts.urls', namespace="accounts")),
     url(r'^accounts/password_reset/$', auth_views.password_reset, {'template_name': 'accounts/password_reset.html'}, name='password_reset'),
     url(r'^accounts/password_reset/done/$', auth_views.password_reset_done, {'template_name': 'accounts/password_reset_done.html'}, name='password_reset_done'),

@@ -149,3 +149,44 @@
 
     &:active, &.toggled
       background-color: #ddd
+
+
+.announce
+  header
+    border-bottom: 1px solid #eee
+
+    h2
+      color: #bbb
+      font-size: 1em
+
+  .details
+    text-align: center
+
+    & + .details
+      div
+        border-top: none
+
+    div
+      @include vendor-prefix(flex, 1 1 50%)
+      border: 1px solid #eee
+      padding: 1em
+
+      & + div
+        border-left: none
+
+    p
+      text-align: center
+      margin: 0
+
+      &:first-child
+        font-size: 1.5em
+        font-weight: bold
+        color: orange
+
+@media screen and (max-width: $mobile_view_treshold)
+  .flex_container
+    display: block
+
+  .announce
+    div
+      border: none !important

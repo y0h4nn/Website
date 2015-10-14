@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from bde import bde_member
+from bde.shortcuts import bde_member
 import csv
 import json
 
@@ -39,7 +39,7 @@ def index(request):
 
 @bde_member
 def admin_index(request):
-    command_list = Command.objects.all().prefetch_related('inscriptions__pizza').prefetch_related('inscriptions__user__profile').order_by("inscriptions__user")
+    command_list = Command.objects.all().prefetch_related('inscriptions__pizza').prefetch_related('inscriptions__user__profile').order_by("-date")
     paginator = Paginator(command_list, 1)
 
     page = request.GET.get('page')
@@ -83,7 +83,7 @@ def admin_manage_pizzas(request):
 def admin_manage_commands(request):
     com = Command.get_current()
     if com is not None and com.is_valid():
-        form = CommandForm(request.POST or None, initial=com.__dict__)
+        form = CommandForm(request.POST or None, instance=com)
     else:
         form = CommandForm(request.POST or None)
 

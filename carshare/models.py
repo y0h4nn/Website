@@ -29,7 +29,7 @@ REGISTRATION_STATUS = OrderedDict([
 class Registration(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     announcement = models.ForeignKey(Announcement)
-    status = models.CharField(max_length=8, null=True, default=None, choices=REGISTRATION_STATUS.items())
+    status = models.CharField(max_length=8, null=True, choices=REGISTRATION_STATUS.items())
     is_simple_comment = models.BooleanField(default=True)
     comment = models.TextField()
     pub_date = models.DateTimeField(auto_now_add=True)

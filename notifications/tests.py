@@ -1,7 +1,7 @@
 import uuid
 from django.test import TestCase
 from django.contrib.auth.models import User, Group
-from . import notify
+from .shortcuts import notify
 from . import models
 
 class TestNotifications(TestCase):
