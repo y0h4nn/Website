@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Photos
+{% endblock %}
+
+{% block header %}
+    {{ path }}
+{% endblock %}
+
+{% block menu %}
+{% endblock%}
+
+{% block main %}
+    {% if not albums %}
+        <p>
+            Il n'y a pas d'album photo.
+        </p>
+    {% endif %}
+    {% for album in albums %}
+        <div>
+            {{ album }}
+        </div>
+    {% endfor %}
+    {% for image in images %}
+        <div>
+            {{ image }}
+        </div>
+    {% endfor %}
+{% endblock %}
