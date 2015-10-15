@@ -62,7 +62,12 @@
                 <p>Lieu</p>
             </div>
             <div class="flex expand">
-                <p>{{ event.registrations_number }}</p>
+                <p>
+                    {{ event.registrations_number }}
+                    {% if event.limited %}
+                        / {{ event.max_inscriptions }}
+                    {% endif %}
+                </p>
                 <p>Inscrit(s)</p>
             </div>
         </div>
@@ -81,7 +86,7 @@
             {% for link in links %}
                 <div class="flex_container details">
                     <div class="flex expand">
-                        <p><a href="{% url 'events:extern' uuid=link.uuid %}">Lien pour {{ link.name }}</a></p>
+                        <p><a href="{% url 'events:extern' uuid=link.uuid %}">Lien pour {{ link.name }}</a> ({{ link.nb_inscriptions }} / {{ link.maximum }})</p>
                     </div>
                 </div>
             {% endfor %}
@@ -96,7 +101,16 @@
         {% endif %}
 
         {% if user_can_invite or invitations %}
-            <header><h1>Invitations</h1></header>
+            <header>
+                <h1>
+                    Invitations {% if event.max_invitations %}({{ event.nb_invitations }} / {{ event.max_invitations }}){% endif %}
+                    <span class="subtitle">
+                        {% if event.max_invitations_by_person %}
+                            (Maximum par personne: {{ event.max_invitations_by_person }})
+                        {% endif %}
+                    </span>
+                </h1>
+            </header>
         {% endif %}
         {% if invitations %}
             <ul class="userlist">

@@ -15,9 +15,9 @@
 
 {% block main %}
     <div class="announce">
-    <header>
-        <h1>{{ event.name }}</h1>
-    </header>
+        <header>
+            <h1>{{ event.name }} ({{ link.nb_places_left }} place(s) restante(s))</h1>
+        </header>
         <p>{{ event.description }}</p>
         <div class="flex_container details">
             <div class="flex expand">
@@ -35,7 +35,12 @@
                 <p>Lieu</p>
             </div>
             <div class="flex expand">
-                <p>{{ event.registrations_number }}</p>
+                <p>
+                    {{ event.registrations_number }}
+                    {% if event.limited %}
+                        / {{ event.max_inscriptions }}
+                    {% endif %}
+                </p>
                 <p>Inscrit(s)</p>
             </div>
         </div>

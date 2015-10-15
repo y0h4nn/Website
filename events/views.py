@@ -103,7 +103,7 @@ def event_extern(request, uuid):
         else:
             messages.add_message(request, messages.INFO, 'Vous avez bien été inscrit à l\'évènement')
         return redirect('news:index')
-    context = {'event': e, 'form': form}
+    context = {'event': e, 'form': form, 'link': link}
     return render(request, 'events/event_extern.html', context)
 
 
