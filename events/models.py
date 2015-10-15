@@ -4,7 +4,6 @@ from django.db import models
 from django.db.models import Q
 from django.templatetags.static import static
 from django.utils import timezone
-from django.utils.functional import cached_property
 from bde.shortcuts import is_contributor
 
 
@@ -37,21 +36,18 @@ class Event(models.Model):
 
     gestion = models.CharField(max_length=3, choices=GESTION_CHOICES, default=None, null=True, blank=True)
 
-    @cached_property
     def registrations_number(self):
-        return self.inscriptions.all().count() + self.extern_inscriptions.all().count() + self.nb_invitations
+        return self.inscriptions.all().count() + self.extern_inscriptions.all().count() + self.nb_invitations()
 
-    @cached_property
     def nb_invitations(self):
         return self.invitations.all().count()
 
-    @cached_property
     def nb_places_left(self):
         if self.limited:
-            return self.max_inscriptions - self.registrations_number
+            return self.max_inscriptions - self.registrations_number()
 
     def can_subscribe(self):
-        return not self.limited or self.registrations_number < self.max_inscriptions
+        return not self.limited or self.registrations_number() < self.max_inscriptions
 
     def can_invite(self, user):
         return (self.allow_invitations and
@@ -90,17 +86,15 @@ class ExternLink(models.Model):
         unique_together = (('name', 'event'),)
 
     def places_left(self):
-        return self.event.can_subscribe() and self.nb_places_left
+        return self.event.can_subscribe() and (self.nb_places_left() > 0)
 
-    @cached_property
     def nb_inscriptions(self):
         return self.inscriptions.all().count()
 
-    @cached_property
     def nb_places_left(self):
-        if self.event.nb_places_left is None:
-            return self.maximum - self.nb_inscriptions
-        return min(self.event.nb_places_left, self.maximum - self.nb_inscriptions)
+        if self.event.nb_places_left() is None:
+            return self.maximum - self.nb_inscriptions()
+        return min(self.event.nb_places_left(), self.maximum - self.nb_inscriptions())
 
 
 class Inscription(models.Model):

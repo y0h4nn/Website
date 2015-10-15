@@ -82,7 +82,7 @@ class TestEvent(TestCase):
         self.do_inscriptions(self.event, 5, True)
         self.assertEqual(self.event.registrations_number(), 13)
 
-    def test_externam_link(self):
+    def test_external_link(self):
         ext = ExternLink.objects.create(event=self.event,
             uuid=uuid.uuid4(),
             maximum=10,
