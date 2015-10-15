@@ -1,47 +1,51 @@
 import os
 from django.shortcuts import render, redirect
+from django.http import Http404
+from django.conf import settings
 from . import forms
 from . import models
 
-PHOTO_ROOT="/home/arnaud/Desktop/Images"
+PHOTO_ROOT="photo"
 ALLOWED_IMAGE_EXT = ['.jpg', '.jpeg', '.png']
 
-def list_albums(path):
-    albums = []
+def list_entries(realpath, path):
+    entries = {
+        'files': [],
+        'dirs': [],
+    }
 
-    for f in os.listdir(path):
-        if not os.path.isdir(os.path.join(path, f)):
-            continue
-        albums.append(f)
-
-    return albums
+    for entry in os.scandir(realpath):
 
 
-def list_images(path):
-    images = []
+        if entry.is_dir():
+            entries['dirs'].append({
+                'name': entry.name,
+                'path': os.path.join(path, entry.name),
+            })
+        elif entry.is_file():
+            if os.path.splitext(entry.name)[1] in ALLOWED_IMAGE_EXT:
+                entries['files'].append({
+                    'name': entry.name,
+                    'path': os.path.join('medias', PHOTO_ROOT, path, entry.name),
+                    # TODO FIXME XXX
+                })
 
-    for f in os.listdir(path):
-        if not os.path.isfile(os.path.join(path, f)):
-            continue
-        if os.path.splitext(f)[1] not in ALLOWED_IMAGE_EXT:
-            print("%s is not an allowed format" % os.path.splitext(f)[1])
-            continue
-        images.append(f)
-
-    return images
+    return entries
 
 
 def browse(request, path):
-    realpath = os.path.join(PHOTO_ROOT, path)
+    realpath = os.path.join(settings.MEDIA_ROOT, PHOTO_ROOT, path)
+    if not os.path.normpath(realpath).startswith(os.path.join(settings.MEDIA_ROOT, PHOTO_ROOT)):
+        raise Http404
     if not os.path.isdir(realpath):
-        return redirect('photo:browse', path='')
+        raise Http404
 
-    print(realpath)
-
+    entries = list_entries(realpath, path)
     context = {
-        'path': realpath,
-        'albums': list_albums(realpath),
-        'images': list_images(realpath),
+        'path': path,
+        'parent': os.path.normpath(os.path.join(path, '..')),
+        'albums': entries['dirs'],
+        'images': entries['files'],
     }
 
     return render(request, 'photo/browse.html', context)

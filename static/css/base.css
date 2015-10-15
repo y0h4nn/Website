@@ -1408,4 +1408,24 @@ table:not(.rd-days) {
     font-size: 1em;
     font-family: monospace; }
 
+.albums {
+  margin-bottom: 2em; }
+
+.album {
+  border-radius: 3px;
+  font-weight: bold; }
+  .album a {
+    padding: 0.5em 0.5em;
+    color: #555;
+    display: block; }
+    .album a:hover {
+      background-color: #eee; }
+
+.photo {
+  display: inline-block; }
+  .photo img {
+    display: inline-block;
+    max-width: 100px;
+    max-height: 100px; }
+
 /*# sourceMappingURL=base.css.map */
