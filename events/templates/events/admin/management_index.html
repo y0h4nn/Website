@@ -28,6 +28,9 @@
 {% endblock %}
 
 {% block main %}
+<div>Derniere personne entrée: <span id="last_entered">Personne</span></div>
+<br>
+<br>
 <div id="userlist">
 </div>
 {% if event.gestion == "WAF" %}
@@ -59,6 +62,8 @@
                 document.popup.user.klass = "bg-blue";
                 input =  document.getElementById('search_input');
                 input.value = "";
+                var last = document.getElementById("last_entered");
+                last.innerHTML = document.popup.user.display_name;
                 input.focus();
             }
             function ack_in(eid, type, iid){

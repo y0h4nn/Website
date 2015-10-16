@@ -2,6 +2,7 @@ from .forms import EventForm, ExternInscriptionForm, ExternLinkForm, InvitForm
 from .models import Event, Inscription, ExternInscription, ExternLink, Invitation
 from bde.shortcuts import bde_member, is_bde_member, is_contributor
 from shop.models import BuyingHistory
+from django.db.models import Count
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -228,7 +229,7 @@ def management_list_users(request, eid):
                 "color": "bg-blue" if ins.in_date is not None else "bg-green" if is_contributor(ins.user) else "bg-red",
                 "type": "reg",
                 "id": ins.id,
-            } for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').select_related("user__contribution").order_by('user__last_name', 'user__first_name', 'user__profile__nickname', 'user__username')
+            } for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').select_related("user__contribution").annotate(null_nick=Count('user__profile__nickname')).order_by('null_nick', '-user__profile__nickname', '-user__last_name', '-user__first_name', '-user__username').reverse()
         ]
         ret['ext_reg'] = [{
                 "display_name": "{} {} ({})".format(ins.last_name, ins.first_name, ins.via.name),
