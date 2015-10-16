@@ -54,7 +54,7 @@ Popup.prototype = {
  *
  * Open a pupop with the given choices and call the callback with the selected
  * one as it's first argument. choises is an array with a key as the choice
- * name and the value as the choice displayed 
+ * name and the value as the choice displayed
  */
 
 function  SelectionPopup(title, choices, callback){

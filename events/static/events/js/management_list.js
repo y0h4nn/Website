@@ -120,7 +120,7 @@
                     pictureContainer.appendChild(img);
                     user.element.addEventListener("click", (function(){
                         if(this.klass == "" || this.klass == "bg-red"){  // He needs to pay.
-                            document.popup = new SelectionPopup('Chosissez un moyen de paiement', payment_means, function(choice){
+                            document.popup = new SelectionPopup(this.display_name, payment_means, function(choice){
                                 queryJson('nl_ack', {'type': this.user.type, 'eid': event_id, 'iid': this.user.id, 'payment_mean': choice}, function(resp){
                                     if(resp['error']){
                                         add_message('error', resp['error']);
@@ -139,7 +139,7 @@
                             document.popup.pop();
                         }
                         else if(this.klass == "bg-green"){  // Contributor
-                            document.popup = new RemoteHtmlPopup("", event_id + "/nl_ack_popup/" + this['id']);
+                            document.popup = new RemoteHtmlPopup(this.display_name, event_id + "/nl_ack_popup/" + this['id']);
                             document.popup.element = this.element;
                             document.popup.user = this;
                             document.popup.pop();
