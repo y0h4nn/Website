@@ -128,9 +128,10 @@
                                     else{
                                         document.popup.element.setAttribute("class", "bg-blue");
                                         document.popup.user.klass = "bg-blue";
-                                        input =  document.getElementById('search_input');
+                                        var input =  document.getElementById('search_input');
                                         input.value = "";
                                         input.focus();
+                                        acked({"status": 1})
                                     }
                                 });
                             });

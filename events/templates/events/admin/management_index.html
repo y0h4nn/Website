@@ -64,7 +64,15 @@
                 input.value = "";
                 var last = document.getElementById("last_entered");
                 last.innerHTML = document.popup.user.display_name;
+                if(data["klass"] != undefined){
+                    document.popup.user.klass = data["klass"];
+                    document.popup.element.setAttribute("class", data["klass"]);
+                }
                 input.focus();
+            }
+            function del_ins(eid, type, iid){
+               document.popup.close();
+               queryJson(eid + "/del/" + type + '/' + iid, {}, acked);
             }
             function ack_in(eid, type, iid){
                document.popup.close();

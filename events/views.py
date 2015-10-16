@@ -298,10 +298,32 @@ def management_nl_ack(request):
     ins.save()
     return JsonResponse({"status": 1})
 
+
+@bde_member
+def management_nl_del(request, eid, type, iid):
+    e = get_object_or_404(Event, id=eid)
+    klass = ""
+    if type == "reg":
+        ins = Inscription.objects.get(event=e, id=iid)
+        if(is_contributor(ins.user)):
+            klass = "bg-green"
+        else:
+            klass = "bg-red"
+    elif type == "ext_reg":
+        ins = ExternInscription.objects.get(event=e, id=iid)
+    else:
+        ins = Invitation.objects.get(event=e, id=iid)
+
+    ins.payment_mean = None
+    ins.in_date = None
+    ins.save()
+    return JsonResponse({"status": 1, "klass": klass})
+
+
 @bde_member
 def management_nl_info_user(request, eid, type, iid):
     e = get_object_or_404(Event, id=eid)
-    context = {'type': type, 'iid': iid, 'event': e}
+    context = {'type': type, 'iid': iid, 'eid': eid, 'event': e}
     if type == "reg":
         ins = Inscription.objects.select_related('user__profile').get(event=e, id=iid)
         context['display_name'] = str(ins.user.profile)
@@ -313,6 +335,7 @@ def management_nl_info_user(request, eid, type, iid):
         context['display_name'] = "{} {}".format(ins.first_name, ins.last_name)
     context['ins'] = ins
     return render(request, "events/admin/info_nl_popup.html", context)
+
 
 @bde_member
 def management_nl_ack_popup(request, iid, eid):
