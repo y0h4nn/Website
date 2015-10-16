@@ -6,6 +6,12 @@ from django.templatetags.static import static
 from django.utils import timezone
 from bde.shortcuts import is_contributor
 
+MEANS_OF_PAYMENT = [
+    ('cash', 'Espèces'),
+    ('check', 'Chèque'),
+    ('card', 'Carte de crédit'),
+]
+
 
 class Event(models.Model):
     GESTION_WAF = "WAF"
@@ -100,7 +106,9 @@ class ExternLink(models.Model):
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="inscriptions")
     event = models.ForeignKey(Event, related_name="inscriptions")
+
     in_date = models.DateTimeField(null=True, blank=True, default=None)
+    payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT, null=True, blank=True)
 
     class Meta:
         unique_together = (('user', 'event'),)
@@ -113,7 +121,9 @@ class ExternInscription(models.Model):
     event = models.ForeignKey(Event, related_name="extern_inscriptions")
     via = models.ForeignKey(ExternLink, related_name="inscriptions")
     birth_date = models.DateField(null=True)
+
     in_date = models.DateTimeField(null=True, blank=True, default=None)
+    payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT, null=True, blank=True)
 
     class Meta:
         unique_together = (('mail', 'event'),)
@@ -126,7 +136,10 @@ class Invitation(models.Model):
     birth_date = models.DateField(null=True)
     event = models.ForeignKey(Event, related_name="invitations")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="invitations")
+
     in_date = models.DateTimeField(null=True, blank=True, default=None)
+    payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT, null=True, blank=True)
+
     class Meta:
         unique_together = (('mail', 'event'),)
 

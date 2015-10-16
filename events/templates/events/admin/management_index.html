@@ -30,28 +30,50 @@
 {% block main %}
 <div id="userlist">
 </div>
-<script>
-        function acked(data){
-            document.popup.element.setAttribute("class", "bg-blue");
-            document.popup.user.klass = "bg-blue";
-            input =  document.getElementById('search_input');
-            input.value = "";
-            input.focus();
-        }
-        function ack_in(eid, type, iid){
-           document.popup.close();
-           queryJson(eid + "/ack/" + type + '/' + iid, {}, acked);
-        }
-        {% if event.gestion == "WAF" %}
+{% if event.gestion == "WAF" %}
+    <script>
+            function acked(data){
+                document.popup.element.setAttribute("class", "bg-blue");
+                document.popup.user.klass = "bg-blue";
+                input =  document.getElementById('search_input');
+                input.value = "";
+                input.focus();
+            }
+            function ack_in(eid, type, iid){
+               document.popup.close();
+               queryJson(eid + "/ack/" + type + '/' + iid, {}, acked);
+            }
             url = "/events/admin/management/list_registrations/{{event.id}}"
-        {% endif %}
-        var event_id = {{event.id}};
-        window.addEventListener('load', function(){
-            var userList = new UserList('userlist', url, function(user){
-                return [
-                ];
+            var event_id = {{event.id}};
+            window.addEventListener('load', function(){
+                var userList = new UserListWaf('userlist', url, function(user){
+                    return [
+                    ];
+                });
             });
-        });
-</script>
+    </script>
+{% else %}
+    <script>
+            function acked(data){
+                document.popup.element.setAttribute("class", "bg-blue");
+                document.popup.user.klass = "bg-blue";
+                input =  document.getElementById('search_input');
+                input.value = "";
+                input.focus();
+            }
+            function ack_in(eid, type, iid){
+               document.popup.close();
+               queryJson(eid + "/ack/" + type + '/' + iid, {}, acked);
+            }
+            url = "/events/admin/management/list_registrations/{{event.id}}"
+            var event_id = {{event.id}};
+            window.addEventListener('load', function(){
+                var userList = new UserListNL('userlist', url, function(user){
+                    return [
+                    ];
+                });
+            });
+    </script>
+{% endif %}
 
 {% endblock %}

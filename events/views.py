@@ -233,7 +233,7 @@ def management_list_users(request, eid):
         ret['ext_reg'] = [{
                 "display_name": "{} {} ({})".format(ins.last_name, ins.first_name, ins.via.name),
                 "picture": static('images/default_user_icon.png'),
-                "color": "",
+                "color": "bg-blue" if ins.in_date is not None else "",
                 "type": "ext_reg",
                 "id": ins.id,
             } for ins in ExternInscription.objects.filter(event=e).select_related('event').select_related('via').order_by('last_name', 'first_name')
@@ -241,7 +241,7 @@ def management_list_users(request, eid):
         ret['invits'] = [{
                 "display_name": "{} {} (invité par {})".format(ins.first_name, ins.last_name, str(ins.user.profile)),
                 "picture": static('images/default_user_icon.png'),
-                "color": "",
+                "color": "bg-blue" if ins.in_date is not None else "",
                 "type": "invit",
                 "id": ins.id,
             } for ins in Invitation.objects.filter(event=e).select_related('event').select_related('user__profile').order_by('last_name', 'first_name')
@@ -279,3 +279,41 @@ def management_ack(request, eid, type, iid):
         pass
     return render(request, "events/admin/info_popup.html", context)
 
+
+@bde_member
+def management_nl_ack(request):
+    req = json.loads(request.read().decode())
+    e = get_object_or_404(Event, id=req['eid'])
+
+    if req['type'] == "reg":
+        ins = Inscription.objects.get(event=e, id=req['iid'])
+    elif req['type'] == "ext_reg":
+        ins = ExternInscription.objects.get(event=e, id=req['iid'])
+    else:
+        ins = Invitation.objects.get(event=e, id=req['iid'])
+
+    ins.payment_mean = req.get("payment_mean")
+    ins.in_date = timezone.now()
+    ins.save()
+    return JsonResponse({"status": 1})
+
+@bde_member
+def management_nl_info_user(request, eid, type, iid):
+    e = get_object_or_404(Event, id=eid)
+    context = {'type': type, 'iid': iid, 'event': e}
+    if type == "reg":
+        ins = Inscription.objects.select_related('user__profile').get(event=e, id=iid)
+        context['display_name'] = str(ins.user.profile)
+    elif type == "ext_reg":
+        ins = ExternInscription.objects.get(event=e, id=iid)
+        context['display_name'] = "{} {}".format(ins.first_name, ins.last_name)
+    else:
+        ins = Invitation.objects.get(event=e, id=iid)
+        context['display_name'] = "{} {}".format(ins.first_name, ins.last_name)
+    context['ins'] = ins
+    return render(request, "events/admin/info_nl_popup.html", context)
+
+@bde_member
+def management_nl_ack_popup(request, iid, eid):
+    context = {"eid": eid, "iid": iid}
+    return render(request, "events/admin/nl_ack_popup.html", context)
