@@ -35,7 +35,7 @@
     </div>
     <div>
         {% for image in images %}
-            <a href="{% static image.path %}" class="photo"><img src="{% static image.path %}" alt="image.name"/></a>
+            <a href="{% static image.path %}" class="photo"><img src="{% static image.thumbnail %}" alt="{{image.name}}"/></a>
         {% endfor %}
     </div>
 {% endblock %}
