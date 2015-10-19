@@ -40,12 +40,16 @@
                         }
                     }
                     pictureContainer.appendChild(img);
-                    user.element.addEventListener("click", (function(){
+                    user.element.addEventListener("click", (function(list){
                         document.popup = new RemoteHtmlPopup("Info", event_id + "/info/" + this['type'] + '/' + this['id']);
                         document.popup.element = this.element;
                         document.popup.user = this;
                         document.popup.pop();
-                    }).bind(user));
+                        document.popup.onClose = function(){
+                            list.updateElems();
+                            list.render();
+                        }
+                    }).bind(user, this));
                     this.listelement.appendChild(user.element);
                 }
 

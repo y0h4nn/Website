@@ -44,6 +44,9 @@ Popup.prototype = {
 
     close: function(){
         this.container.setAttribute('class', this.baseClass);
+        if(this.onClose != undefined){
+            this.onClose();
+        }
     }
 
 }
