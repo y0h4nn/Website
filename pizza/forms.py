@@ -13,7 +13,7 @@ class PizzaAddingForm(forms.ModelForm):
 class CommandForm(forms.ModelForm):
     class Meta:
         model = Command
-        fields = []
+        fields = ["date"]
     date = forms.SplitDateTimeField()
 
     def clean(self):
