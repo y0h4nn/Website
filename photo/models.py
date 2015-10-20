@@ -1,24 +1,50 @@
 from django.db import models
+from django.contrib.auth.models import User, Group
+from events.models import Inscription, Event
 
 
-class Album(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(default="", blank=True)
-    parent = models.ForeignKey('Album', null=True, blank=True, default=None)
 
-    def __str__(self):
-        return self.name
+class AccessPolicy(models.Model):
+    path = models.CharField(max_length=255)
 
     @staticmethod
-    def get_childs(album):
-        return Album.objects.filter(parent=album)
+    def list(path):
+        """ Get the list of all database objects which are subclasses of
+        AccessPolicy for given path.
+        """
+        access_list = []
+        for cls in AccessPolicy.__subclasses__():
+            access_list.extend(cls.objects.filter(path=path).all())
+        return access_list
 
-class Photo(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField(default="", blank=True)
-    album = models.ForeignKey(Album)
-    image = models.ImageField(height_field="height", width_field="width")
+    def user_can_access(self, user):
+        raise NotImplementedError
 
-    def __str__(self):
-        return self.name
 
+class PublicAccess(AccessPolicy):
+    def user_can_access(self, user):
+        return True
+
+class GroupAccess(AccessPolicy):
+    group = models.ForeignKey(Group)
+
+    def user_can_access(self, user):
+        if group in user.groups.all():
+            return True
+        return False
+
+class EventAccess(AccessPolicy):
+    event = models.ForeignKey(Event)
+
+    def user_can_access(self, user):
+        try:
+            inscription = Inscription.objects.get(user=user, event=event)
+            return bool(inscription.in_date)
+        except Inscription.DoesNotExists:
+            return False
+
+POLICIES = {
+    'public': PublicAccess,
+    'group': GroupAccess,
+    'event': EventAccess,
+}
