@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User, Group
 from events.models import Inscription, Event
 
 
@@ -25,14 +24,6 @@ class PublicAccess(AccessPolicy):
     def user_can_access(self, user):
         return True
 
-class GroupAccess(AccessPolicy):
-    group = models.ForeignKey(Group)
-
-    def user_can_access(self, user):
-        if group in user.groups.all():
-            return True
-        return False
-
 class EventAccess(AccessPolicy):
     event = models.ForeignKey(Event)
 
@@ -45,6 +36,5 @@ class EventAccess(AccessPolicy):
 
 POLICIES = {
     'public': PublicAccess,
-    'group': GroupAccess,
     'event': EventAccess,
 }
