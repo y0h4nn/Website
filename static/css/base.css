@@ -1409,11 +1409,16 @@ table:not(.rd-days) {
     font-family: monospace; }
 
 .albums {
-  margin-bottom: 2em; }
+  margin-bottom: 2em;
+  border: 1px solid #eaeaea;
+  background-color: #f5f5f5;
+  border-radius: 3px; }
 
 .album {
   border-radius: 3px;
   font-weight: bold; }
+  .album:nth-child(2n) {
+    background-color: #fafafa; }
   .album a {
     padding: 0.5em 0.5em;
     color: #555;

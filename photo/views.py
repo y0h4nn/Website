@@ -82,6 +82,13 @@ def browse(request, path):
     return render(request, 'photo/browse.html', context)
 
 
+def permissions(request, path):
+    context = {
+        'path': path,
+    }
+    return render(request, 'photo/permissions.html', context)
+
+
 def add_album(request):
     if request.method == 'POST':
         form = forms.AlbumForm(request.POST)

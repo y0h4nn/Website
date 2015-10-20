@@ -21,6 +21,12 @@
 {% endblock%}
 
 {% block main %}
+    <div class="toolbar">
+        <div class="toolbar">
+            <a href="#"><i class="fa fa-expand"></i> Diaporama</a>
+            <a href="{% url 'photo:permissions' path=path %}"><i class="fa fa-unlock-alt"></i> Permissions</a>
+        </div>
+    </div>
     <div class="albums">
         {% if path %}
             <div class="album">
@@ -29,7 +35,7 @@
         {% endif %}
         {% for album in albums %}
             <div class="album">
-                <a href="{% url 'photo:browse' path=album.path%}"><i class="fa fa-folder"></i> {{ album.name }}</a>
+                <a href="{% url 'photo:browse' path=album.path %}"><i class="fa fa-folder"></i> {{ album.name }}</a>
             </div>
         {% endfor %}
     </div>
