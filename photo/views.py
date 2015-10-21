@@ -83,8 +83,31 @@ def browse(request, path):
 
 
 def permissions(request, path):
+    form_instances = []
+
+    if request.method == 'POST':
+        for name, form in forms.POLICIES_FORMS.items():
+            instance = form(request.POST)
+            if instance.has_changed and instance.is_valid():
+                policy = instance.save(commit=False)
+                policy.path = path
+                policy.save()
+                instance.save()
+
+        return redirect(request.path)
+
+    else:
+        for name, form in forms.POLICIES_FORMS.items():
+            form_instances.append({
+                'name': name,
+                'instance': form()
+            })
+
+
     context = {
         'path': path,
+        'forms': form_instances,
+        'permissions': models.AccessPolicy.list(path),
     }
     return render(request, 'photo/permissions.html', context)
 

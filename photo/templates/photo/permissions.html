@@ -21,4 +21,53 @@
 {% endblock%}
 
 {% block main %}
+
+    <ul>
+    {% for perm in permissions %}
+        <li>
+            {{ perm }}
+        </li>
+    {% endfor %}
+    </ul>
+
+    <form>
+        <p>
+            <label for="selector">Type de permission</label>
+            <select id="selector" name="selector">
+                <option >--</option>
+                {% for form in forms %}
+                    <option >{{ form.name }}</option>
+                {% endfor %}
+            </select>
+        </p>
+    </form>
+
+    {% for form in forms %}
+        <form method="POST" action="{{ request.path }}" id="{{ form.name }}" class="hidden" data-form-instance="true" >
+            {% csrf_token %}
+            {{ form.instance.as_p }}
+            <button>Ajouter la permission</button>
+        </form>
+    {% endfor %}
+
+
+    <script>
+        window.addEventListener('load', function(){
+            var selector = document.getElementById('selector');
+            selector.addEventListener('change', function(){
+                var instances = document.querySelectorAll('form[data-form-instance=true]');
+                var element = document.getElementById(selector.value);
+                for(var i in instances){
+                    if(instances[i].setAttribute){
+                        instances[i].setAttribute('class', 'hidden');
+                    };
+                }
+                if(element){
+                    element.setAttribute('class', '');
+                    console.log(element);
+                }
+            });
+        });
+    </script>
+
 {% endblock %}

@@ -25,6 +25,9 @@ class PublicAccess(AccessPolicy):
     def user_can_access(self, user):
         return True
 
+    def __str__(self):
+        return "Tous le monde peut voir l'album"
+
 class GroupAccess(AccessPolicy):
     group = models.ForeignKey(Group)
 
@@ -32,6 +35,9 @@ class GroupAccess(AccessPolicy):
         if group in user.groups.all():
             return True
         return False
+
+    def __str__(self):
+        return "Seul le group %s peut voir l'album" % self.group.name
 
 class EventAccess(AccessPolicy):
     event = models.ForeignKey(Event)
@@ -42,6 +48,9 @@ class EventAccess(AccessPolicy):
             return bool(inscription.in_date)
         except Inscription.DoesNotExists:
             return False
+
+    def __str__(self):
+        return "Seul les participants de l'évennement %s peuvent voir l'abum" % self.event.name
 
 POLICIES = {
     'public': PublicAccess,
