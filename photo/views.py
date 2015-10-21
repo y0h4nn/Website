@@ -88,7 +88,7 @@ def permissions(request, path):
     if request.method == 'POST':
         for name, form in forms.POLICIES_FORMS.items():
             instance = form(request.POST)
-            if instance.has_changed and instance.is_valid():
+            if instance.has_changed() and instance.is_valid():
                 policy = instance.save(commit=False)
                 policy.path = path
                 policy.save()
