@@ -8,7 +8,7 @@
 function Popup(title){
     // Popup init
     this.container = document.createElement('div');
-    this.container.setAttribute('class', this.popupClass);
+    this.container.setAttribute('class', this.baseClass);
     this.window = document.createElement('div');
     this.header = document.createElement('header');
     this.h1 = document.createElement('h1');
@@ -54,7 +54,7 @@ Popup.prototype = {
  *
  * Open a pupop with the given choices and call the callback with the selected
  * one as it's first argument. choises is an array with a key as the choice
- * name and the value as the choice displayed 
+ * name and the value as the choice displayed
  */
 
 function  SelectionPopup(title, choices, callback){
@@ -220,3 +220,72 @@ UserSelectionPopup.prototype = Object.create(Popup.prototype, {
 
 UserSelectionPopup.prototype.constructor = UserSelectionPopup;
 
+
+
+/*
+ * Photo popup
+ */
+
+function DiaporamaPopup(images){
+    this.images = images;
+    this.index = 0;
+    this.container = document.createElement('div');
+    this.container.setAttribute('class', this.baseClass);
+    this.window = document.createElement('img');
+    this.closeBtn = document.createElement('button');
+    this.closeBtn.innerHTML = "<i class='fa fa-close'></i>";
+    this.closeBtn.setAttribute('type', 'button');
+
+    document.body.insertBefore(this.container, document.body.firstChild);
+    this.container.appendChild(this.window);
+    this.window.appendChild(this.closeBtn);
+
+    this.container.addEventListener('click', function(event){
+        if(!this.window.contains(event.target)){
+            this.close();
+        }
+    }.bind(this));
+
+
+    document.addEventListener('keyup', function(event){
+        console.log(event.keyCode);
+        switch(event.keyCode){
+            case 39:
+                this.nextImage();
+                break;
+            case 37:
+                this.previousImage();
+                break;
+            case 27:
+                this.close();
+                break;
+        }
+    }.bind(this));
+}
+
+DiaporamaPopup.prototype = Object.create(Popup.prototype, {
+    baseClass: {
+        value: 'diaporama_popup',
+    },
+    selectImage: {
+        value: function(index){
+            this.index = Math.abs(index % this.images.length);
+            this.window.setAttribute('src', this.images[this.index].getAttribute('data-photo-url'));
+        },
+    },
+
+    nextImage: {
+        value: function(){
+            this.selectImage(this.index + 1);
+        },
+    },
+
+    previousImage: {
+        value: function(){
+            this.selectImage(this.index - 1);
+        },
+    },
+});
+
+
+DiaporamaPopup.prototype.constructor = DiaporamaPopup;

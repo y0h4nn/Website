@@ -32,7 +32,7 @@ class GroupAccess(AccessPolicy):
     group = models.ForeignKey(Group)
 
     def user_can_access(self, user):
-        if group in user.groups.all():
+        if self.group in user.groups.all():
             return True
         return False
 
