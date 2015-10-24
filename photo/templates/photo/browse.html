@@ -39,7 +39,7 @@
             </div>
         {% endfor %}
     </div>
-    <div>
+    <div class="photos">
         {% for image in images %}
             <a href="{% static image.path %}" class="photo"><img src="{% static image.thumbnail %}" alt="{{image.name}}"/></a>
         {% endfor %}

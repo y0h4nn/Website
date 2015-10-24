@@ -20,8 +20,18 @@ def create_thumbnail(realpath, filename):
         return
 
     image = PIL.Image.open(os.path.join(realpath, filename))
-    image.thumbnail((100,100))
-    image.save(os.path.join(realpath, THUMBNAIL_DIRNAME, filename), "JPEG")
+
+    l = min(image.size)
+    width, height = image.size
+    box = (
+        int((width - l) / 2),
+        int((height - l) / 2),
+        int((width + l) / 2),
+        int((height + l) / 2)
+    )
+    region = image.crop(box)
+    region.thumbnail((100,100))
+    region.save(os.path.join(realpath, THUMBNAIL_DIRNAME, filename), "JPEG")
 
 
 def user_can_access(user, path):
@@ -50,7 +60,7 @@ def list_entries(realpath, path, user):
                         'path': os.path.join(path, entry.name),
                     })
         elif entry.is_file():
-            if os.path.splitext(entry.name)[1] in ALLOWED_IMAGE_EXT:
+            if os.path.splitext(entry.name)[1].lower() in ALLOWED_IMAGE_EXT:
                 entries['files'].append({
                     'name': entry.name,
                     'path': os.path.join('medias', PHOTO_ROOT, path, entry.name),
