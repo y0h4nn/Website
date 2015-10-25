@@ -22,6 +22,7 @@ class AccessPolicy(models.Model):
 
 
 class PublicAccess(AccessPolicy):
+
     def user_can_access(self, user):
         return True
 
@@ -37,23 +38,18 @@ class GroupAccess(AccessPolicy):
         return False
 
     def __str__(self):
-        return "Seul le group %s peut voir l'album" % self.group.name
+        return "Le group %s peut voir l'album" % self.group.name
 
 class EventAccess(AccessPolicy):
     event = models.ForeignKey(Event)
 
     def user_can_access(self, user):
         try:
-            inscription = Inscription.objects.get(user=user, event=event)
+            inscription = Inscription.objects.get(user=user, event=self.event)
             return bool(inscription.in_date)
-        except Inscription.DoesNotExists:
+        except Inscription.DoesNotExist:
             return False
 
     def __str__(self):
-        return "Seul les participants de l'évennement %s peuvent voir l'abum" % self.event.name
+        return "Les participants de l'évennement %s peuvent voir l'abum" % self.event.name
 
-POLICIES = {
-    'public': PublicAccess,
-    'group': GroupAccess,
-    'event': EventAccess,
-}

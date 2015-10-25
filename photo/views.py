@@ -1,6 +1,6 @@
 import os
 import PIL
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.conf import settings
 from . import forms
@@ -39,11 +39,11 @@ def user_can_access(user, path):
         return True
 
     policies = models.AccessPolicy.list(path)
-    print("Bleh", policies)
     access = False
     for p in policies:
         access |= p.user_can_access(user)
     return access
+
 
 def list_entries(realpath, path, user):
     entries = {
@@ -80,6 +80,8 @@ def browse(request, path):
         raise Http404
     if os.path.basename(realpath).startswith('.'):
         raise Http404
+    if path and not user_can_access(request.user, path):
+        raise Http404
 
     entries = list_entries(realpath, path, request.user)
     context = {
@@ -96,9 +98,9 @@ def permissions(request, path):
     form_instances = []
 
     if request.method == 'POST':
-        for name, form in forms.POLICIES_FORMS.items():
-            instance = form(request.POST)
-            if instance.has_changed() and instance.is_valid():
+        if request.POST.get('selected_form') in forms.get_forms():
+            instance = forms.get_forms()[request.POST.get('selected_form')](request.POST)
+            if instance.is_valid():
                 policy = instance.save(commit=False)
                 policy.path = path
                 policy.save()
@@ -107,9 +109,10 @@ def permissions(request, path):
         return redirect(request.path)
 
     else:
-        for name, form in forms.POLICIES_FORMS.items():
+        for name, form in forms.get_forms().items():
             form_instances.append({
                 'name': name,
+                'description': form.__doc__,
                 'instance': form()
             })
 
@@ -122,17 +125,8 @@ def permissions(request, path):
     return render(request, 'photo/permissions.html', context)
 
 
-def add_album(request):
-    if request.method == 'POST':
-        form = forms.AlbumForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('photo:index')
-
-    else:
-        form = forms.AlbumForm()
-
-    context = {
-        'form': form
-    }
-    return render(request, 'photo/add_album.html', context)
+def permissions_delete(request, pid):
+    policy = get_object_or_404(models.AccessPolicy, pk=pid)
+    path = policy.path
+    policy.delete()
+    return redirect('photo:permissions', path=path)
