@@ -231,21 +231,27 @@ function DiaporamaPopup(images){
     this.index = 0;
     this.container = document.createElement('div');
     this.container.setAttribute('class', this.baseClass);
-    this.window = document.createElement('img');
-    this.closeBtn = document.createElement('button');
-    this.closeBtn.innerHTML = "<i class='fa fa-close'></i>";
-    this.closeBtn.setAttribute('type', 'button');
+    this.image = document.createElement('img');
+    this.nextButton = document.createElement('button');
+    this.nextButton.setAttribute('type', 'button');
+    this.nextButton.innerHTML = "<i class='fa fa-chevron-right'></i>";
+    this.previousButton = document.createElement('button');
+    this.previousButton.setAttribute('type', 'button');
+    this.previousButton.innerHTML = "<i class='fa fa-chevron-left'></i>";
 
     document.body.insertBefore(this.container, document.body.firstChild);
-    this.container.appendChild(this.window);
-    this.window.appendChild(this.closeBtn);
+    this.container.appendChild(this.previousButton);
+    this.container.appendChild(this.image);
+    this.container.appendChild(this.nextButton);
 
     this.container.addEventListener('click', function(event){
-        if(!this.window.contains(event.target)){
+        if(event.target != this.previousButton && event.target != this.nextButton){
             this.close();
         }
     }.bind(this));
 
+    this.nextButton.addEventListener('click', this.nextImage.bind(this));
+    this.previousButton.addEventListener('click', this.previousImage.bind(this));
 
     document.addEventListener('keyup', function(event){
         console.log(event.keyCode);
@@ -270,7 +276,7 @@ DiaporamaPopup.prototype = Object.create(Popup.prototype, {
     selectImage: {
         value: function(index){
             this.index = Math.abs(index % this.images.length);
-            this.window.setAttribute('src', this.images[this.index].getAttribute('data-photo-url'));
+            this.image.setAttribute('src', this.images[this.index]);
         },
     },
 
