@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'shop',
     'pizza',
     'help',
+    'enibar',
 )
 
 MIDDLEWARE_CLASSES = (
