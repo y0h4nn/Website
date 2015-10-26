@@ -40,7 +40,7 @@
     </div>
     <div class="photos">
         {% for image in images %}
-            <img src="{% static image.thumbnail %}" alt="{{image.name}}" data-photo-url="{% static image.path %}" />
+            <img src="{{ image.thumbnail }}" alt="{{ image.name }}" data-photo-url="{{ image.path }}" />
         {% endfor %}
     </div>
 {% endblock %}

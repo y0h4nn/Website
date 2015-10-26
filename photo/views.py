@@ -6,7 +6,8 @@ from django.conf import settings
 from . import forms
 from . import models
 
-PHOTO_ROOT = "photo"
+# photo directory name
+PHOTO_DIRNAME = "photo"
 THUMBNAIL_DIRNAME = '.thumbnails'
 ALLOWED_IMAGE_EXT = ['.jpg', '.jpeg', '.png']
 
@@ -63,9 +64,8 @@ def list_entries(realpath, path, user):
             if os.path.splitext(entry.name)[1].lower() in ALLOWED_IMAGE_EXT:
                 entries['files'].append({
                     'name': entry.name,
-                    'path': os.path.join('medias', PHOTO_ROOT, path, entry.name),
-                    # TODO FIXME XXX
-                    'thumbnail': os.path.join('medias', PHOTO_ROOT, path, THUMBNAIL_DIRNAME, entry.name),
+                    'path': os.path.join(settings.MEDIA_URL, PHOTO_DIRNAME, path, entry.name),
+                    'thumbnail': os.path.join(settings.MEDIA_URL, PHOTO_DIRNAME, path, THUMBNAIL_DIRNAME, entry.name),
                 })
                 create_thumbnail(realpath, entry.name)
 
@@ -73,8 +73,8 @@ def list_entries(realpath, path, user):
 
 
 def browse(request, path):
-    realpath = os.path.join(settings.MEDIA_ROOT, PHOTO_ROOT, path)
-    if not os.path.normpath(realpath).startswith(os.path.join(settings.MEDIA_ROOT, PHOTO_ROOT)):
+    realpath = os.path.join(settings.MEDIA_ROOT, PHOTO_DIRNAME, path)
+    if not os.path.normpath(realpath).startswith(os.path.join(settings.MEDIA_ROOT, PHOTO_DIRNAME)):
         raise Http404
     if not os.path.isdir(realpath):
         raise Http404
