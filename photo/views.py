@@ -3,6 +3,7 @@ import PIL
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import Http404
 from django.conf import settings
+from django.db import IntegrityError
 from . import forms
 from . import models
 
@@ -101,10 +102,13 @@ def permissions(request, path):
         if request.POST.get('selected_form') in forms.get_forms():
             instance = forms.get_forms()[request.POST.get('selected_form')](request.POST)
             if instance.is_valid():
-                policy = instance.save(commit=False)
-                policy.path = path
-                policy.save()
-                instance.save()
+                try:
+                    policy = instance.save(commit=False)
+                    policy.path = path
+                    policy.save()
+                    instance.save()
+                except IntegrityError:
+                    pass
 
         return redirect(request.path)
 

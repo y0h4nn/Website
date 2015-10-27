@@ -7,6 +7,9 @@ from events.models import Inscription, Event
 class AccessPolicy(models.Model):
     path = models.CharField(max_length=255)
 
+    class Meta:
+        abstract = True
+
     @staticmethod
     def list(path):
         """ Get the list of all database objects which are subclasses of
@@ -22,6 +25,8 @@ class AccessPolicy(models.Model):
 
 
 class PublicAccess(AccessPolicy):
+    class Meta:
+        unique_together = ('path',)
 
     def user_can_access(self, user):
         return True
@@ -29,8 +34,12 @@ class PublicAccess(AccessPolicy):
     def __str__(self):
         return "Tous le monde peut voir l'album"
 
+
 class GroupAccess(AccessPolicy):
     group = models.ForeignKey(Group)
+
+    class Meta:
+        unique_together = ('path', 'group')
 
     def user_can_access(self, user):
         if self.group in user.groups.all():
@@ -40,8 +49,12 @@ class GroupAccess(AccessPolicy):
     def __str__(self):
         return "Le group %s peut voir l'album" % self.group.name
 
+
 class EventAccess(AccessPolicy):
     event = models.ForeignKey(Event)
+
+    class Meta:
+        unique_together = ('path', 'event')
 
     def user_can_access(self, user):
         try:
