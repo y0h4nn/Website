@@ -21,18 +21,21 @@ def create_or_update(cls, foreign_id, **kwargs):
             setattr(obj, key, value)
         obj.save()
 
+def _create_view(cls):
+    def view(request):
+        req = get_req_or_404(request)
+        id_ = req.pop('id')
+        if request.method == "PUT":
+            create_or_update(cls, id_, **req)
+        elif request.method == "DELETE":
+            cls.objects.get(foreign_id=id_).delete()
+        else:
+            raise Http404
+        return HttpResponse(200)
+    return view
 
-def request_note(request):
-    note = get_req_or_404(request)
-    note_id = note.pop('id')
 
-    if request.method == "PUT":
-        create_or_update(Note, note_id, **note)
-    elif request.method == "DELETE":
-        Note.objects.get(foreign_id=note_id).delete()
-    else:
-        raise Http404
-    return HttpResponse(200)
+request_note = _create_view(Note)
 
 
 def request_category(request):
