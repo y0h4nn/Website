@@ -129,8 +129,11 @@ def permissions(request, path):
     return render(request, 'photo/permissions.html', context)
 
 
-def permissions_delete(request, pid):
-    policy = get_object_or_404(models.AccessPolicy, pk=pid)
-    path = policy.path
-    policy.delete()
+def permissions_delete(request, model, pid):
+    model_classes = models.get_models()
+    if model in model_classes:
+        cls = model_classes[model]
+        policy = get_object_or_404(cls, pk=pid)
+        path = policy.path
+        policy.delete()
     return redirect('photo:permissions', path=path)

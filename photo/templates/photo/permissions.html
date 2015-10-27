@@ -30,7 +30,7 @@
         <ul>
         {% for perm in permissions %}
             <li>
-                {{ perm }} <a href="{% url 'photo:permissions_delete' pid=perm.id %}"><i class="red fa fa-trash-o"></i></a>
+                {{ perm }} <a href="{% url 'photo:permissions_delete' model=perm.get_class_name pid=perm.id %}"><i class="red fa fa-trash-o"></i></a>
             </li>
         {% endfor %}
         </ul>

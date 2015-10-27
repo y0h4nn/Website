@@ -10,6 +10,11 @@ class AccessPolicy(models.Model):
     class Meta:
         abstract = True
 
+    def get_class_name(self):
+        """ Because I need to access __name__ from template
+        """
+        return self.__class__.__name__
+
     @staticmethod
     def list(path):
         """ Get the list of all database objects which are subclasses of
@@ -66,3 +71,6 @@ class EventAccess(AccessPolicy):
     def __str__(self):
         return "Les participants de l'évennement %s peuvent voir l'abum" % self.event.name
 
+
+def get_models():
+    return {c.__name__: c for c in AccessPolicy.__subclasses__()}
