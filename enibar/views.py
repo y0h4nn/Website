@@ -40,5 +40,5 @@ request_category = _create_view(Category)
 request_price_description = _create_view(PriceDescription)
 request_product = _create_view(Product)
 request_price = _create_view(Price)
-request_history_line = _create_view(HistoryLine)
+request_history = _create_view(HistoryLine)
 
