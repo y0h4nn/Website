@@ -1,9 +1,8 @@
 from django.db import models
 
-# Create your models here.
 
 class Note(models.Model):
-    foreign_id = models.IntegerField()
+    foreign_id = models.IntegerField(unique=True)
     nickname = models.CharField(max_length=255)
     mail = models.EmailField()
     note = models.DecimalField(max_digits=10, decimal_places=2)
