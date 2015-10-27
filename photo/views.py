@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db import IntegrityError
 from . import forms
 from . import models
+from bde.shortcuts import bde_member
 
 # photo directory name
 PHOTO_DIRNAME = "photo"
@@ -95,6 +96,7 @@ def browse(request, path):
     return render(request, 'photo/browse.html', context)
 
 
+@bde_member
 def permissions(request, path):
     form_instances = []
 
@@ -128,7 +130,7 @@ def permissions(request, path):
     }
     return render(request, 'photo/permissions.html', context)
 
-
+@bde_member
 def permissions_delete(request, model, pid):
     model_classes = models.get_models()
     if model in model_classes:
@@ -137,3 +139,4 @@ def permissions_delete(request, model, pid):
         path = policy.path
         policy.delete()
     return redirect('photo:permissions', path=path)
+
