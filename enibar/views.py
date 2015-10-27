@@ -36,64 +36,9 @@ def _create_view(cls):
 
 
 request_note = _create_view(Note)
-
-
-def request_category(request):
-    category = get_req_or_404(request)
-
-    if request.method == "PUT":
-        pass
-    elif request.method == "DELETE":
-        pass
-    else:
-        raise Http404
-    return HttpResponse(200)
-
-
-def request_price_description(request):
-    price_description = get_req_or_404(request)
-
-    if request.method == "PUT":
-        pass
-    elif request.method == "DELETE":
-        pass
-    else:
-        raise Http404
-    return HttpResponse(200)
-
-
-def request_product(request):
-    product = get_req_or_404(request)
-
-    if request.method == "PUT":
-        pass
-    elif request.method == "DELETE":
-        pass
-    else:
-        raise Http404
-    return HttpResponse(200)
-
-
-def request_price(request):
-    price = get_req_or_404(request)
-
-    if request.method == "PUT":
-        pass
-    elif request.method == "DELETE":
-        pass
-    else:
-        raise Http404
-    return HttpResponse(200)
-
-
-def request_history_line(request):
-    history_line = get_req_or_404(request)
-
-    if request.method == "PUT":
-        pass
-    elif request.method == "DELETE":
-        pass
-    else:
-        raise Http404
-    return HttpResponse(200)
+request_category = _create_view(Category)
+request_price_description = _create_view(PriceDescription)
+request_product = _create_view(Product)
+request_price = _create_view(Price)
+request_history_line = _create_view(HistoryLine)
 
