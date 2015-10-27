@@ -11,22 +11,25 @@ def get_req_or_404(request):
         raise Http404
 
 
+def create_or_update(cls, foreign_id, **kwargs):
+    try:
+        obj = cls.objects.get(foreign_id=foreign_id)
+    except cls.DoesNotExist:
+        cls.objects.create(foreign_id=foreign_id, **kwargs)
+    else:
+        for key, value in kwargs.items():
+            setattr(obj, key, value)
+        obj.save()
+
+
 def request_note(request):
     note = get_req_or_404(request)
+    note_id = note.pop('id')
 
     if request.method == "PUT":
-        note_id = note.pop('id')
-        try:
-            note_obj = Note.objects.get(foreign_id=note_id)
-        except Note.DoesNotExist:
-            Note.objects.create(foreign_id=note_id, **note)
-        else:
-            for key, value in note.items():
-                setattr(note_obj, key, value)
-            note_obj.save()
+        create_or_update(Note, note_id, **note)
     elif request.method == "DELETE":
-        note_obj = Note.objects.get(foreign_id=note['id'])
-        note_obj.delete()
+        Note.objects.get(foreign_id=note_id).delete()
     else:
         raise Http404
     return HttpResponse(200)
@@ -41,6 +44,7 @@ def request_category(request):
         pass
     else:
         raise Http404
+    return HttpResponse(200)
 
 
 def request_price_description(request):
@@ -52,6 +56,7 @@ def request_price_description(request):
         pass
     else:
         raise Http404
+    return HttpResponse(200)
 
 
 def request_product(request):
@@ -63,6 +68,7 @@ def request_product(request):
         pass
     else:
         raise Http404
+    return HttpResponse(200)
 
 
 def request_price(request):
@@ -74,6 +80,7 @@ def request_price(request):
         pass
     else:
         raise Http404
+    return HttpResponse(200)
 
 
 def request_history_line(request):
@@ -85,4 +92,5 @@ def request_history_line(request):
         pass
     else:
         raise Http404
+    return HttpResponse(200)
 
