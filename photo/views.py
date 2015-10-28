@@ -1,6 +1,7 @@
 import os
 import PIL
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.http import Http404
 from django.conf import settings
 from django.db import IntegrityError
@@ -110,7 +111,17 @@ def permissions(request, path):
                     policy.save()
                     instance.save()
                 except IntegrityError:
-                    pass
+                    messages.add_message(
+                        request,
+                        messages.WARNING,
+                        "Cette permission est déja en place."
+                    )
+            else:
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    "Impossible d'ajouter cette permission. Veuillez remplir tous les champs."
+                )
 
         return redirect(request.path)
 
@@ -138,5 +149,10 @@ def permissions_delete(request, model, pid):
         policy = get_object_or_404(cls, pk=pid)
         path = policy.path
         policy.delete()
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            "La permission a été révoquée."
+        )
     return redirect('photo:permissions', path=path)
 
