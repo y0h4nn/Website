@@ -24,16 +24,24 @@
 
     <a href="{% url 'photo:browse' path=path %}/../"><i class="fa fa-chevron-left"></i> Revenir à l'explorateur</a>
 
-
     {% if permissions %}
         <h2>Permissions en vigueur</h2>
-        <ul>
-        {% for perm in permissions %}
-            <li>
-                {{ perm }} <a href="{% url 'photo:permissions_delete' model=perm.get_class_name pid=perm.id %}"><i class="red fa fa-trash-o"></i></a>
-            </li>
-        {% endfor %}
-        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>Permission</th>
+                    <th>Supprimer</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for perm in permissions %}
+                    <tr>
+                        <td>{{ perm }}</td>
+                        <td class="center"><a href="{% url 'photo:permissions_delete' model=perm.get_class_name pid=perm.id %}" ><i class="red fa fa-trash-o"></i></a><td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% endif %}
 
     <h2>Ajouter une permission</h2>
