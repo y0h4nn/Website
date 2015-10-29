@@ -37,3 +37,14 @@ class TestEnibarImport(TestCase):
         with self.assertRaises(Note.DoesNotExist):
             Note.objects.get(foreign_id=2)
 
+    def test_get_note(self):
+        Note.objects.create(foreign_id=2, nickname="toto", mail="coucou@test.fr", note=Decimal("10"))
+        Note.objects.create(foreign_id=3, nickname="toto2", mail="cou@test.com", note=Decimal("11"))
+
+        response = self.client.get("/enibar/note")
+        self.assertEqual(response.json(), [{'note': '10.00', 'nickname': 'toto', 'foreign_id': 2, 'mail': 'coucou@test.fr'}, {'note': '11.00', 'nickname': 'toto2', 'foreign_id': 3, 'mail': 'cou@test.com'}])
+        response = self.client.get("/enibar/note", {"foreign_id": 2})
+        self.assertEqual(response.json(), [{'mail': 'coucou@test.fr', 'note': '10.00', 'nickname': 'toto', 'foreign_id': 2}])
+        response = self.client.get("/enibar/note", {"pouet": 2})
+        self.assertEqual(response.status_code, 404)
+
