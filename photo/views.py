@@ -23,7 +23,10 @@ def create_thumbnail(realpath, filename):
     if os.path.isfile(os.path.join(realpath, THUMBNAIL_DIRNAME, filename)):
         return
 
-    image = PIL.Image.open(os.path.join(realpath, filename))
+    try:
+        image = PIL.Image.open(os.path.join(realpath, filename))
+    except OSError:
+        return
 
     l = min(image.size)
     width, height = image.size
