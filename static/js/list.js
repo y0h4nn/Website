@@ -80,17 +80,6 @@ var BaseList = function(containerId, buildCallback){
 
             this.matchingElems = this.elems.filter(this.match, this);
     };
-    this.searchInput.addEventListener('focus', function(){
-        if(this.timer){
-            clearTimeout(this.timer);
-        }
-        this.timer = setTimeout(function(){
-            var startDate = new Date();
-            this.updateElems();
-            this.render();
-            console.log("Search update and rendering in " + (new Date() - startDate + "ms"));
-        }.bind(this), 100);
-    }.bind(this));
 
     this.searchInput.addEventListener('keyup', function(){
         if(this.timer){

@@ -14,6 +14,10 @@ urlpatterns = [
     url(r'^admin/management/(?P<eid>[0-9]+)$', views.admin_management, name='admin_management'),
     url(r'^admin/management/list_registrations/(?P<eid>[0-9]+)$', views.management_list_users, name='admin_management_list'),
     url(r'^admin/management/(?P<eid>[0-9]+)/info/(?P<type>[a-zA-Z_]+)/(?P<iid>[0-9]+)$', views.management_info_user, name='admin_management_list'),
-    url(r'^admin/management/(?P<eid>[0-9]+)/ack/(?P<type>[a-zA-Z_]+)/(?P<iid>[0-9]+)$', views.management_ack, name='admin_management_list'),
+    url(r'^admin/management/(?P<eid>[0-9]+)/ack/(?P<type>[a-zA-Z_]+)/(?P<iid>[0-9]+)$', views.management_ack, name='admin_management_ack'),
+    url(r'^admin/management/(?P<eid>[0-9]+)/del/(?P<type>[a-zA-Z_]+)/(?P<iid>[0-9]+)$', views.management_nl_del, name='admin_management_del'),
+    url(r'^admin/management/(?P<eid>[0-9]+)/nl_info/(?P<type>[a-zA-Z_]+)/(?P<iid>[0-9]+)$', views.management_nl_info_user, name='admin_management_list'),
+    url(r'^admin/management/nl_ack$', views.management_nl_ack, name='admin_management_nl_ack'),
+    url(r'^admin/management/(?P<eid>[0-9]+)/nl_ack_popup/(?P<iid>[0-9]+)$', views.management_nl_ack_popup, name='admin_management_nl_ack_popup'),
 ]
 

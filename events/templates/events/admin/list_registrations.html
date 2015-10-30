@@ -39,7 +39,7 @@
                 <div>
                     {{ registration.user.profile }}
                 </div>
-                <button onclick="del_ins({{registration.id}}, false, this); return false;" class="red_button userlist_right_button">
+                <button onclick="del_ins({{registration.id}}, 'ins', this); return false;" class="red_button userlist_right_button">
                     Supprimer
                 </button>
             </li>
@@ -52,7 +52,7 @@
                 <div>
                     {{ registration.first_name }} {{ registration.last_name }} ({{registration.via.name}})
                 </div>
-                <button onclick="del_ins({{registration.id}}, true, this); return false;" class="red_button userlist_right_button">
+                <button onclick="del_ins({{registration.id}}, 'ext', this); return false;" class="red_button userlist_right_button">
                     Supprimer
                 </button>
             </li>
@@ -65,7 +65,7 @@
                 <div>
                     {{ registration.first_name }} {{ registration.last_name }} (Invité par {{registration.user.profile}})
                 </div>
-                <button onclick="del_ins({{registration.id}}, true, this); return false;" class="red_button userlist_right_button">
+                <button onclick="del_ins({{registration.id}}, 'inv', this); return false;" class="red_button userlist_right_button">
                     Supprimer
                 </button>
             </li>

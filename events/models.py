@@ -6,6 +6,12 @@ from django.templatetags.static import static
 from django.utils import timezone
 from bde.shortcuts import is_contributor
 
+MEANS_OF_PAYMENT = [
+    ('cash', 'Espèces'),
+    ('check', 'Chèque'),
+    ('card', 'Carte de crédit'),
+]
+
 
 class Event(models.Model):
     GESTION_WAF = "WAF"
@@ -37,7 +43,14 @@ class Event(models.Model):
     gestion = models.CharField(max_length=3, choices=GESTION_CHOICES, default=None, null=True, blank=True)
 
     def registrations_number(self):
-        return self.inscriptions.all().count() + self.extern_inscriptions.all().count() + self.invitations.all().count()
+        return self.inscriptions.all().count() + self.extern_inscriptions.all().count() + self.nb_invitations()
+
+    def nb_invitations(self):
+        return self.invitations.all().count()
+
+    def nb_places_left(self):
+        if self.limited:
+            return self.max_inscriptions - self.registrations_number()
 
     def can_subscribe(self):
         return not self.limited or self.registrations_number() < self.max_inscriptions
@@ -79,13 +92,23 @@ class ExternLink(models.Model):
         unique_together = (('name', 'event'),)
 
     def places_left(self):
-        return self.event.can_subscribe() and self.maximum > self.inscriptions.all().count()
+        return self.event.can_subscribe() and (self.nb_places_left() > 0)
+
+    def nb_inscriptions(self):
+        return self.inscriptions.all().count()
+
+    def nb_places_left(self):
+        if self.event.nb_places_left() is None:
+            return self.maximum - self.nb_inscriptions()
+        return min(self.event.nb_places_left(), self.maximum - self.nb_inscriptions())
 
 
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="inscriptions")
     event = models.ForeignKey(Event, related_name="inscriptions")
+
     in_date = models.DateTimeField(null=True, blank=True, default=None)
+    payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT, null=True, blank=True)
 
     class Meta:
         unique_together = (('user', 'event'),)
@@ -98,7 +121,9 @@ class ExternInscription(models.Model):
     event = models.ForeignKey(Event, related_name="extern_inscriptions")
     via = models.ForeignKey(ExternLink, related_name="inscriptions")
     birth_date = models.DateField(null=True)
+
     in_date = models.DateTimeField(null=True, blank=True, default=None)
+    payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT, null=True, blank=True)
 
     class Meta:
         unique_together = (('mail', 'event'),)
@@ -111,7 +136,10 @@ class Invitation(models.Model):
     birth_date = models.DateField(null=True)
     event = models.ForeignKey(Event, related_name="invitations")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="invitations")
+
     in_date = models.DateTimeField(null=True, blank=True, default=None)
+    payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT, null=True, blank=True)
+
     class Meta:
         unique_together = (('mail', 'event'),)
 

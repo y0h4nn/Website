@@ -481,6 +481,11 @@ table:not(.rd-days) {
       font-weight: bold;
       color: orange; }
 
+.subtitle {
+  display: block;
+  color: grey;
+  font-size: 0.4em; }
+
 @media screen and (max-width: 640px) {
   .flex_container {
     display: block; }

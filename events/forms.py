@@ -27,6 +27,7 @@ class EventForm(ModelForm):
         if end_ins > start:
             self.add_error('end_inscriptions', "La fin des inscriptions doit se situer avant le début de l'évènement")
 
+
     def as_p(self):
         return super().as_p() + mark_safe('''<script>
             create_calendar("id_end_inscriptions_0")
@@ -39,7 +40,7 @@ class EventForm(ModelForm):
     start_time = SplitDateTimeField(label="Début")
     end_time = SplitDateTimeField(label="Fin")
     end_inscriptions = SplitDateTimeField(label="Fin des inscriptions")
-    invitations_start = SplitDateTimeField(label="Début des invitations")
+    invitations_start = SplitDateTimeField(label="Début des invitations", required=False)
     class Meta:
         model = Event
         exclude = ["uuid"]

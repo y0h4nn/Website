@@ -1,0 +1,12 @@
+<p>{{ display_name }}</p>
+{% if ins.in_date %}
+    Entré le {{ ins.in_date }}
+    {% if ins.payment_mean %}
+        <br>
+        Moyen de payement: {{ ins.payment_mean }}
+    {% endif %}
+    <div class="center">
+        <button onclick="del_ins('{{eid}}', '{{type}}', '{{iid}}')">Annuler</button>
+    </div>
+{% endif %}
+
