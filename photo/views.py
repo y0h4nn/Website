@@ -51,7 +51,7 @@ def can_access(path, user=None, email=None):
         if user:
             access |= p.user_can_access(user)
         elif email:
-            access |= p.extern_can_access(user)
+            access |= p.extern_can_access(email)
     return access
 
 
