@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
-from events.models import Inscription, Event
-
+from events.models import Inscription, Event, ExternInscription
 
 
 class AccessPolicy(models.Model):
@@ -29,11 +28,18 @@ class AccessPolicy(models.Model):
         raise NotImplementedError
 
 
+    def extern_can_access(self, email):
+        raise NotImplementedError
+
+
 class PublicAccess(AccessPolicy):
     class Meta:
         unique_together = ('path',)
 
     def user_can_access(self, user):
+        return True
+
+    def extern_can_access(self, email):
         return True
 
     def __str__(self):
@@ -51,6 +57,9 @@ class GroupAccess(AccessPolicy):
             return True
         return False
 
+    def extern_can_access(self, email):
+        return False
+
     def __str__(self):
         return "Le group %s peut voir l'album" % self.group.name
 
@@ -66,6 +75,13 @@ class EventAccess(AccessPolicy):
             inscription = Inscription.objects.get(user=user, event=self.event)
             return bool(inscription.in_date)
         except Inscription.DoesNotExist:
+            return False
+
+    def extern_can_access(self, email):
+        try:
+            inscription = ExternInscription.objects.get(mail=email, event=self.event)
+            return bool(inscription.in_date)
+        except ExternInscription.DoesNotExist:
             return False
 
     def __str__(self):

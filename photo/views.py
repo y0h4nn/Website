@@ -41,18 +41,21 @@ def create_thumbnail(realpath, filename):
     region.save(os.path.join(realpath, THUMBNAIL_DIRNAME, filename), "JPEG")
 
 
-def user_can_access(user, path):
-    if user.is_superuser:
+def can_access(path, user=None, email=None):
+    if user and user.is_superuser:
         return True
 
     policies = models.AccessPolicy.list(path)
     access = False
     for p in policies:
-        access |= p.user_can_access(user)
+        if user:
+            access |= p.user_can_access(user)
+        elif email:
+            access |= p.extern_can_access(user)
     return access
 
 
-def list_entries(realpath, path, user):
+def list_entries(realpath, path, user=None, email=None):
     entries = {
         'files': [],
         'dirs': [],
@@ -61,7 +64,7 @@ def list_entries(realpath, path, user):
     for entry in os.scandir(realpath):
         if entry.is_dir():
             if entry.name != THUMBNAIL_DIRNAME:
-                if user_can_access(user, os.path.join(path, entry.name)):
+                if can_access(os.path.join(path, entry.name), user, email):
                     entries['dirs'].append({
                         'name': entry.name,
                         'path': os.path.join(path, entry.name),
@@ -70,8 +73,19 @@ def list_entries(realpath, path, user):
             if os.path.splitext(entry.name)[1].lower() in ALLOWED_IMAGE_EXT:
                 entries['files'].append({
                     'name': entry.name,
-                    'path': os.path.join(settings.MEDIA_URL, PHOTO_DIRNAME, path, entry.name),
-                    'thumbnail': os.path.join(settings.MEDIA_URL, PHOTO_DIRNAME, path, THUMBNAIL_DIRNAME, entry.name),
+                    'path': os.path.join(
+                        settings.MEDIA_URL,
+                        PHOTO_DIRNAME,
+                        path,
+                        entry.name
+                    ),
+                    'thumbnail': os.path.join(
+                        settings.MEDIA_URL,
+                        PHOTO_DIRNAME,
+                        path,
+                        THUMBNAIL_DIRNAME,
+                        entry.name
+                    ),
                 })
                 create_thumbnail(realpath, entry.name)
 
@@ -86,10 +100,16 @@ def browse(request, path):
         raise Http404
     if os.path.basename(realpath).startswith('.'):
         raise Http404
-    if path and not user_can_access(request.user, path):
-        raise Http404
 
-    entries = list_entries(realpath, path, request.user)
+    email = request.session.get('email')
+    user = request.user if request.user.is_authenticated() else None
+    if path and not can_access(path, user, email):
+        if user:
+            raise Http404
+        else:
+            return redirect('photo:extern_login', next=path)
+
+    entries = list_entries(realpath, path, user, email)
     context = {
         'path': path,
         'parent': os.path.normpath(os.path.join(path, '..')),
@@ -159,3 +179,11 @@ def permissions_delete(request, model, pid):
         )
     return redirect('photo:permissions', path=path)
 
+
+def extern_login(request, next):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        request.session['email'] = email
+        return redirect('photo:browse', path=next)
+    else:
+        return render(request, 'photo/extern_login.html')

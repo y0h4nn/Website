@@ -23,21 +23,23 @@
 {% endblock%}
 
 {% block main %}
-    <div class="albums">
-        {% if path %}
-            <div class="album">
-                <a href="{% url 'photo:browse' path=parent %}"><i class="fa fa-chevron-left"></i> Album parent</a>
-            </div>
-        {% endif %}
-        {% for album in albums %}
-            <div class="album">
-                {% if is_bde_member or request.user.is_superuser %}
-                    <a href="{% url 'photo:permissions' path=album.path %}" class="float_right"><i class="fa fa-unlock-alt"></i></a>
-                {% endif %}
-                <a href="{% url 'photo:browse' path=album.path %}"><i class="fa fa-folder"></i> {{ album.name }}</a>
-            </div>
-        {% endfor %}
-    </div>
+    {% if albums or parent %}
+        <div class="albums">
+            {% if path %}
+                <div class="album">
+                    <a href="{% url 'photo:browse' path=parent %}"><i class="fa fa-chevron-left"></i> Album parent</a>
+                </div>
+            {% endif %}
+            {% for album in albums %}
+                <div class="album">
+                    {% if is_bde_member or request.user.is_superuser %}
+                        <a href="{% url 'photo:permissions' path=album.path %}" class="float_right"><i class="fa fa-unlock-alt"></i></a>
+                    {% endif %}
+                    <a href="{% url 'photo:browse' path=album.path %}"><i class="fa fa-folder"></i> {{ album.name }}</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
     <div class="photos">
         {% for image in images %}
             <img src="{{ image.thumbnail }}" alt="{{ image.name }}" data-photo-url="{{ image.path }}" />
