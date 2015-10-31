@@ -8,7 +8,7 @@
 function Popup(title){
     // Popup init
     this.container = document.createElement('div');
-    this.container.setAttribute('class', this.popupClass);
+    this.container.setAttribute('class', this.baseClass);
     this.window = document.createElement('div');
     this.header = document.createElement('header');
     this.h1 = document.createElement('h1');
@@ -223,3 +223,78 @@ UserSelectionPopup.prototype = Object.create(Popup.prototype, {
 
 UserSelectionPopup.prototype.constructor = UserSelectionPopup;
 
+
+
+/*
+ * Photo popup
+ */
+
+function DiaporamaPopup(images){
+    this.images = images;
+    this.index = 0;
+    this.container = document.createElement('div');
+    this.container.setAttribute('class', this.baseClass);
+    this.image = document.createElement('img');
+    this.nextButton = document.createElement('button');
+    this.nextButton.setAttribute('type', 'button');
+    this.nextButton.innerHTML = "<i class='fa fa-chevron-right'></i>";
+    this.previousButton = document.createElement('button');
+    this.previousButton.setAttribute('type', 'button');
+    this.previousButton.innerHTML = "<i class='fa fa-chevron-left'></i>";
+
+    document.body.insertBefore(this.container, document.body.firstChild);
+    this.container.appendChild(this.previousButton);
+    this.container.appendChild(this.image);
+    this.container.appendChild(this.nextButton);
+
+    this.container.addEventListener('click', function(event){
+        if(event.target != this.previousButton && event.target != this.nextButton){
+            this.close();
+        }
+    }.bind(this));
+
+    this.nextButton.addEventListener('click', this.nextImage.bind(this));
+    this.previousButton.addEventListener('click', this.previousImage.bind(this));
+
+    document.addEventListener('keyup', function(event){
+        console.log(event.keyCode);
+        switch(event.keyCode){
+            case 39:
+                this.nextImage();
+                break;
+            case 37:
+                this.previousImage();
+                break;
+            case 27:
+                this.close();
+                break;
+        }
+    }.bind(this));
+}
+
+DiaporamaPopup.prototype = Object.create(Popup.prototype, {
+    baseClass: {
+        value: 'diaporama_popup',
+    },
+    selectImage: {
+        value: function(index){
+            this.index = Math.abs(index % this.images.length);
+            this.image.setAttribute('src', this.images[this.index]);
+        },
+    },
+
+    nextImage: {
+        value: function(){
+            this.selectImage(this.index + 1);
+        },
+    },
+
+    previousImage: {
+        value: function(){
+            this.selectImage(this.index - 1);
+        },
+    },
+});
+
+
+DiaporamaPopup.prototype.constructor = DiaporamaPopup;
