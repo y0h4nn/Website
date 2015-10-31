@@ -35,5 +35,6 @@ urlpatterns = [
     url(r'^shop/', include('shop.urls', namespace='shop')),
     url(r'^pizzas/', include('pizza.urls', namespace='pizza')),
     url(r'^help/', include('help.urls', namespace='help')),
+    url(r'^photo/', include('photo.urls', namespace='photo')),
     url(r'^enibar/', include('enibar.urls', namespace='enibar')),
 ]
