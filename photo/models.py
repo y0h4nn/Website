@@ -61,7 +61,7 @@ class GroupAccess(AccessPolicy):
         return False
 
     def __str__(self):
-        return "Le group %s peut voir l'album" % self.group.name
+        return "Le groupe %s peut voir l'album" % self.group.name
 
 
 class EventAccess(AccessPolicy):
@@ -85,7 +85,7 @@ class EventAccess(AccessPolicy):
             return False
 
     def __str__(self):
-        return "Les participants de l'évennement %s peuvent voir l'abum" % self.event.name
+        return "Les participants de l'évènement %s peuvent voir l'album" % self.event.name
 
 
 def get_models():

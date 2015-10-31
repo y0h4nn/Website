@@ -22,7 +22,7 @@ class GroupAccessForm(AccessPolicyForm):
 
 
 class EventAccessForm(AccessPolicyForm):
-    """ Accès au participants d'un evenement donné """
+    """ Accès aux participants d'un évènement donné """
     class Meta:
         model = models.EventAccess
         fields = ['event']

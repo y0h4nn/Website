@@ -137,7 +137,7 @@ def permissions(request, path):
                     messages.add_message(
                         request,
                         messages.WARNING,
-                        "Cette permission est déja en place."
+                        "Cette permission est déjà en place."
                     )
             else:
                 messages.add_message(
