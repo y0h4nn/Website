@@ -9,20 +9,20 @@ class AccessPolicyForm(forms.ModelForm):
 
 
 class PublicAccessForm(AccessPolicyForm):
-    """ Access publique """
+    """ Accès publique """
     class Meta:
         model = models.PublicAccess
         exclude = ['path']
 
 class GroupAccessForm(AccessPolicyForm):
-    """ Access pour un groupe donné """
+    """ Accès pour un groupe donné """
     class Meta:
         model = models.GroupAccess
         fields = ['group']
 
 
 class EventAccessForm(AccessPolicyForm):
-    """ Access au participants d'un evenement donné """
+    """ Accès au participants d'un evenement donné """
     class Meta:
         model = models.EventAccess
         fields = ['event']
