@@ -109,7 +109,7 @@ def browse(request, path):
     context = {
         'path': path,
         'parent': os.path.normpath(os.path.join(path, '..')),
-        'albums': entries['dirs'],
+        'albums': sorted(entries['dirs'], key=lambda x: x['name'].lower()),
         'images': entries['files'],
     }
 
