@@ -53,6 +53,8 @@ class GroupAccess(AccessPolicy):
         unique_together = ('path', 'group')
 
     def user_can_access(self, user):
+        if not user:
+            return False
         if self.group in user.groups.all():
             return True
         return False
@@ -71,6 +73,8 @@ class EventAccess(AccessPolicy):
         unique_together = ('path', 'event')
 
     def user_can_access(self, user):
+        if not user:
+            return False
         try:
             inscription = Inscription.objects.get(user=user, event=self.event)
             return bool(inscription.in_date)

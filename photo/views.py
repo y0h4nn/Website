@@ -48,10 +48,7 @@ def can_access(path, user=None, email=None):
     policies = models.AccessPolicy.list(path)
     access = False
     for p in policies:
-        if user:
-            access |= p.user_can_access(user)
-        elif email:
-            access |= p.extern_can_access(email)
+        access |= p.user_can_access(user) or p.extern_can_access(email)
     return access
 
 
