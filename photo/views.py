@@ -1,5 +1,5 @@
 import os
-import PIL
+from PIL import Image
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import Http404
@@ -24,7 +24,7 @@ def create_thumbnail(realpath, filename):
         return
 
     try:
-        image = PIL.Image.open(os.path.join(realpath, filename))
+        image = Image.open(os.path.join(realpath, filename))
     except OSError:
         return
 
