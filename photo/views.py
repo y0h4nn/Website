@@ -25,20 +25,19 @@ def create_thumbnail(realpath, filename):
 
     try:
         image = Image.open(os.path.join(realpath, filename))
+        l = min(image.size)
+        width, height = image.size
+        box = (
+            int((width - l) / 2),
+            int((height - l) / 2),
+            int((width + l) / 2),
+            int((height + l) / 2)
+        )
+        region = image.crop(box)
+        region.thumbnail((100,100))
+        region.save(os.path.join(realpath, THUMBNAIL_DIRNAME, filename), "JPEG")
     except OSError:
         return
-
-    l = min(image.size)
-    width, height = image.size
-    box = (
-        int((width - l) / 2),
-        int((height - l) / 2),
-        int((width + l) / 2),
-        int((height + l) / 2)
-    )
-    region = image.crop(box)
-    region.thumbnail((100,100))
-    region.save(os.path.join(realpath, THUMBNAIL_DIRNAME, filename), "JPEG")
 
 
 def can_access(path, user=None, email=None):
