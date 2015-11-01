@@ -257,7 +257,6 @@ function DiaporamaPopup(images){
     this.previousButton.addEventListener('click', this.previousImage.bind(this));
 
     document.addEventListener('keyup', function(event){
-        console.log(event.keyCode);
         switch(event.keyCode){
             case 39:
                 this.nextImage();
@@ -278,7 +277,7 @@ DiaporamaPopup.prototype = Object.create(Popup.prototype, {
     },
     selectImage: {
         value: function(index){
-            this.index = Math.abs(index % this.images.length);
+            this.index = index % this.images.length + this.images.length * (Math.sign(index) === -1);
             this.image.setAttribute('src', this.images[this.index]);
         },
     },
