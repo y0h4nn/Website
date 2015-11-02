@@ -277,8 +277,10 @@ DiaporamaPopup.prototype = Object.create(Popup.prototype, {
     },
     selectImage: {
         value: function(index){
-            this.index = index % this.images.length + this.images.length * (Math.sign(index) === -1);
+            this.index = this.normalizedIndex(index);
             this.image.setAttribute('src', this.images[this.index]);
+            this.prefetchImage(this.index - 1);
+            this.prefetchImage(this.index + 1);
         },
     },
 
@@ -291,6 +293,19 @@ DiaporamaPopup.prototype = Object.create(Popup.prototype, {
     previousImage: {
         value: function(){
             this.selectImage(this.index - 1);
+        },
+    },
+
+    prefetchImage: {
+        value: function(index){
+            var img = new Image();
+            img.src = this.images[this.normalizedIndex(index)];
+        },
+    },
+
+    normalizedIndex: {
+        value: function(index){
+            return index % this.images.length + this.images.length * (Math.sign(index) === -1);
         },
     },
 });
