@@ -14,7 +14,7 @@ class NewsForm(forms.ModelForm):
 
         labels = {
             'title': 'Titre',
-            'content': 'contenu',
+            'content': 'Contenu',
         }
 
 class CommentForm(forms.ModelForm):
