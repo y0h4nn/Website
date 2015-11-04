@@ -21,6 +21,9 @@
     {% menu_item "Description" "events:event" eid=event.id %}
     {% menu_item "Liste des inscrits" "events:admin_list_registrations" eid=event.id %}
     {% menu_item "Editer l'évènement" "events:admin_edit" eid=event.id %}
+    {% if event.gestion %}
+        {% menu_item "Gestion" "events:admin_management" eid=event.id %}
+    {% endif %}
 {% endblock %}
 
 {% block main %}

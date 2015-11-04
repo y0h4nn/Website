@@ -11,8 +11,8 @@ from django.db import transaction
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from bde.models import Contributor
-from bde import bde_member
-from notifications import notify
+from bde.shortcuts import bde_member
+from notifications.shortcuts import notify
 from . import forms
 from . import models
 
@@ -45,7 +45,7 @@ def logout(request):
 @login_required()
 def show(request, username):
     try:
-        user = User.objects.get(username=username)
+        user = User.objects.select_related('profile').get(username=username)
     except User.DoesNotExist:
         return redirect(reverse('news:index'))
 

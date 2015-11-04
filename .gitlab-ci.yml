@@ -1,2 +1,2 @@
 test:
-    script: python manage.py test
+    script: ./test.sh

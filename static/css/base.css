@@ -86,11 +86,12 @@ form p {
     font-weight: bold;
     padding-right: 0.5em; }
   form p input, form p .button, form p textarea {
-    -webkit-flex: 0 1 65%;
-    -moz-flex: 0 1 65%;
-    -ms-flex: 0 1 65%;
-    -o-flex: 0 1 65%;
-    flex: 0 1 65%;
+    -webkit-flex: 1 1 auto;
+    -moz-flex: 1 1 auto;
+    -ms-flex: 1 1 auto;
+    -o-flex: 1 1 auto;
+    flex: 1 1 auto;
+    min-width: 0;
     display: inline-block;
     border-radius: 0; }
     form p input:last-child, form p .button:last-child, form p textarea:last-child {
@@ -250,11 +251,11 @@ table:not(.rd-days) {
     table:not(.rd-days) tbody tr:hover {
       background-color: #dfdfdf; }
   table:not(.rd-days) tbody td {
-    padding: 0.5em 0; }
+    padding: 1em; }
     table:not(.rd-days) tbody td:first-child {
-      padding-left: 0.5em; }
+      padding-left: 1em; }
     table:not(.rd-days) tbody td:last-child {
-      padding-right: 0.5em; }
+      padding-right: 1em; }
   table:not(.rd-days) .action_cell {
     text-align: right; }
     table:not(.rd-days) .action_cell a {
@@ -417,6 +418,80 @@ table:not(.rd-days) {
 .float_right {
   float: right; }
 
+.pagination {
+  width: 100%;
+  text-align: center;
+  margin: 2em 0;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;
+  display: -o-flex;
+  display: flex;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -o-justify-content: center;
+  justify-content: center; }
+  .pagination .page {
+    display: block;
+    border-radius: 0;
+    background-color: white;
+    color: #333;
+    border: 1px solid #bbb;
+    padding: 1em 1.25em;
+    margin: 0; }
+    .pagination .page + .page {
+      border-left: none;
+      transition: background-color 0.25s; }
+    .pagination .page:first-child {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px; }
+    .pagination .page:last-child {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px; }
+    .pagination .page:hover {
+      background-color: #eaeaea; }
+    .pagination .page:active, .pagination .page.toggled {
+      background-color: #ddd; }
+
+.announce header {
+  border-bottom: 1px solid #eee; }
+  .announce header h2 {
+    color: #bbb;
+    font-size: 1em; }
+.announce .details {
+  text-align: center; }
+  .announce .details + .details div {
+    border-top: none; }
+  .announce .details div {
+    -webkit-flex: 1 1 50%;
+    -moz-flex: 1 1 50%;
+    -ms-flex: 1 1 50%;
+    -o-flex: 1 1 50%;
+    flex: 1 1 50%;
+    border: 1px solid #eee;
+    padding: 1em; }
+    .announce .details div + div {
+      border-left: none; }
+  .announce .details p {
+    text-align: center;
+    margin: 0; }
+    .announce .details p:first-child {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: orange; }
+
+.subtitle {
+  display: block;
+  color: grey;
+  font-size: 0.4em; }
+
+@media screen and (max-width: 640px) {
+  .flex_container {
+    display: block; }
+
+  .announce div {
+    border: none !important; } }
 #main_container {
   -webkit-flex: 1 1 auto;
   -moz-flex: 1 1 auto;
@@ -865,15 +940,28 @@ table:not(.rd-days) {
   margin-left: auto;
   margin-right: 5px; }
 
-.popup, .selection_popup, .user_selection_popup, .permission_popup {
-  background-color: rgba(0, 0, 0, 0.3);
+@media screen and (max-width: 900px) {
+  .userlist li {
+    display: block;
+    height: auto;
+    padding: 1em;
+    text-align: center;
+    border-bottom: 1px solid #ddd; }
+    .userlist li div:nth-child(2) {
+      display: inline-block;
+      padding: 1em; }
+    .userlist li .picture_container, .userlist li .icon_container {
+      display: none;
+      text-align: center; } }
+.popup, .selection_popup, .user_selection_popup, .diaporama_popup {
+  background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
   position: fixed;
   z-index: 10;
   display: none;
   padding: 2em; }
-  .popup > div, .selection_popup > div, .user_selection_popup > div, .permission_popup > div {
+  .popup > div, .selection_popup > div, .user_selection_popup > div, .diaporama_popup > div {
     background-color: white;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     min-width: 100px;
@@ -881,7 +969,7 @@ table:not(.rd-days) {
     max-height: 100%;
     overflow: auto;
     border-radius: 3px; }
-  .popup.pop, .pop.selection_popup, .pop.user_selection_popup, .pop.permission_popup {
+  .popup.pop, .pop.selection_popup, .pop.user_selection_popup, .pop.diaporama_popup {
     -webkit-display: flex;
     -moz-display: flex;
     -ms-display: flex;
@@ -897,7 +985,7 @@ table:not(.rd-days) {
     -ms-justify-content: center;
     -o-justify-content: center;
     justify-content: center; }
-  .popup header, .selection_popup header, .user_selection_popup header, .permission_popup header {
+  .popup header, .selection_popup header, .user_selection_popup header, .diaporama_popup header {
     background-color: white;
     border-bottom: 1px solid #e2e2e2;
     -webkit-display: flex;
@@ -911,7 +999,7 @@ table:not(.rd-days) {
     -o-align-items: center;
     align-items: center;
     padding: 0; }
-    .popup header button, .selection_popup header button, .user_selection_popup header button, .permission_popup header button {
+    .popup header button, .selection_popup header button, .user_selection_popup header button, .diaporama_popup header button {
       margin: 0;
       padding: 0.8em;
       background: none;
@@ -920,9 +1008,9 @@ table:not(.rd-days) {
       border-radius: 0;
       font-size: 1.2em;
       background-color: white; }
-      .popup header button:hover, .selection_popup header button:hover, .user_selection_popup header button:hover, .permission_popup header button:hover {
+      .popup header button:hover, .selection_popup header button:hover, .user_selection_popup header button:hover, .diaporama_popup header button:hover {
         color: red; }
-    .popup header h1, .selection_popup header h1, .user_selection_popup header h1, .permission_popup header h1 {
+    .popup header h1, .selection_popup header h1, .user_selection_popup header h1, .diaporama_popup header h1 {
       font-size: 1.2em;
       color: #aaa;
       margin: 0;
@@ -932,7 +1020,7 @@ table:not(.rd-days) {
       -ms-flex: 1 1 auto;
       -o-flex: 1 1 auto;
       flex: 1 1 auto; }
-  .popup main, .selection_popup main, .user_selection_popup main, .permission_popup main {
+  .popup main, .selection_popup main, .user_selection_popup main, .diaporama_popup main {
     padding: 1em;
     background-color: white;
     max-height: 100%; }
@@ -954,9 +1042,25 @@ table:not(.rd-days) {
   width: 100%;
   padding: 0.5em; }
 
-.permission_popup input[type=checkbox] {
-  width: auto;
-  vertical-align: middle; }
+.diaporama_popup {
+  text-align: center; }
+  .diaporama_popup.pop {
+    display: table-row;
+    vertical-align: middle; }
+  .diaporama_popup button {
+    display: table-cell;
+    width: 75px;
+    vertical-align: middle;
+    background: none;
+    text-shadow: 1px 1px black;
+    font-size: 2em;
+    padding: 0; }
+  .diaporama_popup img {
+    display: table-cell;
+    vertical-align: middle;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    max-width: calc(100% - 2 * 75px);
+    max-height: 100%; }
 
 .event {
   -webkit-display: flex;
@@ -964,11 +1068,11 @@ table:not(.rd-days) {
   -ms-display: flex;
   -o-display: flex;
   display: flex;
-  -webkit-flex-show: row;
-  -moz-flex-show: row;
-  -ms-flex-show: row;
-  -o-flex-show: row;
-  flex-show: row;
+  -webkit-flex-flow: row;
+  -moz-flex-flow: row;
+  -ms-flex-flow: row;
+  -o-flex-flow: row;
+  flex-flow: row;
   -webkit-align-items: stretch;
   -moz-align-items: stretch;
   -ms-align-items: stretch;
@@ -1036,6 +1140,24 @@ table:not(.rd-days) {
   .event .inscription_count + p {
     margin-top: 0; }
 
+.bg-red {
+  background-color: #FBE1E1 !important; }
+  .bg-red:hover {
+    background-color: #F5C1C1 !important; }
+
+.bg-green {
+  background-color: #C4ECC4 !important; }
+  .bg-green:hover {
+    background-color: #95EC95 !important; }
+
+.bg-blue {
+  background-color: #9FD3F3 !important; }
+  .bg-blue:hover {
+    background-color: #7AB3D7 !important; }
+
+@media screen and (max-width: 640px) {
+  .event {
+    display: block; } }
 .comment {
   border: 1px solid #ddd;
   padding: 1em;
@@ -1103,35 +1225,9 @@ table:not(.rd-days) {
     -o-flex: 1 1 auto;
     flex: 1 1 auto; }
 
-.announce header {
-  border-bottom: 1px solid #eee; }
-  .announce header h2 {
-    color: #bbb;
-    font-size: 1em; }
-.announce .details {
-  text-align: center; }
-  .announce .details + .details div {
-    border-top: none; }
-  .announce .details div {
-    -webkit-flex: 1 1 50%;
-    -moz-flex: 1 1 50%;
-    -ms-flex: 1 1 50%;
-    -o-flex: 1 1 50%;
-    flex: 1 1 50%;
-    border: 1px solid #eee;
-    padding: 1em; }
-    .announce .details div + div {
-      border-left: none; }
-  .announce .details p {
-    text-align: center;
-    margin: 0; }
-    .announce .details p:first-child {
-      font-size: 1.5em;
-      font-weight: bold;
-      color: orange; }
-
 .news {
-  margin: 1em 0 5em 0; }
+  margin: 1em 0 5em 0;
+  width: 100%; }
   .news header {
     border-bottom: 1px solid #eee; }
     .news header h1 {
@@ -1141,6 +1237,15 @@ table:not(.rd-days) {
     .news header h2 {
       font-size: 1em;
       color: #bbb; }
+  .news footer {
+    border-top: 1px solid #eee;
+    padding: 1em 0 0 0; }
+    .news footer a {
+      color: #bbb; }
+      .news footer a:hover {
+        color: #68B9DE; }
+  .news img {
+    max-width: 100%; }
 
 .notification {
   margin-bottom: 3em;
@@ -1258,6 +1363,7 @@ table:not(.rd-days) {
       color: #C9E6F0; }
 
 .cal {
+  color: #333;
   position: fixed;
   z-index: 1;
   background-color: white;
@@ -1327,4 +1433,29 @@ table:not(.rd-days) {
     font-size: 1em;
     font-family: monospace; }
 
-/*# sourceMappingURL=base.css.map */
+.albums {
+  margin-bottom: 2em;
+  border: 1px solid #eaeaea;
+  background-color: #f5f5f5;
+  border-radius: 3px; }
+
+.album {
+  border-radius: 3px;
+  font-weight: bold; }
+  .album:nth-child(2n) {
+    background-color: #fafafa; }
+  .album a {
+    padding: 0.5em 0.5em;
+    color: #555;
+    display: block; }
+    .album a:hover {
+      background-color: #eee; }
+
+.photos {
+  text-align: center; }
+
+.photo {
+  display: inline-block; }
+  .photo img {
+    display: inline-block; }
+

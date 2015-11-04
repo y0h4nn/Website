@@ -1,0 +1,85 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+{% load markdown %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Actualités
+{% endblock %}
+
+{% block header %}
+    Actualités
+{% endblock %}
+
+{% block menu %}
+    {% if request.user.is_active and user_is_bde_member %}
+        {% menu_item 'Actualités' 'news:index' %}
+        {% menu_item 'Ajouter une actualité' 'news:create' %}
+    {% endif %}
+{% endblock%}
+
+{% block main %}
+        <article class="news">
+            <header>
+                <h1>{{ news.title }}</h1>
+                <h2>
+                    Le {{ news.pub_date }} par {{ news.author.profile }}
+                    {% if user_is_bde_member %}
+                        <a href="{% url 'news:edit' nid=news.id %}" title="Editer"><i class="fa fa-pencil"></i></a>
+                        <a href="{% url 'news:delete' nid=news.id %}" class="red" title="Supprimer"><i class="fa fa-trash-o"></i></a>
+                    {% endif %}
+                </h2>
+            </header>
+            <main>
+                {{ news.content|markdown }}
+            </main>
+        </article>
+        <div id="comments">
+            {% if comments %}
+                <h3>Commentaires</h3>
+            {% endif %}
+            {% for comment in comments %}
+                <div class="comment">
+                    <div>
+                        <header>
+                            <hgroup>
+                                <h4>
+                                    {{ comment.user.profile }}
+                                </h4>
+                                <h5>
+                                    {{ comment.pub_date }}
+                                    {% if user_is_bde_member or comment.user == request.user %}
+                                        <a href="{% url 'news:del_comment' cid=comment.id %}" class="red" title="Supprimer" ><i class="fa fa-trash-o"></i></a>
+                                    {% endif %}
+                                </h5>
+                            </hgroup>
+                        </header>
+                        <main>
+                            <p>
+                                {{ comment.content|markdown }}
+                            </p>
+                        </main>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ comment_form.content.errors }}
+                {{ comment_form.content }}
+                <br/><br/>
+                <button>
+                    <i class="fa fa-comments"></i>
+                    Commenter
+                </button>
+            </form>
+        </div>
+{% endblock %}

@@ -6,14 +6,15 @@ from django.utils import timezone
 class PizzaAddingForm(forms.ModelForm):
     class Meta:
         model = Pizza
-        fields = ['name']
+        fields = ['name', 'ingredients']
         labels = {'name': "Nom"}
+
 
 class CommandForm(forms.ModelForm):
     class Meta:
         model = Command
-        fields = ['date']
-        widgets = {"date": forms.SplitDateTimeWidget()}
+        fields = ["date"]
+    date = forms.SplitDateTimeField()
 
     def clean(self):
         cleaned_data = super().clean()
@@ -27,6 +28,7 @@ class CommandForm(forms.ModelForm):
         if date < timezone.now():
             self.add_error("date", "Impossible d'avoir une commande dans le passé")
         return cleaned_data
+
 
 class PizzaTakingForm(forms.Form):
     pizza = forms.ChoiceField(widget=forms.RadioSelect)

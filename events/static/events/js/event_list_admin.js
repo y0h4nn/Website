@@ -11,7 +11,8 @@
         populate: {
             value: function(data){
                 this.elems = data['events'];
-                for(var evt of this.elems){
+                for(var i in this.elems){
+                    var evt = this.elems[i];
                     var img = document.createElement('img');
                         img.setAttribute('src', evt['picture']);
                         img.setAttribute('alt', 'profile_picture');
@@ -19,7 +20,11 @@
                         pictureContainer.setAttribute('class', 'picture_container');
                     var nameContainer = document.createElement('div');
                     var d = new Date(evt['start_time']);
-                        nameContainer.innerHTML = evt['name'] + '<span style="color:#BBB;"> (' + d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + ')</span>';
+                    var dateContainer = document.createElement('span');
+                        dateContainer.setAttribute('style', 'color: #BBB');
+                        dateContainer.innerHTML = ' (' + d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + ')';
+                        nameContainer.appendChild(document.createTextNode(evt['name']));
+                        nameContainer.appendChild(dateContainer);
                     var actionContainer = document.createElement('div');
                         actionContainer.setAttribute('class', 'action_container');
 
@@ -29,8 +34,9 @@
                     evt.element.appendChild(nameContainer);
                     evt.element.appendChild(actionContainer);
                     if(this.onElemBuild){
-                        for(var action of this.onElemBuild(evt)){
-                            actionContainer.appendChild(action.element);
+                        var actions = this.onElemBuild(evt);
+                        for(var i in actions ){
+                            actionContainer.appendChild(actions[i].element);
                         }
                     }
                     pictureContainer.appendChild(img);

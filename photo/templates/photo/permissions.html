@@ -1,0 +1,88 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Permissions de {{ path }}
+{% endblock %}
+
+{% block header %}
+    Permissions de {{ path }}
+{% endblock %}
+
+{% block menu %}
+{% endblock%}
+
+{% block main %}
+
+    <a href="{% url 'photo:browse' path=path %}/../"><i class="fa fa-chevron-left"></i> Revenir à l'explorateur</a>
+
+    {% if permissions %}
+        <h2>Permissions en vigueur</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Permission</th>
+                    <th>Supprimer</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for perm in permissions %}
+                    <tr>
+                        <td>{{ perm }}</td>
+                        <td class="center"><a href="{% url 'photo:permissions_delete' model=perm.get_class_name pid=perm.id %}" ><i class="red fa fa-trash-o"></i></a><td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <h2>Ajouter une permission</h2>
+    <form>
+        <p>
+            <label for="selector">Type de permission</label>
+            <select id="selector" name="selector">
+                <option >--</option>
+                {% for form in forms %}
+                    <option value={{form.name}}>{{ form.description }}</option>
+                {% endfor %}
+            </select>
+        </p>
+    </form>
+
+    {% for form in forms %}
+        <form method="POST" action="{{ request.path }}" id="{{ form.name }}" class="hidden" data-form-instance="true" >
+            {% csrf_token %}
+            {{ form.instance.as_p }}
+            <button name="selected_form" value="{{ form.name }}">Ajouter la permission</button>
+        </form>
+    {% endfor %}
+
+
+    <script>
+        window.addEventListener('load', function(){
+            var selector = document.getElementById('selector');
+            selector.addEventListener('change', function(){
+                var instances = document.querySelectorAll('form[data-form-instance=true]');
+                var element = document.getElementById(selector.value);
+                for(var i in instances){
+                    if(instances[i].setAttribute){
+                        instances[i].setAttribute('class', 'hidden');
+                    };
+                }
+                if(element){
+                    element.setAttribute('class', '');
+                    console.log(element);
+                }
+            });
+        });
+    </script>
+
+{% endblock %}

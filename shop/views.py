@@ -1,6 +1,7 @@
 import csv
 import json
 from collections import Counter
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.http import JsonResponse, HttpResponse
@@ -10,14 +11,14 @@ from django.contrib.auth.decorators import login_required
 from . import forms
 from . import models
 from events.models import Inscription
-from bde import bde_member
-from notifications import notify
+from bde.shortcuts import bde_member
+from notifications.shortcuts import notify
 
 
 @login_required
 def index(request):
     context = {
-        'history': models.BuyingHistory.objects.filter(user=request.user).order_by('date').all().reverse()
+        'history': models.BuyingHistory.objects.filter(user=request.user).order_by('date').select_related('user__profile').all().reverse()
     }
 
     return render(request, 'shop/index.html', context)
@@ -66,8 +67,19 @@ def pack(request):
 
 @bde_member
 def history(request):
+    history = models.BuyingHistory.objects.select_related('user__profile').select_related('pack').select_related('product').order_by('date').all().reverse()
+    paginator = Paginator(history, 25)
+
+    page = request.GET.get('page')
+    try:
+        response = paginator.page(page)
+    except PageNotAnInteger:
+        response = paginator.page(1)
+    except EmptyPage:
+        response = paginator.page(paginator.num_pages)
+
     context = {
-        'history': models.BuyingHistory.objects.select_related('user__profile').select_related('pack').select_related('product').order_by('date').all().reverse()
+        'history': response
     }
 
     return render(request, 'shop/history.html', context)

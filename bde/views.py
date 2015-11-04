@@ -1,14 +1,15 @@
 import json
-import datetime
+from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.conf import settings
+from django.http import HttpResponse
 from . import models
-from . import forms
-from . import bde_member
+from .shortcuts import bde_member
+import csv
 
 
 def index(request):
@@ -126,6 +127,22 @@ def memberlist(request):
             'nickname': user.profile.nickname,
             'email': user.email,
             'is_member': bde_group in user.groups.all(),
-        } for user in User.objects.select_related('profile').all()
+        } for user in User.objects.select_related('profile').prefetch_related('groups').all()
     ]
     return JsonResponse({'users': users})
+
+
+@bde_member
+def export_contributors(request):
+    print(timezone.now().date())
+    users = User.objects.filter(contribution__end_date__gt=timezone.now().date()).select_related('profile').select_related('contribution')
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="cotisants.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'Début', 'Fin'])
+    for user in users:
+        line = [user.profile.user, user.profile.nickname, user.first_name, user.last_name, user.email, user.contribution.start_date, user.contribution.end_date]
+        writer.writerow(line)
+    return response
+

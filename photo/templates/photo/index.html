@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Photos
+{% endblock %}
+
+{% block header %}
+    Photos
+{% endblock %}
+
+{% block menu %}
+{% endblock%}
+
+{% block main %}
+    {% if not albums %}
+        <p>
+            Il n'y a pas d'album photo.
+        </p>
+    {% endif %}
+    {% for album in albums %}
+        <div>
+            {{ album.name }}
+        </div>
+    {% endfor %}
+    <a href="{% url 'photo:add_album' %}">Ajouter un album</a>
+{% endblock %}

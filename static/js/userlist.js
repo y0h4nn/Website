@@ -11,14 +11,15 @@
         populate: {
             value: function(json){
                 this.elems = json['users'];
-                for(var user of this.elems){
+                for(var i in this.elems){
+                    var user = this.elems[i];
                     var img = document.createElement('img');
                         img.setAttribute('src', user['picture']);
                         img.setAttribute('alt', 'profile_picture');
                     var pictureContainer = document.createElement('div');
                         pictureContainer.setAttribute('class', 'picture_container');
                     var nameContainer = document.createElement('div');
-                        nameContainer.innerHTML = user['display_name'];
+                        nameContainer.appendChild(document.createTextNode(user['display_name']));
                     var actionContainer = document.createElement('div');
                         actionContainer.setAttribute('class', 'action_container');
 
@@ -28,8 +29,9 @@
                     user.element.appendChild(nameContainer);
                     user.element.appendChild(actionContainer);
                     if(this.onElemBuild){
-                        for(var action of this.onElemBuild(user)){
-                            actionContainer.appendChild(action.element);
+                        var actions = this.onElemBuild(user);
+                        for(var i in actions){
+                            actionContainer.appendChild(actions[i].element);
                         }
                     }
                     pictureContainer.appendChild(img);

@@ -14,6 +14,11 @@ class NewsForm(forms.ModelForm):
 
         labels = {
             'title': 'Titre',
-            'content': 'contenu',
+            'content': 'Contenu',
         }
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = models.Comment
+        fields = ['content', ]
+        labels = {'content': 'Commentaire'}

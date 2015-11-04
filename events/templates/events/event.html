@@ -1,6 +1,24 @@
 {% extends 'core/base.html' %}
 {% load menu_item %}
 {% load markdown %}
+{% load static %}
+
+
+{% block scripts %}
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script>
+        function update_list(data){
+            if(data["status"] == 1){
+                this.parentNode.parentNode.removeChild(this.parentNode);
+            }
+        }
+
+        function del_ins(elem, iid){
+            queryJson('', {'iid': iid}, update_list.bind(elem));
+        }
+    </script>
+    <script src="{% static 'js/calendar.js' %}"></script>
+{% endblock %}
 
 {% block header %}
     Evenement
@@ -16,6 +34,9 @@
     {% if user_is_bde_member %}
         {% menu_item "Liste des inscrits" "events:admin_list_registrations" eid=event.id %}
         {% menu_item "Editer l'évènement" "events:admin_edit" eid=event.id %}
+        {% if event.gestion %}
+            {% menu_item "Gestion" "events:admin_management" eid=event.id %}
+        {% endif %}
     {% endif %}
 {% endblock %}
 
@@ -41,7 +62,12 @@
                 <p>Lieu</p>
             </div>
             <div class="flex expand">
-                <p>{{ event.registrations_number }}</p>
+                <p>
+                    {{ event.registrations_number }}
+                    {% if event.limited %}
+                        / {{ event.max_inscriptions }}
+                    {% endif %}
+                </p>
                 <p>Inscrit(s)</p>
             </div>
         </div>
@@ -55,11 +81,12 @@
                 {% endif %}
             </div>
         </div>
+
         {% if user_is_bde_member and event.allow_extern %}
             {% for link in links %}
                 <div class="flex_container details">
                     <div class="flex expand">
-                        <p><a href="{% url 'events:extern' uuid=link.uuid %}">Lien pour {{ link.name }}</a></p>
+                        <p><a href="{% url 'events:extern' uuid=link.uuid %}">Lien pour {{ link.name }}</a> ({{ link.nb_inscriptions }} / {{ link.maximum }})</p>
                     </div>
                 </div>
             {% endfor %}
@@ -68,8 +95,44 @@
                 <form action="" method="POST">
                     {% csrf_token %}
                     {{ link_form.as_p }}
-                    <button>Nouveau lien</button>
+                    <button name='btn_link'>Nouveau lien</button>
                 </form>
+            </div>
+        {% endif %}
+
+        {% if user_can_invite or invitations %}
+            <header>
+                <h1>
+                    Invitations {% if event.max_invitations %}({{ event.nb_invitations }} / {{ event.max_invitations }}){% endif %}
+                    <span class="subtitle">
+                        {% if event.max_invitations_by_person %}
+                            (Maximum par personne: {{ event.max_invitations_by_person }})
+                        {% endif %}
+                    </span>
+                </h1>
+            </header>
+        {% endif %}
+        {% if invitations %}
+            <ul class="userlist">
+            {% for invit in invitations %}
+                <li>
+                    <div class="picture_container"><img alt="profile picture" src="{% static 'images/default_user_icon.png' %}"/></div>
+                    <div>{{ invit.first_name }} {{ invit.last_name }}</div>
+                    <button onclick="del_ins(this, {{ invit.id }}); return false;" class="userlist_right_button">Supprimer</button>
+                </li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% if user_can_invite %}
+            <div>
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    {{ invit_form.as_p }}
+                    <button name='btn_invit'>Inviter</button>
+                </form>
+                <script>
+                    create_calendar("id_birth_date");
+                </script>
             </div>
         {% endif %}
     </div>

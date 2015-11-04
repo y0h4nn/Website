@@ -64,6 +64,19 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="pagination">
+            {% if history.has_previous %}
+                <a class="page" href="?page={{ history.previous_page_number }}"><i class="fa fa-chevron-left"></i></a>
+            {% endif %}
+
+            <span class="current page">
+                Page {{ history.number }} of {{ history.paginator.num_pages }}.
+            </span>
+
+            {% if history.has_next %}
+                <a class="page" href="?page={{ history.next_page_number }}"><i class="fa fa-chevron-right"></i></a>
+            {% endif %}
+        </div>
     {% else %}
         <p>
             il n'y a eu aucun produit vendu.

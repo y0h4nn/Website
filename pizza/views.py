@@ -4,9 +4,10 @@ from collections import Counter
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
-from bde import bde_member
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from bde.shortcuts import bde_member
+import csv
 import json
 
 
@@ -30,7 +31,7 @@ def index(request):
             messages.add_message(request, messages.INFO, "Votre commande a bien été prise en compte")
             return redirect('pizza:index')
 
-    ins = Inscription.objects.filter(user=request.user).select_related("pizza")
+    ins = Inscription.objects.filter(user=request.user, command=com).select_related("pizza")
     form = PizzaTakingForm(pizzas=pizzas)
     context = {"pizzas": pizzas, 'form': form, 'command': com, 'inscriptions': ins}
     return render(request, 'pizza/index.html', context)
@@ -38,7 +39,7 @@ def index(request):
 
 @bde_member
 def admin_index(request):
-    command_list = Command.objects.all().prefetch_related('inscriptions__pizza').prefetch_related('inscriptions__user__profile').order_by("inscriptions__user")
+    command_list = Command.objects.all().prefetch_related('inscriptions__pizza').prefetch_related('inscriptions__user__profile').order_by("-date")
     paginator = Paginator(command_list, 1)
 
     page = request.GET.get('page')
@@ -82,7 +83,7 @@ def admin_manage_pizzas(request):
 def admin_manage_commands(request):
     com = Command.get_current()
     if com is not None and com.is_valid():
-        form = CommandForm(request.POST or None, initial=com.__dict__)
+        form = CommandForm(request.POST or None, instance=com)
     else:
         form = CommandForm(request.POST or None)
 
@@ -92,4 +93,19 @@ def admin_manage_commands(request):
             messages.add_message(request, messages.INFO, "La commande a été sauvegardée")
 
     return render(request, 'pizza/admin/manage_commands.html', {'form': form})
+
+@bde_member
+def admin_export_csv(request, cid):
+    command = get_object_or_404(Command, id=cid)
+    reg = Inscription.objects.filter(command=command).select_related("user__profile").order_by('user')
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="pizzas_{}.csv"'.format(command.date)
+
+    writer = csv.writer(response)
+    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From', 'Pizza'])
+    for r in reg:
+        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB", r.pizza.name]
+        writer.writerow(line)
+    return response
 

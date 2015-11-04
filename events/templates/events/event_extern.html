@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load menu_item %}
+{% load static %}
 
 {% block header %}
     Evenement
@@ -8,11 +9,15 @@
 {% block menu %}
 {% endblock %}
 
+{% block scripts %}
+    <script src="{% static 'js/calendar.js' %}"></script>
+{% endblock %}
+
 {% block main %}
     <div class="announce">
-    <header>
-        <h1>{{ event.name }}</h1>
-    </header>
+        <header>
+            <h1>{{ event.name }} ({{ link.nb_places_left }} place(s) restante(s))</h1>
+        </header>
         <p>{{ event.description }}</p>
         <div class="flex_container details">
             <div class="flex expand">
@@ -30,7 +35,12 @@
                 <p>Lieu</p>
             </div>
             <div class="flex expand">
-                <p>{{ event.registrations_number }}</p>
+                <p>
+                    {{ event.registrations_number }}
+                    {% if event.limited %}
+                        / {{ event.max_inscriptions }}
+                    {% endif %}
+                </p>
                 <p>Inscrit(s)</p>
             </div>
         </div>
@@ -48,6 +58,9 @@
     <form action="" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
+        <script>
+            create_calendar("id_birth_date");
+        </script>
         <button>S'inscrire</button>
     </form>
 {% endblock %}

@@ -42,7 +42,12 @@
             </main>
         </div>
         <div>
-            <p class="inscription_count">{{ event.registrations_number }}</p>
+            <p class="inscription_count">
+                <span>{{ event.registrations_number }}</span>
+                {% if event.limited %}
+                    <span>/ {{ event.max_inscriptions }}</span>
+                {% endif %}
+            </p>
             <p>Participants</p>
 
             {% if inscription %}

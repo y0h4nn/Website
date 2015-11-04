@@ -1,6 +1,6 @@
 .event
   @include vendor-prefix(display, flex)
-  @include vendor-prefix(flex-show, row)
+  @include vendor-prefix(flex-flow, row)
   @include vendor-prefix(align-items, stretch)
   margin-bottom: 2em
 
@@ -60,3 +60,22 @@
 
   .inscription_count + p
     margin-top: 0
+
+.bg-red
+  background-color: #FBE1E1 !important
+  &:hover
+    background-color: #F5C1C1 !important
+
+.bg-green
+  background-color: #C4ECC4 !important
+  &:hover
+    background-color: #95EC95 !important
+
+.bg-blue
+  background-color: #9FD3F3 !important
+  &:hover
+    background-color: #7AB3D7 !important
+
+@media screen and (max-width: $mobile_view_treshold)
+  .event
+    display: block

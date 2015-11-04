@@ -11,13 +11,18 @@
         populate: {
             value: function(data){
                 this.elems = data['polls'];
-                for(var elem of this.elems){
+                for(var i in this.elems){
+                    var elem = this.elems[i];
                     var img = document.createElement('i');
                         img.setAttribute('class', elem['icon']);
                     var pictureContainer = document.createElement('div');
                         pictureContainer.setAttribute('class', 'icon_container');
+                    var boldContainer = document.createElement('span');
+                        boldContainer.setAttribute('class', 'bold');
+                        boldContainer.appendChild(document.createTextNode(elem['title']))
                     var nameContainer = document.createElement('div');
-                        nameContainer.innerHTML = "<span class='bold'>" + elem['title'] + '</span> (' + elem['start'] + ' - ' + elem['end'] + ')';
+                        nameContainer.appendChild(boldContainer);
+                        nameContainer.appendChild(document.createTextNode('(' + elem['start'] + ' - ' + elem['end'] + ')'));
                     var actionContainer = document.createElement('div');
                         actionContainer.setAttribute('class', 'action_container');
 
@@ -27,8 +32,9 @@
                     elem.element.appendChild(nameContainer);
                     elem.element.appendChild(actionContainer);
                     if(this.onElemBuild){
-                        for(var action of this.onElemBuild(elem)){
-                            actionContainer.appendChild(action.element);
+                        var actions = this.onElemBuild(elem);
+                        for(var i in actions){
+                            actionContainer.appendChild(actions[i].element);
                         }
                     }
                     pictureContainer.appendChild(img);

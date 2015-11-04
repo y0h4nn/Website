@@ -7,7 +7,7 @@ from django.utils import timezone
 import json
 from .models import Question, Answer, Poll, Voter
 from .forms import PollForm
-from bde import bde_member
+from bde.shortcuts import bde_member
 
 
 @bde_member
@@ -151,8 +151,7 @@ def admin_edit_poll(request, pid):
             p.title = form.cleaned_data['title']
             p.start_date = form.cleaned_data['start_time']
             p.end_date = form.cleaned_data['end_time']
-            g = request.user.groups.get(name=form.cleaned_data['group'])
-            p.group = g
+            p.group = form.cleaned_data['group']
 
             for fq, (question, answers) in zip(p.questions.all(), form.questions_answers.items()):
                 fq.text = form.cleaned_data[question]

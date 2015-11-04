@@ -30,8 +30,9 @@
                     user.element.appendChild(nameContainer);
                     user.element.appendChild(actionContainer);
                     if(this.onElemBuild){
-                        for(var action of this.onElemBuild(user)){
-                            actionContainer.appendChild(action.element);
+                        var actions = this.onElemBuild(user);
+                        for(var i in actions){
+                            actionContainer.appendChild(actions[i].element);
                         }
                     }
                     pictureContainer.appendChild(img);

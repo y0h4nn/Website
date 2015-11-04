@@ -8,6 +8,7 @@
     {% menu_item "Gérer les pizzas" 'pizza:admin_manage' %}
     {% menu_item "Gérer la commande" 'pizza:admin_command' %}
 {% endblock %}
+
 {% block main %}
     {% if commands.has_previous %}
         <a href="?page={{ commands.previous_page_number }}">&lt;</a>
@@ -17,6 +18,9 @@
     {% endif %}
 
     {% for command in commands %}
+        <div class="toolbar">
+            <a href="{% url 'pizza:admin_export_csv' cid=command.id %}"><i class="fa fa-download"></i></a>
+        </div>
         <header><h1>Commande du {{ command.date }}</h1></header>
         <h2>Total</h2>
         <table>
@@ -25,7 +29,7 @@
             </thead>
             <tbody>
                 {% for pizza, nb in pizzas.items %}
-                    <tr><td>{{ pizza }}</td><td>{{ nb }}</td></tr>
+                    <tr><td>{{ pizza.name }}</td><td>{{ nb }}</td></tr>
                 {% endfor %}
             </tbody>
             <tfoot>
@@ -40,7 +44,7 @@
             </thead>
             <tbody>
                 {% for inscription in command.inscriptions.all %}
-                    <tr><td>{{ inscription.user.profile }}</td><td>{{ inscription.pizza }}</td></tr>
+                    <tr><td>{{ inscription.user.profile }}</td><td>{{ inscription.pizza.name }}</td></tr>
                 {% endfor %}
             </tbody>
         </table>

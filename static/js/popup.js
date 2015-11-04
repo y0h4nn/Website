@@ -44,6 +44,9 @@ Popup.prototype = {
 
     close: function(){
         this.container.setAttribute('class', this.baseClass);
+        if(this.onClose != undefined){
+            this.onClose();
+        }
     }
 }
 
@@ -182,11 +185,13 @@ UserSelectionPopup.prototype = Object.create(Popup.prototype, {
     buildUserList: {
         value: function(users){
             this.btnContainer.innerHTML = "";
-            for(var user of users){
+            for(var i in users){
+                var user = users[i];
+                var text = document.createTextNode(user.display_name);
                 var button = document.createElement('button');
+                button.appendChild(text);
                 button.setAttribute('type', 'button');
                 button.setAttribute('data-uid', user.id);
-                button.innerHTML = user.display_name;
                 button.addEventListener('click', function(event){
                     var uid = event.target.getAttribute('data-uid');
                     this.callback(uid);
@@ -217,3 +222,95 @@ UserSelectionPopup.prototype = Object.create(Popup.prototype, {
 
 UserSelectionPopup.prototype.constructor = UserSelectionPopup;
 
+
+
+/*
+ * Photo popup
+ */
+
+function DiaporamaPopup(images){
+    this.images = images;
+    this.index = 0;
+    this.container = document.createElement('div');
+    this.container.setAttribute('class', this.baseClass);
+    this.image = document.createElement('img');
+    this.nextButton = document.createElement('button');
+    this.nextButton.setAttribute('type', 'button');
+    this.nextButton.innerHTML = "<i class='fa fa-chevron-right'></i>";
+    this.previousButton = document.createElement('button');
+    this.previousButton.setAttribute('type', 'button');
+    this.previousButton.innerHTML = "<i class='fa fa-chevron-left'></i>";
+
+    document.body.insertBefore(this.container, document.body.firstChild);
+    this.container.appendChild(this.previousButton);
+    this.container.appendChild(this.image);
+    this.container.appendChild(this.nextButton);
+
+    this.container.addEventListener('click', function(event){
+        if(event.target != this.previousButton && event.target != this.nextButton){
+            this.close();
+        }
+    }.bind(this));
+
+    this.nextButton.addEventListener('click', this.nextImage.bind(this));
+    this.previousButton.addEventListener('click', this.previousImage.bind(this));
+
+    document.addEventListener('keyup', function(event){
+        switch(event.keyCode){
+            case 39:
+                this.nextImage();
+                break;
+            case 37:
+                this.previousImage();
+                break;
+            case 27:
+                this.close();
+                break;
+        }
+    }.bind(this));
+
+    this.image.onload = function(){
+        this.prefetchImage(this.index - 1);
+        this.prefetchImage(this.index + 1);
+    }.bind(this)
+}
+
+DiaporamaPopup.prototype = Object.create(Popup.prototype, {
+    baseClass: {
+        value: 'diaporama_popup',
+    },
+    selectImage: {
+        value: function(index){
+            this.index = this.normalizedIndex(index);
+            this.image.setAttribute('src', this.images[this.index]);
+        },
+    },
+
+    nextImage: {
+        value: function(){
+            this.selectImage(this.index + 1);
+        },
+    },
+
+    previousImage: {
+        value: function(){
+            this.selectImage(this.index - 1);
+        },
+    },
+
+    prefetchImage: {
+        value: function(index){
+            var img = new Image();
+            img.src = this.images[this.normalizedIndex(index)];
+        },
+    },
+
+    normalizedIndex: {
+        value: function(index){
+            return index % this.images.length + this.images.length * (Math.sign(index) === -1);
+        },
+    },
+});
+
+
+DiaporamaPopup.prototype.constructor = DiaporamaPopup;

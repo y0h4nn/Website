@@ -1,0 +1,80 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+{% load static %}
+
+
+{% block header %}
+    {{ event.name }}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'js/list.js' %}"></script>
+    <script src="{% static 'js/popup.js' %}"></script>
+    <script src="{% static 'events/js/management_list.js' %}"></script>
+{% endblock %}
+
+{% block menu %}
+    {% menu_item "Liste des évènements" "events:admin_index" %}
+    {% menu_item "Description" "events:event" eid=event.id %}
+    {% menu_item "Liste des inscrits" "events:admin_list_registrations" eid=event.id %}
+    {% menu_item "Editer l'évènement" "events:admin_edit" eid=event.id %}
+    {% if event.gestion %}
+        {% menu_item "Gestion" "events:admin_management" eid=event.id %}
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+<div>Derniere personne entrée: <span id="last_entered">Personne</span></div>
+<br>
+<br>
+<div id="userlist">
+</div>
+<script>
+        function acked(data){
+            document.popup.element.setAttribute("class", "bg-blue");
+            document.popup.user.klass = "bg-blue";
+            input =  document.getElementById('search_input');
+            input.value = "";
+            var last = document.getElementById("last_entered");
+            last.innerHTML = document.popup.user.display_name;
+            if(data["klass"] != undefined){
+                document.popup.user.klass = data["klass"];
+                document.popup.element.setAttribute("class", data["klass"]);
+            }
+            input.focus();
+            document.popup.onClose()
+        }
+        function del_ins(eid, type, iid){
+           document.popup.close();
+           queryJson(eid + "/del/" + type + '/' + iid, {}, acked);
+        }
+        function ack_in(eid, type, iid){
+           document.popup.close();
+           queryJson(eid + "/ack/" + type + '/' + iid, {}, acked);
+        }
+{% if event.gestion == "WAF" %}
+        url = "/events/admin/management/list_registrations/{{event.id}}"
+        var event_id = {{event.id}};
+        window.addEventListener('load', function(){
+            var userList = new UserListWaf('userlist', url, function(user){
+                return [
+                ];
+            });
+        });
+{% else %}
+        url = "/events/admin/management/list_registrations/{{event.id}}"
+        var event_id = {{event.id}};
+        window.addEventListener('load', function(){
+            var userList = new UserListNL('userlist', url, function(user){
+                return [
+                ];
+            });
+        });
+{% endif %}
+</script>
+
+{% endblock %}

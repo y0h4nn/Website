@@ -6,11 +6,8 @@ function update_list(data){
     }
 }
 
-function del_ins(iid, ext, elmt){
-    if(ext){
-        queryJson('', {"iid": iid, 'ext': true}, update_list.bind(elmt));
-    }
-    else{
-        queryJson('', {"iid": iid}, update_list.bind(elmt));
-    }
+function del_ins(iid, type, elmt){
+        var params = {"iid": iid};
+        params[type] = true;
+        queryJson('', params, update_list.bind(elmt));
 }

@@ -114,3 +114,84 @@
 
 .float_right
   float: right
+
+
+.pagination
+  width: 100%
+  text-align: center
+  margin: 2em 0
+  @include display_flex()
+  @include vendor-prefix('justify-content', center)
+
+  .page
+    display: block
+    border-radius: 0
+    background-color: white
+    color: #333
+    border: 1px solid #bbb
+    padding: 1em 1.25em
+    margin: 0
+
+    & + .page
+      border-left: none
+      transition: background-color 0.25s
+
+    &:first-child
+      border-top-left-radius: 3px
+      border-bottom-left-radius: 3px
+
+    &:last-child
+      border-top-right-radius: 3px
+      border-bottom-right-radius: 3px
+
+    &:hover
+      background-color: #eaeaea
+
+    &:active, &.toggled
+      background-color: #ddd
+
+
+.announce
+  header
+    border-bottom: 1px solid #eee
+
+    h2
+      color: #bbb
+      font-size: 1em
+
+  .details
+    text-align: center
+
+    & + .details
+      div
+        border-top: none
+
+    div
+      @include vendor-prefix(flex, 1 1 50%)
+      border: 1px solid #eee
+      padding: 1em
+
+      & + div
+        border-left: none
+
+    p
+      text-align: center
+      margin: 0
+
+      &:first-child
+        font-size: 1.5em
+        font-weight: bold
+        color: orange
+
+.subtitle
+  display: block
+  color: grey
+  font-size: 0.4em
+
+@media screen and (max-width: $mobile_view_treshold)
+  .flex_container
+    display: block
+
+  .announce
+    div
+      border: none !important

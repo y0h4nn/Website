@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+    Accès extérieur
+{% endblock %}
+
+{% block header %}
+    Accès extérieur
+{% endblock %}
+
+{% block menu %}
+{% endblock%}
+
+{% block main %}
+    <p>
+        Seul les membres et certains extérieurs peuvent acceder à cet album. Si
+        vous êtes membres il vous suffit de <a href="{% url 'accounts:login' %}">vous
+        connecter</a>. Si vous êtes une personne extérieure vous devez entrer
+        votre adresse email dans le formulaire ci-dessous.
+    </p>
+
+
+    <h3>Accès extérieurs</h3>
+    <form action="{{ request.path }}" method="POST">
+        {% csrf_token %}
+        <p>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="{{ request.session.email }}">
+        </p>
+        <button>Valider</button>
+    </form>
+{% endblock %}
