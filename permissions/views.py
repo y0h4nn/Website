@@ -57,7 +57,7 @@ ACTIONS = {
     'superuser': set_superuser,
 }
 
-def index(request):
+def users(request):
     context = {}
 
 
@@ -67,5 +67,9 @@ def index(request):
         if req.get('action') in ACTIONS:
             return ACTIONS[req.get('action')](req, user)
 
-    return render(request, 'permissions/index.html', context)
+    return render(request, 'permissions/users.html', context)
+
+
+def groups(request):
+    return render(request, 'permissions/groups.html')
 

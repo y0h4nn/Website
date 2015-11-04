@@ -862,7 +862,6 @@ table:not(.rd-days) {
     height: 50px;
     vertical-align: middle;
     position: relative;
-    top: 50%;
     left: 50%;
     transform: translate(-50%, 0); }
   .userlist li {
@@ -921,6 +920,7 @@ table:not(.rd-days) {
   -o-flex: 0 1 50px;
   flex: 0 1 50px;
   width: 50px;
+  height: 50px;
   min-width: 50px;
   max-width: 50px;
   margin: 0 1em 0 0;
@@ -953,7 +953,7 @@ table:not(.rd-days) {
     .userlist li .picture_container, .userlist li .icon_container {
       display: none;
       text-align: center; } }
-.popup, .selection_popup, .user_selection_popup, .diaporama_popup {
+.popup, .selection_popup, .user_selection_popup, .permission_popup, .diaporama_popup {
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
@@ -961,7 +961,7 @@ table:not(.rd-days) {
   z-index: 10;
   display: none;
   padding: 2em; }
-  .popup > div, .selection_popup > div, .user_selection_popup > div, .diaporama_popup > div {
+  .popup > div, .selection_popup > div, .user_selection_popup > div, .permission_popup > div, .diaporama_popup > div {
     background-color: white;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
     min-width: 100px;
@@ -969,7 +969,7 @@ table:not(.rd-days) {
     max-height: 100%;
     overflow: auto;
     border-radius: 3px; }
-  .popup.pop, .pop.selection_popup, .pop.user_selection_popup, .pop.diaporama_popup {
+  .popup.pop, .pop.selection_popup, .pop.user_selection_popup, .pop.permission_popup, .pop.diaporama_popup {
     -webkit-display: flex;
     -moz-display: flex;
     -ms-display: flex;
@@ -985,7 +985,7 @@ table:not(.rd-days) {
     -ms-justify-content: center;
     -o-justify-content: center;
     justify-content: center; }
-  .popup header, .selection_popup header, .user_selection_popup header, .diaporama_popup header {
+  .popup header, .selection_popup header, .user_selection_popup header, .permission_popup header, .diaporama_popup header {
     background-color: white;
     border-bottom: 1px solid #e2e2e2;
     -webkit-display: flex;
@@ -999,7 +999,7 @@ table:not(.rd-days) {
     -o-align-items: center;
     align-items: center;
     padding: 0; }
-    .popup header button, .selection_popup header button, .user_selection_popup header button, .diaporama_popup header button {
+    .popup header button, .selection_popup header button, .user_selection_popup header button, .permission_popup header button, .diaporama_popup header button {
       margin: 0;
       padding: 0.8em;
       background: none;
@@ -1008,9 +1008,9 @@ table:not(.rd-days) {
       border-radius: 0;
       font-size: 1.2em;
       background-color: white; }
-      .popup header button:hover, .selection_popup header button:hover, .user_selection_popup header button:hover, .diaporama_popup header button:hover {
+      .popup header button:hover, .selection_popup header button:hover, .user_selection_popup header button:hover, .permission_popup header button:hover, .diaporama_popup header button:hover {
         color: red; }
-    .popup header h1, .selection_popup header h1, .user_selection_popup header h1, .diaporama_popup header h1 {
+    .popup header h1, .selection_popup header h1, .user_selection_popup header h1, .permission_popup header h1, .diaporama_popup header h1 {
       font-size: 1.2em;
       color: #aaa;
       margin: 0;
@@ -1020,7 +1020,7 @@ table:not(.rd-days) {
       -ms-flex: 1 1 auto;
       -o-flex: 1 1 auto;
       flex: 1 1 auto; }
-  .popup main, .selection_popup main, .user_selection_popup main, .diaporama_popup main {
+  .popup main, .selection_popup main, .user_selection_popup main, .permission_popup main, .diaporama_popup main {
     padding: 1em;
     background-color: white;
     max-height: 100%; }
@@ -1041,6 +1041,10 @@ table:not(.rd-days) {
 .user_selection_popup input {
   width: 100%;
   padding: 0.5em; }
+
+.permission_popup input[type=checkbox] {
+  width: auto;
+  vertical-align: middle; }
 
 .diaporama_popup {
   text-align: center; }
@@ -1459,3 +1463,4 @@ table:not(.rd-days) {
   .photo img {
     display: inline-block; }
 
+/*# sourceMappingURL=base.css.map */

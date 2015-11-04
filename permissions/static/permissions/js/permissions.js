@@ -1,10 +1,12 @@
 "user strict";
 
+/*
+ * Base Permssion class
+ */
 
-function Permission(name, codename, state, user){
+function Permission(name, codename, state){
     this.name = name;
     this.codename = codename;
-    this.user = user;
 
     this.element = document.createElement('div');
     this.checkbox = document.createElement('input');
@@ -17,36 +19,60 @@ function Permission(name, codename, state, user){
     this.element.appendChild(this.checkbox);
     this.element.appendChild(this.label);
 
-
-    this.checkbox.addEventListener('change', function(){
-        console.log(this.checkbox.checked);
-        queryJson('', {
-            'uid': user.id,
-            'action': 'set',
-            'codename': this.codename,
-            'state': this.checkbox.checked,
-        }, function(){
-            // callback
-        });
-    }.bind(this));
+    this.checkbox.addEventListener('change', this.onchange.bind(this));
 }
 
 Permission.prototype = {
     appendTo: function(element){
         element.appendChild(this.element);
     },
+    onchange: function(){
+        console.log(this);
+        console.log("NOP");
+    },
 };
 
 
-function PermSection(name){
+/*
+ * User permission
+ */
+
+function UserPermission(name, codename, state, user){
+    Permission.call(this, name, codename, state);
+    this.user = user;
+}
+
+
+UserPermission.prototype = Object.create(Permission.prototype, {
+    onchange: {
+        value: function(){
+            queryJson('', {
+                'uid': this.user.id,
+                'action': 'set',
+                'codename': this.codename,
+                'state': this.checkbox.checked,
+            }, function(){
+                // callback
+            });
+        },
+    },
+});
+
+UserPermission.prototype.constructor = UserPermission;
+
+/*
+ * Permission Section
+ */
+
+function PermSection(name, permCls){
     this.name = name;
+    this.permCls = permCls;
     this.element = document.createElement('div');
     this.title = document.createElement('h3');
     this.title.innerHTML = name;
 
     this.element.appendChild(this.title);
     this.perms = [];
-
 };
 
 PermSection.prototype = {
@@ -55,7 +81,7 @@ PermSection.prototype = {
     },
 
     addPerm: function(name, codename, state, user){
-        perm = new Permission(name, codename, state, user);
+        perm = new this.permCls(name, codename, state, user);
         perm.appendTo(this.element);
         this.perms.push(perm);
     },
@@ -64,41 +90,27 @@ PermSection.prototype = {
         this.element.parentNode.removeChild(this.element);
     },
 
+
 };
 
 
-function UserPermissionPopup(title, user){
+/*
+ * PermissionPopup
+ */
+
+function PermissionPopup(title){
     Popup.call(this, title);
     this.baseClass = 'permission_popup';
     this.sections = [];
-    this.user = user;
-
     this.spinner = document.createElement('div');
     this.spinner.setAttribute('class', 'spinner');
-    //this.spinner.setAttribute('class', 'hidden');
-
     this.main.appendChild(this.spinner);
-    this.isSuperuserContainer = document.createElement('div');
-    this.isSuperuserCheckbox = document.createElement('input');
-    this.isSuperuserCheckbox.setAttribute('id', 'is_superuser');
-    this.isSuperuserCheckbox.setAttribute('type', 'checkbox');
-    this.isSuperuserLabel = document.createElement('label');
-    this.isSuperuserLabel.innerHTML = 'Le member est super utilisateur';
-    this.isSuperuserLabel.setAttribute('for', 'is_superuser');
-    this.main.appendChild(this.isSuperuserContainer);
-    this.isSuperuserContainer.appendChild(this.isSuperuserCheckbox);
-    this.isSuperuserContainer.appendChild(this.isSuperuserLabel);
-
-
-
-    this.isSuperuserCheckbox.addEventListener('change', function(){
-        queryJson('', {'uid': user.id, 'action': 'superuser', superuser: this.isSuperuserCheckbox.checked}, this.fillContent.bind(this));
-    }.bind(this));
-
-    queryJson('', {'uid': user.id, 'action': 'list'}, this.fillContent.bind(this));
 }
 
-UserPermissionPopup.prototype = Object.create(Popup.prototype, {
+PermissionPopup.prototype = Object.create(Popup.prototype, {
+    permissionClass: {
+        value: Permission
+    },
 
     clear: {
         value: function(){
@@ -109,6 +121,61 @@ UserPermissionPopup.prototype = Object.create(Popup.prototype, {
         },
     },
 
+    getOrCreateSection: {
+        value: function(name){
+            for(var i = 0, l = this.sections.length; i < l; i++){
+                if(this.sections[i].name == name){
+                    return this.sections[i];
+                }
+            }
+            return this.addSection(name);
+        },
+    },
+
+    addSection: {
+        value: function(name){
+            var section = new PermSection(name, this.permissionClass);
+            section.appendTo(this.main);
+            this.sections.push(section);
+            return section;
+        },
+    },
+});
+
+Permission.prototype.constructor = PermissionPopup;
+
+/*
+ * UserPermissionPopup
+ */
+
+
+function UserPermissionPopup(title, user){
+    PermissionPopup.call(this, title);
+    this.user = user;
+
+    this.isSuperuserContainer = document.createElement('div');
+    this.isSuperuserCheckbox = document.createElement('input');
+    this.isSuperuserCheckbox.setAttribute('id', 'is_superuser');
+    this.isSuperuserCheckbox.setAttribute('type', 'checkbox');
+    this.isSuperuserLabel = document.createElement('label');
+    this.isSuperuserLabel.innerHTML = 'Le member est super utilisateur';
+    this.isSuperuserLabel.setAttribute('for', 'is_superuser');
+
+    this.main.appendChild(this.isSuperuserContainer);
+    this.isSuperuserContainer.appendChild(this.isSuperuserCheckbox);
+    this.isSuperuserContainer.appendChild(this.isSuperuserLabel);
+
+    this.isSuperuserCheckbox.addEventListener('change', function(){
+        queryJson('', {'uid': user.id, 'action': 'superuser', superuser: this.isSuperuserCheckbox.checked}, this.fillContent.bind(this));
+    }.bind(this));
+
+    queryJson('', {'uid': user.id, 'action': 'list'}, this.fillContent.bind(this));
+}
+
+UserPermissionPopup.prototype = Object.create(PermissionPopup.prototype, {
+    permissionClass: {
+        value: UserPermission
+    },
     fillContent: {
         value: function(json){
             this.clear();
@@ -141,41 +208,6 @@ UserPermissionPopup.prototype = Object.create(Popup.prototype, {
             this.isSuperuserCheckbox.checked = superuser;
         },
     },
-
-    getOrCreateSection: {
-        value: function(name){
-            for(var i = 0, l = this.sections.length; i < l; i++){
-                if(this.sections[i].name == name){
-                    return this.sections[i];
-                }
-            }
-            return this.addSection(name);
-        },
-    },
-
-    addSection: {
-        value: function(name){
-            var section = new PermSection(name);
-            section.appendTo(this.main);
-            this.sections.push(section);
-            return section;
-        },
-    },
-
 });
 
 UserPermissionPopup.prototype.constructor = UserSelectionPopup;
-
-
-window.addEventListener('load', function(){
-    var list = new UserList('userlist', '/accounts/members/', function(user){
-        function permEdit(){
-            var popup = new UserPermissionPopup('Permissions de l\'utilisateur ' + user.display_name, user);
-            popup.pop();
-
-        }
-        return [
-            new UserList.UserAction('Editer les permissions', permEdit),
-        ];
-    });
-});

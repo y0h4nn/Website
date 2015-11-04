@@ -148,7 +148,7 @@ def get_contrib(user):
     except Contributor.DoesNotExist:
         return None
 
-@login_required()
+@login_required
 def members(request):
     if request.method == 'OPTIONS':
         users = [
@@ -168,6 +168,21 @@ def members(request):
         return JsonResponse({'users': users})
 
     return render(request, 'accounts/list.html', {})
+
+import hashlib
+
+@login_required
+def groups(request):
+    if request.method == 'OPTIONS':
+        groups = [
+            {
+                'id': group.id,
+                'name': group.name,
+                'color': '#%s' % (hashlib.md5(group.name.encode()).hexdigest()[:6]),
+            } for group in Group.objects.all()
+        ]
+        return JsonResponse({'groups': groups})
+    return redirect('accounts:list')
 
 
 def account_request(request):

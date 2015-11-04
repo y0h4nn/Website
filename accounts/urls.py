@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^(?P<username>[_a-zA-Z0-9éèÃ©®§«´‰¯¨¢œ\\\'@,. -]+)$', views.show, name='show'),
     url(r'^(?P<username>[_a-zA-Z0-9éèÃ©®§«´‰¯¨¢œ\\\'@,. -]+)/edit$', views.edit, name='edit'),
     url(r'^members/$', views.members, name='members'),
+    url(r'^groups/$', views.groups, name='groups'),
 ]
 
