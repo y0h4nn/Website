@@ -32,6 +32,11 @@ Permission.prototype = {
     },
 };
 
+/*
+ * XXX
+ * As the sole difference between UserPermission and GroupPermission below, it may be possible
+ * to only use permission by providing group and user as unknow object to Permission
+ */
 
 /*
  * User permission
@@ -59,6 +64,32 @@ UserPermission.prototype = Object.create(Permission.prototype, {
 });
 
 UserPermission.prototype.constructor = UserPermission;
+
+/*
+ * Group permissions
+ */
+
+function GroupPermission(name, codename, state, group){
+    Permission.call(this, name, codename, state);
+    this.group = group;
+}
+
+GroupPermission.prototype = Object.create(Permission.prototype, {
+    onchange: {
+        value: function(){
+            queryJson('', {
+                'gid': this.group.id,
+                'action': 'set_perm',
+                'codename': this.codename,
+                'state': this.checkbox.checked,
+            }, function(){
+                // callback
+            });
+        },
+    },
+});
+
+GroupPermission.prototype.constructor = UserPermission;
 
 /*
  * Permission Section
@@ -222,13 +253,13 @@ function GroupPermissionPopup(title, group){
     queryJson('', {'gid': this.group.id, 'action': 'list_perms'}, this.fillContent.bind(this));
 }
 
-GroupPermissionPopup.prototype = Object.create(Permission.prototype, {
+GroupPermissionPopup.prototype = Object.create(PermissionPopup.prototype, {
     permissionClass: {
         value: GroupPermission,
     },
 
     fillContent: {
-        value: function(){
+        value: function(json){
             this.clear();
             for(var name  in json['perms']){
                 var section = this.getOrCreateSection(name);
@@ -237,8 +268,9 @@ GroupPermissionPopup.prototype = Object.create(Permission.prototype, {
                     section.addPerm(perm.name, perm.codename, perm.state, this.group);
                 }
             }
-            this.setSuperuser(json['superuser']);
             this.spinner.setAttribute('class', 'hidden');
         },
     },
 });
+
+GroupPermissionPopup.prototype.constructor = GroupPermissionPopup;
