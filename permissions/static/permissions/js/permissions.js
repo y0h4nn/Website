@@ -48,7 +48,7 @@ UserPermission.prototype = Object.create(Permission.prototype, {
         value: function(){
             queryJson('', {
                 'uid': this.user.id,
-                'action': 'set',
+                'action': 'set_perm',
                 'codename': this.codename,
                 'state': this.checkbox.checked,
             }, function(){
@@ -166,10 +166,10 @@ function UserPermissionPopup(title, user){
     this.isSuperuserContainer.appendChild(this.isSuperuserLabel);
 
     this.isSuperuserCheckbox.addEventListener('change', function(){
-        queryJson('', {'uid': user.id, 'action': 'superuser', superuser: this.isSuperuserCheckbox.checked}, this.fillContent.bind(this));
+        queryJson('', {'uid': user.id, 'action': 'set_superuser', superuser: this.isSuperuserCheckbox.checked}, this.fillContent.bind(this));
     }.bind(this));
 
-    queryJson('', {'uid': user.id, 'action': 'list'}, this.fillContent.bind(this));
+    queryJson('', {'uid': user.id, 'action': 'list_perms'}, this.fillContent.bind(this));
 }
 
 UserPermissionPopup.prototype = Object.create(PermissionPopup.prototype, {
@@ -211,3 +211,34 @@ UserPermissionPopup.prototype = Object.create(PermissionPopup.prototype, {
 });
 
 UserPermissionPopup.prototype.constructor = UserSelectionPopup;
+
+
+/*
+ * Group permissions popup
+ */
+function GroupPermissionPopup(title, group){
+    PermissionPopup.call(this, title);
+    this.group = group;
+    queryJson('', {'gid': this.group.id, 'action': 'list_perms'}, this.fillContent.bind(this));
+}
+
+GroupPermissionPopup.prototype = Object.create(Permission.prototype, {
+    permissionClass: {
+        value: GroupPermission,
+    },
+
+    fillContent: {
+        value: function(){
+            this.clear();
+            for(var name  in json['perms']){
+                var section = this.getOrCreateSection(name);
+                for(var i in json['perms'][name]){
+                    var perm = json['perms'][name][i];
+                    section.addPerm(perm.name, perm.codename, perm.state, this.group);
+                }
+            }
+            this.setSuperuser(json['superuser']);
+            this.spinner.setAttribute('class', 'hidden');
+        },
+    },
+});
