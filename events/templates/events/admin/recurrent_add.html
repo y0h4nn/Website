@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+{% load static %}
+
+{% block header %}
+    Liste des évènements récurrents
+{% endblock %}
+
+{% block menu %}
+    {% menu_item "Liste des évènements" "events:admin_index" %}
+    {% menu_item "Evènements récurrents" "events:admin_recurrent" %}
+    {% menu_item "Ajouter un évènement récurrent" "events:admin_add_recurrent" %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/calendar.js' %}"></script>
+    <script src="{% static 'events/js/events_form.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+    <form enctype="multipart/form-data" action="{% url 'events:admin_add_recurrent' %}" method="POST">
+        {% csrf_token %}
+        {{ event_form.as_p }}
+        <button>Ajouter</button>
+    </form>
+{% endblock %}
+

@@ -82,6 +82,11 @@ class Event(models.Model):
         ).distinct()]
 
 
+class RecurrentEvent(Event):
+    delay = models.IntegerField(default=1)
+    last_created = models.DateField(null=True, blank=True, default=None)
+
+
 class ExternLink(models.Model):
     event = models.ForeignKey(Event, related_name="extern_links")
     uuid = models.UUIDField()

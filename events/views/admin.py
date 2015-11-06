@@ -1,5 +1,5 @@
-from ..forms import EventForm
-from ..models import Event, Inscription, ExternInscription, Invitation
+from ..forms import EventForm, ReccurentEventForm
+from ..models import Event, Inscription, ExternInscription, Invitation, RecurrentEvent
 from bde.shortcuts import bde_member
 
 from django.core.urlresolvers import reverse
@@ -53,6 +53,28 @@ def admin_add(request):
         form = EventForm()
     context = {'event_form': form}
     return render(request, 'events/admin/add.html', context)
+
+
+@bde_member
+def admin_add_recurrent(request):
+    if request.method == "POST":
+        form = ReccurentEventForm(request.POST, request.FILES or None)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.uuid = uuid.uuid4()
+            event.save()
+            return redirect(reverse('events:admin_reccurent_index'))
+    else:
+        form = ReccurentEventForm()
+    context = {'event_form': form}
+    return render(request, 'events/admin/recurrent_add.html', context)
+
+
+@bde_member
+def admin_recurrent(request):
+    context = {'events': RecurrentEvent.objects.all()}
+    return render(request, 'events/admin/recurrent_index.html', context)
+
 
 
 @bde_member

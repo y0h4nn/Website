@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+{% load static %}
+
+{% block header %}
+    Liste des évènements récurrents
+{% endblock %}
+
+{% block menu %}
+    {% menu_item "Liste des évènements" "events:admin_index" %}
+    {% menu_item "Evènements récurrents" "events:admin_recurrent" %}
+    {% menu_item "Ajouter un évènement récurrent" "events:admin_add_recurrent" %}
+{% endblock %}
+
+{% block main %}
+    {% for event in events %}
+        {{ event }}
+    {% endfor %}
+{% endblock %}
+
