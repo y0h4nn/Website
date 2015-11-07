@@ -51,7 +51,7 @@ class EventForm(ModelForm):
         widgets = {'photo': WrapperClearableinput,}
 
 
-class ReccurentEventForm(EventForm):
+class RecurrentEventForm(EventForm):
     delay = IntegerField()
     class Meta(EventForm.Meta):
         model = RecurrentEvent

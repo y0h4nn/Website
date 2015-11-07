@@ -1,4 +1,4 @@
-from ..forms import EventForm, ReccurentEventForm
+from ..forms import EventForm, RecurrentEventForm
 from ..models import Event, Inscription, ExternInscription, Invitation, RecurrentEvent
 from bde.shortcuts import bde_member
 
@@ -28,9 +28,9 @@ def admin_list_events(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
         if req['arg'] == "new":
-            evts = Event.objects.filter(start_time__gt=timezone.now()).order_by('start_time').reverse()
+            evts = Event.objects.filter(start_time__gt=timezone.now(), model=False).order_by('start_time').reverse()
         else:
-            evts = Event.objects.filter(start_time__lt=timezone.now()).order_by('start_time').reverse()
+            evts = Event.objects.filter(start_time__lt=timezone.now(), model=False).order_by('start_time').reverse()
         return JsonResponse({'events': [{
             'eid': evt.id,
             'name': evt.name,
@@ -58,16 +58,35 @@ def admin_add(request):
 @bde_member
 def admin_add_recurrent(request):
     if request.method == "POST":
-        form = ReccurentEventForm(request.POST, request.FILES or None)
+        form = RecurrentEventForm(request.POST, request.FILES or None)
         if form.is_valid():
             event = form.save(commit=False)
             event.uuid = uuid.uuid4()
+            event.model = True
             event.save()
-            return redirect(reverse('events:admin_reccurent_index'))
+            return redirect(reverse('events:admin_recurrent'))
     else:
-        form = ReccurentEventForm()
+        form = RecurrentEventForm()
     context = {'event_form': form}
     return render(request, 'events/admin/recurrent_add.html', context)
+
+
+@bde_member
+def admin_edit_recurrent(request, eid):
+    e = get_object_or_404(Event, id=eid, model=True)
+    form = RecurrentEventForm(request.POST or None, request.FILES or None, instance=e)
+    if form.is_valid():
+        if not form.cleaned_data['allow_invitations']:
+            Invitation.objects.filter(event=e).delete()
+        form.save()
+        return redirect(reverse('events:admin_recurrent'))
+    context = {'event': e, 'event_form': form}
+    return render(request, 'events/admin/recurrent_edit.html', context)
+
+
+@bde_member
+def admin_del_recurrent(request, eid):
+    pass
 
 
 @bde_member
@@ -79,7 +98,7 @@ def admin_recurrent(request):
 
 @bde_member
 def admin_edit(request, eid):
-    e = get_object_or_404(Event, id=eid)
+    e = get_object_or_404(Event, id=eid, model=False)
     form = EventForm(request.POST or None, request.FILES or None, instance=e)
     if form.is_valid():
         if not form.cleaned_data['allow_invitations']:
@@ -104,7 +123,7 @@ def admin_list_registrations(request, eid):
             ins.delete()
             return JsonResponse({"status": 1})
         return JsonResponse({"status": 0})
-    e = get_object_or_404(Event, id=eid)
+    e = get_object_or_404(Event, id=eid, model=False)
     reg = Inscription.objects.filter(event=e).select_related("user__profile").select_related('event')
     ext_reg = ExternInscription.objects.filter(event=e).select_related('event')
     invits = Invitation.objects.filter(event=e).select_related('event').select_related('user__profile')
@@ -113,7 +132,7 @@ def admin_list_registrations(request, eid):
 
 @bde_member
 def admin_export_csv(request, eid):
-    event = get_object_or_404(Event, id=eid)
+    event = get_object_or_404(Event, id=eid, model=False)
     reg = Inscription.objects.filter(event=event).select_related("user__profile")
     ext_reg = ExternInscription.objects.filter(event=event).select_related("via")
     invits = Invitation.objects.filter(event=event).select_related('user__profile')

@@ -42,6 +42,8 @@ class Event(models.Model):
 
     gestion = models.CharField(max_length=3, choices=GESTION_CHOICES, default=None, null=True, blank=True)
 
+    model = models.BooleanField(default=False)
+
     def registrations_number(self):
         return self.inscriptions.all().count() + self.extern_inscriptions.all().count() + self.nb_invitations()
 
@@ -77,6 +79,7 @@ class Event(models.Model):
     @staticmethod
     def to_come(user):
         return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(
+            Q(model=False),
             Q(end_inscriptions__gt=timezone.now()),
             Q(inscriptions__user=user) | Q(private=False)
         ).distinct()]

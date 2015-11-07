@@ -34,7 +34,7 @@ def index(request):
 
 @login_required
 def event(request, eid):
-    e = get_object_or_404(Event, id=eid)
+    e = get_object_or_404(Event, id=eid, model=False)
     context = {'event': e, 'links': [], 'user_can_invite': False}
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
