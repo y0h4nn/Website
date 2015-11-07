@@ -13,7 +13,6 @@ class ActionRouter:
         Do not catch errors so debug stay simple.
         """
         action = self.request.get('action')
-        print(action)
         return self.__getattribute__(action)()
 
 
@@ -103,6 +102,24 @@ class GroupActionRouter(ActionRouter):
         self.group.save()
         return JsonResponse({})
 
+    def add_user(self):
+        try:
+            user = User.objects.get(id=self.request.get('uid'))
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'L\'utilisateur n\'existe pas.'})
+
+        user.groups.add(self.group)
+        return JsonResponse({})
+
+    def del_user(self):
+        try:
+            user = User.objects.get(id=self.request.get('uid'))
+        except User.DoesNotExist:
+            return JsonResponse({'error': 'L\'utilisateur n\'existe pas.'})
+
+        user.groups.remove(self.group)
+        return JsonResponse({})
+
 
 def users(request):
     context = {}
@@ -121,3 +138,20 @@ def groups(request):
 
     return render(request, 'permissions/groups.html')
 
+
+def custom_member_list(request, gid):
+    group = get_object_or_404(Group, id=gid)
+    users = [
+        {
+            'id': user.id,
+            'display_name': str(user.profile),
+            'picture': user.profile.get_picture_url(),
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'username': user.username,
+            'nickname': user.profile.nickname,
+            'email': user.email,
+            'in_group': group in user.groups.all(),
+        } for user in User.objects.select_related('profile').prefetch_related('groups').all()
+    ]
+    return JsonResponse({'users': users})

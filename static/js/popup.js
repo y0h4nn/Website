@@ -223,6 +223,23 @@ UserSelectionPopup.prototype = Object.create(Popup.prototype, {
 UserSelectionPopup.prototype.constructor = UserSelectionPopup;
 
 
+/*
+ * User list popup
+ */
+
+function UserListPopup(title, listProvider, buildCallback){
+    Popup.call(this, title);
+    this.userListContainer = document.createElement('div');
+    this.userListContainer.id = 'userlist_popup';
+    this.main.appendChild(this.userListContainer);
+    this.userList = new UserList(this.userListContainer.id, listProvider, buildCallback);
+}
+
+UserListPopup.prototype = Object.create(Popup.prototype, {
+});
+
+UserListPopup.prototype.constructor = UserListPopup;
+
 
 /*
  * Photo popup
