@@ -1,0 +1,106 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+{% load markdown %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'js/list.js' %}"></script>
+    <script src="{% static 'js/userlist.js' %}"></script>
+    <script src="{% static 'js/grouplist.js' %}"></script>
+    <script src="{% static 'js/popup.js' %}"></script>
+    <script src="{% static 'permissions/js/permissions.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+    Gestion des permissions
+{% endblock %}
+
+{% block header %}
+    Gestion des permissions
+{% endblock %}
+
+{% block menu %}
+    {% menu_item 'Utilisateurs' 'permissions:users' %}
+    {% menu_item 'Groups' 'permissions:groups' %}
+{% endblock%}
+
+{% block main %}
+    <div id="grouplist"></div>
+    <script>
+        window.addEventListener('load', function(){
+            var list = new GroupList('grouplist', '/accounts/groups/', function(group){
+                function permEdit(){
+                    var popup = new GroupPermissionPopup('Permissions du groupe ' + group.name, group);
+                    popup.pop();
+                }
+
+                function manageUsers(){
+                    var popup = new UserListPopup('Utilisateurs membres du groupe ' + group.name, '/permissions/'+group.id+'/members/', function(user){
+                        function toggleMembership(){
+                            if(this.isToggled()){
+                                queryJson('', {'action': 'del_user', 'uid': user.id, 'gid': group.id}, function(resp){
+                                    if(resp.error){
+                                        alert(resp.error);
+                                        return;
+                                    }
+                                    this.setUntoggled();
+                                    this.element.innerHTML = 'ajouter';
+                                }.bind(this));
+                            }
+                            else{
+                                queryJson('', {'action': 'add_user', 'uid': user.id, 'gid': group.id}, function(resp){
+                                    if(resp.error){
+                                        alert(resp.error);
+                                        return;
+                                    }
+                                    this.setToggled();
+                                    this.element.innerHTML = 'supprimer';
+                                }.bind(this));
+                            }
+                        };
+                        if(user.in_group){
+                            var text = 'supprimer';
+                            var toggled = true;
+                        }
+                        else{
+                            var text = 'ajouter';
+                            var toggled = false;
+                        }
+
+                        return [
+                            new UserList.UserAction(text, toggleMembership, toggled),
+                        ]
+                    });
+                    popup.pop();
+                };
+
+                function deleteGroup(){
+                    queryJson('', {'action': 'remove', 'gid': group.id}, function(resp){
+                        if(resp.error){
+                            alert(resp.error);
+                            return;
+                        }
+                        list.removeElems(function(g){ return g.id == group.id });
+                    }.bind(this));
+                };
+
+                return [
+                    new GroupList.GroupAction('Gestion des membres', manageUsers),
+                    new GroupList.GroupAction('Editer les permissions', permEdit),
+                    new GroupList.GroupAction('Supprimer', deleteGroup),
+                ];
+            });
+        });
+    </script>
+    <h3>Ajouter un groupe</h4>
+    <form action="{{ request.path }}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Ajouter</button>
+    </form>
+{% endblock %}

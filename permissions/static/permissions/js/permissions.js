@@ -183,22 +183,14 @@ Permission.prototype.constructor = PermissionPopup;
 function UserPermissionPopup(title, user){
     PermissionPopup.call(this, title);
     this.user = user;
-
-    this.isSuperuserContainer = document.createElement('div');
-    this.isSuperuserCheckbox = document.createElement('input');
-    this.isSuperuserCheckbox.setAttribute('id', 'is_superuser');
-    this.isSuperuserCheckbox.setAttribute('type', 'checkbox');
-    this.isSuperuserLabel = document.createElement('label');
-    this.isSuperuserLabel.innerHTML = 'Le member est super utilisateur';
-    this.isSuperuserLabel.setAttribute('for', 'is_superuser');
-
-    this.main.appendChild(this.isSuperuserContainer);
-    this.isSuperuserContainer.appendChild(this.isSuperuserCheckbox);
-    this.isSuperuserContainer.appendChild(this.isSuperuserLabel);
-
-    this.isSuperuserCheckbox.addEventListener('change', function(){
-        queryJson('', {'uid': user.id, 'action': 'set_superuser', superuser: this.isSuperuserCheckbox.checked}, this.fillContent.bind(this));
-    }.bind(this));
+    this.groupContainer = document.createElement('div');
+    this.groupTitle = document.createElement('h4');
+    this.groupTitle.innerHTML = "Certaines permissions sont hérités des groupes suivants";
+    this.groupList = document.createElement('ul');
+    this.groupList.id = 'grouplist'
+    this.groupContainer.appendChild(this.groupTitle);
+    this.groupContainer.appendChild(this.groupList);
+    this.main.appendChild(this.groupContainer);
 
     queryJson('', {'uid': user.id, 'action': 'list_perms'}, this.fillContent.bind(this));
 }
@@ -210,6 +202,26 @@ UserPermissionPopup.prototype = Object.create(PermissionPopup.prototype, {
     fillContent: {
         value: function(json){
             this.clear();
+            for(var i in json['groups']){
+                var group = json['groups'][i];
+                var li = document.createElement('li');
+                li.appendChild(document.createTextNode(group.name));
+
+                var sum = 0;
+                for(var i = 0; i < 3; i++){
+                    sum += parseInt(group.color.slice(i + 1, i + 3), 16);
+                }
+                var avg = sum/3;
+
+                if(avg >= 0x7F){
+                    var textColor = "#000000";
+                }
+                else{
+                    var textColor = "#FFFFFF";
+                }
+                li.setAttribute('style', 'background-color: ' + group.color + '; color: ' + textColor);
+                this.groupList.appendChild(li);
+            }
             for(var name  in json['perms']){
                 var section = this.getOrCreateSection(name);
                 for(var i in json['perms'][name]){
@@ -217,28 +229,10 @@ UserPermissionPopup.prototype = Object.create(PermissionPopup.prototype, {
                     section.addPerm(perm.name, perm.codename, perm.state, this.user);
                 }
             }
-            this.setSuperuser(json['superuser']);
             this.spinner.setAttribute('class', 'hidden');
         },
     },
 
-    setSuperuser: {
-        value: function(superuser){
-            for(var i in this.sections){
-                for(var j in this.sections[i].perms){
-                    // We can't simply set disabled to false to enable
-                    // checkbox, attribute must be removed.
-                    if(superuser){
-                        this.sections[i].perms[j].checkbox.setAttribute('disabled', true);
-                    }
-                    else{
-                        this.sections[i].perms[j].checkbox.removeAttribute('disabled');
-                    }
-                }
-            }
-            this.isSuperuserCheckbox.checked = superuser;
-        },
-    },
 });
 
 UserPermissionPopup.prototype.constructor = UserSelectionPopup;

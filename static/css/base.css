@@ -931,7 +931,7 @@ table:not(.rd-days) {
   text-align: center;
   margin-right: 0; }
 
-#userlist input {
+#userlist input, #grouplist input {
   width: 100%;
   padding: 0.75em 1em;
   font-weight: bold; }
@@ -1045,6 +1045,16 @@ table:not(.rd-days) {
 .permission_popup input[type=checkbox] {
   width: auto;
   vertical-align: middle; }
+.permission_popup #grouplist {
+  padding: 0;
+  list-style: none; }
+  .permission_popup #grouplist li {
+    display: inline-block;
+    padding: 0.5em;
+    background-color: #EEE;
+    margin: 0.2em;
+    color: white;
+    border-radius: 3px; }
 
 .diaporama_popup {
   text-align: center; }

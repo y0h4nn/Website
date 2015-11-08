@@ -12,7 +12,7 @@ function Popup(title){
     this.window = document.createElement('div');
     this.header = document.createElement('header');
     this.h1 = document.createElement('h1');
-    this.h1.innerHTML = title;
+    this.h1.appendChild(document.createTextNode(title));
     this.closeBtn = document.createElement('button');
     this.closeBtn.innerHTML = "<i class='fa fa-close'></i>";
     this.closeBtn.setAttribute('type', 'button');

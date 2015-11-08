@@ -1,7 +1,10 @@
 import json
-from django.shortcuts import render, get_object_or_404
+import hashlib
+from django.shortcuts import render, get_object_or_404, redirect
+from django.conf import settings
 from django.http import JsonResponse
 from django.contrib.auth.models import User, Permission, Group
+from .forms import GroupCreationForm
 
 
 class ActionRouter:
@@ -25,7 +28,11 @@ class UserActionRouter(ActionRouter):
         perms = Permission.objects.all()
         response = {
             'perms': {},
-            'superuser': self.user.is_superuser,
+            'groups': [{
+                    'id': g.id,
+                    'name': g.name,
+                    'color': '#%s' % (hashlib.md5(g.name.encode()).hexdigest()[:6]),
+                } for g in self.user.groups.all()],
         }
         for perm in perms:
             if perm.content_type.app_label not in response['perms']:
@@ -54,16 +61,14 @@ class UserActionRouter(ActionRouter):
         self.user.save()
         return JsonResponse({})
 
-    def set_superuser(self):
-        if self.request.get('superuser'):
-            self.user.is_superuser = True
-        else:
-            self.user.is_superuser = False
-        self.user.save()
-        return self.list_perms()
-
 
 class GroupActionRouter(ActionRouter):
+    GROUP_DELETION_BLACKLIST = [
+        'Enib',
+        'Tous',
+        settings.BDE_GROUP_NAME,
+    ]
+
     def __init__(self, request):
         super().__init__(request)
         self.group = get_object_or_404(Group, id=self.request.get('gid'))
@@ -120,6 +125,13 @@ class GroupActionRouter(ActionRouter):
         user.groups.remove(self.group)
         return JsonResponse({})
 
+    def remove(self):
+        if self.group.name not in self.GROUP_DELETION_BLACKLIST:
+            self.group.delete()
+            return JsonResponse({})
+        else:
+            return JsonResponse({'error': 'Ce groupe n\'est pas supprimable'})
+
 
 def users(request):
     context = {}
@@ -135,8 +147,19 @@ def groups(request):
         fuckdat = router.route()
         if fuckdat is not None:
             return fuckdat
+        else:
+            return JsonResponse({'error': 'Action invalide'})
 
-    return render(request, 'permissions/groups.html')
+    elif request.method == 'POST':
+        form = GroupCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('permissions:groups')
+
+    else:
+        form = GroupCreationForm()
+
+    return render(request, 'permissions/groups.html', {'form': form})
 
 
 def custom_member_list(request, gid):
