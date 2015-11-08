@@ -72,7 +72,7 @@ UserPermission.prototype.constructor = UserPermission;
  * Group permissions
  */
 
-function GroupPermission(name, codename, state, group){
+function GroupPermission(name, codename, state, enabled, group){
     Permission.call(this, name, codename, state, enabled);
     this.group = group;
 }

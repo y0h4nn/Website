@@ -88,6 +88,7 @@ class GroupActionRouter(ActionRouter):
                 'name': perm.name,
                 'codename': perm.codename,
                 'state': perm in group_perms,
+                'enabled': True,
             })
         return JsonResponse(response)
 
