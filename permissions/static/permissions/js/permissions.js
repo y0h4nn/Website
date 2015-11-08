@@ -4,7 +4,7 @@
  * Base Permssion class
  */
 
-function Permission(name, codename, state){
+function Permission(name, codename, state, enabled){
     this.name = name;
     this.codename = codename;
 
@@ -13,6 +13,9 @@ function Permission(name, codename, state){
     this.checkbox.setAttribute('type', 'checkbox');
     this.checkbox.setAttribute('id', codename);
     this.checkbox.checked = state;
+    if(!enabled){
+        this.checkbox.setAttribute('disabled', true);
+    }
     this.label = document.createElement('label');
     this.label.setAttribute('for', codename);
     this.label.innerHTML = name;
@@ -42,8 +45,8 @@ Permission.prototype = {
  * User permission
  */
 
-function UserPermission(name, codename, state, user){
-    Permission.call(this, name, codename, state);
+function UserPermission(name, codename, state, enabled, user){
+    Permission.call(this, name, codename, state, enabled);
     this.user = user;
 }
 
@@ -70,7 +73,7 @@ UserPermission.prototype.constructor = UserPermission;
  */
 
 function GroupPermission(name, codename, state, group){
-    Permission.call(this, name, codename, state);
+    Permission.call(this, name, codename, state, enabled);
     this.group = group;
 }
 
@@ -111,10 +114,10 @@ PermSection.prototype = {
         element.appendChild(this.element);
     },
 
-    addPerm: function(name, codename, state, user){
-        perm = new this.permCls(name, codename, state, user);
-        perm.appendTo(this.element);
-        this.perms.push(perm);
+    addPerm: function(perm, user){
+        permObj = new this.permCls(perm.name, perm.codename, perm.state, perm.enabled, user);
+        permObj.appendTo(this.element);
+        this.perms.push(permObj);
     },
 
     clear: function(){
@@ -226,7 +229,7 @@ UserPermissionPopup.prototype = Object.create(PermissionPopup.prototype, {
                 var section = this.getOrCreateSection(name);
                 for(var i in json['perms'][name]){
                     var perm = json['perms'][name][i];
-                    section.addPerm(perm.name, perm.codename, perm.state, this.user);
+                    section.addPerm(perm, this.user);
                 }
             }
             this.spinner.setAttribute('class', 'hidden');
@@ -259,7 +262,7 @@ GroupPermissionPopup.prototype = Object.create(PermissionPopup.prototype, {
                 var section = this.getOrCreateSection(name);
                 for(var i in json['perms'][name]){
                     var perm = json['perms'][name][i];
-                    section.addPerm(perm.name, perm.codename, perm.state, this.group);
+                    section.addPerm(perm, this.group);
                 }
             }
             this.spinner.setAttribute('class', 'hidden');
