@@ -82,7 +82,7 @@ class Event(models.Model):
             Q(model=False),
             Q(end_inscriptions__gt=timezone.now()),
             Q(inscriptions__user=user) | Q(private=False)
-        ).distinct()]
+        ).distinct().order_by('start_time')]
 
 
 class RecurrentEvent(Event):
