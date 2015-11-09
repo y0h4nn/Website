@@ -2,7 +2,10 @@
 
 {% menu_item 'Accueil' 'bde:index' %}
 {% if user_is_bde_member %}
-    {% menu_item 'Cotisants' 'bde:contributors' %}
-    {% menu_item 'Membres' 'bde:members' %}
-    {% menu_item 'Demandes de compte' 'accounts:list_request' %}
+    {% if perms.bde.change_contributor %}
+        {% menu_item 'Cotisants' 'bde:contributors' %}
+    {% endif %}
+    {% if perms.accounts.manage_account_request %}
+        {% menu_item 'Demandes de compte' 'accounts:list_request' %}
+    {% endif %}
 {% endif %}

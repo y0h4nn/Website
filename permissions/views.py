@@ -39,7 +39,7 @@ class UserActionRouter(ActionRouter):
         }
         for perm in perms:
             app_label = perm.content_type.app_label
-            if True:
+            if settings.PERM_ENABLE_WHITELIST:
                 if app_label not in settings.PERM_WHITELIST:
                     continue
                 if perm.codename not in settings.PERM_WHITELIST[app_label]:

@@ -153,12 +153,33 @@ EMAIL_USE_TLS=True
 
 
 # Permissions
+PERM_ENABLE_WHITELIST = True
 PERM_WHITELIST = {
     'auth': [
         'add_group',
         'delete_group',
         'change_permission',
     ],
+
+    'bde': [
+        'change_contributor',
+    ],
+
+    'accounts': [
+        'manage_account_request',
+    ],
+
+#    'carshare': [
+#        'change_announcement',
+#        'delete_announcement',
+#    ],
+#
+#    'events': [
+#        'add_event',
+#        'change_event'
+#        'delete_event',
+#    ],
+
 }
 
 

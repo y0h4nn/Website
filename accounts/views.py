@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
 from django.contrib import auth
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
@@ -209,7 +209,7 @@ def account_request(request):
     return render(request, 'accounts/request.html', context)
 
 
-@bde_member
+@permission_required('accounts.manage_account_request')
 def list_request(request, error=None):
     context = {
         'requests': models.UserRequest.objects.all(),
@@ -237,7 +237,7 @@ REJECT_MAIL_TPL="""Bonjour {first_name} {last_name},
 Votre demande de création de compte sur enib.net à été rejetée.
 """
 
-@bde_member
+@permission_required('accounts.manage_account_request')
 def accept_request(request, rid):
     user_request = get_object_or_404(models.UserRequest, id=rid)
     username = ("%s_%s" % (user_request.first_name[0], user_request.last_name[:6])).lower()
@@ -275,7 +275,7 @@ def accept_request(request, rid):
     return redirect(reverse('accounts:list_request'))
 
 
-@bde_member
+@permission_required('accounts.manage_account_request')
 def reject_request(request, rid):
     user_request = get_object_or_404(models.UserRequest, id=rid)
     user_request.delete()

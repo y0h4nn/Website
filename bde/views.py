@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db import IntegrityError
 from django.conf import settings
 from django.http import HttpResponse
@@ -16,7 +16,7 @@ def index(request):
     return render(request, 'bde/index.html', {})
 
 
-@bde_member
+@permission_required('bde.change_contributor')
 def contributors(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -57,7 +57,7 @@ def contributors(request):
         return JsonResponse({'error': None})
     return render(request, 'bde/contributors.html', {})
 
-@bde_member
+@permission_required('bde.change_contributor')
 def detail(request, id):
     user = User.objects.get(id=id);
 
@@ -132,7 +132,7 @@ def memberlist(request):
     return JsonResponse({'users': users})
 
 
-@bde_member
+@permission_required('change_contributor')
 def export_contributors(request):
     print(timezone.now().date())
     users = User.objects.filter(contribution__end_date__gt=timezone.now().date()).select_related('profile').select_related('contribution')
