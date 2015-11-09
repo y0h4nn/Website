@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 
 class AnnouncementForm(forms.ModelForm):
     prefix = 'announcement'
+    date = forms.SplitDateTimeField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -36,9 +37,6 @@ class AnnouncementForm(forms.ModelForm):
             'price': 'Prix',
         }
 
-        widgets = {
-            "date": forms.SplitDateTimeWidget(),
-        }
 
 
 class RegistrationForm(forms.ModelForm):

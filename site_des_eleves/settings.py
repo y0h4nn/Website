@@ -169,10 +169,11 @@ PERM_WHITELIST = {
         'manage_account_request',
     ],
 
-#    'carshare': [
-#        'change_announcement',
-#        'delete_announcement',
-#    ],
+    'carshare': [
+        'change_announcement',
+        'delete_announcement',
+        'delete_registration',
+    ],
 #
 #    'events': [
 #        'add_event',

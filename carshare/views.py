@@ -1,7 +1,7 @@
 from . import forms
 from . import models
 from datetime import timedelta
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -107,10 +107,14 @@ def action(request, aid, rid, state):
     return redirect(reverse('carshare:show', kwargs={'aid': aid}))
 
 
+
 @login_required
 def edit(request, aid):
     announcement = get_object_or_404(models.Announcement, id=aid)
     context = {'announcement': announcement}
+
+    if request.user != announcement.author and not request.user.has_perm('carshare.change_announcement'):
+        return redirect('news:index')
 
     if request.method == "POST":
         form = forms.AnnouncementForm(request.POST, instance=announcement)
@@ -134,7 +138,7 @@ def edit(request, aid):
 @login_required
 def delete(request, aid):
     announcement = get_object_or_404(models.Announcement, id=aid)
-    if request.user == announcement.author or is_bde_member(request.user):
+    if request.user == announcement.author or request.user.has_perm('carshare.change_announcement'):
         registrations = models.Registration.objects.filter(announcement=announcement).all()
         users = set(reg.user for reg in registrations if reg.user != request.user)
         notify(
@@ -146,10 +150,9 @@ def delete(request, aid):
     return redirect(reverse('carshare:index'))
 
 
-@bde_member
+@permission_required('carshare.delete_registration')
 def delete_registration(request, rid):
-    if is_bde_member(request.user):
-        registration = get_object_or_404(models.Registration, id=rid)
-        announcement = registration.announcement
-        registration.delete()
+    registration = get_object_or_404(models.Registration, id=rid)
+    announcement = registration.announcement
+    registration.delete()
     return redirect('carshare:show', aid=announcement.id)
