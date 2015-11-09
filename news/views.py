@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from . import forms
 from . import models
 from bde.shortcuts import bde_member, is_bde_member
@@ -14,7 +14,7 @@ def index(request):
     return render(request, "news/index.html", context)
 
 
-@bde_member
+@permission_required('news.add_news')
 def create(request):
     context = {}
 
@@ -34,7 +34,7 @@ def create(request):
 
     return render(request, "news/create.html", context)
 
-@bde_member
+@permission_required('news.change_news')
 def edit(request, nid):
     n = get_object_or_404(models.News, id=nid)
     if request.method == "POST":
@@ -47,7 +47,7 @@ def edit(request, nid):
     context = {'form': form, 'news': n}
     return render(request, "news/edit.html", context)
 
-@bde_member
+@permission_required('news.delete_news')
 def delete(request, nid):
     n = get_object_or_404(models.News, id=nid)
     n.delete()
@@ -70,13 +70,11 @@ def comment(request, nid):
     else:
         form = forms.CommentForm()
     context['comment_form'] = form
-
-
     return render(request, "news/comment.html", context)
 
 @login_required
 def del_comment(request, cid):
-    if is_bde_member(request.user):
+    if request.user.has_perm('news.delete_comment'):
         c = get_object_or_404(models.Comment, id=cid)
     else:
         c = get_object_or_404(models.Comment, id=cid, user=request.user)

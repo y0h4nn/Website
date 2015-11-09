@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block menu %}
-    {% if request.user.is_active and user_is_bde_member %}
+    {% if perms.news.add_news %}
         {% menu_item 'Actualités' 'news:index' %}
         {% menu_item 'Ajouter une actualité' 'news:create' %}
     {% endif %}
@@ -31,10 +31,12 @@
                 <h1>{{ news.title }}</h1>
                 <h2>
                     Le {{ news.pub_date }} par {{ news.author.profile }}
-                    {% if user_is_bde_member %}
-                        <a href="{% url 'news:edit' nid=news.id %}" title="Editer"><i class="fa fa-pencil"></i></a>
-                        <a href="{% url 'news:delete' nid=news.id %}" class="red" title="Supprimer"><i class="fa fa-trash-o"></i></a>
-                    {% endif %}
+                        {% if perms.news.change_news %}
+                            <a href="{% url 'news:edit' nid=news.id %}" title="Editer"><i class="fa fa-pencil"></i></a>
+                        {% endif %}
+                        {% if perms.news.delete_news %}
+                            <a href="{% url 'news:delete' nid=news.id %}" class="red" title="Supprimer"><i class="fa fa-trash-o"></i></a>
+                        {% endif %}
                 </h2>
             </header>
             <main>
@@ -55,7 +57,7 @@
                                 </h4>
                                 <h5>
                                     {{ comment.pub_date }}
-                                    {% if user_is_bde_member or comment.user == request.user %}
+                                    {% if perms.news.delete_comment or comment.user == request.user %}
                                         <a href="{% url 'news:del_comment' cid=comment.id %}" class="red" title="Supprimer" ><i class="fa fa-trash-o"></i></a>
                                     {% endif %}
                                 </h5>
