@@ -102,7 +102,7 @@ function PermSection(name, permCls){
     this.name = name;
     this.permCls = permCls;
     this.element = document.createElement('div');
-    this.title = document.createElement('h3');
+    this.title = document.createElement('h4');
     this.title.innerHTML = name;
 
     this.element.appendChild(this.title);

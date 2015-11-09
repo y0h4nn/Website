@@ -42,8 +42,9 @@ class UserActionRouter(ActionRouter):
                 'name': perm.name,
                 'codename': perm.codename,
                 'state': self.user.has_perm("%s.%s" % (perm.content_type.app_label, perm.codename)),
-                'enabled': "%s.%s" % (perm.content_type.app_label, perm.codename) not in self.user.get_group_permissions(),
+                'enabled': "%s.%s" % (perm.content_type.app_label, perm.codename) not in self.user.get_group_permissions() and not self.user.is_superuser,
             })
+
         return JsonResponse(response)
 
     def set_perm(self):
