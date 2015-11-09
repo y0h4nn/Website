@@ -42,6 +42,13 @@ class Event(models.Model):
 
     gestion = models.CharField(max_length=3, choices=GESTION_CHOICES, default=None, null=True, blank=True)
 
+
+    class Meta:
+        permissions = (
+            ('manage_entries', 'Can manage user entries'),
+            ('access_list', 'Can view user list (needed for csv export)'),
+        )
+
     def registrations_number(self):
         return self.inscriptions.all().count() + self.extern_inscriptions.all().count() + self.nb_invitations()
 

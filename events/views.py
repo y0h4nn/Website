@@ -1,11 +1,11 @@
 from .forms import EventForm, ExternInscriptionForm, ExternLinkForm, InvitForm
 from .models import Event, Inscription, ExternInscription, ExternLink, Invitation
-from bde.shortcuts import bde_member, is_bde_member, is_contributor
+from bde.shortcuts import is_contributor
 from shop.models import BuyingHistory
 from django.db.models import Count
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.http import JsonResponse, HttpResponse, Http404
@@ -48,7 +48,7 @@ def event(request, eid):
         inv.delete()
         return JsonResponse({'status': 1})
 
-    if e.allow_extern and is_bde_member(request.user):
+    if e.allow_extern and request.user.has_perm('events.change_event'):
         if request.method == "POST" and 'btn_link' in request.POST:
             form = ExternLinkForm(request.POST)
             if form.is_valid():
@@ -76,7 +76,11 @@ def event(request, eid):
                 try:
                     ins.save()
                 except IntegrityError:
-                    messages.add_message(request, messages.ERROR, "Vous ne pouvez pas inviter 2 fois la meme personne avec la meme adresse email")
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        "Vous ne pouvez pas inviter 2 fois la meme personne avec la meme adresse email"
+                    )
         else:
             form = InvitForm()
         context['invit_form'] = form
@@ -108,7 +112,8 @@ def event_extern(request, uuid):
     return render(request, 'events/event_extern.html', context)
 
 
-@bde_member
+
+@user_passes_test(lambda u: u.has_module_perms('events'))
 def admin_index(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -119,7 +124,7 @@ def admin_index(request):
     return render(request, 'events/admin/index.html', context)
 
 
-@bde_member
+@user_passes_test(lambda u: u.has_module_perms('events'))
 def admin_list_events(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -136,7 +141,7 @@ def admin_list_events(request):
         } for evt in evts]})
 
 
-@bde_member
+@permission_required('events.add_event')
 def admin_add(request):
     if request.method == "POST":
         form = EventForm(request.POST, request.FILES or None)
@@ -151,7 +156,7 @@ def admin_add(request):
     return render(request, 'events/admin/add.html', context)
 
 
-@bde_member
+@permission_required('events.change_event')
 def admin_edit(request, eid):
     e = get_object_or_404(Event, id=eid)
     form = EventForm(request.POST or None, request.FILES or None, instance=e)
@@ -164,7 +169,7 @@ def admin_edit(request, eid):
     return render(request, 'events/admin/edit.html', context)
 
 
-@bde_member
+@permission_required('events.access_list')
 def admin_list_registrations(request, eid):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -185,7 +190,7 @@ def admin_list_registrations(request, eid):
     return render(request, 'events/admin/list_registrations.html', {'event': e, 'reg': reg, 'ext_reg': ext_reg, 'invits': invits})
 
 
-@bde_member
+@permission_required('events.access_list')
 def admin_export_csv(request, eid):
     event = get_object_or_404(Event, id=eid)
     reg = Inscription.objects.filter(event=event).select_related("user__profile")
@@ -207,7 +212,7 @@ def admin_export_csv(request, eid):
         writer.writerow(line)
     return response
 
-@bde_member
+@permission_required('events.manage_entries')
 def admin_management(request, eid):
     event = get_object_or_404(Event, id=eid)
     if event.gestion is None:
@@ -217,7 +222,7 @@ def admin_management(request, eid):
 
     return render(request, 'events/admin/management_index.html', context)
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_list_users(request, eid):
     e = get_object_or_404(Event, id=eid)
     ret = {}
@@ -250,7 +255,7 @@ def management_list_users(request, eid):
         return JsonResponse(ret)
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_info_user(request, eid, type, iid):
     e = get_object_or_404(Event, id=eid)
     context = {'type': type, 'iid': iid, 'event': e}
@@ -266,7 +271,7 @@ def management_info_user(request, eid, type, iid):
     return render(request, "events/admin/info_popup.html", context)
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_ack(request, eid, type, iid):
     e = get_object_or_404(Event, id=eid)
     if type == "reg":
@@ -281,7 +286,7 @@ def management_ack(request, eid, type, iid):
     return render(request, "events/admin/info_popup.html", context)
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_nl_ack(request):
     req = json.loads(request.read().decode())
     e = get_object_or_404(Event, id=req['eid'])
@@ -299,7 +304,7 @@ def management_nl_ack(request):
     return JsonResponse({"status": 1})
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_nl_del(request, eid, type, iid):
     e = get_object_or_404(Event, id=eid)
     klass = ""
@@ -320,7 +325,7 @@ def management_nl_del(request, eid, type, iid):
     return JsonResponse({"status": 1, "klass": klass})
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_nl_info_user(request, eid, type, iid):
     e = get_object_or_404(Event, id=eid)
     context = {'type': type, 'iid': iid, 'eid': eid, 'event': e}
@@ -337,7 +342,7 @@ def management_nl_info_user(request, eid, type, iid):
     return render(request, "events/admin/info_nl_popup.html", context)
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_nl_ack_popup(request, iid, eid):
     context = {"eid": eid, "iid": iid}
     return render(request, "events/admin/nl_ack_popup.html", context)

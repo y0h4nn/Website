@@ -7,8 +7,12 @@
 {% endblock %}
 
 {% block menu %}
-    {% menu_item "Liste des évènements" "events:admin_index" %}
-    {% menu_item "Ajouter un evenement" "events:admin_add" %}
+    {% if perms.events %}
+        {% menu_item "Liste des évènements" "events:admin_index" %}
+    {% endif %}
+    {% if perms.events.add_event %}
+        {% menu_item "Ajouter un evenement" "events:admin_add" %}
+    {% endif %}
 {% endblock %}
 
 {% block styles %}

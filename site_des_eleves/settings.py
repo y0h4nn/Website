@@ -174,12 +174,21 @@ PERM_WHITELIST = {
         'delete_announcement',
         'delete_registration',
     ],
-#
-#    'events': [
-#        'add_event',
-#        'change_event'
-#        'delete_event',
-#    ],
+
+    'events': [
+        'add_event',
+        'change_event',
+        'delete_event',
+        'access_list',
+        'manage_entries',
+    ],
+
+    'news': [
+        'delete_comment',
+        'add_news',
+        'change_news',
+        'delete_news',
+    ],
 
 }
 
