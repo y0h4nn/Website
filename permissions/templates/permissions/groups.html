@@ -92,15 +92,20 @@
                 return [
                     new GroupList.GroupAction('Gestion des membres', manageUsers),
                     new GroupList.GroupAction('Editer les permissions', permEdit),
-                    new GroupList.GroupAction('Supprimer', deleteGroup),
+                    {% if perms.auth.delete_group %}
+                        new GroupList.GroupAction('Supprimer', deleteGroup),
+                    {% endif %}
                 ];
             });
         });
     </script>
-    <h3>Ajouter un groupe</h4>
-    <form action="{{ request.path }}" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button>Ajouter</button>
-    </form>
+
+    {% if perms.auth.add_group %}
+        <h3>Ajouter un groupe</h4>
+        <form action="{{ request.path }}" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button>Ajouter</button>
+        </form>
+    {% endif %}
 {% endblock %}

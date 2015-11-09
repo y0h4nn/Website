@@ -57,7 +57,9 @@
                         {% _base_menu_item 'Covoiturage' 'carshare:index' %}
                         {% _base_menu_item 'Boutique' 'shop:index' %}
                         {% _base_menu_item 'Pizzas' 'pizza:index' %}
-                        {% _base_menu_item 'Permissions' 'permissions:users' %}
+                        {% if perms.auth %}
+                            {% _base_menu_item 'Permissions' 'permissions:users' %}
+                        {% endif %}
                         {% _base_menu_item 'Photos' 'photo:browse' '' %}
                     </ul>
                 </nav>

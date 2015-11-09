@@ -150,6 +150,18 @@ EMAIL_HOSt_USER=""
 EMAIL_HOST_PASSWORD=""
 EMAIL_USE_TLS=True
 
+
+
+# Permissions
+PERM_WHITELIST = {
+    'auth': [
+        'add_group',
+        'delete_group',
+        'change_permission',
+    ],
+}
+
+
 # Application settings
 BDE_GROUP_NAME = 'BDE'
 

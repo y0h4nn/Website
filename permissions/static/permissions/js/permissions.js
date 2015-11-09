@@ -225,12 +225,10 @@ UserPermissionPopup.prototype = Object.create(PermissionPopup.prototype, {
                 li.setAttribute('style', 'background-color: ' + group.color + '; color: ' + textColor);
                 this.groupList.appendChild(li);
             }
-            for(var name  in json['perms']){
-                var section = this.getOrCreateSection(name);
-                for(var i in json['perms'][name]){
-                    var perm = json['perms'][name][i];
-                    section.addPerm(perm, this.user);
-                }
+            for(var i in json['perms']){
+                var perm = json['perms'][i];
+                var section = this.getOrCreateSection(perm.section);
+                section.addPerm(perm, this.user);
             }
             this.spinner.setAttribute('class', 'hidden');
         },
@@ -258,12 +256,10 @@ GroupPermissionPopup.prototype = Object.create(PermissionPopup.prototype, {
     fillContent: {
         value: function(json){
             this.clear();
-            for(var name  in json['perms']){
-                var section = this.getOrCreateSection(name);
-                for(var i in json['perms'][name]){
-                    var perm = json['perms'][name][i];
-                    section.addPerm(perm, this.group);
-                }
+            for(var i in json['perms']){
+                var perm = json['perms'][i];
+                var section = this.getOrCreateSection(perm.section);
+                section.addPerm(perm, this.group);
             }
             this.spinner.setAttribute('class', 'hidden');
         },

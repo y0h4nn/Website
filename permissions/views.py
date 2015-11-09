@@ -2,13 +2,16 @@ import json
 import hashlib
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
+from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth.models import User, Permission, Group
+from django.contrib.auth.decorators import permission_required, login_required
 from .forms import GroupCreationForm
 
 
 class ActionRouter:
     def __init__(self, request):
+        self._request = request
         self.request = json.loads(request.read().decode())
 
     def route(self):
@@ -27,7 +30,7 @@ class UserActionRouter(ActionRouter):
     def list_perms(self):
         perms = Permission.objects.all()
         response = {
-            'perms': {},
+            'perms': [],
             'groups': [{
                     'id': g.id,
                     'name': g.name,
@@ -35,16 +38,21 @@ class UserActionRouter(ActionRouter):
                 } for g in self.user.groups.all()],
         }
         for perm in perms:
-            if perm.content_type.app_label not in response['perms']:
-                response['perms'][perm.content_type.app_label] = []
+            app_label = perm.content_type.app_label
+            if True:
+                if app_label not in settings.PERM_WHITELIST:
+                    continue
+                if perm.codename not in settings.PERM_WHITELIST[app_label]:
+                    continue
 
-            response['perms'][perm.content_type.app_label].append({
+            response['perms'].append({
+                'section': perm.content_type.app_label,
                 'name': perm.name,
                 'codename': perm.codename,
                 'state': self.user.has_perm("%s.%s" % (perm.content_type.app_label, perm.codename)),
                 'enabled': "%s.%s" % (perm.content_type.app_label, perm.codename) not in self.user.get_group_permissions() and not self.user.is_superuser,
             })
-
+            response['perms'].sort(key=lambda p: p['section'])
         return JsonResponse(response)
 
     def set_perm(self):
@@ -79,18 +87,23 @@ class GroupActionRouter(ActionRouter):
         perms = Permission.objects.all()
         group_perms = self.group.permissions.all()
         response = {
-            'perms': {},
+            'perms': [],
         }
         for perm in perms:
-            if perm.content_type.app_label not in response['perms']:
-                response['perms'][perm.content_type.app_label] = []
+            app_label = perm.content_type.app_label
+            if app_label not in settings.PERM_WHITELIST:
+                continue
+            if perm.codename not in settings.PERM_WHITELIST[app_label]:
+                continue
 
-            response['perms'][perm.content_type.app_label].append({
+            response['perms'].append({
+                'section': perm.content_type.app_label,
                 'name': perm.name,
                 'codename': perm.codename,
                 'state': perm in group_perms,
                 'enabled': True,
             })
+            response['perms'].sort(key=lambda p: p['section'])
         return JsonResponse(response)
 
     def set_perm(self):
@@ -129,6 +142,8 @@ class GroupActionRouter(ActionRouter):
         return JsonResponse({})
 
     def remove(self):
+        if not self._request.user.has_perm('auth.delete_group'):
+            return JsonResponse({'error': 'Droit insufisants'})
         if self.group.name not in self.GROUP_DELETION_BLACKLIST:
             self.group.delete()
             return JsonResponse({})
@@ -136,6 +151,7 @@ class GroupActionRouter(ActionRouter):
             return JsonResponse({'error': 'Ce groupe n\'est pas supprimable'})
 
 
+@permission_required('auth.change_permission')
 def users(request):
     context = {}
     if request.method == 'OPTIONS':
@@ -144,6 +160,7 @@ def users(request):
     return render(request, 'permissions/users.html', context)
 
 
+@permission_required('auth.change_permission')
 def groups(request):
     if request.method == 'OPTIONS':
         router = GroupActionRouter(request)
@@ -154,17 +171,19 @@ def groups(request):
             return JsonResponse({'error': 'Action invalide'})
 
     elif request.method == 'POST':
-        form = GroupCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('permissions:groups')
+        if request.user.has_perm('auth.add_group'):
+            form = GroupCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('permissions:groups')
+        else:
+            messages.add_message(request, messages.ERROR, 'Vous n\'avez pas les droits pour créer un groupe.')
 
-    else:
-        form = GroupCreationForm()
-
+    form = GroupCreationForm()
     return render(request, 'permissions/groups.html', {'form': form})
 
 
+@login_required
 def custom_member_list(request, gid):
     group = get_object_or_404(Group, id=gid)
     users = [
