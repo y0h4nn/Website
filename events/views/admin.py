@@ -73,7 +73,7 @@ def admin_add_recurrent(request):
 
 @bde_member
 def admin_edit_recurrent(request, eid):
-    e = get_object_or_404(Event, id=eid, model=True)
+    e = get_object_or_404(RecurrentEvent, id=eid, model=True)
     form = RecurrentEventForm(request.POST or None, request.FILES or None, instance=e)
     if form.is_valid():
         if not form.cleaned_data['allow_invitations']:
@@ -86,7 +86,9 @@ def admin_edit_recurrent(request, eid):
 
 @bde_member
 def admin_del_recurrent(request, eid):
-    pass
+    e = get_object_or_404(RecurrentEvent, id=eid, model=True)
+    e.delete()
+    return redirect('events:admin_recurrent')
 
 
 @bde_member

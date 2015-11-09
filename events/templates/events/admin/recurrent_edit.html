@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+{% load static %}
+
+
+{% block header %}
+    {{ event.name }}
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'accounts/css/edit.css' %}" />
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/calendar.js' %}"></script>
+    <script src="{% static 'events/js/events_form.js' %}"></script>
+{% endblock %}
+
+{% block menu %}
+    {% menu_item "Liste des évènements" "events:admin_index" %}
+    {% menu_item "Evènements récurrents" "events:admin_recurrent" %}
+    {% menu_item "Editer l'évènement" "events:admin_edit_recurrent" eid=event.id %}
+    {% if event.gestion %}
+        {% menu_item "Gestion" "events:admin_management" eid=event.id %}
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    <form enctype="multipart/form-data" action="{% url 'events:admin_edit_recurrent' eid=event.id %}" method="POST">
+        {% csrf_token %}
+        {{ event_form.as_p }}
+        <button>Sauvegarder</button>
+    </form>
+{% endblock %}
