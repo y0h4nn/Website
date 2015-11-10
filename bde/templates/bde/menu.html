@@ -1,11 +1,9 @@
 {% load menu_item %}
 
 {% menu_item 'Accueil' 'bde:index' %}
-{% if user_is_bde_member %}
-    {% if perms.bde.change_contributor %}
-        {% menu_item 'Cotisants' 'bde:contributors' %}
-    {% endif %}
-    {% if perms.accounts.manage_account_request %}
-        {% menu_item 'Demandes de compte' 'accounts:list_request' %}
-    {% endif %}
+{% if perms.bde.change_contributor %}
+    {% menu_item 'Cotisants' 'bde:contributors' %}
+{% endif %}
+{% if perms.accounts.manage_account_request %}
+    {% menu_item 'Demandes de compte' 'accounts:list_request' %}
 {% endif %}

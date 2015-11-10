@@ -80,7 +80,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'notifications.context_processors.check_notifications',
-                'bde.context_processors.bde_member',
             ],
         },
     },
