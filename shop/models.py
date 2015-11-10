@@ -61,6 +61,12 @@ class Product(models.Model):
     description = models.TextField()
     enabled = models.BooleanField(default=True)
 
+    class Meta:
+        permissions = (
+            ('sell_product', 'Can sell products'),
+            ('manage_product', 'Can manage products and packs'),
+        )
+
     def __str__(self):
         return self.name
 
@@ -192,6 +198,10 @@ class BuyingHistory(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT)
 
+    class Meta:
+        permissions = (
+            ('view_history', 'Can view history'),
+        )
 
     @staticmethod
     def get_product_buyers(product):

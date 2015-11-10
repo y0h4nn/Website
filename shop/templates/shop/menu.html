@@ -2,8 +2,12 @@
 {% load menu_item %}
 
 {% menu_item 'Mes achats' 'shop:index' %}
-{% if user_is_bde_member %}
+{% if perms.shop.sell_product %}
     {% menu_item 'Ventes' 'shop:sells' %}
+{% endif %}
+{% if perms.shop.view_history %}
     {% menu_item 'Historique' 'shop:history' %}
+{% endif %}
+{% if perms.shop.manage_product %}
     {% menu_item 'Administration' 'shop:admin' %}
 {% endif %}

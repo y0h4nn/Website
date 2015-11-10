@@ -5,7 +5,6 @@ from . import views
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^sells$', views.sells, name='sells'),
-    url(r'^pack$', views.pack, name='pack'),
     url(r'^history$', views.history, name='history'),
     url(r'^history/export$', views.history_export_csv, name='history_export'),
     url(r'^admin$', views.admin, name='admin'),

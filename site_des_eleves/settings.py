@@ -196,6 +196,14 @@ PERM_WHITELIST = {
         'delete_poll',
     ],
 
+
+    'shop': [
+        'view_history',
+        'delete_buyinghistory',
+        'sell_product',
+        'manage_product',
+    ],
+
 }
 
 

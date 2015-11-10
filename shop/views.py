@@ -7,7 +7,7 @@ from django.db import transaction
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from . import forms
 from . import models
 from events.models import Inscription
@@ -24,7 +24,7 @@ def index(request):
     return render(request, 'shop/index.html', context)
 
 
-@bde_member
+@permission_required('shop.sell_product')
 def sells(request):
     if request.method == 'OPTIONS':
         req = json.loads(request.read().decode())
@@ -57,15 +57,8 @@ def sells(request):
         return render(request, 'shop/sell.html', context)
 
 
-@bde_member
-def pack(request):
-    context = {
-        'packs': models.Packs.objects.all()
-    }
-    return render(request, 'shop/pack.html', context)
 
-
-@bde_member
+@permission_required('shop.view_history')
 def history(request):
     history = models.BuyingHistory.objects.select_related('user__profile').select_related('pack').select_related('product').order_by('date').all().reverse()
     paginator = Paginator(history, 25)
@@ -85,7 +78,7 @@ def history(request):
     return render(request, 'shop/history.html', context)
 
 
-@bde_member
+@permission_required('shop.view_history')
 def history_export_csv(request):
 
     history = models.BuyingHistory.objects.select_related('user').select_related('pack').select_related('product').order_by('date').all().reverse()
@@ -115,7 +108,7 @@ def history_export_csv(request):
     return response
 
 
-@bde_member
+@permission_required('shop.delete_buyinghistory')
 def history_delete(request, hid):
     entry = get_object_or_404(models.BuyingHistory, id=hid)
 
@@ -131,7 +124,7 @@ def history_delete(request, hid):
     return redirect(reverse('shop:history'))
 
 
-@bde_member
+@permission_required('shop.manage_product')
 def admin(request):
 
     context = {
@@ -142,7 +135,7 @@ def admin(request):
     return render(request, 'shop/admin.html', context)
 
 
-@bde_member
+@permission_required('shop.manage_product')
 def product_add(request):
     if request.method == "POST":
         form = forms.ProductForm(request.POST)
@@ -159,7 +152,7 @@ def product_add(request):
     return render(request, 'shop/product_add.html', context)
 
 
-@bde_member
+@permission_required('shop.manage_product')
 def product_delete(request, pid):
     product = get_object_or_404(models.Product, id=pid)
     product.enabled = False
@@ -167,7 +160,7 @@ def product_delete(request, pid):
     return redirect(reverse('shop:admin'))
 
 
-@bde_member
+@permission_required('shop.manage_product')
 def product_edit(request, pid):
     product = get_object_or_404(models.Product, id=pid)
 
@@ -189,7 +182,7 @@ def product_edit(request, pid):
     return render(request, 'shop/product_edit.html', context)
 
 
-@bde_member
+@permission_required('shop.manage_product')
 def pack_add(request):
     if request.method == "POST":
         form = forms.PackForm(request.POST)
@@ -205,7 +198,7 @@ def pack_add(request):
 
     return render(request, 'shop/pack_add.html', context)
 
-@bde_member
+@permission_required('shop.manage_product')
 def pack_edit(request, pid):
     pack = get_object_or_404(models.Packs, id=pid)
     if request.method == "POST":
@@ -225,7 +218,7 @@ def pack_edit(request, pid):
 
     return render(request, 'shop/pack_edit.html', context)
 
-@bde_member
+@permission_required('shop.manage_product')
 def pack_delete(request, pid):
     pack = get_object_or_404(models.Packs, id=pid)
     pack.enabled = False
