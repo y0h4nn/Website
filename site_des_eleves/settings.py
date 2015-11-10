@@ -207,6 +207,11 @@ PERM_WHITELIST = {
     'pizza': [
         'manage_pizza',
     ],
+
+    'photo': [
+        'manage_access_policy',
+    ]
+
 }
 
 

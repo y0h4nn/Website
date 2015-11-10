@@ -8,6 +8,9 @@ class AccessPolicy(models.Model):
 
     class Meta:
         abstract = True
+        permissions = (
+            ('manage_access_policy', 'Can manage access policies'),
+        )
 
     def get_class_name(self):
         """ Because I need to access __name__ from template
