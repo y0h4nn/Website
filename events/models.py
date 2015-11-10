@@ -42,6 +42,7 @@ class Event(models.Model):
 
     gestion = models.CharField(max_length=3, choices=GESTION_CHOICES, default=None, null=True, blank=True)
 
+    model = models.BooleanField(default=False)
 
     class Meta:
         permissions = (
@@ -84,9 +85,15 @@ class Event(models.Model):
     @staticmethod
     def to_come(user):
         return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(
+            Q(model=False),
             Q(end_inscriptions__gt=timezone.now()),
             Q(inscriptions__user=user) | Q(private=False)
-        ).distinct()]
+        ).distinct().order_by('start_time')]
+
+
+class RecurrentEvent(Event):
+    delay = models.IntegerField(default=1)
+    last_created = models.DateField(null=True, blank=True, default=None)
 
 
 class ExternLink(models.Model):

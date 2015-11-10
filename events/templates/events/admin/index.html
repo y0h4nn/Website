@@ -18,6 +18,7 @@
     {% endif %}
     {% if perms.events.add_event %}
         {% menu_item "Ajouter un évènement" "events:admin_add" %}
+        {% menu_item "Evènements récurrents" "events:admin_recurrent" %}
     {% endif %}
 {% endblock %}
 

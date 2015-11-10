@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+{% load static %}
+
+{% block header %}
+    Liste des évènements récurrents
+{% endblock %}
+
+{% block menu %}
+    {% menu_item "Liste des évènements" "events:admin_index" %}
+    {% menu_item "Evènements récurrents" "events:admin_recurrent" %}
+    {% menu_item "Ajouter un évènement récurrent" "events:admin_add_recurrent" %}
+{% endblock %}
+
+{% block main %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Délai</th>
+                <th>Date du dernier créé</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+                <tr>
+                    <td>{{ event }}</td>
+                    <td>{{ event.delay }} jours</td>
+                    <td>{{ event.last_created }}</td>
+                    <td class="action_cell">
+                        <a href="{% url 'events:admin_edit_recurrent' eid=event.id %}"><i class="fa fa-pencil"></i></a>
+                        <a href="{% url 'events:admin_del_recurrent' eid=event.id %}"><i class="fa fa-trash-o"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

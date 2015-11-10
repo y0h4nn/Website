@@ -1,6 +1,6 @@
-from django.forms import ModelForm, ClearableFileInput, SplitDateTimeField
+from django.forms import ModelForm, ClearableFileInput, SplitDateTimeField, IntegerField
 from django.utils.safestring import mark_safe
-from .models import Event, ExternInscription, ExternLink, Invitation
+from .models import Event, ExternInscription, ExternLink, Invitation, RecurrentEvent
 
 
 class WrapperClearableinput(ClearableFileInput):
@@ -49,6 +49,13 @@ class EventForm(ModelForm):
                   'max_inscriptions': "Nombre maximum d'inscriptions", 'allow_invitations': "Autoriser les invitations",
                   'max_invitations': "Nombre maximum d'invitations", 'max_invitations_by_person': "Nombre maximum d'invitations par personne"}
         widgets = {'photo': WrapperClearableinput,}
+
+
+class RecurrentEventForm(EventForm):
+    delay = IntegerField()
+    class Meta(EventForm.Meta):
+        model = RecurrentEvent
+        exclude = ["uuid", "last_created"]
 
 
 
