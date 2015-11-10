@@ -131,7 +131,7 @@ def memberlist(request):
     return JsonResponse({'users': users})
 
 
-@permission_required('change_contributor')
+@permission_required('bde.change_contributor')
 def export_contributors(request):
     print(timezone.now().date())
     users = User.objects.filter(contribution__end_date__gt=timezone.now().date()).select_related('profile').select_related('contribution')
