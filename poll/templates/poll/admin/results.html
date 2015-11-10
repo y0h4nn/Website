@@ -6,7 +6,7 @@
 {% block menu %}
     {% menu_item "Administration" "poll:admin" %}
     {% menu_item "Détails" "poll:admin_question" pid=pid %}
-    {% if not poll.is_ended %}
+    {% if not poll.is_ended and perms.poll.change_poll %}
         {% menu_item "Editer" "poll:admin_edit_poll" pid=pid %}
     {% endif %}
 {% endblock %}

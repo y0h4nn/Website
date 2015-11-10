@@ -5,7 +5,7 @@
 
 {% block menu %}
     {% menu_item "Liste" "poll:index" %}
-    {% if user_is_bde_member %}
+    {% if perms.poll %}
         {% menu_item "Administration" "poll:admin" %}
     {% endif %}
 {% endblock %}

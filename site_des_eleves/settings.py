@@ -190,6 +190,12 @@ PERM_WHITELIST = {
         'delete_news',
     ],
 
+    'poll': [
+        'add_poll',
+        'change_poll',
+        'delete_poll',
+    ],
+
 }
 
 

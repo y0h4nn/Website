@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.db.models import F, Q
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed, JsonResponse
@@ -10,13 +10,14 @@ from .forms import PollForm
 from bde.shortcuts import bde_member
 
 
-@bde_member
+@user_passes_test(lambda u: u.has_module_perms('poll'))
 def admin_question(request, pid):
     if not request.user.is_authenticated():
         return HttpResponseForbidden()
     p = get_object_or_404(Poll, id=pid)
     context = {'poll': p, 'pid': pid, "errors": []}
     return render(request, 'poll/admin/results.html', context)
+
 
 @login_required()
 def question(request, pid):
@@ -52,17 +53,17 @@ def question(request, pid):
     return render(request, 'poll/question.html', context)
 
 
-@login_required()
+@login_required
 def thanks(request):
     return render(request, 'poll/thanks.html', {})
 
 
-@login_required()
+@login_required
 def already(request):
     return render(request, 'poll/already.html', {})
 
 
-@login_required()
+@login_required
 def poll_index(request):
     return render(request, 'poll/index.html')
 
@@ -81,7 +82,7 @@ def poll_list(request):
         })
 
 
-@bde_member
+@permission_required('poll.delete_poll')
 def admin_delete(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -90,13 +91,13 @@ def admin_delete(request):
         return JsonResponse({'status': 1})
 
 
-@bde_member
+@user_passes_test(lambda u: u.has_module_perms('poll'))
 def admin_index(request):
     context = {'polls': Poll.objects.filter(author=request.user)}
     return render(request, 'poll/admin/index.html', context)
 
 
-@bde_member
+@user_passes_test(lambda u: u.has_module_perms('poll'))
 def admin_list(request):
     return JsonResponse({'polls': [
             {
@@ -111,7 +112,7 @@ def admin_list(request):
     })
 
 
-@bde_member
+@permission_required('poll.add_poll')
 def admin_add_poll(request):
     if request.method == 'GET':
         form = PollForm(user=request.user)
@@ -134,7 +135,7 @@ def admin_add_poll(request):
     return render(request, 'poll/admin/add.html', {'form': form})
 
 
-@bde_member
+@permission_required('poll.change_poll')
 def admin_edit_poll(request, pid):
     if request.method == 'GET':
         p = get_object_or_404(Poll, id=pid)
