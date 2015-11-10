@@ -25,6 +25,11 @@ class Pizza(models.Model):
     ingredients = models.CharField(max_length=255)
     deleted = models.BooleanField(default=False)
 
+    class Meta:
+        permissions = (
+            ('manage_pizza', 'Can manage pizza'),
+        )
+
     def __str__(self):
         return "{} ({})".format(self.name, self.ingredients)
 

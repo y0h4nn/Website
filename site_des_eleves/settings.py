@@ -204,6 +204,9 @@ PERM_WHITELIST = {
         'manage_product',
     ],
 
+    'pizza': [
+        'manage_pizza',
+    ],
 }
 
 

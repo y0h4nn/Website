@@ -2,7 +2,7 @@ from .forms import PizzaAddingForm, PizzaTakingForm, CommandForm
 from .models import Pizza, Inscription, Command
 from collections import Counter
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -37,7 +37,7 @@ def index(request):
     return render(request, 'pizza/index.html', context)
 
 
-@bde_member
+@permission_required('pizza.manage_pizza')
 def admin_index(request):
     command_list = Command.objects.all().prefetch_related('inscriptions__pizza').prefetch_related('inscriptions__user__profile').order_by("-date")
     paginator = Paginator(command_list, 1)
@@ -60,7 +60,7 @@ def admin_index(request):
     return render(request, 'pizza/admin/index.html', {'commands': commands, 'pizzas': dict(pizzas.items())})
 
 
-@bde_member
+@permission_required('pizza.manage_pizza')
 def admin_manage_pizzas(request):
     if request.method == 'POST':
         form = PizzaAddingForm(request.POST)
@@ -79,7 +79,7 @@ def admin_manage_pizzas(request):
     return render(request, 'pizza/admin/manage_pizzas.html', context)
 
 
-@bde_member
+@permission_required('pizza.manage_pizza')
 def admin_manage_commands(request):
     com = Command.get_current()
     if com is not None and com.is_valid():
@@ -94,7 +94,8 @@ def admin_manage_commands(request):
 
     return render(request, 'pizza/admin/manage_commands.html', {'form': form})
 
-@bde_member
+
+@permission_required('pizza.manage_pizza')
 def admin_export_csv(request, cid):
     command = get_object_or_404(Command, id=cid)
     reg = Inscription.objects.filter(command=command).select_related("user__profile").order_by('user')

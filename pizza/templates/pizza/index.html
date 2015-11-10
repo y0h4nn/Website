@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block menu %}
-    {% if user_is_bde_member %}
+    {% if perms.pizza.manage_pizza %}
         {% menu_item "Administration" 'pizza:admin_index' %}
     {% endif %}
 {% endblock %}
