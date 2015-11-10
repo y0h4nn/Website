@@ -8,7 +8,6 @@ from django.db import IntegrityError
 from django.conf import settings
 from django.http import HttpResponse
 from . import models
-from .shortcuts import bde_member
 import csv
 
 
@@ -82,7 +81,7 @@ def detail(request, id):
 
     return render(request, 'bde/contributors_detail.html', context)
 
-@bde_member
+@permission_required('auth.change_permission')
 def members(request):
     context = {}
 
@@ -112,7 +111,7 @@ def members(request):
     return render(request, 'bde/members.html', context)
 
 
-@bde_member
+@permission_required('auth.change_permission')
 def memberlist(request):
     bde_group = Group.objects.get(name=settings.BDE_GROUP_NAME)
     users = [

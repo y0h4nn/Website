@@ -1,5 +1,5 @@
 from ..models import Event, Inscription, ExternInscription, Invitation
-from bde.shortcuts import bde_member, is_contributor
+from bde.shortcuts import is_contributor
 from shop.models import BuyingHistory
 from django.db.models import Count
 

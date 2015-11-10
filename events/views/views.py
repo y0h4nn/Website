@@ -1,6 +1,5 @@
 from ..forms import ExternInscriptionForm, ExternLinkForm, InvitForm
 from ..models import Event, Inscription, ExternLink, Invitation
-from bde.shortcuts import is_bde_member
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -42,7 +41,7 @@ def event(request, eid):
         inv.delete()
         return JsonResponse({'status': 1})
 
-    if e.allow_extern and is_bde_member(request.user):
+    if e.allow_extern and request.user.has_perm('events.manage_event'):
         if request.method == "POST" and 'btn_link' in request.POST:
             form = ExternLinkForm(request.POST)
             if form.is_valid():

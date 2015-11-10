@@ -8,7 +8,6 @@ from django.db import IntegrityError
 from django.contrib.auth.decorators import permission_required
 from . import forms
 from . import models
-from bde.shortcuts import bde_member, is_bde_member
 
 # photo directory name
 PHOTO_DIRNAME = "photo"
@@ -42,7 +41,7 @@ def create_thumbnail(realpath, filename):
 
 
 def can_access(path, user=None, email=None):
-    if user and (user.is_superuser or is_bde_member(user)):
+    if user and user.has_perm('photo.manage_access_policy'):
         return True
 
     policies = models.AccessPolicy.list(path)

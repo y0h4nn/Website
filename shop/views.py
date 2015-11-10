@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import login_required, permission_required
 from . import forms
 from . import models
 from events.models import Inscription
-from bde.shortcuts import bde_member
 from notifications.shortcuts import notify
 
 

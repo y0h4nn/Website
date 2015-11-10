@@ -1,6 +1,5 @@
 from ..forms import EventForm, RecurrentEventForm
 from ..models import Event, Inscription, ExternInscription, Invitation, RecurrentEvent
-from bde.shortcuts import bde_member
 
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse, HttpResponse

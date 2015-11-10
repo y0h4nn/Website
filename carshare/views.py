@@ -6,7 +6,6 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from notifications.shortcuts import notify
-from bde.shortcuts import is_bde_member, bde_member
 
 
 @login_required

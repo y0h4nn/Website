@@ -7,7 +7,6 @@ from django.utils import timezone
 import json
 from .models import Question, Answer, Poll, Voter
 from .forms import PollForm
-from bde.shortcuts import bde_member
 
 
 @user_passes_test(lambda u: u.has_module_perms('poll'))
