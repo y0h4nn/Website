@@ -176,9 +176,8 @@ PERM_WHITELIST = {
     ],
 
     'events': [
-        'add_event',
-        'change_event',
-        'delete_event',
+        'manage_event',
+        'manage_recurrent_event',
         'access_list',
         'manage_entries',
     ],

@@ -42,7 +42,7 @@ def admin_list_events(request):
         } for evt in evts]})
 
 
-@permission_required('events.add_event')
+@permission_required('events.manage_event')
 def admin_add(request):
     if request.method == "POST":
         form = EventForm(request.POST, request.FILES or None)
@@ -57,7 +57,7 @@ def admin_add(request):
     return render(request, 'events/admin/add.html', context)
 
 
-@permission_required('events.add_event')
+@permission_required('events.manage_recurrent_event')
 def admin_add_recurrent(request):
     if request.method == "POST":
         form = RecurrentEventForm(request.POST, request.FILES or None)
@@ -73,7 +73,7 @@ def admin_add_recurrent(request):
     return render(request, 'events/admin/recurrent_add.html', context)
 
 
-@permission_required('events.change_event')
+@permission_required('events.manage_recurrent_event')
 def admin_edit_recurrent(request, eid):
     e = get_object_or_404(RecurrentEvent, id=eid, model=True)
     form = RecurrentEventForm(request.POST or None, request.FILES or None, instance=e)
@@ -86,21 +86,21 @@ def admin_edit_recurrent(request, eid):
     return render(request, 'events/admin/recurrent_edit.html', context)
 
 
-@permission_required('events.delete_event')
+@permission_required('events.manage_recurrent_event')
 def admin_del_recurrent(request, eid):
     e = get_object_or_404(RecurrentEvent, id=eid, model=True)
     e.delete()
     return redirect('events:admin_recurrent')
 
 
-@permission_required('events.change_event')
+@permission_required('events.manage_recurrent_event')
 def admin_recurrent(request):
     context = {'events': RecurrentEvent.objects.all()}
     return render(request, 'events/admin/recurrent_index.html', context)
 
 
 
-@permission_required('events.change_event')
+@permission_required('events.manage_event')
 def admin_edit(request, eid):
     e = get_object_or_404(Event, id=eid, model=False)
     form = EventForm(request.POST or None, request.FILES or None, instance=e)

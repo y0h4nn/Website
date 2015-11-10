@@ -10,7 +10,7 @@
     {% if perms.events %}
         {% menu_item "Liste des évènements" "events:admin_index" %}
     {% endif %}
-    {% if perms.events.add_event %}
+    {% if perms.events.manage_event %}
         {% menu_item "Ajouter un evenement" "events:admin_add" %}
     {% endif %}
 {% endblock %}

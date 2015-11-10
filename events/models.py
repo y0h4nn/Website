@@ -47,6 +47,7 @@ class Event(models.Model):
     class Meta:
         permissions = (
             ('manage_entries', 'Can manage user entries'),
+            ('manage_event', 'Can manage events (add/del/edit)'),
             ('access_list', 'Can view user list (needed for csv export)'),
         )
 
@@ -95,6 +96,10 @@ class RecurrentEvent(Event):
     delay = models.IntegerField(default=1)
     last_created = models.DateField(null=True, blank=True, default=None)
 
+    class Meta:
+        permissions = (
+            ('manage_recurrent_event', 'Can manage recurrent event (add/del/edit'),
+        )
 
 class ExternLink(models.Model):
     event = models.ForeignKey(Event, related_name="extern_links")
