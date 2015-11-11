@@ -45,7 +45,7 @@
                             if(this.isToggled()){
                                 queryJson('', {'action': 'del_user', 'uid': user.id, 'gid': group.id}, function(resp){
                                     if(resp.error){
-                                        alert(resp.error);
+                                        add_message('error', resp.error);
                                         return;
                                     }
                                     this.setUntoggled();
@@ -55,7 +55,7 @@
                             else{
                                 queryJson('', {'action': 'add_user', 'uid': user.id, 'gid': group.id}, function(resp){
                                     if(resp.error){
-                                        alert(resp.error);
+                                        add_message('error', resp.error);
                                         return;
                                     }
                                     this.setToggled();
@@ -82,7 +82,7 @@
                 function deleteGroup(){
                     queryJson('', {'action': 'remove', 'gid': group.id}, function(resp){
                         if(resp.error){
-                            alert(resp.error);
+                            add_message('error', resp.error);
                             return;
                         }
                         list.removeElems(function(g){ return g.id == group.id });
