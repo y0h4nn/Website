@@ -1,4 +1,5 @@
 import uuid
+import hashlib
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
@@ -168,7 +169,6 @@ def members(request):
 
     return render(request, 'accounts/list.html', {})
 
-import hashlib
 
 @login_required
 def groups(request):
