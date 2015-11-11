@@ -11,21 +11,21 @@ from .forms import GroupCreationForm
 
 class ActionRouter:
     def __init__(self, request):
-        self._request = request
-        self.request = json.loads(request.read().decode())
+        self.request = request
+        self.request_data = json.loads(request.read().decode())
 
     def route(self):
         """
         Do not catch errors so debug stays simple.
         """
-        action = self.request.get('action')
+        action = self.request_data.get('action')
         return self.__getattribute__(action)()
 
 
 class UserActionRouter(ActionRouter):
     def __init__(self, request):
         super().__init__(request)
-        self.user = get_object_or_404(User, id=self.request.get('uid'))
+        self.user = get_object_or_404(User, id=self.request_data.get('uid'))
 
     def list_perms(self):
         perms = Permission.objects.all()
@@ -56,9 +56,9 @@ class UserActionRouter(ActionRouter):
         return JsonResponse(response)
 
     def set_perm(self):
-        perm = Permission.objects.get(codename=self.request.get('codename'))
-        codename = self.request.get('codename')
-        state = self.request.get('state')
+        perm = Permission.objects.get(codename=self.request_data.get('codename'))
+        codename = self.request_data.get('codename')
+        state = self.request_data.get('state')
 
         if perm is None or state is None or codename is None:
             return JsonResponse({'error': 'Missing arguments'})
@@ -81,7 +81,7 @@ class GroupActionRouter(ActionRouter):
 
     def __init__(self, request):
         super().__init__(request)
-        self.group = get_object_or_404(Group, id=self.request.get('gid'))
+        self.group = get_object_or_404(Group, id=self.request_data.get('gid'))
 
     def list_perms(self):
         perms = Permission.objects.all()
@@ -107,10 +107,10 @@ class GroupActionRouter(ActionRouter):
         return JsonResponse(response)
 
     def set_perm(self):
-        perm = Permission.objects.get(codename=self.request.get('codename'))
+        perm = Permission.objects.get(codename=self.request_data.get('codename'))
         group_perms = self.group.permissions.all()
-        codename = self.request.get('codename')
-        state = self.request.get('state')
+        codename = self.request_data.get('codename')
+        state = self.request_data.get('state')
 
         if perm is None or state is None or codename is None:
             return JsonResponse({'error': 'Missing arguments'})
@@ -125,7 +125,7 @@ class GroupActionRouter(ActionRouter):
 
     def add_user(self):
         try:
-            user = User.objects.get(id=self.request.get('uid'))
+            user = User.objects.get(id=self.request_data.get('uid'))
         except User.DoesNotExist:
             return JsonResponse({'error': 'L\'utilisateur n\'existe pas.'})
 
@@ -134,7 +134,7 @@ class GroupActionRouter(ActionRouter):
 
     def del_user(self):
         try:
-            user = User.objects.get(id=self.request.get('uid'))
+            user = User.objects.get(id=self.request_data.get('uid'))
         except User.DoesNotExist:
             return JsonResponse({'error': 'L\'utilisateur n\'existe pas.'})
 
@@ -142,7 +142,7 @@ class GroupActionRouter(ActionRouter):
         return JsonResponse({})
 
     def remove(self):
-        if not self._request.user.has_perm('auth.delete_group'):
+        if not self.request.user.has_perm('auth.delete_group'):
             return JsonResponse({'error': 'Droit insufisants'})
         if self.group.name not in self.GROUP_DELETION_BLACKLIST:
             self.group.delete()
