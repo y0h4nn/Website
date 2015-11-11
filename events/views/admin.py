@@ -12,7 +12,6 @@ import json
 import uuid
 
 
-
 @user_passes_test(lambda u: u.has_module_perms('events'))
 def admin_index(request):
     if request.method == "OPTIONS":
@@ -96,7 +95,6 @@ def admin_del_recurrent(request, eid):
 def admin_recurrent(request):
     context = {'events': RecurrentEvent.objects.all()}
     return render(request, 'events/admin/recurrent_index.html', context)
-
 
 
 @permission_required('events.manage_event')
