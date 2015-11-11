@@ -18,7 +18,7 @@ function Permission(name, codename, state, enabled){
     }
     this.label = document.createElement('label');
     this.label.setAttribute('for', codename);
-    this.label.innerHTML = name;
+    this.label.appendChild(document.createTextNode(name));
     this.element.appendChild(this.checkbox);
     this.element.appendChild(this.label);
 
@@ -30,8 +30,6 @@ Permission.prototype = {
         element.appendChild(this.element);
     },
     onchange: function(){
-        console.log(this);
-        console.log("NOP");
     },
 };
 
@@ -157,7 +155,7 @@ PermissionPopup.prototype = Object.create(Popup.prototype, {
 
     getOrCreateSection: {
         value: function(name){
-            for(var i = 0, l = this.sections.length; i < l; i++){
+            for(var i in this.sections){
                 if(this.sections[i].name == name){
                     return this.sections[i];
                 }
