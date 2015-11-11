@@ -157,7 +157,11 @@ def users(request):
     context = {}
     if request.method == 'OPTIONS':
         router = UserActionRouter(request)
-        return router.route()
+        response = router.route()
+        if response is not None:
+            return response
+        else:
+            return JsonResponse({'error': 'Action invalide'})
     return render(request, 'permissions/users.html', context)
 
 
@@ -165,9 +169,9 @@ def users(request):
 def groups(request):
     if request.method == 'OPTIONS':
         router = GroupActionRouter(request)
-        fuckdat = router.route()
-        if fuckdat is not None:
-            return fuckdat
+        response = router.route()
+        if response is not None:
+            return response
         else:
             return JsonResponse({'error': 'Action invalide'})
 
