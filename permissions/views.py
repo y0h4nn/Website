@@ -91,10 +91,11 @@ class GroupActionRouter(ActionRouter):
         }
         for perm in perms:
             app_label = perm.content_type.app_label
-            if app_label not in settings.PERM_WHITELIST:
-                continue
-            if perm.codename not in settings.PERM_WHITELIST[app_label]:
-                continue
+            if settings.PERM_ENABLE_WHITELIST:
+                if app_label not in settings.PERM_WHITELIST:
+                    continue
+                if perm.codename not in settings.PERM_WHITELIST[app_label]:
+                    continue
 
             response['perms'].append({
                 'section': perm.content_type.app_label,
