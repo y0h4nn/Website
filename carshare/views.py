@@ -1,7 +1,7 @@
 from . import forms
 from . import models
 from datetime import timedelta
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -104,7 +104,6 @@ def action(request, aid, rid, state):
 
     registration.save()
     return redirect(reverse('carshare:show', kwargs={'aid': aid}))
-
 
 
 @login_required
