@@ -16,7 +16,7 @@ class ActionRouter:
 
     def route(self):
         """
-        Do not catch errors so debug stay simple.
+        Do not catch errors so debug stays simple.
         """
         action = self.request.get('action')
         return self.__getattribute__(action)()
