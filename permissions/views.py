@@ -174,7 +174,6 @@ def groups(request):
             return response
         else:
             return JsonResponse({'error': 'Action invalide'})
-
     elif request.method == 'POST':
         if request.user.has_perm('auth.add_group'):
             form = GroupCreationForm(request.POST)
@@ -183,7 +182,6 @@ def groups(request):
                 return redirect('permissions:groups')
         else:
             messages.add_message(request, messages.ERROR, 'Vous n\'avez pas les droits pour créer un groupe.')
-
     form = GroupCreationForm()
     return render(request, 'permissions/groups.html', {'form': form})
 
