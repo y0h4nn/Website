@@ -97,7 +97,6 @@ def admin_recurrent(request):
     return render(request, 'events/admin/recurrent_index.html', context)
 
 
-
 @bde_member
 def admin_edit(request, eid):
     e = get_object_or_404(Event, id=eid, model=False)
@@ -142,15 +141,15 @@ def admin_export_csv(request, eid):
     response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(event.name)
 
     writer = csv.writer(response)
-    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From'])
+    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From', 'Entrée', 'Externe'])
     for r in reg:
-        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB"]
+        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB", r.in_date, '0']
         writer.writerow(line)
     for r in ext_reg:
-        line = ["", "", r.first_name, r.last_name, r.mail, r.via.name]
+        line = ["", "", r.first_name, r.last_name, r.mail, r.via.name, r.in_date, '1']
         writer.writerow(line)
     for r in invits:
-        line = ["", "", r.first_name, r.last_name, r.mail, str(r.user.profile)]
+        line = ["", "", r.first_name, r.last_name, r.mail, str(r.user.profile), r.in_date, '1']
         writer.writerow(line)
     return response
 
