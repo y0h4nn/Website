@@ -133,7 +133,6 @@ def memberlist(request):
 
 @permission_required('bde.change_contributor')
 def export_contributors(request):
-    print(timezone.now().date())
     users = User.objects.filter(contribution__end_date__gt=timezone.now().date()).select_related('profile').select_related('contribution')
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="cotisants.csv"'
