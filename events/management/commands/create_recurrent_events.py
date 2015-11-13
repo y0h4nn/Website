@@ -8,8 +8,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for event in RecurrentEvent.objects.all():
-            if event.last_created is None or event.last_created < timezone.now() + datetime.timedelta(days=14):
-                self.update_event(event)
+            while True:
+                if event.last_created is None or event.last_created < timezone.now() + datetime.timedelta(days=14):
+                    self.update_event(event)
+                else:
+                    break
         self.stdout.write('Successfully created events')
 
     def update_event(self, event):
