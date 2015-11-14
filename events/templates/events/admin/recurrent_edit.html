@@ -26,6 +26,9 @@
 {% endblock %}
 
 {% block main %}
+    <p>
+        Les modifications ne prendrons effet que lors de la prochaine génération de cet évènement.
+    </p>
     <form enctype="multipart/form-data" action="{% url 'events:admin_edit_recurrent' eid=event.id %}" method="POST">
         {% csrf_token %}
         {{ event_form.as_p }}
