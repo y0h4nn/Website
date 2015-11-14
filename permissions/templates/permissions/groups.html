@@ -26,7 +26,7 @@
 
 {% block menu %}
     {% menu_item 'Utilisateurs' 'permissions:users' %}
-    {% menu_item 'Groups' 'permissions:groups' %}
+    {% menu_item 'Groupes' 'permissions:groups' %}
 {% endblock%}
 
 {% block main %}
@@ -49,7 +49,7 @@
                                         return;
                                     }
                                     this.setUntoggled();
-                                    this.element.innerHTML = 'ajouter';
+                                    this.element.innerHTML = 'Ajouter';
                                 }.bind(this));
                             }
                             else{
@@ -59,16 +59,16 @@
                                         return;
                                     }
                                     this.setToggled();
-                                    this.element.innerHTML = 'supprimer';
+                                    this.element.innerHTML = 'Supprimer';
                                 }.bind(this));
                             }
                         };
                         if(user.in_group){
-                            var text = 'supprimer';
+                            var text = 'Supprimer';
                             var toggled = true;
                         }
                         else{
-                            var text = 'ajouter';
+                            var text = 'Ajouter';
                             var toggled = false;
                         }
 
