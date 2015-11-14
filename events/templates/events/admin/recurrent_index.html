@@ -13,28 +13,32 @@
 {% endblock %}
 
 {% block main %}
-    <table>
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Délai</th>
-                <th>Date du dernier créé</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for event in events %}
+    {% if events %}
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ event }}</td>
-                    <td>{{ event.delay }} jours</td>
-                    <td>{{ event.last_created }}</td>
-                    <td class="action_cell">
-                        <a href="{% url 'events:admin_edit_recurrent' eid=event.id %}"><i class="fa fa-pencil"></i></a>
-                        <a href="{% url 'events:admin_del_recurrent' eid=event.id %}"><i class="fa fa-trash-o"></i></a>
-                    </td>
+                    <th>Nom</th>
+                    <th>Délai</th>
+                    <th>Date du dernier créé</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td>{{ event }}</td>
+                        <td>{{ event.delay }} jours</td>
+                        <td>{{ event.last_created }}</td>
+                        <td class="action_cell">
+                            <a href="{% url 'events:admin_edit_recurrent' eid=event.id %}"><i class="fa fa-pencil"></i></a>
+                            <a href="{% url 'events:admin_del_recurrent' eid=event.id %}"><i class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Il n'y a pas d'évènements récurrents</p>
+    {% endif %}
 {% endblock %}
 
