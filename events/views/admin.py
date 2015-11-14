@@ -1,18 +1,18 @@
 from ..forms import EventForm, RecurrentEventForm, RecurrentEventEditForm
 from ..models import Event, Inscription, ExternInscription, Invitation, RecurrentEvent
-from bde.shortcuts import bde_member
 
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from django.contrib.auth.decorators import permission_required, user_passes_test
 
 import csv
 import json
 import uuid
 
 
-@bde_member
+@user_passes_test(lambda u: u.has_module_perms('events'))
 def admin_index(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -23,7 +23,7 @@ def admin_index(request):
     return render(request, 'events/admin/index.html', context)
 
 
-@bde_member
+@user_passes_test(lambda u: u.has_module_perms('events'))
 def admin_list_events(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -40,7 +40,7 @@ def admin_list_events(request):
         } for evt in evts]})
 
 
-@bde_member
+@permission_required('events.manage_event')
 def admin_add(request):
     if request.method == "POST":
         form = EventForm(request.POST, request.FILES or None)
@@ -55,7 +55,7 @@ def admin_add(request):
     return render(request, 'events/admin/add.html', context)
 
 
-@bde_member
+@permission_required('events.manage_recurrent_event')
 def admin_add_recurrent(request):
     if request.method == "POST":
         form = RecurrentEventForm(request.POST, request.FILES or None)
@@ -71,7 +71,7 @@ def admin_add_recurrent(request):
     return render(request, 'events/admin/recurrent_add.html', context)
 
 
-@bde_member
+@permission_required('events.manage_recurrent_event')
 def admin_edit_recurrent(request, eid):
     e = get_object_or_404(RecurrentEvent, id=eid, model=True)
     form = RecurrentEventEditForm(request.POST or None, request.FILES or None, instance=e)
@@ -84,20 +84,20 @@ def admin_edit_recurrent(request, eid):
     return render(request, 'events/admin/recurrent_edit.html', context)
 
 
-@bde_member
+@permission_required('events.manage_recurrent_event')
 def admin_del_recurrent(request, eid):
     e = get_object_or_404(RecurrentEvent, id=eid, model=True)
     e.delete()
     return redirect('events:admin_recurrent')
 
 
-@bde_member
+@permission_required('events.manage_recurrent_event')
 def admin_recurrent(request):
     context = {'events': RecurrentEvent.objects.all()}
     return render(request, 'events/admin/recurrent_index.html', context)
 
 
-@bde_member
+@permission_required('events.manage_event')
 def admin_edit(request, eid):
     e = get_object_or_404(Event, id=eid, model=False)
     form = EventForm(request.POST or None, request.FILES or None, instance=e)
@@ -110,7 +110,7 @@ def admin_edit(request, eid):
     return render(request, 'events/admin/edit.html', context)
 
 
-@bde_member
+@permission_required('events.access_list')
 def admin_list_registrations(request, eid):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -131,7 +131,7 @@ def admin_list_registrations(request, eid):
     return render(request, 'events/admin/list_registrations.html', {'event': e, 'reg': reg, 'ext_reg': ext_reg, 'invits': invits})
 
 
-@bde_member
+@permission_required('events.access_list')
 def admin_export_csv(request, eid):
     event = get_object_or_404(Event, id=eid, model=False)
     reg = Inscription.objects.filter(event=event).select_related("user__profile")

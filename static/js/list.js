@@ -81,6 +81,17 @@ var BaseList = function(containerId, buildCallback){
             this.matchingElems = this.elems.filter(this.match, this);
     };
 
+    this.removeElems = function(filter){
+        for(var i in this.elems){
+            if(filter(this.elems[i])){
+                this.listelement.removeChild(this.elems[i].element);
+                this.elems.splice(i, 1);
+            }
+        }
+        this.updateElems();
+        this.render();
+    };
+
     this.searchInput.addEventListener('keyup', function(){
         if(this.timer){
             clearTimeout(this.timer);

@@ -3,12 +3,11 @@ from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db import IntegrityError
 from django.conf import settings
 from django.http import HttpResponse
 from . import models
-from .shortcuts import bde_member
 import csv
 
 
@@ -16,7 +15,7 @@ def index(request):
     return render(request, 'bde/index.html', {})
 
 
-@bde_member
+@permission_required('bde.change_contributor')
 def contributors(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
@@ -57,7 +56,7 @@ def contributors(request):
         return JsonResponse({'error': None})
     return render(request, 'bde/contributors.html', {})
 
-@bde_member
+@permission_required('bde.change_contributor')
 def detail(request, id):
     user = User.objects.get(id=id);
 
@@ -82,7 +81,7 @@ def detail(request, id):
 
     return render(request, 'bde/contributors_detail.html', context)
 
-@bde_member
+@permission_required('auth.change_permission')
 def members(request):
     context = {}
 
@@ -112,7 +111,7 @@ def members(request):
     return render(request, 'bde/members.html', context)
 
 
-@bde_member
+@permission_required('auth.change_permission')
 def memberlist(request):
     bde_group = Group.objects.get(name=settings.BDE_GROUP_NAME)
     users = [
@@ -132,9 +131,8 @@ def memberlist(request):
     return JsonResponse({'users': users})
 
 
-@bde_member
+@permission_required('bde.change_contributor')
 def export_contributors(request):
-    print(timezone.now().date())
     users = User.objects.filter(contribution__end_date__gt=timezone.now().date()).select_related('profile').select_related('contribution')
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="cotisants.csv"'

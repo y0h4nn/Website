@@ -23,7 +23,6 @@ Arnaud
 #XXX add unit testing
 
 
-from django.utils import timezone
 from collections import Counter
 from django.contrib.auth.models import User
 from django.db import models, IntegrityError, transaction
@@ -31,6 +30,7 @@ from django.conf import settings
 from bde.models import Contributor
 from events.models import Event, Inscription
 from notifications.shortcuts import notify
+import datetime
 
 
 ACTIONS = [
@@ -57,9 +57,15 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.FloatField()
     action = models.CharField(max_length=100, choices=ACTIONS, null=True, blank=True)
-    event = models.ForeignKey(Event, null=True, blank=True, on_delete=models.SET_NULL, limit_choices_to={'start_time__gt': timezone.now})
+    event = models.ForeignKey(Event, null=True, blank=True, on_delete=models.SET_NULL, limit_choices_to={'start_time__gt': datetime.datetime.now()})
     description = models.TextField()
     enabled = models.BooleanField(default=True)
+
+    class Meta:
+        permissions = (
+            ('sell_product', 'Can sell products'),
+            ('manage_product', 'Can manage products and packs'),
+        )
 
     def __str__(self):
         return self.name
@@ -192,6 +198,10 @@ class BuyingHistory(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT)
 
+    class Meta:
+        permissions = (
+            ('view_history', 'Can view history'),
+        )
 
     @staticmethod
     def get_product_buyers(product):

@@ -1,8 +1,9 @@
 from ..models import Event, Inscription, ExternInscription, Invitation
-from bde.shortcuts import bde_member, is_contributor
+from bde.shortcuts import is_contributor
 from shop.models import BuyingHistory
 from django.db.models import Count
 
+from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
@@ -11,7 +12,7 @@ from django.templatetags.static import static
 import json
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def admin_management(request, eid):
     event = get_object_or_404(Event, id=eid)
     if event.gestion is None:
@@ -21,7 +22,7 @@ def admin_management(request, eid):
 
     return render(request, 'events/admin/management_index.html', context)
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_list_users(request, eid):
     e = get_object_or_404(Event, id=eid)
     ret = {}
@@ -54,7 +55,7 @@ def management_list_users(request, eid):
         return JsonResponse(ret)
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_info_user(request, eid, type, iid):
     e = get_object_or_404(Event, id=eid)
     context = {'type': type, 'iid': iid, 'event': e}
@@ -70,7 +71,7 @@ def management_info_user(request, eid, type, iid):
     return render(request, "events/admin/info_popup.html", context)
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_ack(request, eid, type, iid):
     e = get_object_or_404(Event, id=eid)
     if type == "reg":
@@ -85,7 +86,7 @@ def management_ack(request, eid, type, iid):
     return render(request, "events/admin/info_popup.html")
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_nl_ack(request):
     req = json.loads(request.read().decode())
     e = get_object_or_404(Event, id=req['eid'])
@@ -103,7 +104,7 @@ def management_nl_ack(request):
     return JsonResponse({"status": 1})
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_nl_del(request, eid, type, iid):
     e = get_object_or_404(Event, id=eid)
     klass = ""
@@ -124,7 +125,7 @@ def management_nl_del(request, eid, type, iid):
     return JsonResponse({"status": 1, "klass": klass})
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_nl_info_user(request, eid, type, iid):
     e = get_object_or_404(Event, id=eid)
     context = {'type': type, 'iid': iid, 'eid': eid, 'event': e}
@@ -141,7 +142,7 @@ def management_nl_info_user(request, eid, type, iid):
     return render(request, "events/admin/info_nl_popup.html", context)
 
 
-@bde_member
+@permission_required('events.manage_entries')
 def management_nl_ack_popup(request, iid, eid):
     context = {"eid": eid, "iid": iid}
     return render(request, "events/admin/nl_ack_popup.html", context)

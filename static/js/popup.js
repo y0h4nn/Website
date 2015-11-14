@@ -12,7 +12,7 @@ function Popup(title){
     this.window = document.createElement('div');
     this.header = document.createElement('header');
     this.h1 = document.createElement('h1');
-    this.h1.innerHTML = title;
+    this.h1.appendChild(document.createTextNode(title));
     this.closeBtn = document.createElement('button');
     this.closeBtn.innerHTML = "<i class='fa fa-close'></i>";
     this.closeBtn.setAttribute('type', 'button');
@@ -48,7 +48,6 @@ Popup.prototype = {
             this.onClose();
         }
     }
-
 }
 
 
@@ -223,6 +222,23 @@ UserSelectionPopup.prototype = Object.create(Popup.prototype, {
 
 UserSelectionPopup.prototype.constructor = UserSelectionPopup;
 
+
+/*
+ * User list popup
+ */
+
+function UserListPopup(title, listProvider, buildCallback){
+    Popup.call(this, title);
+    this.userListContainer = document.createElement('div');
+    this.userListContainer.id = 'userlist_popup';
+    this.main.appendChild(this.userListContainer);
+    this.userList = new UserList(this.userListContainer.id, listProvider, buildCallback);
+}
+
+UserListPopup.prototype = Object.create(Popup.prototype, {
+});
+
+UserListPopup.prototype.constructor = UserListPopup;
 
 
 /*

@@ -13,9 +13,15 @@
 {% endblock %}
 
 {% block menu %}
-    {% menu_item "Liste des évènements" "events:admin_index" %}
-    {% menu_item "Ajouter un évènement" "events:admin_add" %}
-    {% menu_item "Evènements récurrents" "events:admin_recurrent" %}
+    {% if perms.events %}
+        {% menu_item "Liste des évènements" "events:admin_index" %}
+    {% endif %}
+    {% if perms.events.manage_event %}
+        {% menu_item "Ajouter un évènement" "events:admin_add" %}
+    {% endif %}
+    {% if perms.events.manage_recurrent_event %}
+        {% menu_item "Evènements récurrents" "events:admin_recurrent" %}
+    {% endif %}
 {% endblock %}
 
 {% block styles %}
@@ -47,7 +53,9 @@
 
                 return [
                     new EventList.Action('Details', details),
-                    new EventList.Action('Supprimer', del_event),
+                    {% if perms.events.manage_event %}
+                        new EventList.Action('Supprimer', del_event),
+                    {% endif %}
                 ];
             });
         }

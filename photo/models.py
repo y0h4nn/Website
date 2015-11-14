@@ -2,6 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 from events.models import Inscription, Event, ExternInscription
 
+class StandaloneAppPermissions(models.Model):
+    class Meta:
+        permissions = (
+            ('manage_access_policy', 'Can manage access policies'),
+        )
 
 class AccessPolicy(models.Model):
     path = models.CharField(max_length=255)

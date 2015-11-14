@@ -83,6 +83,11 @@ class UserRequest(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
 
+    class Meta:
+        permissions = (
+            ('manage_account_request', 'Can manage account request'),
+        )
+
     def __str__(self):
         return self.username
 

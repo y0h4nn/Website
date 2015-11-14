@@ -35,32 +35,29 @@
                     <th>prix</th>
                     <th>Moyen de paiement</th>
                     <th>Type</th>
-                    <th></th>
+                    {% if perms.shop.delete_history %}
+                        <th></th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
                 {% for item in history %}
-                    {% if item.type == 'pack' %}
-                        <tr>
-                            <td>{{ item.pack.name }}</td>
-                            <td>{{ item.user.profile }}</td>
-                            <td>{{ item.date }}</td>
+                    <tr>
+                        <td>{{ item.pack.name }}</td>
+                        <td>{{ item.user.profile }}</td>
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.payment_mean }}</td>
+                        {% if item.type == 'pack' %}
                             <td>{{ item.pack.price }} €</td>
-                            <td>{{ item.payment_mean }}</td>
                             <td>Pack</td>
-                            <td><a href="{% url 'shop:history_delete' hid=item.id %}"><i class="fa fa-trash-o red"></i></a></td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td>{{ item.product.name }}</td>
-                            <td>{{ item.user.profile }}</td>
-                            <td>{{ item.date }}</td>
+                        {% else %}
                             <td>{{ item.product.price }} €</td>
-                            <td>{{ item.payment_mean }}</td>
                             <td>Produit</td>
+                        {% endif %}
+                        {% if perms.shop.delete_buyinghistory %}
                             <td><a href="{% url 'shop:history_delete' hid=item.id %}"><i class="fa fa-trash-o red"></i></a></td>
-                        </tr>
-                    {% endif %}
+                        {% endif %}
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>

@@ -6,7 +6,9 @@
 
 {% block menu %}
     {% menu_item "Administration" "poll:admin" %}
-    {% menu_item "Ajouter un sondage" 'poll:admin_add_poll' %}
+    {% if perms.poll.add_poll %}
+        {% menu_item "Ajouter un sondage" 'poll:admin_add_poll' %}
+    {% endif %}
 {% endblock %}
 
 {% block scripts %}
@@ -37,7 +39,9 @@
                 }
                 return [
                     new PollList.Action('Details', details),
-                    new PollList.Action('Supprimer', del),
+                    {% if perms.poll.delete_poll %}
+                        new PollList.Action('Supprimer', del),
+                    {% endif %}
                 ];
             });
         });

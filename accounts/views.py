@@ -1,9 +1,10 @@
 import uuid
+import hashlib
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
 from django.contrib import auth
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
@@ -11,7 +12,6 @@ from django.db import transaction
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 from bde.models import Contributor
-from bde.shortcuts import bde_member
 from notifications.shortcuts import notify
 from . import forms
 from . import models
@@ -148,7 +148,7 @@ def get_contrib(user):
     except Contributor.DoesNotExist:
         return None
 
-@login_required()
+@login_required
 def members(request):
     if request.method == 'OPTIONS':
         users = [
@@ -168,6 +168,20 @@ def members(request):
         return JsonResponse({'users': users})
 
     return render(request, 'accounts/list.html', {})
+
+
+@login_required
+def groups(request):
+    if request.method == 'OPTIONS':
+        groups = [
+            {
+                'id': group.id,
+                'name': group.name,
+                'color': '#%s' % (hashlib.md5(group.name.encode()).hexdigest()[:6]),
+            } for group in Group.objects.all()
+        ]
+        return JsonResponse({'groups': groups})
+    return redirect('accounts:list')
 
 
 def account_request(request):
@@ -194,7 +208,7 @@ def account_request(request):
     return render(request, 'accounts/request.html', context)
 
 
-@bde_member
+@permission_required('accounts.manage_account_request')
 def list_request(request, error=None):
     context = {
         'requests': models.UserRequest.objects.all(),
@@ -222,7 +236,7 @@ REJECT_MAIL_TPL="""Bonjour {first_name} {last_name},
 Votre demande de création de compte sur enib.net à été rejetée.
 """
 
-@bde_member
+@permission_required('accounts.manage_account_request')
 def accept_request(request, rid):
     user_request = get_object_or_404(models.UserRequest, id=rid)
     username = ("%s_%s" % (user_request.first_name[0], user_request.last_name[:6])).lower()
@@ -260,7 +274,7 @@ def accept_request(request, rid):
     return redirect(reverse('accounts:list_request'))
 
 
-@bde_member
+@permission_required('accounts.manage_account_request')
 def reject_request(request, rid):
     user_request = get_object_or_404(models.UserRequest, id=rid)
     user_request.delete()

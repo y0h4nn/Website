@@ -32,7 +32,7 @@
             {% endif %}
             {% for album in albums %}
                 <div class="album">
-                    {% if user_is_bde_member or request.user.is_superuser %}
+                    {% if perms.photo.manage_access_policy %}
                         <a href="{% url 'photo:permissions' path=album.path %}" class="float_right"><i class="fa fa-unlock-alt"></i></a>
                     {% endif %}
                     <a href="{% url 'photo:browse' path=album.path %}"><i class="fa fa-folder"></i> {{ album.name }}</a>

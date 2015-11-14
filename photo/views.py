@@ -5,9 +5,9 @@ from django.contrib import messages
 from django.http import Http404
 from django.conf import settings
 from django.db import IntegrityError
+from django.contrib.auth.decorators import permission_required
 from . import forms
 from . import models
-from bde.shortcuts import bde_member, is_bde_member
 
 # photo directory name
 PHOTO_DIRNAME = "photo"
@@ -41,7 +41,7 @@ def create_thumbnail(realpath, filename):
 
 
 def can_access(path, user=None, email=None):
-    if user and (user.is_superuser or is_bde_member(user)):
+    if user and user.has_perm('photo.manage_access_policy'):
         return True
 
     policies = models.AccessPolicy.list(path)
@@ -116,7 +116,7 @@ def browse(request, path):
     return render(request, 'photo/browse.html', context)
 
 
-@bde_member
+@permission_required('photo.manage_access_policy')
 def permissions(request, path):
     form_instances = []
 
@@ -160,7 +160,8 @@ def permissions(request, path):
     }
     return render(request, 'photo/permissions.html', context)
 
-@bde_member
+
+@permission_required('photo.manage_access_policy')
 def permissions_delete(request, model, pid):
     model_classes = models.get_models()
     if model in model_classes:

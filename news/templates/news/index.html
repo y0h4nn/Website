@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block menu %}
-    {% if request.user.is_active and user_is_bde_member %}
+    {% if perms.news.add_news %}
         {% menu_item 'Actualités' 'news:index' %}
         {% menu_item 'Ajouter une actualité' 'news:create' %}
     {% endif %}
@@ -33,8 +33,10 @@
                     <h1>{{ new.title }}</h1>
                     <h2>
                         Le {{ new.pub_date }} par {{ new.author.profile }}
-                        {% if user_is_bde_member %}
+                        {% if perms.news.change_news %}
                             <a href="{% url 'news:edit' nid=new.id %}" title="Editer"><i class="fa fa-pencil"></i></a>
+                        {% endif %}
+                        {% if perms.news.delete_news %}
                             <a href="{% url 'news:delete' nid=new.id %}" class="red" title="Supprimer"><i class="fa fa-trash-o"></i></a>
                         {% endif %}
                     </h2>

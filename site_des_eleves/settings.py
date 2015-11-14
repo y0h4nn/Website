@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'shop',
     'pizza',
     'help',
+    'permissions',
     'photo',
     'enibar',
 )
@@ -79,7 +80,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'notifications.context_processors.check_notifications',
-                'bde.context_processors.bde_member',
             ],
         },
     },
@@ -148,6 +148,70 @@ EMAIL_PORT=587
 EMAIL_HOSt_USER=""
 EMAIL_HOST_PASSWORD=""
 EMAIL_USE_TLS=True
+
+
+
+# Permissions
+PERM_ENABLE_WHITELIST = True
+PERM_WHITELIST = {
+    'auth': [
+        'add_group',
+        'delete_group',
+        'change_permission',
+    ],
+
+    'bde': [
+        'change_contributor',
+    ],
+
+    'accounts': [
+        'manage_account_request',
+    ],
+
+    'carshare': [
+        'change_announcement',
+        'delete_announcement',
+        'delete_registration',
+    ],
+
+    'events': [
+        'manage_event',
+        'manage_recurrent_event',
+        'access_list',
+        'manage_entries',
+    ],
+
+    'news': [
+        'delete_comment',
+        'add_news',
+        'change_news',
+        'delete_news',
+    ],
+
+    'poll': [
+        'add_poll',
+        'change_poll',
+        'delete_poll',
+    ],
+
+
+    'shop': [
+        'view_history',
+        'delete_buyinghistory',
+        'sell_product',
+        'manage_product',
+    ],
+
+    'pizza': [
+        'manage_pizza',
+    ],
+
+    'photo': [
+        'manage_access_policy',
+    ]
+
+}
+
 
 # Application settings
 BDE_GROUP_NAME = 'BDE'
