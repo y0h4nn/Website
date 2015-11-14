@@ -94,7 +94,7 @@ class Event(models.Model):
 
 class RecurrentEvent(Event):
     delay = models.IntegerField(default=1)
-    last_created = models.DateField(null=True, blank=True, default=None)
+    last_created = models.DateTimeField(null=True, blank=True, default=None)
 
     class Meta:
         permissions = (

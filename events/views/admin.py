@@ -1,4 +1,4 @@
-from ..forms import EventForm, RecurrentEventForm
+from ..forms import EventForm, RecurrentEventForm, RecurrentEventEditForm
 from ..models import Event, Inscription, ExternInscription, Invitation, RecurrentEvent
 
 from django.core.urlresolvers import reverse
@@ -74,7 +74,7 @@ def admin_add_recurrent(request):
 @permission_required('events.manage_recurrent_event')
 def admin_edit_recurrent(request, eid):
     e = get_object_or_404(RecurrentEvent, id=eid, model=True)
-    form = RecurrentEventForm(request.POST or None, request.FILES or None, instance=e)
+    form = RecurrentEventEditForm(request.POST or None, request.FILES or None, instance=e)
     if form.is_valid():
         if not form.cleaned_data['allow_invitations']:
             Invitation.objects.filter(event=e).delete()
@@ -141,15 +141,15 @@ def admin_export_csv(request, eid):
     response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(event.name)
 
     writer = csv.writer(response)
-    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From'])
+    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From', 'Entrée', 'Externe'])
     for r in reg:
-        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB"]
+        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB", r.in_date, '0']
         writer.writerow(line)
     for r in ext_reg:
-        line = ["", "", r.first_name, r.last_name, r.mail, r.via.name]
+        line = ["", "", r.first_name, r.last_name, r.mail, r.via.name, r.in_date, '1']
         writer.writerow(line)
     for r in invits:
-        line = ["", "", r.first_name, r.last_name, r.mail, str(r.user.profile)]
+        line = ["", "", r.first_name, r.last_name, r.mail, str(r.user.profile), r.in_date, '1']
         writer.writerow(line)
     return response
 
