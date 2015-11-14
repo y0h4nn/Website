@@ -1,6 +1,7 @@
 from django.forms import ModelForm, ClearableFileInput, SplitDateTimeField, IntegerField
 from django.utils.safestring import mark_safe
 from .models import Event, ExternInscription, ExternLink, Invitation, RecurrentEvent
+from core.forms import ReadOnlyFieldsMixin
 
 
 class WrapperClearableinput(ClearableFileInput):
@@ -52,11 +53,14 @@ class EventForm(ModelForm):
 
 
 class RecurrentEventForm(EventForm):
-    delay = IntegerField()
+    delay = IntegerField(label="Délai (en jours)")
     class Meta(EventForm.Meta):
         model = RecurrentEvent
-        exclude = ["uuid", "last_created"]
+        exclude = ["uuid", "last_created", "model"]
 
+
+class RecurrentEventEditForm(RecurrentEventForm, ReadOnlyFieldsMixin):
+    readonly_fields = ('start_time', 'end_time', 'invitations_start', 'end_inscriptions')
 
 
 class ExternInscriptionForm(ModelForm):

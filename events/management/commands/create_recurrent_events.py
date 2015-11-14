@@ -1,7 +1,8 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from events.models import RecurrentEvent, Event
 from django.utils import timezone
 import datetime
+
 
 class Command(BaseCommand):
     help = 'Create events based on reucrrent events.'
@@ -21,6 +22,7 @@ class Command(BaseCommand):
         if event.last_created is None:  # First creation
             e = Event.objects.create(**{field: value for field, value in event.__dict__.items() if field in [field.column for field in Event._meta.fields if field.column not in ['id', 'model']]})
             e.save()
+
             event.last_created = e.start_time
             event.save()
             print("First creation of %s, start = %s (delay=%d)" % (event, event.start_time, event.delay))
@@ -29,12 +31,12 @@ class Command(BaseCommand):
             e = Event.objects.create(**{field: value for field, value in event.__dict__.items() if field in [field.column for field in Event._meta.fields if field.column not in ['id', 'model']]})
             e.start_time += delta_dates
             e.end_time += delta_dates
-            e.end_inscriptions +=delta_dates
+            e.end_inscriptions += delta_dates
             if e.invitations_start is not None:
                 e.invitations_start += delta_dates
             e.save()
+
             event.last_created = e.start_time
             event.save()
             print("Creating event %s for date %s" % (event, event.last_created))
-
 

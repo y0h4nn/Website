@@ -1,4 +1,4 @@
-from ..forms import EventForm, RecurrentEventForm
+from ..forms import EventForm, RecurrentEventForm, RecurrentEventEditForm
 from ..models import Event, Inscription, ExternInscription, Invitation, RecurrentEvent
 from bde.shortcuts import bde_member
 
@@ -74,7 +74,7 @@ def admin_add_recurrent(request):
 @bde_member
 def admin_edit_recurrent(request, eid):
     e = get_object_or_404(RecurrentEvent, id=eid, model=True)
-    form = RecurrentEventForm(request.POST or None, request.FILES or None, instance=e)
+    form = RecurrentEventEditForm(request.POST or None, request.FILES or None, instance=e)
     if form.is_valid():
         if not form.cleaned_data['allow_invitations']:
             Invitation.objects.filter(event=e).delete()
