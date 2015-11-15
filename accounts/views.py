@@ -163,7 +163,7 @@ def members(request):
                 'nickname': user.profile.nickname,
                 'contribution': get_contrib(user),
                 'email': user.email,
-            } for user in User.objects.select_related('profile').select_related('contribution').all()
+            } for user in User.objects.select_related('profile').select_related('contribution').all().only('id', 'first_name', 'last_name', 'username', 'profile', 'email', 'contribution',)
         ]
         return JsonResponse({'users': users})
 
