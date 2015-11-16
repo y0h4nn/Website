@@ -88,7 +88,7 @@
             </div>
         </div>
 
-        {% if perms.event.manage_event and event.allow_extern %}
+        {% if perms.events.manage_event and event.allow_extern %}
             {% for link in links %}
                 <div class="flex_container details">
                     <div class="flex expand">
