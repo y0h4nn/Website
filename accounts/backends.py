@@ -37,12 +37,8 @@ class ImapAuth(BaseAuth):
                 try:
                     srv.login(username, password)
                     user = User.objects.create_user(username, email, password)
-
                     enib_group = Group.objects.get(name='Enib')
-                    all_group = Group.objects.get(name='Tous')
                     enib_group.user_set.add(user)
-                    all_group.user_set.add(user)
-
                     user.save()
                 except (imaplib.IMAP4.error, IntegrityError):
                     pass
