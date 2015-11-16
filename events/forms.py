@@ -44,7 +44,7 @@ class EventForm(ModelForm):
     invitations_start = SplitDateTimeField(label="Début des invitations", required=False)
     class Meta:
         model = Event
-        exclude = ["uuid"]
+        exclude = ["uuid", "model"]
         labels = {'name': "Nom", 'location': "Lieu", 'private': "Privé",
                   'allow_extern': "Autoriser les exterieurs", 'limited': "Nombre d'inscriptions limité",
                   'max_inscriptions': "Nombre maximum d'inscriptions", 'allow_invitations': "Autoriser les invitations",
