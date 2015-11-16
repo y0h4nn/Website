@@ -103,6 +103,11 @@ DATABASES = {
 }
 
 
+FIXTURE_DIRS = (
+   'fixtures/',
+)
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -225,6 +230,18 @@ import sys
 import os
 
 if 'test' in sys.argv:
+    from django.db.models.signals import post_migrate
+    from django.core.management import call_command
+
+    def my_callback(sender, **kwargs):
+        call_command(
+            'loaddata',
+            'groups.json',
+            verbosity=0
+        )
+
+    post_migrate.connect(my_callback)
+
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
