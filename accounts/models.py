@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from webmail.models import WebmailSettings
 
 
@@ -98,4 +98,6 @@ def create_favorites(sender, instance, created, **kwargs):
         p = Profile.objects.create(user=instance)
         Address.objects.create(profile=p)
         WebmailSettings.objects.create(user=instance)
+        all_group = Group.objects.get(name='Tous')
+        all_group.user_set.add(instance)
 
