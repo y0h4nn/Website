@@ -98,6 +98,9 @@ def create_favorites(sender, instance, created, **kwargs):
         p = Profile.objects.create(user=instance)
         Address.objects.create(profile=p)
         WebmailSettings.objects.create(user=instance)
-        all_group = Group.objects.get(name='Tous')
-        all_group.user_set.add(instance)
+        try:
+            all_group = Group.objects.get(name='Tous')
+            all_group.user_set.add(instance)
+        except Group.DoesNotExist:
+            pass
 
