@@ -38,4 +38,5 @@ urlpatterns = [
     url(r'^permissions/', include('permissions.urls', namespace='permissions')),
     url(r'^photo/', include('photo.urls', namespace='photo')),
     url(r'^enibar/', include('enibar.urls', namespace='enibar')),
+    url('^api/', include('api.urls')),
 ]

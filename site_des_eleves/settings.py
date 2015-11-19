@@ -37,6 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'api',
     'core',
     'notifications',
     'accounts',
@@ -220,6 +222,14 @@ PERM_WHITELIST = {
 
 # Application settings
 BDE_GROUP_NAME = 'BDE'
+
+
+# Rest framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ]
+}
 
 try:
     from .local_settings import *
