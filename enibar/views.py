@@ -1,7 +1,9 @@
-from django.shortcuts import render
-from django.core import serializers
 from .models import Note, Category, PriceDescription, Product, Price, HistoryLine
+from django.conf import settings
+from django.core import serializers
+from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 
@@ -10,6 +12,14 @@ def get_req_or_404(request):
         return json.loads(request.read().decode())
     except json.JSONDecodeError:
         raise Http404
+
+
+def check_token(request):
+    if 'token' not in request:
+        raise PermissionDenied
+    token = request.pop('token')
+    if token != settings.AUTH_SYNC_ENIBAR_TOKEN:
+        raise PermissionDenied
 
 
 def create_or_update(cls, foreign_id, **kwargs):
@@ -24,13 +34,16 @@ def create_or_update(cls, foreign_id, **kwargs):
 
 
 def _create_view(cls):
+    @csrf_exempt
     def view(request):
         if request.method == "PUT":
             req = get_req_or_404(request)
+            check_token(req)
             id_ = req.pop('id')
             create_or_update(cls, id_, **req)
         elif request.method == "DELETE":
             req = get_req_or_404(request)
+            check_token(req)
             id_ = req.pop('id')
             cls.objects.get(foreign_id=id_).delete()
         elif request.method == "GET":

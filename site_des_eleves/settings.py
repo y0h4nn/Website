@@ -220,6 +220,7 @@ PERM_WHITELIST = {
 
 # Application settings
 BDE_GROUP_NAME = 'BDE'
+AUTH_SYNC_ENIBAR_TOKEN = 'changeme'
 
 try:
     from .local_settings import *
