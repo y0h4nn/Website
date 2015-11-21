@@ -37,6 +37,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    **Readonly** api to gather user informations.
+    """
     queryset = User.objects.prefetch_related('profile').all()
     serializer_class = UserSerializer
     lookup_field = 'username'
