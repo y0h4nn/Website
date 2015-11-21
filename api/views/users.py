@@ -6,12 +6,11 @@ from accounts.models import Profile
 
 
 
-class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     display_name = serializers.CharField(source='__str__')
     class Meta:
         model = Profile
         fields = [
-            'id',
             'nickname',
             'display_name',
             'phone',
@@ -24,6 +23,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = [
             'id',
+            'url',
             'username',
             'first_name',
             'last_name',
