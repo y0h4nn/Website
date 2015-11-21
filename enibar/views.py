@@ -60,9 +60,5 @@ def _create_view(cls):
 
 
 request_note = _create_view(Note)
-request_category = _create_view(Category)
-request_price_description = _create_view(PriceDescription)
-request_product = _create_view(Product)
-request_price = _create_view(Price)
 request_history = _create_view(HistoryLine)
 
