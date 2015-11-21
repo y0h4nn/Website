@@ -30,12 +30,15 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             'email',
             'profile',
         ]
+        extra_kwargs = {
+            'url': {'lookup_field': 'username'}
+        }
 
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.prefetch_related('profile').all()
     serializer_class = UserSerializer
-
+    lookup_field = 'username'
     class Meta:
         methods = ['GET']
