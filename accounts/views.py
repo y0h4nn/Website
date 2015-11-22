@@ -1,5 +1,6 @@
 import uuid
 import hashlib
+from core.cache import cache_unless
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
@@ -109,7 +110,6 @@ def edit(request, username):
         else:
             addressform = forms.AddressForm(instance=user.profile.address)
 
-
         if error:
             context = {
                 'userform': userform.as_p(),
@@ -122,9 +122,7 @@ def edit(request, username):
             return render(request, 'accounts/edit.html', context)
         else:
             return redirect(reverse('accounts:edit', kwargs={'username': username}))
-
     else:
-
         userform = forms.UserForm(instance=user)
         passwordform = auth.forms.PasswordChangeForm(request.user)
         profileform = forms.ProfileForm(instance=user.profile)
@@ -148,7 +146,9 @@ def get_contrib(user):
     except Contributor.DoesNotExist:
         return None
 
+
 @login_required
+@cache_unless("members")
 def members(request):
     if request.method == 'OPTIONS':
         users = [

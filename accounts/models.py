@@ -1,10 +1,11 @@
-from django.templatetags.static import static
-from django.db import models
+from core.cache import invalid_cache
 from django.conf import settings
+from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import User, Group
+from django.templatetags.static import static
 from webmail.models import WebmailSettings
 
 
@@ -94,10 +95,18 @@ class UserRequest(models.Model):
 
 @receiver(post_save, sender=User)
 def create_favorites(sender, instance, created, **kwargs):
+    updated = kwargs['update_fields']
+    if updated != frozenset({'last_login'}):
+        invalid_cache("members")
     if created:
         p = Profile.objects.create(user=instance)
         Address.objects.create(profile=p)
         WebmailSettings.objects.create(user=instance)
         all_group = Group.objects.get(name='Tous')
         all_group.user_set.add(instance)
+
+
+@receiver(post_save, sender=Profile)
+def cache_profile_handler(sender, **kwargs):
+    invalid_cache("members")
 
