@@ -5,5 +5,6 @@ from . import views
 PREFIX = "core:"
 
 urlpatterns = [
-    url(r'^$', views.settings, name='settings'),
+    url('^$', views.settings, name='settings'),
+    url('^api$', views.api, name='api'),
 ]

@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block styles %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block title %}
+  Paramètres utilisateur
+{% endblock %}
+
+{% block header %}
+  Paramètres utilisateur
+{% endblock %}
+
+{% block menu %}
+    {% menu_item 'Général' 'core:settings' %}
+    {% menu_item 'API rest' 'core:api' %}
+{% endblock %}
+
+{% block main %}
+    <form action="{% url 'core:api' %}" method="POST">
+        {% csrf_token %}
+        <fieldset>
+            <legend>Token</legend>
+            {{ webmail_settings_form }}
+            <p>
+                <label for="token">Token</label>
+                <input type="text" readonly name="token" id="token" value="{{token}}" />
+                <button name="action" value="delete" class="red_button">delete</button>
+                <button name="action" value="change">change</button>
+            <p>
+        </fieldset>
+    </form>
+{% endblock %}
