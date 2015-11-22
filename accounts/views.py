@@ -6,7 +6,6 @@ from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.db import transaction
@@ -148,7 +147,7 @@ def get_contrib(user):
 
 
 @login_required
-@cache_unless("members")
+@cache_unless("members", methods=["OPTIONS"])
 def members(request):
     if request.method == 'OPTIONS':
         users = [
