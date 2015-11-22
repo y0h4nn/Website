@@ -1,6 +1,6 @@
 from rest_framework import serializers, viewsets
 from rest_framework.response import Response
-from rest_framework.decorators import list_route, detail_route
+from rest_framework.decorators import detail_route
 from events.models import Event, Inscription
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
@@ -11,7 +11,11 @@ class RegistrationSerializer(serializers.BaseSerializer):
 
 
 class EventSerializer(serializers.HyperlinkedModelSerializer):
-    places_left = serializers.IntegerField(source='nb_places_left', read_only=True)
+    places_left = serializers.IntegerField(
+        source='nb_places_left',
+        read_only=True
+    )
+
     class Meta:
         model = Event
         fields = [
@@ -51,6 +55,7 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
             'max_invitations',
             'max_invitations_by_person',
         ]
+
 
 class EventViewSet(viewsets.ModelViewSet):
     """
@@ -95,13 +100,12 @@ class EventViewSet(viewsets.ModelViewSet):
 
         return Response({})
 
-
     @detail_route()
     def get_registration(self, request, pk):
         event = get_object_or_404(Event, pk=pk)
         registered = False
         try:
-            ins = Inscription.objects.get(event=event, user=request.user)
+            Inscription.objects.get(event=event, user=request.user)
             registered = True
         except Inscription.DoesNotExist:
             pass
