@@ -1,4 +1,4 @@
-from .models import Note, Category, PriceDescription, Product, Price, HistoryLine
+from .models import Note, HistoryLine
 from django.conf import settings
 from django.core import serializers
 from django.core.exceptions import PermissionDenied
