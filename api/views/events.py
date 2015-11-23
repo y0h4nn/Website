@@ -103,10 +103,9 @@ class EventViewSet(viewsets.ModelViewSet):
     @detail_route()
     def get_registration(self, request, pk):
         event = get_object_or_404(Event, pk=pk)
-        registered = False
         try:
             Inscription.objects.get(event=event, user=request.user)
             registered = True
         except Inscription.DoesNotExist:
-            pass
+            registered = False
         return Response({'user_is_registered': registered})
