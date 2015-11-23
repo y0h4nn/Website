@@ -4,6 +4,10 @@ from django.contrib.auth.hashers import check_password
 from django.db import IntegrityError
 
 
+def normalize_username(username):
+    return username[:30].replace('.', '_')
+
+
 class BaseAuth:
     def get_user(self, user_id):
         try:
@@ -31,7 +35,7 @@ class ImapAuth(BaseAuth):
             with imaplib.IMAP4_SSL('imap-eleves.enib.fr') as srv:
                 srv._mode_utf8()
 
-                username = email.split("@")[0].strip()
+                username = normalize_username(email.split("@")[0].strip())
                 email = email.strip() + '@enib.fr' if '@' not in email else email
                 user = None
                 try:
@@ -43,4 +47,3 @@ class ImapAuth(BaseAuth):
                 except (imaplib.IMAP4.error, IntegrityError):
                     pass
                 return user
-
