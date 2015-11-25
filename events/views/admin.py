@@ -28,7 +28,7 @@ def admin_list_events(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
         if req['arg'] == "new":
-            evts = Event.objects.filter(start_time__gt=timezone.now(), model=False).order_by('start_time').reverse()
+            evts = Event.objects.filter(start_time__gt=timezone.now(), model=False).order_by('start_time')
         else:
             evts = Event.objects.filter(start_time__lt=timezone.now(), model=False).order_by('start_time').reverse()
         return JsonResponse({'events': [{
