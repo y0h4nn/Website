@@ -200,7 +200,6 @@ def account_request(request):
     else:
         form = forms.UserRequestForm()
 
-
     context = {
         'form': form
     }
@@ -226,7 +225,7 @@ passe suivant:
 {password}
 
 Pour garantir la sécurité de votre compte nous vous conseillons
-fortement de le changer dès votre premierre conexion.
+fortement de le changer dès votre première connexion.
 """
 
 
@@ -293,3 +292,4 @@ def reject_request(request, rid):
 
 def confirmation_request(request):
     return render(request, 'accounts/confirmation.html')
+
