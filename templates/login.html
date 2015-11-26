@@ -11,7 +11,7 @@
         <form action="{% url 'accounts:login'%}" method="POST">
             {% csrf_token %}
             <p>
-                <label for="email">User email</label>
+                <label for="email">Email</label>
                 <input type="text" id="email" name="email" required />
             </p>
 
