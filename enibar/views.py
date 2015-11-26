@@ -48,7 +48,7 @@ def _create_view(cls):
             cls.objects.get(foreign_id=id_).delete()
         elif request.method == "GET":
             try:
-                get = {key: value[0] for key, value in request.GET.items()}
+                get = {key: value for key, value in request.GET.items()}
                 res = [obj['fields'] for obj in json.loads(serializers.serialize("json", cls.objects.filter(**get)))]
                 return JsonResponse(res, safe=False)
             except: # Whaterver...
