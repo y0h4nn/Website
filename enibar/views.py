@@ -45,7 +45,10 @@ def _create_view(cls):
             req = get_req_or_404(request)
             check_token(req)
             id_ = req.pop('id')
-            cls.objects.get(foreign_id=id_).delete()
+            try:
+                cls.objects.get(foreign_id=id_).delete()
+            except:
+                raise Http404
         elif request.method == "GET":
             try:
                 get = {key: value for key, value in request.GET.items()}
@@ -61,4 +64,3 @@ def _create_view(cls):
 
 request_note = _create_view(Note)
 request_history = _create_view(HistoryLine)
-
