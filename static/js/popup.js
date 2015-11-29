@@ -250,7 +250,7 @@ function DiaporamaPopup(images){
     this.index = 0;
     this.container = document.createElement('div');
     this.container.setAttribute('class', this.baseClass);
-    this.image = document.createElement('img');
+    this.image = document.createElement('div');
     this.nextButton = document.createElement('button');
     this.nextButton.setAttribute('type', 'button');
     this.nextButton.innerHTML = "<i class='fa fa-chevron-right'></i>";
@@ -285,11 +285,6 @@ function DiaporamaPopup(images){
                 break;
         }
     }.bind(this));
-
-    this.image.onload = function(){
-        this.prefetchImage(this.index - 1);
-        this.prefetchImage(this.index + 1);
-    }.bind(this)
 }
 
 DiaporamaPopup.prototype = Object.create(Popup.prototype, {
@@ -299,7 +294,9 @@ DiaporamaPopup.prototype = Object.create(Popup.prototype, {
     selectImage: {
         value: function(index){
             this.index = this.normalizedIndex(index);
-            this.image.setAttribute('src', this.images[this.index]);
+            this.image.style.backgroundImage = "url('"+this.images[this.index]+"'), url('/static/images/spinner.gif')";
+            this.prefetchImage(this.index - 1);
+            this.prefetchImage(this.index + 1);
         },
     },
 
