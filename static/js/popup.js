@@ -264,7 +264,8 @@ function DiaporamaPopup(images){
     this.container.appendChild(this.nextButton);
 
     this.container.addEventListener('click', function(event){
-        if(event.target != this.previousButton && event.target != this.nextButton){
+        console.log(event.target, this.previousButton, this.nextButton);
+        if(!this.previousButton.contains(event.target) && !this.nextButton.contains(event.target)){
             this.close();
         }
     }.bind(this));
