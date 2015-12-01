@@ -48,7 +48,7 @@ def _create_view(cls):
             try:
                 cls.objects.get(foreign_id=id_).delete()
             except:
-                raise Http404
+                return HttpResponse(200)
         elif request.method == "GET":
             try:
                 get = {key: value for key, value in request.GET.items()}
