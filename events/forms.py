@@ -48,7 +48,8 @@ class EventForm(ModelForm):
         labels = {'name': "Nom", 'location': "Lieu", 'private': "Privé",
                   'allow_extern': "Autoriser les exterieurs", 'limited': "Nombre d'inscriptions limité",
                   'max_inscriptions': "Nombre maximum d'inscriptions", 'allow_invitations': "Autoriser les invitations",
-                  'max_invitations': "Nombre maximum d'invitations", 'max_invitations_by_person': "Nombre maximum d'invitations par personne"}
+                  'max_invitations': "Nombre maximum d'invitations", 'max_invitations_by_person': "Nombre maximum d'invitations par personne",
+                  'photo': "Photo (max 2Mio)"}
         widgets = {'photo': WrapperClearableinput,}
 
 
