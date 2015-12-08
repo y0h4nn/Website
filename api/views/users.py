@@ -1,6 +1,4 @@
 from rest_framework import serializers, viewsets
-from rest_framework.response import Response
-from rest_framework.decorators import list_route, detail_route
 from django.contrib.auth.models import User
 from accounts.models import Profile
 
@@ -15,6 +13,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             'display_name',
             'phone',
             'birthdate',
+            'picture',
         ]
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
