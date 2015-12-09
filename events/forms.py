@@ -75,7 +75,7 @@ class ExternLinkForm(ModelForm):
     class Meta:
         model = ExternLink
         labels = {"name": "Pour", "maximum": "Nombre de places"}
-        fields = ["name", "maximum"]
+        fields = ["name", "maximum", "payment_mean"]
 
 
 class InvitForm(ModelForm):
