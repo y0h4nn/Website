@@ -1,10 +1,10 @@
 from ..forms import ExternInscriptionForm, ExternLinkForm, InvitForm
-from ..models import Event, Inscription, ExternLink, Invitation
+from ..models import Event, Inscription, ExternLink, Invitation, ExternInscription
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 
 import json
@@ -48,6 +48,7 @@ def event(request, eid):
                 link = form.save(commit=False)
                 link.event = e
                 link.uuid = uuid.uuid4()
+                link.admin_uuid = uuid.uuid4()
                 try:
                     link.save()
                 except IntegrityError:
@@ -79,7 +80,27 @@ def event(request, eid):
 
 
 def event_extern(request, uuid):
-    link = get_object_or_404(ExternLink, uuid=uuid)
+    try:
+        link = get_object_or_404(ExternLink, uuid=uuid)
+        return event_extern_normal(request, link)
+    except Http404:
+        link = get_object_or_404(ExternLink, admin_uuid=uuid)
+        return event_extern_admin(request, link)
+
+
+def event_extern_admin(request, link):
+    e = link.event
+    if request.method == "OPTIONS":
+        req = json.loads(request.read().decode())
+        ins = get_object_or_404(ExternInscription, id=req['iid'])
+        ins.delete()
+        return JsonResponse({"status": 1})
+    ext_reg = ExternInscription.objects.filter(event=e, via=link).select_related('event')
+    context = {'event': e, 'ext_reg': ext_reg}
+    return render(request, 'events/admin/event_extern_admin.html', context)
+
+
+def event_extern_normal(request, link):
     e = link.event
     if e.closed():
         return render(request, 'events/closed.html')

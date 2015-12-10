@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.templatetags.static import static
 from django.utils import timezone
 from bde.shortcuts import is_contributor
+import uuid as u
 
 MEANS_OF_PAYMENT = [
     ('cash', 'Espèces'),
@@ -101,9 +102,11 @@ class RecurrentEvent(Event):
             ('manage_recurrent_event', 'Can manage recurrent event (add/del/edit'),
         )
 
+
 class ExternLink(models.Model):
     event = models.ForeignKey(Event, related_name="extern_links")
     uuid = models.UUIDField()
+    admin_uuid = models.UUIDField(default=u.uuid4)
     maximum = models.IntegerField(validators=[MinValueValidator(1)])
     name = models.CharField(max_length=255)
 

@@ -92,7 +92,11 @@
             {% for link in links %}
                 <div class="flex_container details">
                     <div class="flex expand">
-                        <p><a href="{% url 'events:extern' uuid=link.uuid %}">Lien pour {{ link.name }}</a> ({{ link.nb_inscriptions }} / {{ link.maximum }})</p>
+                        <p>
+                            <a href="{% url 'events:extern' uuid=link.uuid %}">Lien pour {{ link.name }}</a>
+                            ({{ link.nb_inscriptions }} / {{ link.maximum }})
+                            <p><a href="{% url 'events:extern' uuid=link.admin_uuid %}">Administration</a></p>
+                        </p>
                     </div>
                 </div>
             {% endfor %}
