@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+{% load static %}
+
+{% block header %}
+    Inscriptions pour {{ event.name }}
+{% endblock %}
+
+{% block menu %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/calendar.js' %}"></script>
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'events/js/user_list.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+    <ul class="userlist">
+        {% for registration in ext_reg %}
+            <li>
+                <div>
+                    {{ registration.first_name }} {{ registration.last_name }} ({{registration.via.name}})
+                </div>
+                <button onclick="del_ins({{registration.id}}, 'ext', this); return false;" class="red_button userlist_right_button">
+                    Supprimer
+                </button>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+
