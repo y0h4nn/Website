@@ -80,12 +80,13 @@ class EventViewSet(viewsets.ModelViewSet):
 
     -------
     """
-    queryset = Event.objects.all()
+    queryset = Event.objects.filter(private=False).all()
     serializer_class = EventSerializer
 
     @detail_route(methods=['POST'])
     def set_registration(self, request, pk):
         event = get_object_or_404(Event, pk=pk)
+        registered = False
         if self.request.data.get('registration') == False:
             try:
                 ins = Inscription.objects.get(event=event, user=request.user)
@@ -94,11 +95,18 @@ class EventViewSet(viewsets.ModelViewSet):
                 pass
         else:
             try:
-                ins = Inscription.objects.create(event=event, user=request.user)
+                to_come = [e[1] for e in Event.to_come(request.user)]
+                if event.can_subscribe() and event in to_come:
+                    ins = Inscription.objects.create(event=event, user=request.user)
+                    registered = True
+                elif event not in to_come:
+                    return Response({'error': 'Les inscriptions sont fermés'})
+                else:
+                    return Response({'error': 'Le nombre maximal de place est atteind'})
             except IntegrityError:
-                pass
+                registered = True
 
-        return Response({})
+        return Response({'user_is_registered': registered })
 
     @detail_route()
     def get_registration(self, request, pk):
