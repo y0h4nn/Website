@@ -109,3 +109,7 @@ class EventViewSet(viewsets.ModelViewSet):
         except Inscription.DoesNotExist:
             registered = False
         return Response({'user_is_registered': registered})
+
+
+    def create(self, request):
+        return Response({})
