@@ -1,8 +1,9 @@
 from ..models import Event, Inscription, ExternInscription, Invitation
 from bde.shortcuts import is_contributor
 from shop.models import BuyingHistory
-from django.db.models import Count
 
+from django.db.models import Count
+from django.core.mail import send_mail
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse, Http404
 from django.shortcuts import render, get_object_or_404
@@ -95,8 +96,10 @@ def management_nl_ack(request):
         ins = Inscription.objects.get(event=e, id=req['iid'])
     elif req['type'] == "ext_reg":
         ins = ExternInscription.objects.get(event=e, id=req['iid'])
+        send_mail_photos_nl(e, ins)
     else:
         ins = Invitation.objects.get(event=e, id=req['iid'])
+        send_mail_photos_nl(e, ins)
 
     ins.payment_mean = req.get("payment_mean")
     ins.in_date = timezone.now()
@@ -146,4 +149,22 @@ def management_nl_info_user(request, eid, type, iid):
 def management_nl_ack_popup(request, iid, eid):
     context = {"eid": eid, "iid": iid}
     return render(request, "events/admin/nl_ack_popup.html", context)
+
+
+def send_mail_photos_nl(event, inv):
+    if event.photo_path:
+        send_mail('Photos ' + event.name, '''
+Bonjour {first_name},
+Tu viens de rentrer dans la super soirée {event_name} :)
+
+On espère que tu vas bien t'amuser, et profiter, mais n'oublies pas: l'abus d'alcool est dangereux pour la santé :p
+
+
+Sache que tu pourras trouver les photos de l'événement sur le lien suivant dès samedi prochain {link}
+
+Nous te souhaitons une bonne semaine et espérons te revoir bientôt :)
+
+L'équipe du BDE
+'''.format(first_name=inv.first_name, event_name=event.name, link="https://enib.net/photo/browse/" + event.photo_path),
+    'noreply@enib.net', [inv.mail,])
 
