@@ -2,6 +2,9 @@ from django.forms import ModelForm, ClearableFileInput, SplitDateTimeField, Inte
 from django.utils.safestring import mark_safe
 from .models import Event, ExternInscription, ExternLink, Invitation, RecurrentEvent
 from core.forms import ReadOnlyFieldsMixin
+from django.conf import settings
+import os
+import os.path
 
 
 class WrapperClearableinput(ClearableFileInput):
@@ -14,11 +17,18 @@ class WrapperClearableinput(ClearableFileInput):
 
 
 class EventForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['photo_path'].widget.attrs['list'] = "photo_paths"
+        self.fields['photo_path'].widget.attrs['autocomplete'] = "off"
+
     def clean(self):
         super().clean()
         start = self.cleaned_data.get('start_time')
         end = self.cleaned_data.get('end_time')
         end_ins = self.cleaned_data.get('end_inscriptions')
+        management_type = self.cleaned_data.get('gestion')
+        photo_path = self.cleaned_data.get('photo_path')
 
         if start is None or end is None or end_ins is None:
             return
@@ -27,6 +37,11 @@ class EventForm(ModelForm):
             self.add_error('start_time', "Le début de l'événement doit se situer avant sa fin...")
         if end_ins > start:
             self.add_error('end_inscriptions', "La fin des inscriptions doit se situer avant le début de l'évènement")
+
+        if management_type == Event.GESTION_NOLIMIT:
+            if photo_path:
+                realpath = os.path.join(settings.MEDIA_ROOT, 'photo', photo_path)
+                os.makedirs(realpath, exist_ok=True)
 
 
     def as_p(self):
@@ -49,7 +64,7 @@ class EventForm(ModelForm):
                   'allow_extern': "Autoriser les exterieurs", 'limited': "Nombre d'inscriptions limité",
                   'max_inscriptions': "Nombre maximum d'inscriptions", 'allow_invitations': "Autoriser les invitations",
                   'max_invitations': "Nombre maximum d'invitations", 'max_invitations_by_person': "Nombre maximum d'invitations par personne",
-                  'photo': "Photo (max 2Mio)"}
+                  'photo': "Photo (max 2Mio)", 'photo_path': 'Chemin pour les photos'}
         widgets = {'photo': WrapperClearableinput,}
 
 

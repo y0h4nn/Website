@@ -1,14 +1,17 @@
 from ..forms import EventForm, RecurrentEventForm, RecurrentEventEditForm
 from ..models import Event, Inscription, ExternInscription, Invitation, RecurrentEvent
 
+from django.conf import settings
+from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from django.contrib.auth.decorators import permission_required, user_passes_test
 
 import csv
 import json
+import os
+import os.path
 import uuid
 
 
@@ -51,7 +54,12 @@ def admin_add(request):
             return redirect(reverse('events:admin_index'))
     else:
         form = EventForm()
-    context = {'event_form': form}
+    autocomplete_dirs = []
+    realpath = os.path.join(settings.MEDIA_ROOT, 'photo')
+    for root, dirs, files in os.walk(os.path.join(realpath)):
+        for d in dirs:
+            autocomplete_dirs.append(os.path.relpath(os.path.join(root, d), start=realpath))
+    context = {'event_form': form, "autocomplete_dirs": autocomplete_dirs}
     return render(request, 'events/admin/add.html', context)
 
 
@@ -106,7 +114,13 @@ def admin_edit(request, eid):
             Invitation.objects.filter(event=e).delete()
         form.save()
         return redirect(reverse('events:admin_index'))
-    context = {'event': e, 'event_form': form}
+    autocomplete_dirs = []
+    realpath = os.path.join(settings.MEDIA_ROOT, 'photo')
+    for root, dirs, files in os.walk(os.path.join(realpath)):
+        for d in dirs:
+            autocomplete_dirs.append(os.path.relpath(os.path.join(root, d), start=realpath))
+
+    context = {'event': e, 'event_form': form, "autocomplete_dirs": autocomplete_dirs}
     return render(request, 'events/admin/edit.html', context)
 
 

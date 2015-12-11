@@ -42,6 +42,7 @@ class Event(models.Model):
     invitations_start = models.DateTimeField(null=True, blank=True)
 
     gestion = models.CharField(max_length=3, choices=GESTION_CHOICES, default=None, null=True, blank=True)
+    photo_path = models.CharField(max_length=255, blank=True, default="")
 
     model = models.BooleanField(default=False)
 

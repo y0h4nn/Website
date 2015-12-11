@@ -24,6 +24,11 @@
 {% endblock %}
 
 {% block main %}
+    <datalist id="photo_paths">
+        {% for value in autocomplete_dirs %}
+            <option value="{{ value }}"/>
+        {% endfor %}
+    </datalist>
     <form enctype="multipart/form-data" action="{% url 'events:admin_add' %}" method="POST">
         {% csrf_token %}
         {{ event_form.as_p }}

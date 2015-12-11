@@ -1,8 +1,10 @@
 window.addEventListener('load', function(){
     max = document.getElementById('id_max_inscriptions').parentNode;
     limited = document.getElementById('id_limited');
+    management = document.getElementById('id_gestion');
 
     invits = document.getElementById('id_allow_invitations');
+    photo_path = document.getElementById('id_photo_path').parentNode;
     max1 = document.getElementById('id_max_invitations').parentNode;
     max2 = document.getElementById('id_max_invitations_by_person').parentNode;
     is_start = document.getElementById('id_invitations_start_0').parentNode;
@@ -28,6 +30,15 @@ window.addEventListener('load', function(){
         }
     }
 
+    function check_photo_path(){
+        if(management.value === "NL"){
+            photo_path.style.display = "flex";
+        }
+        else{
+            photo_path.style.display = "none";
+        }
+    }
+
     limited.addEventListener('change', function(){
         check_max();
     });
@@ -35,6 +46,11 @@ window.addEventListener('load', function(){
     invits.addEventListener('change', function(){
         check_invits();
     });
+
+    management.addEventListener('change', function(){
+        check_photo_path();
+    });
     check_max();
     check_invits();
+    check_photo_path();
 });
