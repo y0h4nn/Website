@@ -125,7 +125,7 @@
                     user.element.addEventListener("click", (function(){
                         if(this.klass == "" || this.klass == "bg-red"){  // He needs to pay.
                             document.popup = new SelectionPopup(this.display_name, payment_means, function(choice){
-                                queryJson('nl_ack', {'type': this.user.type, 'eid': event_id, 'iid': this.user.id, 'payment_mean': choice}, function(resp){
+                                queryJson('nl_ack', {'type': this.user.type, 'eid': event_id, 'iid': this.user.id, 'user': this.user.user, 'payment_mean': choice}, function(resp){
                                     if(resp['error']){
                                         add_message('error', resp['error']);
                                     }

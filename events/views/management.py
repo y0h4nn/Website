@@ -2,6 +2,7 @@ from ..models import Event, Inscription, ExternInscription, Invitation
 from bde.shortcuts import is_contributor
 from shop.models import BuyingHistory
 
+from django.contrib.auth.models import User
 from django.db.models import Count
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import permission_required
@@ -29,14 +30,39 @@ def management_list_users(request, eid):
     ret = {}
     if request.method == "OPTIONS":
         # Reg
-        ret['reg'] = [{
-                "display_name": str(ins.user.profile),
-                "picture": ins.user.profile.get_picture_url(),
-                "color": "bg-blue" if ins.in_date is not None else "bg-green" if is_contributor(ins.user) else "bg-red",
-                "type": "reg",
-                "id": ins.id,
-            } for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').select_related("user__contribution").annotate(null_nick=Count('user__profile__nickname')).order_by('null_nick', '-user__profile__nickname', '-user__last_name', '-user__first_name', '-user__username').reverse()
-        ]
+        if e.gestion == Event.GESTION_NOLIMIT:
+            already_in_list = []
+            ret['reg'] = []
+            for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').select_related("user__contribution").annotate(null_nick=Count('user__profile__nickname')).order_by('null_nick', '-user__profile__nickname', '-user__last_name', '-user__first_name', '-user__username').reverse():
+                ret['reg'].append({
+                        "display_name": str(ins.user.profile),
+                        "picture": ins.user.profile.get_picture_url(),
+                        "color": "bg-blue" if ins.in_date is not None else "bg-green" if is_contributor(ins.user) else "bg-red",
+                        "type": "reg",
+                        "id": ins.id,
+                        "user": False,
+                })
+                already_in_list.append(str(ins.user.profile))
+            for user in User.objects.all().select_related('profile'):
+                if str(user.profile) not in already_in_list:
+                    ret['reg'].append({
+                            "display_name": str(user.profile),
+                            "picture": user.profile.get_picture_url(),
+                            "color": "bg-green" if is_contributor(user) else "bg-red",
+                            "type": "reg",
+                            "id": user.id,
+                            "user": True,
+                    })
+        else:
+            ret['reg'] = [{
+                    "display_name": str(ins.user.profile),
+                    "picture": ins.user.profile.get_picture_url(),
+                    "color": "bg-blue" if ins.in_date is not None else "bg-green" if is_contributor(ins.user) else "bg-red",
+                    "type": "reg",
+                    "id": ins.id,
+                } for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').select_related("user__contribution").annotate(null_nick=Count('user__profile__nickname')).order_by('null_nick', '-user__profile__nickname', '-user__last_name', '-user__first_name', '-user__username').reverse()
+            ]
+
         ret['ext_reg'] = [{
                 "display_name": "{} {} ({})".format(ins.last_name, ins.first_name, ins.via.name),
                 "picture": static('images/default_user_icon.png'),
@@ -75,8 +101,13 @@ def management_info_user(request, eid, type, iid):
 @permission_required('events.manage_entries')
 def management_ack(request, eid, type, iid):
     e = get_object_or_404(Event, id=eid)
+    req = json.loads(request.read().decode())
     if type == "reg":
-        ins = Inscription.objects.get(event=e, id=iid)
+        if req['user']:
+            u = User.objects.get(id=iid)
+            ins = Inscription.objects.create(event=e, user=u)
+        else:
+            ins = Inscription.objects.get(event=e, id=iid)
         ins.in_date = timezone.now()
         ins.save()
         return JsonResponse({"status": 1})
@@ -93,7 +124,11 @@ def management_nl_ack(request):
     e = get_object_or_404(Event, id=req['eid'])
 
     if req['type'] == "reg":
-        ins = Inscription.objects.get(event=e, id=req['iid'])
+        if req['user']:
+            u = User.objects.get(id=req['iid'])
+            ins = Inscription.objects.create(event=e, user=u)
+        else:
+            ins = Inscription.objects.get(event=e, id=req['iid'])
     elif req['type'] == "ext_reg":
         ins = ExternInscription.objects.get(event=e, id=req['iid'])
         send_mail_photos_nl(e, ins)

@@ -60,6 +60,10 @@
            document.popup.close();
            queryJson(eid + "/ack/" + type + '/' + iid, {}, acked);
         }
+        function nl_ack_in(eid, type, iid){
+           document.popup.close();
+           queryJson(eid + "/ack/" + type + '/' + iid, {'user': true}, acked);
+        }
 {% if event.gestion == "WAF" %}
         url = "/events/admin/management/list_registrations/{{event.id}}"
         var event_id = {{event.id}};
