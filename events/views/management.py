@@ -110,7 +110,7 @@ def management_ack(request, eid, type, iid):
             ins = Inscription.objects.get(event=e, id=iid)
         ins.in_date = timezone.now()
         ins.save()
-        return JsonResponse({"status": 1})
+        return JsonResponse({"status": 1, "ins_id": ins.id})
     elif type == "ext_reg":
         pass
     else:
@@ -139,7 +139,8 @@ def management_nl_ack(request):
     ins.payment_mean = req.get("payment_mean")
     ins.in_date = timezone.now()
     ins.save()
-    return JsonResponse({"status": 1})
+    r = JsonResponse({"status": 1, 'ins_id': ins.id})
+    return r
 
 
 @permission_required('events.manage_entries')

@@ -135,7 +135,7 @@
                                         var input =  document.getElementById('search_input');
                                         input.value = "";
                                         input.focus();
-                                        acked({"status": 1})
+                                        acked(resp)
                                     }
                                 });
                             });

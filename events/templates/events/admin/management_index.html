@@ -41,6 +41,10 @@
         function acked(data){
             document.popup.element.setAttribute("class", "bg-blue");
             document.popup.user.klass = "bg-blue";
+            document.popup.user.user = false;
+            if(data.ins_id){
+                document.popup.user.id = data.ins_id;
+            }
             input =  document.getElementById('search_input');
             input.value = "";
             var last = document.getElementById("last_entered");
@@ -62,7 +66,7 @@
         }
         function nl_ack_in(eid, type, iid){
            document.popup.close();
-           queryJson(eid + "/ack/" + type + '/' + iid, {'user': true}, acked);
+           queryJson(eid + "/ack/" + type + '/' + iid, {'user': document.popup.user.user}, acked);
         }
 {% if event.gestion == "WAF" %}
         url = "/events/admin/management/list_registrations/{{event.id}}"
