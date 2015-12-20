@@ -4,6 +4,7 @@ from django.core import serializers
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404, render
 import json
 
 
@@ -54,7 +55,7 @@ def _create_view(cls):
                 get = {key: value for key, value in request.GET.items()}
                 res = [obj['fields'] for obj in json.loads(serializers.serialize("json", cls.objects.filter(**get)))]
                 return JsonResponse(res, safe=False)
-            except: # Whaterver...
+            except:  # Whaterver...
                 raise Http404
         else:
             raise Http404
@@ -64,3 +65,12 @@ def _create_view(cls):
 
 request_note = _create_view(Note)
 request_history = _create_view(HistoryLine)
+
+
+def show_history(request):
+    note = get_object_or_404(Note, mail="a2levauf@enib.fr")  # TODO: Change by request.user.email
+    history = HistoryLine.objects.filter(note=note.nickname)
+    context = {"history": history}
+
+    return render(request, 'enibar/history.html', context)
+
