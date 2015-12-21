@@ -1,6 +1,7 @@
 from .models import Note, HistoryLine
 from django.conf import settings
 from django.core import serializers
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -67,9 +68,18 @@ request_note = _create_view(Note)
 request_history = _create_view(HistoryLine)
 
 
-def show_history(request):
+def show_history(request, page):
+    page = page or 1
     note = get_object_or_404(Note, mail="a2levauf@enib.fr")  # TODO: Change by request.user.email
-    history = HistoryLine.objects.filter(note=note.nickname)
+    paginator = Paginator(HistoryLine.objects.filter(note=note.nickname), 50)
+
+    try:
+        history = paginator.page(page)
+    except PageNotAnInteger:
+        history = paginator.page(1)
+    except EmptyPage:
+        history = paginator.page(paginator.num_pages)
+
     context = {"history": history}
 
     return render(request, 'enibar/history.html', context)
