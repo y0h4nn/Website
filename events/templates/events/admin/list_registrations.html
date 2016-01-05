@@ -42,6 +42,9 @@
                 </div>
                 <div>
                     {{ registration.user.profile }}
+                    {% if registration.formula %}
+                        - {{ registration.formula.name }}
+                    {% endif %}
                 </div>
                 <button onclick="del_ins({{registration.id}}, 'ins', this); return false;" class="red_button userlist_right_button">
                     Supprimer
@@ -55,6 +58,9 @@
             <li>
                 <div>
                     {{ registration.first_name }} {{ registration.last_name }} ({{registration.via.name}})
+                    {% if registration.formula %}
+                        - {{ registration.formula.name }}
+                    {% endif %}
                 </div>
                 <button onclick="del_ins({{registration.id}}, 'ext', this); return false;" class="red_button userlist_right_button">
                     Supprimer
@@ -68,6 +74,9 @@
             <li>
                 <div>
                     {{ registration.first_name }} {{ registration.last_name }} (Invité par {{registration.user.profile}})
+                    {% if registration.formula %}
+                        - {{ registration.formula.name }}
+                    {% endif %}
                 </div>
                 <button onclick="del_ins({{registration.id}}, 'inv', this); return false;" class="red_button userlist_right_button">
                     Supprimer

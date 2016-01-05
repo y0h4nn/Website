@@ -17,46 +17,46 @@
 
 {% block scripts %}
     <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'js/popup.js' %}"></script>
     <script src="{% static 'events/js/event_list.js' %}"></script>
 {% endblock %}
 
 {% block main %}
     {% for inscription, event in events %}
-    <div class="event">
-        <div>
-            {% if event.photo %}
-                <img src="{{ event.photo.url }}" alt="event-picture"/>
-            {% else %}
-                <img src="{% static 'images/default_event_icon.png' %}" alt="event-picture"/>
-            {% endif %}
-
-        </div>
-        <div>
-            <header>
-                <h3>{{ event.name }}</h3>
-                <p>{{ event.location }}, du {{ event.start_time }} au {{ event.end_time }}</p>
-            </header>
-            <main>
-                <p>{{ event.description }}</p>
-                <a href="{% url 'events:event' eid=event.id %}">En savoir plus</a>
-            </main>
-        </div>
-        <div>
-            <p class="inscription_count">
-                <span>{{ event.registrations_number }}</span>
-                {% if event.limited %}
-                    <span>/ {{ event.max_inscriptions }}</span>
+        <div class="event">
+            <div>
+                {% if event.photo %}
+                    <img src="{{ event.photo.url }}" alt="event-picture"/>
+                {% else %}
+                    <img src="{% static 'images/default_event_icon.png' %}" alt="event-picture"/>
                 {% endif %}
-            </p>
-            <p>Participants</p>
+            </div>
+            <div>
+                <header>
+                    <h3>{{ event.name }}</h3>
+                    <p>{{ event.location }}, du {{ event.start_time }} au {{ event.end_time }}</p>
+                </header>
+                <main>
+                    <p>{{ event.description }}</p>
+                    <a href="{% url 'events:event' eid=event.id %}">En savoir plus</a>
+                </main>
+            </div>
+            <div>
+                <p class="inscription_count">
+                    <span>{{ event.registrations_number }}</span>
+                    {% if event.limited %}
+                        <span>/ {{ event.max_inscriptions }}</span>
+                    {% endif %}
+                </p>
+                <p>Participants</p>
 
-            {% if inscription %}
-                <button onclick="inscription(this, {{event.id}});return false;" class="red_button">Se désinscrire</button>
-            {% else %}
-                <button onclick="inscription(this, {{event.id}});return false;">S'inscrire</button>
-            {% endif %}
+                {% if inscription %}
+                    <button onclick="inscription(this, {{event.id}}, {{ event.formulas_json }});return false;" class="red_button">Se désinscrire</button>
+                {% else %}
+                    <button onclick="inscription(this, {{event.id}}, {{ event.formulas_json }});return false;">S'inscrire</button>
+                {% endif %}
+            </div>
         </div>
-    </div>
     {% endfor %}
 
 {% endblock %}

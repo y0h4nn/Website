@@ -1,6 +1,7 @@
 from django.forms import ModelForm, ClearableFileInput, SplitDateTimeField, IntegerField
+from django.forms import modelformset_factory
 from django.utils.safestring import mark_safe
-from .models import Event, ExternInscription, ExternLink, Invitation, RecurrentEvent
+from .models import Event, ExternInscription, ExternLink, Invitation, RecurrentEvent, Formula
 from core.forms import ReadOnlyFieldsMixin
 from django.conf import settings
 import os
@@ -14,6 +15,9 @@ class WrapperClearableinput(ClearableFileInput):
     )
 
     template_with_clear = '<label for="%(clear_checkbox_id)s">%(clear_checkbox_label)s</label><span class="align_left"> %(clear)s</span>'
+
+
+FormulaFormSet = modelformset_factory(Formula, exclude=['event', ])
 
 
 class EventForm(ModelForm):
@@ -97,5 +101,5 @@ class InvitForm(ModelForm):
     class Meta:
         model = Invitation
         labels = {'first_name': "Prénom", 'last_name': "Nom", 'birth_date': "Date de naissance"}
-        fields = ["mail", "birth_date", "first_name", "last_name"]
+        fields = ["mail", "birth_date", "first_name", "last_name", "formula"]
 

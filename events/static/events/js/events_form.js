@@ -53,4 +53,5 @@ window.addEventListener('load', function(){
     check_max();
     check_invits();
     check_photo_path();
+
 });

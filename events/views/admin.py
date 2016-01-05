@@ -1,5 +1,5 @@
-from ..forms import EventForm, RecurrentEventForm, RecurrentEventEditForm
-from ..models import Event, Inscription, ExternInscription, Invitation, RecurrentEvent
+from ..forms import EventForm, RecurrentEventForm, RecurrentEventEditForm, FormulaFormSet
+from ..models import Event, Inscription, ExternInscription, Invitation, RecurrentEvent, Formula
 
 from django.conf import settings
 from django.contrib.auth.decorators import permission_required, user_passes_test
@@ -47,19 +47,29 @@ def admin_list_events(request):
 def admin_add(request):
     if request.method == "POST":
         form = EventForm(request.POST, request.FILES or None)
+        fform = FormulaFormSet(request.POST, queryset=Formula.objects.none())
         if form.is_valid():
             event = form.save(commit=False)
             event.uuid = uuid.uuid4()
             event.save()
+            if fform.is_valid():
+                formulas = fform.save(commit=False)
+                for formula in formulas:
+                    formula.event = event
+                    formula.save()
             return redirect(reverse('events:admin_index'))
     else:
         form = EventForm()
+        fform = FormulaFormSet(queryset=Formula.objects.none())
     autocomplete_dirs = []
     realpath = os.path.join(settings.MEDIA_ROOT, 'photo')
     for root, dirs, files in os.walk(os.path.join(realpath)):
         for d in dirs:
             autocomplete_dirs.append(os.path.relpath(os.path.join(root, d), start=realpath))
-    context = {'event_form': form, "autocomplete_dirs": autocomplete_dirs}
+    context = {'event_form': form,
+               'autocomplete_dirs': autocomplete_dirs,
+               'formula_form': fform,
+               }
     return render(request, 'events/admin/add.html', context)
 
 
@@ -109,10 +119,16 @@ def admin_recurrent(request):
 def admin_edit(request, eid):
     e = get_object_or_404(Event, id=eid, model=False)
     form = EventForm(request.POST or None, request.FILES or None, instance=e)
+    fform = FormulaFormSet(request.POST or None, queryset=e.formulas.all())
     if form.is_valid():
         if not form.cleaned_data['allow_invitations']:
             Invitation.objects.filter(event=e).delete()
-        form.save()
+        event = form.save()
+        if fform.is_valid():
+            formulas = fform.save(commit=False)
+            for formula in formulas:
+                formula.event = event
+                formula.save()
         return redirect(reverse('events:admin_index'))
     autocomplete_dirs = []
     realpath = os.path.join(settings.MEDIA_ROOT, 'photo')
@@ -120,7 +136,7 @@ def admin_edit(request, eid):
         for d in dirs:
             autocomplete_dirs.append(os.path.relpath(os.path.join(root, d), start=realpath))
 
-    context = {'event': e, 'event_form': form, "autocomplete_dirs": autocomplete_dirs}
+    context = {'event': e, 'event_form': form, 'formula_form': fform, "autocomplete_dirs": autocomplete_dirs}
     return render(request, 'events/admin/edit.html', context)
 
 

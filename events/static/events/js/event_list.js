@@ -20,7 +20,20 @@ function update_button(data){
     this.parentNode.getElementsByClassName("inscription_count")[0].childNodes[1].innerHTML = cur_nb;
 }
 
-function inscription(elmt, eid){
-    queryJson('', {"eid": eid}, update_button.bind(elmt));
+function inscription(elmt, eid, formulas){
+    if(elmt.className == "red_button" || !Object.keys(formulas).length){
+        queryJson('', {"eid": eid}, update_button.bind(elmt));
+    }
+    else{
+        new SelectionPopup('Choisissez une formule', formulas, function(choice){
+            queryJson('', {'eid': eid, 'formula': choice}, function(resp){
+                if(resp['error']){
+                    add_message('error', resp['error']);
+                }
+                update_button.bind(elmt)(resp);
+            });
+        }).pop()
+
+    }
 }
 

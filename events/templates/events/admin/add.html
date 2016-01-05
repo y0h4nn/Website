@@ -19,8 +19,14 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="{% static 'js/formset.js' %}"></script>
     <script src="{% static 'js/calendar.js' %}"></script>
     <script src="{% static 'events/js/events_form.js' %}"></script>
+    <script>
+        window.addEventListener('load', function(){
+            var fs = new FormSet("empty_formula", "add_formula", "formulas", "id_form-TOTAL_FORMS");
+        });
+    </script>
 {% endblock %}
 
 {% block main %}
@@ -29,9 +35,34 @@
             <option value="{{ value }}"/>
         {% endfor %}
     </datalist>
+    <script type="text/html" style="display:none;" id="empty_formula">
+        <tr>
+            {{ formula_form.empty_form.id }}
+            <td>{{ formula_form.empty_form.name }}</td>
+            <td>{{ formula_form.empty_form.price_contributor }}</td>
+            <td>{{ formula_form.empty_form.price_non_contributor }}</td>
+        </tr>
+    </script>
     <form enctype="multipart/form-data" action="{% url 'events:admin_add' %}" method="POST">
         {% csrf_token %}
         {{ event_form.as_p }}
+        {{ formula_form.management_form }}
+        <table>
+            <thead>
+                <tr><th>Nom</th><th>Prix cotisant</th><th>Prix non cotisant</th></tr>
+            </thead>
+            <tbody id="formulas">
+                {% for item_form in formula_form %}
+                    <tr>
+                    {{ item_form.id }}
+                        <td>{{ item_form.name }}</td>
+                        <td>{{ item_form.price_contributor }}</td>
+                        <td>{{ item_form.price_non_contributor }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a href="#" id="add_formula">Add</a>
         <button>Ajouter</button>
     </form>
 {% endblock %}

@@ -1,13 +1,26 @@
-from rest_framework import serializers, viewsets
+from rest_framework import serializers, viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
-from events.models import Event, Inscription
+from events.models import Event, Inscription, Formula
 from django.shortcuts import get_object_or_404
 from django.db import IntegrityError
 
 
-class RegistrationSerializer(serializers.BaseSerializer):
-    count = serializers.IntegerField()
+class EventPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_perm('events.manage_event')
+
+
+class FormulaSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Formula
+        fields = '__all__'
+
+
+class FormulaViewSet(viewsets.ModelViewSet):
+    permission_classes = (EventPermission, )
+    queryset = Formula.objects.all()
+    serializer_class = FormulaSerializer
 
 
 class EventSerializer(serializers.HyperlinkedModelSerializer):
@@ -106,7 +119,7 @@ class EventViewSet(viewsets.ModelViewSet):
             except IntegrityError:
                 registered = True
 
-        return Response({'user_is_registered': registered })
+        return Response({'user_is_registered': registered})
 
     @detail_route()
     def get_registration(self, request, pk):

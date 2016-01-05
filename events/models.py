@@ -6,6 +6,8 @@ from django.templatetags.static import static
 from django.utils import timezone
 from bde.shortcuts import is_contributor
 import uuid as u
+import json
+
 
 MEANS_OF_PAYMENT = [
     ('cash', 'Espèces'),
@@ -93,6 +95,10 @@ class Event(models.Model):
             Q(inscriptions__user=user) | Q(private=False)
         ).distinct().order_by('start_time')]
 
+    def formulas_json(self):
+        res = {f.name: "{} <br>(Cotisant: {}€ / Non cotisant: {}€)".format(f.name, f.price_contributor, f.price_non_contributor) for f in self.formulas.all()}
+        return json.dumps(res)
+
 
 class RecurrentEvent(Event):
     delay = models.IntegerField(default=1)
@@ -126,9 +132,23 @@ class ExternLink(models.Model):
         return min(self.event.nb_places_left(), self.maximum - self.nb_inscriptions())
 
 
+class Formula(models.Model):
+    name = models.CharField(max_length=255)
+    event = models.ForeignKey(Event, related_name='formulas')
+    price_contributor = models.IntegerField()
+    price_non_contributor = models.IntegerField()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        unique_together = (('name', 'event'), )
+
+
 class Inscription(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="inscriptions")
     event = models.ForeignKey(Event, related_name="inscriptions")
+    formula = models.ForeignKey(Formula, related_name="inscriptions", null=True, blank=True)
 
     in_date = models.DateTimeField(null=True, blank=True, default=None)
     payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT, null=True, blank=True)
@@ -142,6 +162,8 @@ class ExternInscription(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     event = models.ForeignKey(Event, related_name="extern_inscriptions")
+    formula = models.ForeignKey(Formula, related_name="extern_inscriptions", null=True, blank=True)
+
     via = models.ForeignKey(ExternLink, related_name="inscriptions")
     birth_date = models.DateField(null=True)
 
@@ -159,10 +181,11 @@ class Invitation(models.Model):
     birth_date = models.DateField(null=True)
     event = models.ForeignKey(Event, related_name="invitations")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="invitations")
+    formula = models.ForeignKey(Formula, blank=True, null=True)
 
     in_date = models.DateTimeField(null=True, blank=True, default=None)
     payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT, null=True, blank=True)
 
     class Meta:
-        unique_together = (('mail', 'event'),)
+        unique_together = (('mail', 'event'), )
 

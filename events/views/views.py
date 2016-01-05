@@ -1,5 +1,5 @@
 from ..forms import ExternInscriptionForm, ExternLinkForm, InvitForm
-from ..models import Event, Inscription, ExternLink, Invitation, ExternInscription
+from ..models import Event, Inscription, ExternLink, Invitation, ExternInscription, Formula
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -16,13 +16,19 @@ def index(request):
     if request.method == "OPTIONS":
         req = json.loads(request.read().decode())
         event = get_object_or_404(Event, id=req['eid'])
+        formula = None
+        if 'formula' in req:
+            try:
+                formula = Formula.objects.get(name=req['formula'])
+            except Formula.DoesNotExist:
+                return JsonResponse({'registered': 0, 'error': "Cette formule n'existe pas"})
         try:
             ins = Inscription.objects.get(event=event, user=request.user)
             ins.delete()
             return JsonResponse({'registered': 0, 'full': 0})
         except Inscription.DoesNotExist:
             if event.can_subscribe():
-                ins = Inscription(event=event, user=request.user)
+                ins = Inscription(event=event, user=request.user, formula=formula)
                 ins.save()
                 return JsonResponse({'registered': 1, 'full': 0})
             else:
@@ -63,6 +69,11 @@ def event(request, eid):
         context['user_can_invite'] = True
         if request.method == "POST" and 'btn_invit' in request.POST:
             form = InvitForm(request.POST)
+            if e.formulas.count():
+                form.fields['formula'].queryset = Formula.objects.filter(event=e)
+                form.fields['formula'].empty_label = None
+            else:
+                del form.fields['formula']
             if form.is_valid():
                 ins = form.save(commit=False)
                 ins.event = e
@@ -73,6 +84,11 @@ def event(request, eid):
                     messages.add_message(request, messages.ERROR, "Vous ne pouvez pas inviter 2 fois la meme personne avec la meme adresse email")
         else:
             form = InvitForm()
+            if e.formulas.count():
+                form.fields['formula'].queryset = Formula.objects.filter(event=e)
+                form.fields['formula'].empty_label = None
+            else:
+                del form.fields['formula']
         context['invit_form'] = form
     context['invitations'] = e.invitations.filter(user=request.user)
 
@@ -107,6 +123,11 @@ def event_extern_normal(request, link):
     if not link.places_left():
         return render(request, 'events/no_places.html')
     form = ExternInscriptionForm(request.POST or None, initial={"event": e})
+    if e.formulas.count():
+        form.fields['formula'].queryset = Formula.objects.filter(event=e)
+        form.fields['formula'].empty_label = None
+    else:
+        del form.fields['formula']
     if form.is_valid():
         ins = form.save(commit=False)
         ins.event = e
