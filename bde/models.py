@@ -40,10 +40,7 @@ class Contributor(models.Model):
     @staticmethod
     def take_full_contribution(user, mean):
         now = datetime.datetime.now()
-        if 8 <= now.month <= 12:
-            endate = datetime.date(now.year + 1, 6, 30)
-        else:
-            return None
+        endate = datetime.date(now.year + 1, 6, 30)
 
         return Contributor.objects.update_or_create({
             'end_date': endate,
