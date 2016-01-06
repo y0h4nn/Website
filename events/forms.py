@@ -88,7 +88,7 @@ class RecurrentEventEditForm(RecurrentEventForm, ReadOnlyFieldsMixin):
 class ExternInscriptionForm(ModelForm):
     class Meta:
         model = ExternInscription
-        labels = {'first_name': "Prénom", 'last_name': "Nom", 'birth_date': "Date de naissance"}
+        labels = {'first_name': "Prénom", 'last_name': "Nom", 'birth_date': "Date de naissance", 'formula': "Formule"}
         exclude = ["event", "via", "in_date", "payment_mean"]
 
 
@@ -102,6 +102,6 @@ class ExternLinkForm(ModelForm):
 class InvitForm(ModelForm):
     class Meta:
         model = Invitation
-        labels = {'first_name': "Prénom", 'last_name': "Nom", 'birth_date': "Date de naissance"}
+        labels = {'first_name': "Prénom", 'last_name': "Nom", 'birth_date': "Date de naissance", 'formula': "Formule"}
         fields = ["mail", "birth_date", "first_name", "last_name", "formula"]
 
