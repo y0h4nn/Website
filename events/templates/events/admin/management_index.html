@@ -77,6 +77,15 @@
                 ];
             });
         });
+{% elif event.gestion == "FOR" %}
+        url = "/events/admin/management/list_registrations/{{event.id}}"
+        var event_id = {{event.id}};
+        window.addEventListener('load', function(){
+            var userList = new UserListFOR('userlist', url, function(user){
+                return [
+                ];
+            });
+        });
 {% else %}
         url = "/events/admin/management/list_registrations/{{event.id}}"
         var event_id = {{event.id}};

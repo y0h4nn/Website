@@ -19,9 +19,11 @@ MEANS_OF_PAYMENT = [
 class Event(models.Model):
     GESTION_WAF = "WAF"
     GESTION_NOLIMIT = "NL"
+    GESTION_FORMULAS = "FOR"
     GESTION_CHOICES = [(None, 'Pas de gestion'),
                        (GESTION_WAF, 'Gestion style WAF'),
-                       (GESTION_NOLIMIT, 'Gestion style no-limit')]
+                       (GESTION_NOLIMIT, 'Gestion style no-limit'),
+                       (GESTION_FORMULAS, 'Gestion formules'), ]
 
     name = models.CharField(max_length=255)
     end_inscriptions = models.DateTimeField()

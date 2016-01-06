@@ -24,6 +24,7 @@ def admin_management(request, eid):
 
     return render(request, 'events/admin/management_index.html', context)
 
+
 @permission_required('events.manage_entries')
 def management_list_users(request, eid):
     e = get_object_or_404(Event, id=eid)
@@ -60,6 +61,8 @@ def management_list_users(request, eid):
                     "color": "bg-blue" if ins.in_date is not None else "bg-green" if is_contributor(ins.user) else "bg-red",
                     "type": "reg",
                     "id": ins.id,
+                    "formula": ins.formula.name if ins.formula else None,
+                    "formula_price": ins.formula.price_contributor if is_contributor(ins.user) else ins.formula.price_non_contributor if ins.formula else None,
                 } for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').select_related("user__contribution").annotate(null_nick=Count('user__profile__nickname')).order_by('null_nick', '-user__profile__nickname', '-user__last_name', '-user__first_name', '-user__username').reverse()
             ]
 
@@ -69,6 +72,8 @@ def management_list_users(request, eid):
                 "color": "bg-blue" if ins.in_date is not None else "",
                 "type": "ext_reg",
                 "id": ins.id,
+                "formula": ins.formula.name if ins.formula else None,
+                "formula_price": ins.formula.price_non_contributor if ins.formula else None,
             } for ins in ExternInscription.objects.filter(event=e).select_related('event').select_related('via').order_by('last_name', 'first_name')
         ]
         ret['invits'] = [{
@@ -77,6 +82,8 @@ def management_list_users(request, eid):
                 "color": "bg-blue" if ins.in_date is not None else "",
                 "type": "invit",
                 "id": ins.id,
+                "formula": ins.formula.name if ins.formula else None,
+                "formula_price": ins.formula.price_non_contributor if ins.formula else None,
             } for ins in Invitation.objects.filter(event=e).select_related('event').select_related('user__profile').order_by('last_name', 'first_name')
         ]
         return JsonResponse(ret)
@@ -124,7 +131,7 @@ def management_nl_ack(request):
     e = get_object_or_404(Event, id=req['eid'])
 
     if req['type'] == "reg":
-        if req['user']:
+        if req.get('user'):
             u = User.objects.get(id=req['iid'])
             ins = Inscription.objects.create(event=e, user=u)
         else:
