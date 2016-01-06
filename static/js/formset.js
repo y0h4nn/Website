@@ -8,7 +8,7 @@ var FormSet = function(empty_id, button_id, formset_id, nb_forms_id){
         var nb = this.formset.getElementsByTagName('tr').length
         var node = document.createElement('tr');
         node.innerHTML = this.empty.innerHTML.replace(new RegExp('__prefix__', 'g'), nb)
-        this.nb_forms.value = nb;
+        this.nb_forms.value = nb + 1;
         this.formset.insertBefore(node, null);
     }.bind(this));
 }
