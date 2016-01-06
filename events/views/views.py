@@ -118,7 +118,7 @@ def event_extern_admin(request, link):
 
 def event_extern_normal(request, link):
     e = link.event
-    if e.closed():
+    if e.closed_extern():
         return render(request, 'events/closed.html')
     if not link.places_left():
         return render(request, 'events/no_places.html')

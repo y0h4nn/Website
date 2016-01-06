@@ -39,6 +39,7 @@ class Event(models.Model):
     max_inscriptions = models.IntegerField(validators=[MinValueValidator(0)], default=0)
 
     allow_extern = models.BooleanField(default=False)
+    end_extern_inscriptions = models.DateTimeField(default=None, null=True, blank=True)
 
     allow_invitations = models.BooleanField(default=False)
     max_invitations = models.IntegerField(validators=[MinValueValidator(0)], default=0)
@@ -80,6 +81,9 @@ class Event(models.Model):
 
     def closed(self):
         return timezone.now() >= self.end_inscriptions
+
+    def closed_extern(self):
+        return self.closed() or (self.end_extern_inscriptions and timezone.now() >= self.end_extern_inscriptions)
 
     def photo_url(self):
         if self.photo:

@@ -54,12 +54,14 @@ class EventForm(ModelForm):
             create_calendar("id_start_time_0")
             create_calendar("id_end_time_0")
             create_calendar("id_invitations_start_0")
+            create_calendar("id_end_extern_inscriptions_0")
         </script>
         ''')
 
     start_time = SplitDateTimeField(label="Début")
     end_time = SplitDateTimeField(label="Fin")
     end_inscriptions = SplitDateTimeField(label="Fin des inscriptions")
+    end_extern_inscriptions = SplitDateTimeField(label="Fin des inscriptions externes")
     invitations_start = SplitDateTimeField(label="Début des invitations", required=False)
     class Meta:
         model = Event
