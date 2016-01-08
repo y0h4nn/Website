@@ -9,11 +9,13 @@
         <tr>
             <th>Date</th>
             <th>Consommation</th>
+            <th>Quantité</th>
+            <th>Prix</th>
         </tr>
     </thead>
     <tbody>
     {% for line in history %}
-        <tr><td>{{ line.date }}<td>{{ line.product }} ({{ line.price_name }}) - {{ line.category }}</td></tr>
+        <tr><td>{{ line.date }}<td>{{ line.product }} ({{ line.price_name }})</td><td>{{ line.quantity }}</td><td>{{ line.price }}</td></tr>
     {% endfor %}
     </tbody>
 </table>
