@@ -171,15 +171,15 @@ def admin_export_csv(request, eid):
     response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(event.name)
 
     writer = csv.writer(response)
-    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From', 'Entrée', 'Externe'])
+    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From', 'Entrée', 'Externe', 'Formule'])
     for r in reg:
-        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB", r.in_date, '0']
+        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB", r.in_date, '0', r.formula]
         writer.writerow(line)
     for r in ext_reg:
-        line = ["", "", r.first_name, r.last_name, r.mail, r.via.name, r.in_date, '1']
+        line = ["", "", r.first_name, r.last_name, r.mail, r.via.name, r.in_date, '1', r.formula]
         writer.writerow(line)
     for r in invits:
-        line = ["", "", r.first_name, r.last_name, r.mail, str(r.user.profile), r.in_date, '1']
+        line = ["", "", r.first_name, r.last_name, r.mail, str(r.user.profile), r.in_date, '1', r.formula]
         writer.writerow(line)
     return response
 
