@@ -63,6 +63,12 @@ class Profile(models.Model):
         return reverse('accounts:show', kwargs={'username': self.user.username})
 
 
+    def is_valid(self):
+        # We need to force fetch the object because django doesn't update it soon enough when we submit the edit form.
+        prof = self.__class__.objects.get(id=self.id)
+        return bool(prof.nickname or (prof.user.first_name and prof.user.last_name))
+
+
 class Email(models.Model):
     email = models.EmailField()
     profile = models.ForeignKey('Profile', related_name='secondary_emails')

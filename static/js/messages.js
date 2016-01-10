@@ -1,4 +1,7 @@
-function add_message(klass, text){
+function add_message(klass, text, delay){
+    if(delay == undefined){
+        delay = 5000;
+    }
     messages_div = document.getElementById('messages');
     message = document.createElement('div');
     message_icon = document.createElement('i');
@@ -30,6 +33,8 @@ function add_message(klass, text){
     message.addEventListener('click', function(){
         remove.bind(this)();
     });
-    window.setTimeout(remove.bind(message), 5000);
+    if(delay){
+        window.setTimeout(remove.bind(message), delay);
+    }
 }
 

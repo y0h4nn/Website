@@ -17,7 +17,6 @@
         {% block scripts %}{% endblock %}
     </head>
     <body>
-
         <section id="nav_container" class="">
             <header>
                 <div>
@@ -29,6 +28,7 @@
                     <ul>
                         <li><a href="{% url 'webmail:index' %}"><i class="fa fa-envelope"></i></a></li>
                         {% if request.user.is_active %}
+
                             {% if user_have_notifications %}
                                 <li><a href="{% url 'notifications:index' %}"><i class="fa fa-inbox" id="new_notification"></i></a></li>
                             {% else %}
@@ -69,6 +69,9 @@
 
         <section id="main_container">
             <div id='messages'></div>
+            {% if request.user.is_active and not request.user.profile.is_valid %}
+                <script>add_message("error", "Veuillez remplir les informations de votre profil svp. (Nom, prénom et/ou surnom)", 0);</script>
+            {% endif %}
             {% if messages %}
                 <script>
                     {% for message in messages %}
