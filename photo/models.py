@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
-from events.models import Inscription, Event, ExternInscription
+from events.models import Inscription, Event, ExternInscription, Invitation
 
 class StandaloneAppPermissions(models.Model):
     class Meta:
@@ -89,7 +89,8 @@ class EventAccess(AccessPolicy):
     def extern_can_access(self, email):
         try:
             inscription = ExternInscription.objects.get(mail=email, event=self.event)
-            return bool(inscription.in_date)
+            invitation = Invitation.objects.get(mail=email, event=self.event)
+            return bool(inscription.in_date) or bool(invitation.in_date)
         except ExternInscription.DoesNotExist:
             return False
 
