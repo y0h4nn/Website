@@ -11,12 +11,12 @@
 
 {% block main %}
     {% if commands.has_previous %}
-        <a href="?page={{ commands.previous_page_number }}">&lt;</a>
+        <a href="?page={{ commands.previous_page_number }}">Semaine précedente</a>
     {% endif %}
     {% if commands.has_next %}
-        <a href="?page={{ commands.next_page_number }}">&gt;</a>
+        <a style="float:right" href="?page={{ commands.next_page_number }}">Semaine suivant</a>
     {% endif %}
-
+    <br>
     {% for command in commands %}
         <div class="toolbar">
             <a href="{% url 'pizza:admin_export_csv' cid=command.id %}"><i class="fa fa-download"></i></a>
