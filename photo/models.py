@@ -93,6 +93,8 @@ class EventAccess(AccessPolicy):
             return bool(inscription.in_date) or bool(invitation.in_date)
         except ExternInscription.DoesNotExist:
             return False
+        except Invitation.DoesNotExist:
+            return False
 
     def __str__(self):
         return "Les participants de l'évènement %s peuvent voir l'album" % self.event.name
