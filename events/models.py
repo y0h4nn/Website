@@ -1,9 +1,10 @@
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Count, Sum
 from django.templatetags.static import static
 from django.utils import timezone
+from django.utils.functional import cached_property
 from bde.shortcuts import is_contributor
 import uuid as u
 import json
@@ -59,8 +60,9 @@ class Event(models.Model):
         )
 
     def registrations_number(self):
-        return self.inscriptions.all().count() + self.extern_inscriptions.all().count() + self.nb_invitations()
+        return self.inscriptions.all().count() + self.extern_inscriptions.all().count() + self.nb_invitations
 
+    @cached_property
     def nb_invitations(self):
         return self.invitations.all().count()
 
@@ -95,11 +97,12 @@ class Event(models.Model):
 
     @staticmethod
     def to_come(user):
-        return [(event.inscriptions.filter(user=user).count(), event) for event in Event.objects.filter(
+        events = [event for event in Event.objects.filter(
             Q(model=False),
             Q(end_inscriptions__gt=timezone.now()),
             Q(inscriptions__user=user) | Q(private=False)
-        ).distinct().order_by('start_time')]
+        ).distinct().prefetch_related('formulas').order_by('start_time').annotate(ins=Count('inscriptions', user=user), reg_nb=Count('inscriptions') + Count('extern_inscriptions') + Count('invitations'))]
+        return [(event.ins, event) for event in events]
 
     def formulas_json(self):
         res = {f.name: "{} <br>(Cotisant: {}€ / Non cotisant: {}€)".format(f.name, f.price_contributor, f.price_non_contributor) for f in self.formulas.all()}
