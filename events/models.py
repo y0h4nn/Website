@@ -101,7 +101,7 @@ class Event(models.Model):
             Q(model=False),
             Q(end_inscriptions__gt=timezone.now()),
             Q(inscriptions__user=user) | Q(private=False)
-        ).distinct().prefetch_related('formulas').order_by('start_time').annotate(ins=Count('inscriptions', user=user), reg_nb=Count('inscriptions') + Count('extern_inscriptions') + Count('invitations'))]
+        ).distinct().prefetch_related('formulas').order_by('start_time').annotate(ins=Count('inscriptions', user=user), reg_nb=(Count('inscriptions', distinct=True) + Count('extern_inscriptions', distinct=True) + Count('invitations', distinct=True)))]
         return [(event.ins, event) for event in events]
 
     def formulas_json(self):
