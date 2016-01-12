@@ -47,8 +47,8 @@
                 <footer>
                     <a href="{% url 'news:comment' nid=new.id %}">
                     <i class="fa fa-comments-o"></i>
-                    {% if new.comments_count %}
-                        {{ new.comments_count }} commentaires.
+                    {% if new.nb_comments %}
+                        {{ new.nb_comments }} commentaires.
                     {% else %}
                         Il n'y a pas de commentaire.
                     {% endif %}
