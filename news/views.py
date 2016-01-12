@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required, permission_required
+from django.db.models import Count
 from . import forms
 from . import models
 import json
@@ -8,7 +9,7 @@ import json
 
 def index(request):
     context = {
-        'news': models.News.objects.order_by('pub_date').all().reverse().select_related('author__profile')[:10],
+        'news': models.News.objects.order_by('pub_date').all().reverse().select_related('author__profile').annotate(nb_comments=Count('comments'))[:10],
     }
     return render(request, "news/index.html", context)
 
@@ -33,6 +34,7 @@ def create(request):
 
     return render(request, "news/create.html", context)
 
+
 @permission_required('news.change_news')
 def edit(request, nid):
     n = get_object_or_404(models.News, id=nid)
@@ -45,6 +47,7 @@ def edit(request, nid):
         form = forms.NewsForm(instance=n)
     context = {'form': form, 'news': n}
     return render(request, "news/edit.html", context)
+
 
 @permission_required('news.delete_news')
 def delete(request, nid):

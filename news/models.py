@@ -10,9 +10,6 @@ class News(models.Model):
     edit_date = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL)
 
-    @cached_property
-    def comments_count(self):
-        return Comment.objects.filter(news=self).count()
 
 class Comment(models.Model):
     news = models.ForeignKey(News, related_name='comments')
