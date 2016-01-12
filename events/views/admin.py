@@ -155,9 +155,9 @@ def admin_list_registrations(request, eid):
             return JsonResponse({"status": 1})
         return JsonResponse({"status": 0})
     e = get_object_or_404(Event, id=eid, model=False)
-    reg = Inscription.objects.filter(event=e).select_related("user__profile").select_related('event')
-    ext_reg = ExternInscription.objects.filter(event=e).select_related('event').select_related('via')
-    invits = Invitation.objects.filter(event=e).select_related('event').select_related('user__profile')
+    reg = Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').select_related('formula')
+    ext_reg = ExternInscription.objects.filter(event=e).select_related('event').select_related('via').select_related('formula')
+    invits = Invitation.objects.filter(event=e).select_related('event').select_related('user__profile').select_related('formula')
     return render(request, 'events/admin/list_registrations.html', {'event': e, 'reg': reg, 'ext_reg': ext_reg, 'invits': invits})
 
 
