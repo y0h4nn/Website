@@ -3,6 +3,7 @@
 {% load static %}
 {% load menu_item %}
 {% load markdown %}
+{% load cache %}
 
 {% block styles %}
 {% endblock %}
@@ -26,39 +27,41 @@
 {% endblock%}
 
 {% block main %}
-    {% if news %}
-        {% for new in news %}
-            <article class="news">
-                <header>
-                    <h1>{{ new.title }}</h1>
-                    <h2>
-                        Le {{ new.pub_date }} par {{ new.author.profile }}
-                        {% if perms.news.change_news %}
-                            <a href="{% url 'news:edit' nid=new.id %}" title="Editer"><i class="fa fa-pencil"></i></a>
+    {% cache 86400 news_index %}
+        {% if news %}
+            {% for new in news %}
+                <article class="news">
+                    <header>
+                        <h1>{{ new.title }}</h1>
+                        <h2>
+                            Le {{ new.pub_date }} par {{ new.author.profile }}
+                            {% if perms.news.change_news %}
+                                <a href="{% url 'news:edit' nid=new.id %}" title="Editer"><i class="fa fa-pencil"></i></a>
+                            {% endif %}
+                            {% if perms.news.delete_news %}
+                                <a href="{% url 'news:delete' nid=new.id %}" class="red" title="Supprimer"><i class="fa fa-trash-o"></i></a>
+                            {% endif %}
+                        </h2>
+                    </header>
+                    <main>
+                        {{ new.content|markdown }}
+                    </main>
+                    <footer>
+                        <a href="{% url 'news:comment' nid=new.id %}">
+                        <i class="fa fa-comments-o"></i>
+                        {% if new.nb_comments %}
+                            {{ new.nb_comments }} commentaires.
+                        {% else %}
+                            Il n'y a pas de commentaire.
                         {% endif %}
-                        {% if perms.news.delete_news %}
-                            <a href="{% url 'news:delete' nid=new.id %}" class="red" title="Supprimer"><i class="fa fa-trash-o"></i></a>
-                        {% endif %}
-                    </h2>
-                </header>
-                <main>
-                    {{ new.content|markdown }}
-                </main>
-                <footer>
-                    <a href="{% url 'news:comment' nid=new.id %}">
-                    <i class="fa fa-comments-o"></i>
-                    {% if new.nb_comments %}
-                        {{ new.nb_comments }} commentaires.
-                    {% else %}
-                        Il n'y a pas de commentaire.
-                    {% endif %}
-                    </a>
-                </footer>
-            </article>
-        {% endfor %}
-    {% else %}
-        <p>
-            Il n'y a pas d'actualités.
-        </p>
-    {% endif %}
+                        </a>
+                    </footer>
+                </article>
+            {% endfor %}
+        {% else %}
+            <p>
+                Il n'y a pas d'actualités.
+            </p>
+        {% endif %}
+    {% endcache %}
 {% endblock %}

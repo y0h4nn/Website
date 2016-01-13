@@ -1,5 +1,7 @@
 import redis
 from django.http import HttpResponse
+from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
 
 
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -7,6 +9,11 @@ r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 def invalid_cache(key):
     r.set(key, 1)
+
+
+def invalid_fragment_cache(fragment_name, *variables):
+    cache_key = make_template_fragment_key(fragment_name, vary_on=variables)
+    cache.delete(cache_key)
 
 
 def cache_unless(key, methods=["OPTIONS", "GET"]):
