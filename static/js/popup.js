@@ -250,24 +250,41 @@ function DiaporamaPopup(images){
     this.index = 0;
     this.container = document.createElement('div');
     this.container.setAttribute('class', this.baseClass);
-    this.image = document.createElement('div');
+
+    this.image = document.createElement('img');
+
+    this.overlay = document.createElement('div');
+
     this.nextButton = document.createElement('button');
     this.nextButton.setAttribute('type', 'button');
     this.nextButton.innerHTML = "<i class='fa fa-chevron-right'></i>";
+
     this.previousButton = document.createElement('button');
     this.previousButton.setAttribute('type', 'button');
     this.previousButton.innerHTML = "<i class='fa fa-chevron-left'></i>";
 
+    this.downloadButton = document.createElement('button');
+    this.downloadButton.setAttribute('type', 'button');
+    this.downloadButton.innerHTML = "<i class='fa fa-download'></i>";
+
     document.body.insertBefore(this.container, document.body.firstChild);
-    this.container.appendChild(this.previousButton);
     this.container.appendChild(this.image);
-    this.container.appendChild(this.nextButton);
+    this.container.appendChild(this.overlay);
+    this.overlay.appendChild(this.previousButton);
+    this.overlay.appendChild(this.downloadButton);
+    this.overlay.appendChild(this.nextButton);
 
     this.container.addEventListener('click', function(event){
         console.log(event.target, this.previousButton, this.nextButton);
-        if(!this.previousButton.contains(event.target) && !this.nextButton.contains(event.target)){
+        if(!this.overlay.contains(event.target)){
             this.close();
         }
+    }.bind(this));
+
+    this.downloadButton.addEventListener('click', function(event){
+        var url = this.images[this.index];
+        console.log(url);
+        document.location.href = url;
     }.bind(this));
 
     this.nextButton.addEventListener('click', this.nextImage.bind(this));
@@ -295,7 +312,7 @@ DiaporamaPopup.prototype = Object.create(Popup.prototype, {
     selectImage: {
         value: function(index){
             this.index = this.normalizedIndex(index);
-            this.image.style.backgroundImage = "url('"+this.images[this.index]+"'), url('/static/images/spinner.gif')";
+            this.image.src = this.images[this.index];
             this.prefetchImage(this.index - 1);
             this.prefetchImage(this.index + 1);
         },
