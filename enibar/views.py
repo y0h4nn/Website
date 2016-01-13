@@ -70,7 +70,7 @@ request_history = _create_view(HistoryLine)
 
 def show_history(request, page):
     page = page or 1
-    note = get_object_or_404(Note, mail="a2levauf@enib.fr")  # TODO: Change by request.user.email
+    note = get_object_or_404(Note, mail=request.user.email)
     paginator = Paginator(HistoryLine.objects.filter(note=note.nickname), 50)
 
     try:
