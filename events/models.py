@@ -101,8 +101,12 @@ class Event(models.Model):
             Q(model=False),
             Q(end_inscriptions__gt=timezone.now()),
             Q(inscriptions__user=user) | Q(private=False)
-        ).distinct().prefetch_related('formulas').order_by('start_time').annotate(ins=Count('inscriptions', user=user), reg_nb=(Count('inscriptions', distinct=True) + Count('extern_inscriptions', distinct=True) + Count('invitations', distinct=True)))]
-        return [(event.ins, event) for event in events]
+        ).distinct().prefetch_related('formulas').order_by('start_time')\
+        .annotate(reg_nb=(Count('inscriptions', distinct=True) + Count('extern_inscriptions', distinct=True) + Count('invitations', distinct=True)))\
+        .extra(select={'ins': "(SELECT COUNT(*) FROM events_inscription WHERE events_inscription.event_id=events_event.id AND events_inscription.user_id=%d)" % user.id})]
+        a = [(event.ins, event) for event in events]
+        print(a)
+        return a
 
     def formulas_json(self):
         res = {f.name: "{} <br>(Cotisant: {}€ / Non cotisant: {}€)".format(f.name, f.price_contributor, f.price_non_contributor) for f in self.formulas.all()}
