@@ -11,10 +11,10 @@
 
 {% block main %}
     {% if commands.has_previous %}
-        <a href="?page={{ commands.previous_page_number }}">Semaine précedente</a>
+        <a href="?page={{ commands.previous_page_number }}">Semaine suivante</a>
     {% endif %}
     {% if commands.has_next %}
-        <a style="float:right" href="?page={{ commands.next_page_number }}">Semaine suivant</a>
+        <a style="float:right" href="?page={{ commands.next_page_number }}">Semaine précedente</a>
     {% endif %}
     <br>
     {% for command in commands %}
