@@ -91,7 +91,7 @@ class AddressForm(forms.ModelForm):
             'town',
         ]
         labels = {
-            'street': 'voie',
+            'street': 'Voie',
             'postal_code': 'Code postal',
             'town': 'Ville',
         }
