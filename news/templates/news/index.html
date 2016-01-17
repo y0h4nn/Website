@@ -27,7 +27,7 @@
 {% endblock%}
 
 {% block main %}
-    {% cache 86400 news_index %}
+    {% cache 86400 news_index request.user.username %}
         {% if news %}
             {% for new in news %}
                 <article class="news">

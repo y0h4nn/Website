@@ -1,4 +1,5 @@
 from core.cache import invalid_fragment_cache
+from django.core.cache import cache
 from django.db import models
 from django.conf import settings
 from django.db.models.signals import post_save, post_delete
@@ -25,5 +26,5 @@ class Comment(models.Model):
 @receiver(post_save, sender=Comment)
 @receiver(post_delete, sender=Comment)
 def cache_profile_handler(sender, **kwargs):
-    invalid_fragment_cache("news_index")
+    cache.delete_pattern("template.cache.news_index.*")
 
