@@ -275,7 +275,6 @@ function DiaporamaPopup(images){
     this.overlay.appendChild(this.nextButton);
 
     this.container.addEventListener('click', function(event){
-        console.log(event.target, this.previousButton, this.nextButton);
         if(!this.overlay.contains(event.target)){
             this.close();
         }
@@ -283,8 +282,12 @@ function DiaporamaPopup(images){
 
     this.downloadButton.addEventListener('click', function(event){
         var url = this.images[this.index];
-        console.log(url);
-        document.location.href = url;
+        var a = document.createElement('a');
+        document.body.appendChild(a);
+        a.style.display = 'none';
+        a.setAttribute('download', '');
+        a.setAttribute('href', url);
+        a.click();
     }.bind(this));
 
     this.nextButton.addEventListener('click', this.nextImage.bind(this));
