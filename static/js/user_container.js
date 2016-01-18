@@ -6,18 +6,18 @@ window.addEventListener('load', function(){
   var previousSize = document.body.clientWidth;
 
   function retract(){
-      button.parentNode.setAttribute('class', 'retracted');
+      document.body.setAttribute('class', 'retracted')
       button.firstChild.setAttribute('class', 'fa fa-chevron-left');
       localStorage.setItem('userContainerRetracted', true);
   }
   function expand(){
-      button.parentNode.setAttribute('class', '');
+      document.body.setAttribute('class', '')
       button.firstChild.setAttribute('class', 'fa fa-chevron-right');
       localStorage.setItem('userContainerRetracted', false);
   }
 
   button.addEventListener('click', function(event){
-    if(button.parentNode.getAttribute('class') == 'retracted'){
+    if(document.body.getAttribute('class') == 'retracted'){
       expand();
       explicitOpen = true;
     }
