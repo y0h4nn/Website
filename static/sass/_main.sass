@@ -1,6 +1,10 @@
 #main_container
   @include vendor-prefix(flex, 1 1 auto)
   @include vendor-prefix(order, 2)
+  max-width: calc(100% - 300px - 225px)
+
+.retracted #main_container
+  max-width: calc(100% - 300px - 50px)
 
 #main_div
   margin: 2.5em
@@ -53,6 +57,11 @@
   main
     color: #555
 
+@media screen and (max-width: 1280px)
+  #main_container
+    max-width: calc(100% - 200px - 225px)
+  .retracted #main_container
+    max-width: calc(100% - 200px - 50px)
 
 @media screen and (max-width: 768px)
   #main_header
@@ -84,5 +93,6 @@
 
 @media screen and (max-width: $mobile_view_treshold)
   #main_container
+    max-width: 100%
     @include vendor-prefix(flex, 1 1 auto)
     @include vendor-prefix(order, 3)

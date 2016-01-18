@@ -92,7 +92,7 @@ $user_container_width: 225px
         color: white
 
 
-#user_container.retracted
+.retracted #user_container
   @include vendor-prefix(flex, 0 1 50px)
   min-width: 50px
   padding: 0.5em
@@ -123,7 +123,7 @@ $user_container_width: 225px
   #toggle_user_container
     display: none
 
-  #user_container.retracted
+  .retracted #user_container
     @include vendor-prefix(flex, 1 1 auto)
     @include vendor-prefix(order, 2)
 
