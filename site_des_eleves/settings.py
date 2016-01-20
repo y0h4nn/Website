@@ -148,7 +148,7 @@ MEDIA_URL = '/static/medias/'
 
 AUTHENTICATION_BACKENDS = (
     'accounts.backends.NormalAuth',
-    'accounts.backends.ImapAuth',
+    'accounts.backends.CASAuth',
     'django.contrib.auth.backends.ModelBackend'
 )
 

@@ -1,4 +1,4 @@
-import imaplib
+import requests
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.hashers import check_password
 from django.db import IntegrityError
@@ -29,21 +29,16 @@ class NormalAuth(BaseAuth):
                 return None
 
 
-class ImapAuth(BaseAuth):
+class CASAuth(BaseAuth):
     def authenticate(self, email=None, password=None):
+        user = None
         if email and password:
-            with imaplib.IMAP4_SSL('imap-eleves.enib.fr') as srv:
-                srv._mode_utf8()
-
-                username = normalize_username(email.split("@")[0].strip())
-                email = email.strip() + '@enib.fr' if '@' not in email else email
-                user = None
-                try:
-                    srv.login(username, password)
-                    user = User.objects.create_user(username, email, password)
-                    enib_group = Group.objects.get(name='Enib')
-                    enib_group.user_set.add(user)
-                    user.save()
-                except (imaplib.IMAP4.error, IntegrityError):
-                    pass
-                return user
+            username = normalize_username(email.split("@")[0].strip())
+            email = email.strip() + '@enib.fr' if '@' not in email else email
+            r = requests.post('https://cas.enib.fr/v1/tickets/', data={'username': username, 'password': password})
+            if r.status_code == 201:
+                user = User.objects.create_user(username, email, password)
+                enib_group = Group.objects.get(name='Enib')
+                enib_group.user_set.add(user)
+                user.save()
+        return user

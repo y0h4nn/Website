@@ -9,7 +9,7 @@ class NormalAuthTest(TestCase):
 
     def setUp(self):
         self.auth_backend = backends.NormalAuth()
-        self.imap_backend = backends.ImapAuth()
+        self.cas_backend = backends.CASAuth()
 
         # Be careful when changing user passwords as they are hardcoded
         self.ext_user = User.objects.create_user('AAA', 'AAA@exemple.com', 'AAA')
@@ -36,30 +36,30 @@ class NormalAuthTest(TestCase):
         auth_user = self.auth_backend.authenticate(email=self.enib_user.email, password='INVALID')
         self.assertIsNone(auth_user)
 
-    def test_imap_enib_fail(self):
-        auth_user = self.imap_backend.authenticate(email='INVALID@enib.fr', password='INVALID')
+    def test_cas_enib_fail(self):
+        auth_user = self.cas_backend.authenticate(email='INVALID@enib.fr', password='INVALID')
         self.assertIsNone(auth_user)
 
-    def test_imap_enib_success(self):
+    def test_cas_enib_success(self):
         try:
             mail = os.environ['test_mail']
             password = os.environ['test_password']
         except:
             mail = password = None
-        auth_user = self.imap_backend.authenticate(email=mail, password=password)
+        auth_user = self.cas_backend.authenticate(email=mail, password=password)
         groups = auth_user.groups.all()
         self.assertIsNotNone(auth_user)
         self.assertEqual(auth_user.email, mail)
         self.assertEqual(groups[0].name, "Tous")
         self.assertEqual(groups[1].name, "Enib")
 
-    def test_imap_enib_success_with_space(self):
+    def test_cas_enib_success_with_space(self):
         try:
             mail = os.environ['test_mail'] + " "
             password = os.environ['test_password']
         except:
             mail = password = None
-        auth_user = self.imap_backend.authenticate(email=mail, password=password)
+        auth_user = self.cas_backend.authenticate(email=mail, password=password)
         groups = auth_user.groups.all()
         self.assertIsNotNone(auth_user)
         self.assertEqual(auth_user.email, mail.strip())
