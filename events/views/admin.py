@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from bde.shortcuts import is_contributor
 
 import csv
 import json
@@ -164,22 +165,32 @@ def admin_list_registrations(request, eid):
 @permission_required('events.access_list')
 def admin_export_csv(request, eid):
     event = get_object_or_404(Event, id=eid, model=False)
-    reg = Inscription.objects.filter(event=event).select_related("user__profile")
+    reg = Inscription.objects.filter(event=event).select_related("user__profile").select_related("user__contribution")
     ext_reg = ExternInscription.objects.filter(event=event).select_related("via")
     invits = Invitation.objects.filter(event=event).select_related('user__profile')
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(event.name)
 
     writer = csv.writer(response)
-    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From', 'Entrée', 'Externe', 'Formule'])
+    def formula_price(formula, contributor=False):
+        if formula is None:
+            return 0
+        if contributor:
+            p = formula.price_contributor
+        else:
+            p = formula.price_non_contributor
+        return "{} €".format(p)
+
+    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From', 'Entrée', 'Externe', 'Formule', "Cotisant", "Prix"])
     for r in reg:
-        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB", r.in_date, '0', r.formula]
+        contributor = is_contributor(r.user)
+        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB", r.in_date, '0', r.formula, contributor, formula_price(r.formula, contributor)]
         writer.writerow(line)
     for r in ext_reg:
-        line = ["", "", r.first_name, r.last_name, r.mail, r.via.name, r.in_date, '1', r.formula]
+        line = ["", "", r.first_name, r.last_name, r.mail, r.via.name, r.in_date, '1', r.formula, False, formula_price(r.formula)]
         writer.writerow(line)
     for r in invits:
-        line = ["", "", r.first_name, r.last_name, r.mail, str(r.user.profile), r.in_date, '1', r.formula]
+        line = ["", "", r.first_name, r.last_name, r.mail, str(r.user.profile), r.in_date, '1', r.formula, False, formula_price(r.formula)]
         writer.writerow(line)
     return response
 
