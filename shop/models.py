@@ -18,14 +18,8 @@ Arnaud
 
 """
 
-#TODO add unit testing
-#FIXME add unit testing
-#XXX add unit testing
-
-
 from collections import Counter
-from django.contrib.auth.models import User
-from django.db import models, IntegrityError, transaction
+from django.db import models, transaction
 from django.conf import settings
 from bde.models import Contributor
 from events.models import Event, Inscription
