@@ -11,13 +11,12 @@ from django.contrib.auth.decorators import login_required, permission_required
 from . import forms
 from . import models
 from events.models import Inscription
-from notifications.shortcuts import notify
 
 
 @login_required
 def index(request):
     context = {
-        'history': models.BuyingHistory.objects.filter(user=request.user).order_by('date').select_related('user__profile').all().reverse()
+        'history': models.BuyingHistory.objects.filter(user=request.user).order_by('date').select_related('user__profile').select_related('seller__profile').all().reverse()
     }
 
     return render(request, 'shop/index.html', context)
@@ -45,7 +44,7 @@ def sells(request):
         if req.get('payment_mean') not in [p[0] for p in models.MEANS_OF_PAYMENT]:
             return JsonResponse({'error': 'Le moyen de paiement n\'est pas valide'})
 
-        item.buy(user, req.get('payment_mean'))
+        item.buy(user, req.get('payment_mean'), request.user)
 
         return JsonResponse({'error': None, 'name': item.name, 'user': str(user.profile)})
     else:
@@ -59,7 +58,7 @@ def sells(request):
 
 @permission_required('shop.view_history')
 def history(request):
-    history = models.BuyingHistory.objects.select_related('user__profile').select_related('pack').select_related('product').order_by('date').all().reverse()
+    history = models.BuyingHistory.objects.select_related('user__profile').select_related('seller__profile').select_related('pack').select_related('product').order_by('date').all().reverse()
     paginator = Paginator(history, 25)
 
     page = request.GET.get('page')
@@ -80,12 +79,12 @@ def history(request):
 @permission_required('shop.view_history')
 def history_export_csv(request):
 
-    history = models.BuyingHistory.objects.select_related('user').select_related('pack').select_related('product').order_by('date').all().reverse()
+    history = models.BuyingHistory.objects.select_related('user').select_related('seller__profile').select_related('pack').select_related('product').order_by('date').all().reverse()
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="historique.csv"'
     writer = csv.writer(response)
-    writer.writerow(['Date', 'Produit', 'Type', 'Prix', 'Moyen de paiment', 'Prenom', 'Nom', 'Mail'])
+    writer.writerow(['Date', 'Produit', 'Type', 'Prix', 'Moyen de paiment', 'Prenom', 'Nom', 'Mail', 'Vendeur'])
 
     for h in history:
         if h.type == 'pack':
@@ -102,6 +101,7 @@ def history_export_csv(request):
             h.user.first_name,
             h.user.last_name,
             h.user.email,
+            str(h.seller.profile) if h.seller else "",
         ])
 
     return response

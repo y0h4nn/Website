@@ -70,12 +70,13 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-    def buy(self, user, payment_mean):
+    def buy(self, user, payment_mean, seller):
         buy = BuyingHistory(
             user=user,
             product=self,
             type='product',
-            payment_mean=payment_mean
+            payment_mean=payment_mean,
+            seller=seller,
         )
         buy.save()
         notify(
@@ -132,12 +133,13 @@ class Packs(models.Model):
     def __str__(self):
         return self.name
 
-    def buy(self, user, payment_mean):
+    def buy(self, user, payment_mean, seller):
         buy = BuyingHistory(
             user=user,
             pack=self,
             type='pack',
-            payment_mean=payment_mean
+            payment_mean=payment_mean,
+            seller=seller
         )
         buy.save()
         notify(
@@ -193,15 +195,19 @@ TYPES = [
 class BuyingHistory(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     type = models.CharField(max_length=10, choices=TYPES)
-    product = models.ForeignKey(Product ,null=True)
-    pack = models.ForeignKey(Packs, null=True)
+    product = models.ForeignKey(Product ,null=True, blank=True)
+    pack = models.ForeignKey(Packs, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT)
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True, default=None, related_name="seller")
 
     class Meta:
         permissions = (
             ('view_history', 'Can view history'),
         )
+
+    def __str__(self):
+        return "%s bought by %s" % (self.product or self.pack, self.user.profile)
 
     @staticmethod
     def get_product_buyers(product):

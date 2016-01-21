@@ -32,29 +32,36 @@
                     <th>prix</th>
                     <th>Moyen de paiement</th>
                     <th>Type</th>
+                    <th>Vendeur</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in history %}
-                    {% if item.type == 'pack' %}
-                        <tr>
+                    <tr>
+                        {% if item.type == 'pack' %}
                             <td>{{ item.pack.name }}</td>
-                            <td>{{ item.user.profile }}</td>
-                            <td>{{ item.date }}</td>
-                            <td>{{ item.pack.price }} €</td>
-                            <td>{{ item.payment_mean }}</td>
-                            <td>Pack</td>
-                        </tr>
-                    {% else %}
-                        <tr>
+                        {% else %}
                             <td>{{ item.product.name }}</td>
-                            <td>{{ item.user.profile }}</td>
-                            <td>{{ item.date }}</td>
+                        {% endif %}
+
+                        <td>{{ item.user.profile }}</td>
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.payment_mean }}</td>
+
+                        {% if item.type == 'pack' %}
+                            <td>{{ item.pack.price }} €</td>
+                            <td>Pack</td>
+                        {% else %}
                             <td>{{ item.product.price }} €</td>
-                            <td>{{ item.payment_mean }}</td>
                             <td>Produit</td>
-                        </tr>
-                    {% endif %}
+                        {% endif %}
+
+                        {% if item.seller %}
+                            <td>{{ item.seller.profile }}</td>
+                        {% else %}
+                            <td>n/d</td>
+                        {% endif %}
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
