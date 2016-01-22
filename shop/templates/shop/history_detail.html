@@ -1,0 +1,36 @@
+<p>
+    <strong>Nom: </strong>
+    {% if item.type == 'pack' %}
+       {{ item.pack.name }}
+    {% else %}
+        {{ item.product.name }}
+    {% endif %}
+</p>
+
+<p>
+    <strong>Date de l'achat:</strong>
+    {{ item.date }}
+</p>
+
+<p>
+    <strong>Moyen de payement:</strong>
+    {{ item.payment_mean }}
+</p>
+
+{% if item.seller %}
+<p>
+    <strong>Vendeur:</strong>
+    {{ item.seller }} <a href="mailto:{{ item.seller.email }}">{{ item.seller.email }}</a>
+</p>
+{% endif %}
+
+{% if item.type == 'pack' %}
+<p>
+    <strong>Contenu du pack:</strong>
+    <ul>
+        {% for p in item.pack.products.all %}
+            <li>{{ p }}</li>
+        {% endfor %}
+    </ul>
+</p>
+{% endif %}

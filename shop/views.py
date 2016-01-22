@@ -107,6 +107,14 @@ def history_export_csv(request):
     return response
 
 
+@login_required
+def history_detail(request, hid):
+    ctx = {
+        'item': get_object_or_404(models.BuyingHistory, pk=hid),
+    }
+    return render(request, 'shop/history_detail.html', ctx)
+
+
 @permission_required('shop.delete_buyinghistory')
 def history_delete(request, hid):
     entry = get_object_or_404(models.BuyingHistory, id=hid)

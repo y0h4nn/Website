@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block scripts %}
+    <script src="{% static 'js/popup.js' %}"></script>
 {% endblock %}
 
 {% block title %}
@@ -33,6 +34,7 @@
                     <th>Moyen de paiement</th>
                     <th>Type</th>
                     <th>Vendeur</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -61,6 +63,7 @@
                         {% else %}
                             <td>n/d</td>
                         {% endif %}
+                        <td class="action_cell"><a href="{% url 'shop:history_detail' hid=item.pk %}" onclick="showDetails(this);return false;" ><i class="fa fa-list-alt"></i></a></td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -70,4 +73,12 @@
             Vous n'avez rien acheté.
         </p>
     {% endif %}
+    <script>
+        function showDetails(element){
+            var popup = new RemoteHtmlPopup("Détail de l'achat", element.href);
+            popup.pop();
+        }
+    </script>
+
+
 {% endblock %}
