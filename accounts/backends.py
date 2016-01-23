@@ -19,14 +19,21 @@ class BaseAuth:
 class NormalAuth(BaseAuth):
     def authenticate(self, email=None, password=None):
         if email and password:
-            email = email + '@enib.fr' if '@' not in email else email
-            try:
-                user = User.objects.get(email=email)
-                if not check_password(password, user.password):
+            if '@' in email:
+                try:
+                    user = User.objects.get(email=email)
+                except User.DoesNotExist:
                     return None
-                return user
-            except User.DoesNotExist:
+            else:
+                try:
+                    user = User.objects.get(username=email)
+                    print(user)
+                except User.DoesNotExist:
+                    return None
+            if not check_password(password, user.password):
                 return None
+            return user
+
 
 
 class CASAuth(BaseAuth):
@@ -37,8 +44,11 @@ class CASAuth(BaseAuth):
             email = email.strip() + '@enib.fr' if '@' not in email else email
             r = requests.post('https://cas.enib.fr/v1/tickets/', data={'username': username, 'password': password})
             if r.status_code == 201:
-                user = User.objects.create_user(username, email, password)
-                enib_group = Group.objects.get(name='Enib')
-                enib_group.user_set.add(user)
-                user.save()
+                try:
+                    user = User.objects.create_user(username, email, password)
+                    enib_group = Group.objects.get(name='Enib')
+                    enib_group.user_set.add(user)
+                    user.save()
+                except IntegrityError:
+                    return None
         return user
