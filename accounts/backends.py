@@ -40,6 +40,8 @@ class CASAuth(BaseAuth):
     def authenticate(self, email=None, password=None):
         user = None
         if email and password:
+            if '@' in email and not email.strip().endswith('@enib.fr'):
+                return None
             username = normalize_username(email.split("@")[0].strip())
             email = email.strip() + '@enib.fr' if '@' not in email else email
             r = requests.post('https://cas.enib.fr/v1/tickets/', data={'username': username, 'password': password})
