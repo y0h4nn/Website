@@ -1,5 +1,5 @@
 
-from django.conf.urls import include, url
+from django.conf.urls import url
 from . import views
 
 urlpatterns = [
@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^sells$', views.sells, name='sells'),
     url(r'^history$', views.history, name='history'),
     url(r'^history/export$', views.history_export_csv, name='history_export'),
+    url(r'^history/detail/(?P<hid>[0-9]+)$', views.history_detail, name='history_detail'),
     url(r'^admin$', views.admin, name='admin'),
     url(r'^admin/history/delete/(?P<hid>[0-9]+)', views.history_delete, name='history_delete'),
     url(r'^admin/product/delete/(?P<pid>[0-9]+)', views.product_delete, name='product_delete'),

@@ -35,6 +35,7 @@
                     <th>prix</th>
                     <th>Moyen de paiement</th>
                     <th>Type</th>
+                    <th>Vendeur</th>
                     {% if perms.shop.delete_history %}
                         <th></th>
                     {% endif %}
@@ -43,16 +44,28 @@
             <tbody>
                 {% for item in history %}
                     <tr>
-                        <td>{{ item.pack.name }}</td>
+                        {% if item.type == 'pack' %}
+                            <td>{{ item.pack.name }}</td>
+                        {% else %}
+                            <td>{{ item.product.name }}</td>
+                        {% endif %}
+
                         <td>{{ item.user.profile }}</td>
                         <td>{{ item.date }}</td>
                         <td>{{ item.payment_mean }}</td>
+
                         {% if item.type == 'pack' %}
                             <td>{{ item.pack.price }} €</td>
                             <td>Pack</td>
                         {% else %}
                             <td>{{ item.product.price }} €</td>
                             <td>Produit</td>
+                        {% endif %}
+
+                        {% if item.seller %}
+                            <td>{{ item.seller.profile }}</td>
+                        {% else %}
+                            <td>n/d</td>
                         {% endif %}
                         {% if perms.shop.delete_buyinghistory %}
                             <td><a href="{% url 'shop:history_delete' hid=item.id %}"><i class="fa fa-trash-o red"></i></a></td>

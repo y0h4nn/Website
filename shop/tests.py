@@ -9,6 +9,7 @@ from events.models import Event, Inscription
 class ModelsTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('user', 'user@exemple.com', 'password')
+        self.seller = User.objects.create_user('seller', 'seller@exemple.com', 'password')
         self.product = models.Product.objects.create(
             name='default',
             price=51.69,
@@ -73,7 +74,7 @@ class ModelsTest(TestCase):
 
         buy_count = 0
         for mean in models.MEANS_OF_PAYMENT:
-            product_1.buy(self.user, mean[0])
+            product_1.buy(self.user, mean[0], self.seller)
             buy_count += 1
             history_count = models.BuyingHistory.objects.filter(
                 product=product_1,
@@ -87,9 +88,9 @@ class ModelsTest(TestCase):
             name='Product event',
             price=0,
             description='Description',
-            event=self.event
+            event=self.event,
         )
-        product_event.buy(self.user, models.MEANS_OF_PAYMENT[0][0])
+        product_event.buy(self.user, models.MEANS_OF_PAYMENT[0][0], self.seller)
         self.assertEqual(Inscription.objects.filter(event=self.event, user=self.user).count(), 1)
 
 
@@ -105,7 +106,7 @@ class ModelsTest(TestCase):
         last.event = events[1]
         last.save()
 
-        pack.buy(self.user, models.MEANS_OF_PAYMENT[0][0])
+        pack.buy(self.user, models.MEANS_OF_PAYMENT[0][0], self.seller)
 
         self.assertEqual(Inscription.objects.filter(event=events[0], user=self.user).count(), 1)
         self.assertEqual(Inscription.objects.filter(event=events[1], user=self.user).count(), 1)
