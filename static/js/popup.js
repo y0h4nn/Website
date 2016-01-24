@@ -34,6 +34,12 @@ function Popup(title){
     this.closeBtn.addEventListener('click', function(event){
         this.close();
     }.bind(this));
+
+    window.addEventListener('keyup', function(event){
+        if(event.key == "Escape"){
+            this.close();
+        }
+    }.bind(this));
 }
 
 Popup.prototype = {
