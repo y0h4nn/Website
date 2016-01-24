@@ -34,6 +34,11 @@ class EventForm(ModelForm):
         management_type = self.cleaned_data.get('gestion')
         photo_path = self.cleaned_data.get('photo_path')
 
+        allow_extern = self.cleaned_data.get('allow_extern')
+        end_extern_inscriptions = self.cleaned_data.get('end_extern_inscriptions')
+
+        if allow_extern and not end_extern_inscriptions:
+            self.add_error('allow_extern', 'Vous ne pouvez pas autoriser les externes sans mettre de date limite')
         if start is None or end is None or end_ins is None:
             return
 
@@ -61,7 +66,7 @@ class EventForm(ModelForm):
     start_time = SplitDateTimeField(label="Début")
     end_time = SplitDateTimeField(label="Fin")
     end_inscriptions = SplitDateTimeField(label="Fin des inscriptions")
-    end_extern_inscriptions = SplitDateTimeField(label="Fin des inscriptions externes")
+    end_extern_inscriptions = SplitDateTimeField(label="Fin des inscriptions externes", required=False)
     invitations_start = SplitDateTimeField(label="Début des invitations", required=False)
     class Meta:
         model = Event
