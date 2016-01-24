@@ -87,17 +87,20 @@ class EventAccess(AccessPolicy):
             return False
 
     def extern_can_access(self, email):
+        can_access = False
         try:
             inscription = ExternInscription.objects.get(mail=email, event=self.event)
+            can_access |= bool(inscription.in_date)
         except ExternInscription.DoesNotExist:
-            inscription = False
+            pass
 
         try:
             invitation = Invitation.objects.get(mail=email, event=self.event)
+            can_access |= bool(invitation.in_date)
         except Invitation.DoesNotExist:
-            invitation = False
+            pass
 
-        return bool(inscription.in_date) or bool(invitation.in_date)
+        return can_access
 
     def __str__(self):
         return "Les participants de l'évènement %s peuvent voir l'album" % self.event.name
