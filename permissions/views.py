@@ -32,10 +32,10 @@ class UserActionRouter(ActionRouter):
         response = {
             'perms': [],
             'groups': [{
-                    'id': g.id,
-                    'name': g.name,
-                    'color': '#%s' % (hashlib.md5(g.name.encode()).hexdigest()[:6]),
-                } for g in self.user.groups.all()],
+                'id': g.id,
+                'name': g.name,
+                'color': '#%s' % (hashlib.md5(g.name.encode()).hexdigest()[:6]),
+            } for g in self.user.groups.all()],
         }
         for perm in perms:
             app_label = perm.content_type.app_label
