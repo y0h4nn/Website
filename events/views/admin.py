@@ -181,16 +181,16 @@ def admin_export_csv(request, eid):
             p = formula.price_non_contributor
         return "{} €".format(p)
 
-    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From', 'Entrée', 'Externe', 'Formule', "Cotisant", "Prix"])
+    writer.writerow(['Login', 'Surnom', 'Prénom', 'Nom', 'Mail', 'From', 'Entrée', 'Externe', 'Formule', "Cotisant", "Prix", "Moyen de paiement"])
     for r in reg:
         contributor = is_contributor(r.user)
-        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB", r.in_date, '0', r.formula, contributor, formula_price(r.formula, contributor)]
+        line = [r.user.profile.user, r.user.profile.nickname, r.user.first_name, r.user.last_name, r.user.email, "ENIB", r.in_date, '0', r.formula, contributor, formula_price(r.formula, contributor, r.payment_mean)]
         writer.writerow(line)
     for r in ext_reg:
-        line = ["", "", r.first_name, r.last_name, r.mail, r.via.name, r.in_date, '1', r.formula, False, formula_price(r.formula)]
+        line = ["", "", r.first_name, r.last_name, r.mail, r.via.name, r.in_date, '1', r.formula, False, formula_price(r.formula), r.payment_mean]
         writer.writerow(line)
     for r in invits:
-        line = ["", "", r.first_name, r.last_name, r.mail, str(r.user.profile), r.in_date, '1', r.formula, False, formula_price(r.formula)]
+        line = ["", "", r.first_name, r.last_name, r.mail, str(r.user.profile), r.in_date, '1', r.formula, False, formula_price(r.formula), r.payment_mean]
         writer.writerow(line)
     return response
 
