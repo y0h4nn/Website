@@ -38,9 +38,9 @@ class AnnouncementForm(forms.ModelForm):
         }
 
 
-
 class RegistrationForm(forms.ModelForm):
     prefix = "registration"
+
     class Meta:
         model = models.Registration
         fields = [

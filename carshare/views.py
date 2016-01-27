@@ -25,7 +25,6 @@ def show(request, aid):
         'user_is_author': request.user == announcement.author,
     }
 
-
     if request.method == "POST":
         form = forms.RegistrationForm(request.POST)
         if form.is_valid():

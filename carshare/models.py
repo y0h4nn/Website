@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from collections import OrderedDict
 
+
 class Announcement(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -25,6 +26,7 @@ REGISTRATION_STATUS = OrderedDict([
     ('accepted', 'Acceptée'),
     ('refused', 'Refusée'),
 ])
+
 
 class Registration(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
