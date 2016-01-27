@@ -55,7 +55,6 @@ def sells(request):
         return render(request, 'shop/sell.html', context)
 
 
-
 @permission_required('shop.view_history')
 def history(request):
     history = models.BuyingHistory.objects.select_related('user__profile').select_related('seller__profile').select_related('pack').select_related('product').order_by('date').all().reverse()
@@ -205,6 +204,7 @@ def pack_add(request):
 
     return render(request, 'shop/pack_add.html', context)
 
+
 @permission_required('shop.manage_product')
 def pack_edit(request, pid):
     pack = get_object_or_404(models.Packs, id=pid)
@@ -224,6 +224,7 @@ def pack_edit(request, pid):
     }
 
     return render(request, 'shop/pack_edit.html', context)
+
 
 @permission_required('shop.manage_product')
 def pack_delete(request, pid):

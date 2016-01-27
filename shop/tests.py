@@ -6,6 +6,7 @@ from django.utils import timezone
 from . import models
 from events.models import Event, Inscription
 
+
 class ModelsTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('user', 'user@exemple.com', 'password')
@@ -24,7 +25,6 @@ class ModelsTest(TestCase):
             description='Description',
         )
 
-
     def create_dummy_products(self, n=1):
         return [
             models.Product.objects.create(
@@ -33,7 +33,6 @@ class ModelsTest(TestCase):
                 description="product",
             ) for i in range(n)
         ]
-
 
     def create_dummy_packs(self, pack_count=1, products_per_pack=5):
         packs = []
@@ -49,6 +48,7 @@ class ModelsTest(TestCase):
             packs.append(pack)
 
         return packs
+
     def create_dummy_events(self, event_count=1):
         return [
             Event.objects.create(
@@ -60,7 +60,6 @@ class ModelsTest(TestCase):
                 description='Description',
             ) for i in range(event_count)
         ]
-
 
     def test_simple_buying(self):
         """ Testing simple product buying and payment means validity.
@@ -92,7 +91,6 @@ class ModelsTest(TestCase):
         )
         product_event.buy(self.user, models.MEANS_OF_PAYMENT[0][0], self.seller)
         self.assertEqual(Inscription.objects.filter(event=self.event, user=self.user).count(), 1)
-
 
     def test_event_auto_registration_with_pack(self):
         events = self.create_dummy_events(2)

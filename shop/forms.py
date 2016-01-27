@@ -4,6 +4,7 @@ from . import models
 
 class ProductForm(forms.ModelForm):
     prefix = 'product'
+
     class Meta:
         model = models.Product
         fields = [
@@ -25,6 +26,7 @@ class ProductForm(forms.ModelForm):
 
 class PackForm(forms.ModelForm):
     prefix = 'pack'
+
     class Meta:
         model = models.Packs
         fields = [

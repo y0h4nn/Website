@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.db import models, migrations
+
 
 def delete_history(apps, schema_editor):
     BuyingHistory = apps.get_model("shop", "BuyingHistory")
     BuyingHistory.objects.all().delete()
+
 
 class Migration(migrations.Migration):
 

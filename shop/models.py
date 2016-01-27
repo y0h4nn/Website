@@ -84,7 +84,6 @@ class Product(models.Model):
         if self.event:
             self.create_event_registration(user)
 
-
     def create_event_registration(self, user):
         if not self.event:
             return
@@ -186,10 +185,11 @@ TYPES = [
     ('pack', 'Pack'),
 ]
 
+
 class BuyingHistory(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     type = models.CharField(max_length=10, choices=TYPES)
-    product = models.ForeignKey(Product ,null=True, blank=True)
+    product = models.ForeignKey(Product, null=True, blank=True)
     pack = models.ForeignKey(Packs, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     payment_mean = models.CharField(max_length=10, choices=MEANS_OF_PAYMENT)
@@ -216,7 +216,7 @@ class BuyingHistory(models.Model):
 
     @staticmethod
     def get_all_bought_products(user):
-        packs_entries = BuyingHistory.objects.filter(user=user,type='pack').all()
+        packs_entries = BuyingHistory.objects.filter(user=user, type='pack').all()
         products_entries = BuyingHistory.objects.filter(user=user, type='product').all()
 
         products = []
@@ -233,7 +233,7 @@ class BuyingHistory(models.Model):
     def count_event_participations(event, user):
         """ Count event participation grandet buy user buying history.
         """
-        packs_entries = BuyingHistory.objects.filter(user=user,type='pack').all()
+        packs_entries = BuyingHistory.objects.filter(user=user, type='pack').all()
         products_entries = BuyingHistory.objects.filter(user=user, type='product').all()
 
         count = 0
