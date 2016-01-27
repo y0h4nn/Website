@@ -49,7 +49,6 @@ class TestEvent(TestCase):
 
         return users
 
-
     def test_closed(self):
         with freeze_time("2014-07-14 11:00:00"):
             self.assertFalse(self.event.closed())

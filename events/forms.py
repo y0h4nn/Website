@@ -52,7 +52,6 @@ class EventForm(ModelForm):
                 realpath = os.path.join(settings.MEDIA_ROOT, 'photo', photo_path)
                 os.makedirs(realpath, exist_ok=True)
 
-
     def as_p(self):
         return super().as_p() + mark_safe('''<script>
             create_calendar("id_end_inscriptions_0")
@@ -68,6 +67,7 @@ class EventForm(ModelForm):
     end_inscriptions = SplitDateTimeField(label="Fin des inscriptions")
     end_extern_inscriptions = SplitDateTimeField(label="Fin des inscriptions externes", required=False)
     invitations_start = SplitDateTimeField(label="Début des invitations", required=False)
+
     class Meta:
         model = Event
         exclude = ["uuid", "model"]
@@ -76,11 +76,12 @@ class EventForm(ModelForm):
                   'max_inscriptions': "Nombre maximum d'inscriptions", 'allow_invitations': "Autoriser les invitations",
                   'max_invitations': "Nombre maximum d'invitations", 'max_invitations_by_person': "Nombre maximum d'invitations par personne",
                   'photo': "Photo (max 2Mio)", 'photo_path': 'Chemin pour les photos'}
-        widgets = {'photo': WrapperClearableinput,}
+        widgets = {'photo': WrapperClearableinput, }
 
 
 class RecurrentEventForm(EventForm):
     delay = IntegerField(label="Délai (en jours)")
+
     class Meta(EventForm.Meta):
         model = RecurrentEvent
         exclude = ["uuid", "last_created", "model"]

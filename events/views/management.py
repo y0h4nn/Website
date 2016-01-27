@@ -36,56 +36,53 @@ def management_list_users(request, eid):
             ret['reg'] = []
             for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').select_related("user__contribution").annotate(null_nick=Count('user__profile__nickname')).order_by('null_nick', '-user__profile__nickname', '-user__last_name', '-user__first_name', '-user__username').reverse():
                 ret['reg'].append({
-                        "display_name": str(ins.user.profile),
-                        "picture": ins.user.profile.get_picture_url(),
-                        "color": "bg-blue" if ins.in_date is not None else "bg-green" if is_contributor(ins.user) else "bg-red",
-                        "type": "reg",
-                        "id": ins.id,
-                        "user": False,
-                })
-                already_in_list.append(str(ins.user.profile))
-            for user in User.objects.all().select_related('profile'):
-                if str(user.profile) not in already_in_list:
-                    ret['reg'].append({
-                            "display_name": str(user.profile),
-                            "picture": user.profile.get_picture_url(),
-                            "color": "bg-green" if is_contributor(user) else "bg-red",
-                            "type": "reg",
-                            "id": user.id,
-                            "user": True,
-                    })
-        else:
-            ret['reg'] = [{
                     "display_name": str(ins.user.profile),
                     "picture": ins.user.profile.get_picture_url(),
                     "color": "bg-blue" if ins.in_date is not None else "bg-green" if is_contributor(ins.user) else "bg-red",
                     "type": "reg",
                     "id": ins.id,
-                    "formula": ins.formula.name if ins.formula else None,
-                    "formula_price": ins.formula.price_contributor if is_contributor(ins.user) else ins.formula.price_non_contributor if ins.formula else None,
-                } for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').select_related("user__contribution").annotate(null_nick=Count('user__profile__nickname')).order_by('null_nick', '-user__profile__nickname', '-user__last_name', '-user__first_name', '-user__username').reverse()
-            ]
+                    "user": False,
+                })
+                already_in_list.append(str(ins.user.profile))
+            for user in User.objects.all().select_related('profile'):
+                if str(user.profile) not in already_in_list:
+                    ret['reg'].append({
+                        "display_name": str(user.profile),
+                        "picture": user.profile.get_picture_url(),
+                        "color": "bg-green" if is_contributor(user) else "bg-red",
+                        "type": "reg",
+                        "id": user.id,
+                        "user": True,
+                    })
+        else:
+            ret['reg'] = [{
+                "display_name": str(ins.user.profile),
+                "picture": ins.user.profile.get_picture_url(),
+                "color": "bg-blue" if ins.in_date is not None else "bg-green" if is_contributor(ins.user) else "bg-red",
+                "type": "reg",
+                "id": ins.id,
+                "formula": ins.formula.name if ins.formula else None,
+                "formula_price": ins.formula.price_contributor if is_contributor(ins.user) else ins.formula.price_non_contributor if ins.formula else None,
+            } for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').select_related("user__contribution").annotate(null_nick=Count('user__profile__nickname')).order_by('null_nick', '-user__profile__nickname', '-user__last_name', '-user__first_name', '-user__username').reverse()]
 
         ret['ext_reg'] = [{
-                "display_name": "{} {} ({})".format(ins.last_name, ins.first_name, ins.via.name),
-                "picture": static('images/default_user_icon.png'),
-                "color": "bg-blue" if ins.in_date is not None else "",
-                "type": "ext_reg",
-                "id": ins.id,
-                "formula": ins.formula.name if ins.formula else None,
-                "formula_price": ins.formula.price_non_contributor if ins.formula else None,
-            } for ins in ExternInscription.objects.filter(event=e).select_related('event').select_related('via').order_by('last_name', 'first_name')
-        ]
+            "display_name": "{} {} ({})".format(ins.last_name, ins.first_name, ins.via.name),
+            "picture": static('images/default_user_icon.png'),
+            "color": "bg-blue" if ins.in_date is not None else "",
+            "type": "ext_reg",
+            "id": ins.id,
+            "formula": ins.formula.name if ins.formula else None,
+            "formula_price": ins.formula.price_non_contributor if ins.formula else None,
+        } for ins in ExternInscription.objects.filter(event=e).select_related('event').select_related('via').order_by('last_name', 'first_name')]
         ret['invits'] = [{
-                "display_name": "{} {} (invité par {})".format(ins.first_name, ins.last_name, str(ins.user.profile)),
-                "picture": static('images/default_user_icon.png'),
-                "color": "bg-blue" if ins.in_date is not None else "",
-                "type": "invit",
-                "id": ins.id,
-                "formula": ins.formula.name if ins.formula else None,
-                "formula_price": ins.formula.price_non_contributor if ins.formula else None,
-            } for ins in Invitation.objects.filter(event=e).select_related('event').select_related('user__profile').order_by('last_name', 'first_name')
-        ]
+            "display_name": "{} {} (invité par {})".format(ins.first_name, ins.last_name, str(ins.user.profile)),
+            "picture": static('images/default_user_icon.png'),
+            "color": "bg-blue" if ins.in_date is not None else "",
+            "type": "invit",
+            "id": ins.id,
+            "formula": ins.formula.name if ins.formula else None,
+            "formula_price": ins.formula.price_non_contributor if ins.formula else None,
+        } for ins in Invitation.objects.filter(event=e).select_related('event').select_related('user__profile').order_by('last_name', 'first_name')]
         return JsonResponse(ret)
 
 
@@ -208,6 +205,5 @@ Sache que tu pourras trouver les photos de l'événement sur le lien suivant dè
 Nous te souhaitons une bonne semaine et espérons te revoir bientôt :)
 
 L'équipe du BDE
-'''.format(first_name=inv.first_name, event_name=event.name, link="https://enib.net/photo/browse/" + event.photo_path),
-    'noreply@enib.net', [inv.mail,])
+'''.format(first_name=inv.first_name, event_name=event.name, link="https://enib.net/photo/browse/" + event.photo_path), 'noreply@enib.net', [inv.mail, ])
 

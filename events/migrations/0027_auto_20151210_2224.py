@@ -12,6 +12,7 @@ def migrate_data(apps, schema_editor):
         entry.admin_uuid = uuid.uuid4()
         entry.save()
 
+
 class Migration(migrations.Migration):
 
     dependencies = [

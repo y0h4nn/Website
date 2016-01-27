@@ -172,6 +172,7 @@ def admin_export_csv(request, eid):
     response['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(event.name)
 
     writer = csv.writer(response)
+
     def formula_price(formula, contributor=False):
         if formula is None:
             return 0
