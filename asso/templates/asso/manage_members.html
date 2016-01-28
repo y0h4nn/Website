@@ -1,0 +1,119 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+{% load markdown %}
+
+{% block header %}
+    {{ asso.name }}
+{% endblock %}
+
+{% block menu %}
+    {% menu_item 'Liste des associations' 'asso:index' %}
+    {% menu_item 'Retour à la présentation' 'asso:details' aid=asso.pk %}
+    {% if user_is_admin %}
+        {% menu_item 'Gestion des members' 'asso:manage_members' aid=asso.pk %}
+        {% menu_item 'Editer' 'asso:edit' aid=asso.pk %}
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'js/list.js' %}"></script>
+    <script src="{% static 'js/userlist.js' %}"></script>
+    <script src="{% static 'js/grouplist.js' %}"></script>
+    <script src="{% static 'js/popup.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+    <p>
+        <button type="button" class="w100" onclick="manageAdmins()">Gestion des administrateurs</button>
+    </p>
+
+    <p>
+        <button type="button" class="w100" onclick="manageMembers()">Gestion des membres</button>
+    </p>
+
+
+    <script>
+        function manageAdmins(){
+            var popup = new UserListPopup('Administrateurs', '{% url 'asso:manage_members' aid=asso.pk %}', function(user){
+                function toggleMembership(){
+                    if(this.isToggled()){
+                        queryJson('', {'action': 'del_admin', 'uid': user.id}, function(resp){
+                            if(resp.error){
+                                add_message('error', resp.error);
+                                return;
+                            }
+                            this.setUntoggled();
+                            this.element.innerHTML = 'Ajouter';
+                        }.bind(this));
+                    }
+                    else{
+                        queryJson('', {'action': 'add_admin', 'uid': user.id}, function(resp){
+                            if(resp.error){
+                                add_message('error', resp.error);
+                                return;
+                            }
+                            this.setToggled();
+                            this.element.innerHTML = 'Supprimer';
+                        }.bind(this));
+                    }
+                };
+                if(user.is_admin){
+                    var text = 'Supprimer';
+                    var toggled = true;
+                }
+                else{
+                    var text = 'Ajouter';
+                    var toggled = false;
+                }
+
+                return [
+                    new UserList.UserAction(text, toggleMembership, toggled),
+                ]
+            });
+            popup.pop();
+        };
+
+        function manageMembers(){
+            var popup = new UserListPopup('Membres', '{% url 'asso:manage_members' aid=asso.pk %}', function(user){
+                function toggleMembership(){
+                    if(this.isToggled()){
+                        queryJson('', {'action': 'del_member', 'uid': user.id}, function(resp){
+                            if(resp.error){
+                                add_message('error', resp.error);
+                                return;
+                            }
+                            this.setUntoggled();
+                            this.element.innerHTML = 'Ajouter';
+                        }.bind(this));
+                    }
+                    else{
+                        queryJson('', {'action': 'add_member', 'uid': user.id}, function(resp){
+                            if(resp.error){
+                                add_message('error', resp.error);
+                                return;
+                            }
+                            this.setToggled();
+                            this.element.innerHTML = 'Supprimer';
+                        }.bind(this));
+                    }
+                };
+                if(user.is_member){
+                    var text = 'Supprimer';
+                    var toggled = true;
+                }
+                else{
+                    var text = 'Ajouter';
+                    var toggled = false;
+                }
+
+                return [
+                    new UserList.UserAction(text, toggleMembership, toggled),
+                ]
+            });
+            popup.pop();
+        };
+    </script>
+{% endblock %}

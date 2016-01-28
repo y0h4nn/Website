@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+
+{% block header %}
+    {{ asso.name }}
+{% endblock %}
+
+{% block menu %}
+    {% menu_item 'Liste des associations' 'asso:index' %}
+    {% menu_item 'Retour à la présentation' 'asso:details' aid=asso.pk %}
+    {% if user_is_admin %}
+        {% menu_item 'Gestion des members' 'asso:manage_members' aid=asso.pk %}
+        {% menu_item 'Editer' 'asso:edit' aid=asso.pk %}
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'js/list.js' %}"></script>
+    <script src="{% static 'js/userlist.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+    <form action="{{ request.path }}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Valider</button>
+    </form>
+{% endblock %}

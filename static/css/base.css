@@ -41,6 +41,9 @@ a {
   text-decoration: none;
   color: #68B9DE; }
 
+img {
+  max-width: 100%; }
+
 nav > ul {
   padding: 0;
   list-style: none; }
@@ -59,6 +62,24 @@ button, .button {
   button i, .button i {
     vertical-align: middle;
     margin: 0 0.5em; }
+  button[type=button], .button[type=button] {
+    border-radius: 0;
+    background-color: white;
+    color: #333;
+    border: 1px solid #bbb; }
+    button[type=button] + button, .button[type=button] + button {
+      border-left: none;
+      transition: background-color 0.25s; }
+    button[type=button]:first-child, .button[type=button]:first-child {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px; }
+    button[type=button]:last-child, .button[type=button]:last-child {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px; }
+    button[type=button]:hover, .button[type=button]:hover {
+      background-color: #eaeaea; }
+    button[type=button]:active, button[type=button].toggled, .button[type=button]:active, .button[type=button].toggled {
+      background-color: #ddd; }
 
 form p {
   -webkit-display: flex;
@@ -273,6 +294,9 @@ table:not(.rd-days) {
 
 .center {
   text-align: center; }
+
+.w100 {
+  width: 100%; }
 
 .flex_container {
   -webkit-display: flex;
@@ -1546,5 +1570,17 @@ table:not(.rd-days) {
     content: "« "; }
   #quote quote::after {
     content: " »"; }
+
+.asso img {
+  width: 100px;
+  float: left;
+  margin: 0 2em 1em 0; }
+.asso + .asso {
+  border-top: 1px solid #68B9DE;
+  padding-top: 2em;
+  margin-top: 2em; }
+
+.asso_member img {
+  width: 100px; }
 
 /*# sourceMappingURL=base.css.map */

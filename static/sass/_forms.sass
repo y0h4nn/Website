@@ -14,6 +14,29 @@ button, .button
     vertical-align: middle
     margin: 0 0.5em
 
+  &[type=button]
+    border-radius: 0
+    background-color: white
+    color: #333
+    border: 1px solid #bbb
+
+    & + button
+      border-left: none
+      transition: background-color 0.25s
+
+    &:first-child
+      border-top-left-radius: 3px
+      border-bottom-left-radius: 3px
+
+    &:last-child
+      border-top-right-radius: 3px
+      border-bottom-right-radius: 3px
+
+    &:hover
+      background-color: #eaeaea
+
+    &:active, &.toggled
+      background-color: #ddd
 
 form
   p

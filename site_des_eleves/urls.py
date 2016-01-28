@@ -40,4 +40,5 @@ urlpatterns = [
     url('^enibar/', include('enibar.urls', namespace='enibar')),
     url('^api/', include('api.urls')),
     url('^quotes/', include('quotes.urls', namespace='quotes')),
+    url('^asso/', include('asso.urls', namespace='asso')),
 ]

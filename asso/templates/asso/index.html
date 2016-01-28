@@ -1,0 +1,47 @@
+{% extends 'core/base.html' %}
+
+{% load menu_item %}
+{% load markdown %}
+
+{% block header %}
+    Liste des associations
+{% endblock %}
+
+{% block menu %}
+    {% menu_item 'Liste des associations' 'asso:index' %}
+    {% if perms.asso.manage_asso %}
+        {% menu_item 'Management des associations' 'asso:managment' %}
+        {% menu_item 'Créer une associations' 'asso:create' %}
+    {% endif %}
+{% endblock %}
+
+{% block main %}
+    {% for asso in assos %}
+        <div class="asso">
+            {% if asso.picture %}
+                <img src="{{ asso.picture.url }}" alt="asso-picture" />
+            {% endif %}
+
+            <h3><a href="{% url 'asso:details' aid=asso.pk %}">{{ asso }}</a></h3>
+
+            {% if asso.site %}
+                <p>
+                    <a href="{{ asso.site }}"><i class="fa fa-globe"></i> {{ asso.site }}</a>
+                </p>
+            {% endif %}
+
+            {% if asso.mail %}
+                <p>
+                    <a href="mailto:{{ asso.mail }}"><i class="fa fa-envelope"></i> {{ asso.mail }}</a>
+                </p>
+            {% endif %}
+
+            {% if asso.description %}
+                <p>{{ asso.description|markdown }}</p>
+            {% else %}
+                <p>L'association n'a pas rédigé de description</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+{% endblock %}

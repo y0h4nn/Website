@@ -1,0 +1,65 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+{% load menu_item %}
+{% load markdown %}
+
+{% block header %}
+    {{ asso.name }}
+{% endblock %}
+
+{% block menu %}
+    {% menu_item 'Liste des associations' 'asso:index' %}
+    {% if user_is_admin %}
+        {% menu_item 'Gérer les membres' 'asso:manage_members' aid=asso.pk %}
+        {% menu_item 'Editer' 'asso:edit' aid=asso.pk %}
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/json_request.js' %}"></script>
+    <script src="{% static 'js/list.js' %}"></script>
+    <script src="{% static 'js/userlist.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+    <h1>Présentation de l'association</h1>
+    <div class="asso">
+        {% if asso.picture %}
+            <img src="{{ asso.picture.url }}" alt="asso-picture" />
+        {% endif %}
+        {% if asso.site %}
+        <p>
+            <a href="{{ asso.site }}"><i class="fa fa-globe"></i> {{ asso.site }}</a>
+        </p>
+        {% endif %}
+        {% if asso.mail %}
+        <p>
+            <a href="mailto:{{ asso.mail }}"><i class="fa fa-envelope"></i> {{ asso.mail }}</a>
+        </p>
+        {% endif %}
+        {% if asso.description %}
+            <p>{{ asso.description|markdown }}</p>
+        {% else %}
+            <p>L'association n'a pas rédigé de description</p>
+        {% endif %}
+    </div>
+    <h1>Membres de l'association</h1>
+    <div id="userlist"></div>
+    <script>
+        window.addEventListener('load', function(){
+            var userList = new UserList('userlist', '{% url 'asso:members' aid=asso.pk %}', function(user){
+                function sendMail(){
+                    window.location = "mailto:" + user.email;
+                };
+                function viewProfile(){
+                    window.location = user.profile_url;
+                };
+                return [
+                    new UserList.UserAction('Envoyer un email', sendMail),
+                    new UserList.UserAction('Voir le profil', viewProfile),
+                ];
+            });
+        });
+    </script>
+{% endblock %}

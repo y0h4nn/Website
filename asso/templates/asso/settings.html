@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+
+{% load menu_item %}
+
+{% block header %}
+    {{ asso.name }}
+{% endblock %}
+
+{% block menu %}
+    {% menu_item 'Liste des associations' 'asso:index' %}
+    {% menu_item 'Management des associations' 'asso:managment' %}
+    {% menu_item 'Paramètres de l\'association' 'asso:settings' aid=asso.id %}
+{% endblock %}
+
+{% block main %}
+    <form action="{{ request.path }}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Valider</button>
+    </form>
+{% endblock %}

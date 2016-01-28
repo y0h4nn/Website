@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth.models import User, Permission, Group
 from django.contrib.auth.decorators import permission_required, login_required
+from django.db import IntegrityError
 from .forms import GroupCreationForm
 
 
@@ -130,7 +131,13 @@ class GroupActionRouter(ActionRouter):
         except User.DoesNotExist:
             return JsonResponse({'error': 'L\'utilisateur n\'existe pas.'})
 
+        # Add user to all asso members group of the asso he was added to as
+        # admin
+        for asso in self.group.asso_admin_set.all():
+            user.groups.add(asso.members_group)
+
         user.groups.add(self.group)
+
         return JsonResponse({})
 
     def del_user(self):
@@ -139,14 +146,23 @@ class GroupActionRouter(ActionRouter):
         except User.DoesNotExist:
             return JsonResponse({'error': 'L\'utilisateur n\'existe pas.'})
 
+        # Remove user from all asso admin group if he is removed from an asso
+        # group
+        for asso in self.group.asso_set.all():
+            user.groups.remove(asso.admins_group)
+
         user.groups.remove(self.group)
+
         return JsonResponse({})
 
     def remove(self):
         if not self.request.user.has_perm('auth.delete_group'):
             return JsonResponse({'error': 'Droit insufisants'})
         if self.group.name not in self.GROUP_DELETION_BLACKLIST:
-            self.group.delete()
+            try:
+                self.group.delete()
+            except IntegrityError:
+                return JsonResponse({'error': 'Ce groupe est protégé et ne peut pas être supprimé'})
             return JsonResponse({})
         else:
             return JsonResponse({'error': 'Ce groupe n\'est pas supprimable'})

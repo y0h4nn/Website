@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+
+{% load menu_item %}
+
+{% block header %}
+    {{ asso.name }}
+{% endblock %}
+
+{% block menu %}
+    {% menu_item 'Liste des associations' 'asso:index' %}
+    {% menu_item 'Management des associations' 'asso:managment' %}
+    {% menu_item 'Création d\'association' 'asso:create' %}
+{% endblock %}
+
+{% block main %}
+    <form action="{{ request.path }}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            Les groupes seront créés automatiquement s'il ne sont pas spécifiés.
+        </p>
+        <button>Valider</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% load menu_item %}
+
+{% block header %}
+    Management des associations
+{% endblock %}
+
+{% block menu %}
+    {% menu_item 'Liste des associations' 'asso:index' %}
+    {% menu_item 'Management des associations' 'asso:managment' %}
+    {% menu_item 'Créer une associations' 'asso:create' %}
+{% endblock %}
+
+{% block main %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Groupe members</th>
+                <th>Groupe administrateur</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for asso in assos %}
+                <tr>
+                    <td>{{ asso }}</td>
+                    <td>{{ asso.members_group }}</td>
+                    <td>{{ asso.admins_group }}</td>
+                    <td class="action_cell">
+                        <a href="{% url 'asso:details' aid=asso.pk %}"><i class="fa fa-eye"></i></a>
+                        <a href="{% url 'asso:edit' aid=asso.pk %}"><i class="fa fa-pencil"></i></a>
+                        <a href="{% url 'asso:settings' aid=asso.pk %}"><i class="fa fa-wrench"></i></a>
+                        <a href="{% url 'asso:delete' aid=asso.pk %}"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

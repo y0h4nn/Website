@@ -55,6 +55,7 @@ INSTALLED_APPS = (
     'photo',
     'enibar',
     'quotes',
+    'asso',
 )
 
 
@@ -228,7 +229,11 @@ PERM_WHITELIST = {
     'quotes': [
         'manage_prof',
         'manage_quote',
-    ]
+    ],
+
+    'asso': [
+        'manage_asso',
+    ],
 }
 
 
