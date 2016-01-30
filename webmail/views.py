@@ -7,9 +7,11 @@ WEBMAIL_URLS = {
     'squirrel': 'https://imap-eleves.enib.fr',
 }
 
+
 def index(request):
     if request.user.is_authenticated():
         if request.user.webmail_settings.webmail in WEBMAIL_URLS:
             return redirect(WEBMAIL_URLS[request.user.webmail_settings.webmail])
 
     return render(request, 'webmail/index.html', {})
+
