@@ -600,7 +600,10 @@ table:not(.rd-days) {
     -moz-order: 3;
     -ms-order: 3;
     -o-order: 3;
-    order: 3; } }
+    order: 3; }
+
+  .retracted #main_container {
+    max-width: 100%; } }
 #nav_container {
   min-width: 300px;
   -webkit-flex: 0 1 300px;
