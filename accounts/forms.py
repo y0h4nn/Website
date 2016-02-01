@@ -15,6 +15,7 @@ class WrapperClearableinput(forms.widgets.ClearableFileInput):
 
 class UserForm(forms.ModelForm):
     prefix = 'user'
+
     class Meta:
         model = User
         fields = ['last_name', 'first_name', 'email']
@@ -67,6 +68,7 @@ class ProfileForm(forms.ModelForm):
 
 class ImageProfileForm(forms.ModelForm):
     prefix = "profile_img"
+
     class Meta:
         model = models.Profile
         fields = [
@@ -81,8 +83,10 @@ class ImageProfileForm(forms.ModelForm):
             'picture': WrapperClearableinput
         }
 
+
 class AddressForm(forms.ModelForm):
     prefix = "address"
+
     class Meta:
         model = models.Address
         fields = [
@@ -96,8 +100,10 @@ class AddressForm(forms.ModelForm):
             'town': 'Ville',
         }
 
+
 class UserRequestForm(forms.ModelForm):
     prefix = 'user_request'
+
     class Meta:
         model = models.UserRequest
         fields = '__all__'
@@ -106,3 +112,4 @@ class UserRequestForm(forms.ModelForm):
             'last_name': 'Nom de famille',
             'email': 'Email',
         }
+

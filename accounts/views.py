@@ -216,7 +216,7 @@ def list_request(request, error=None):
     return render(request, 'accounts/list-request.html', context)
 
 
-ACCEPT_MAIL_TPL="""Bonjour {first_name} {last_name},
+ACCEPT_MAIL_TPL = """Bonjour {first_name} {last_name},
 
 Votre compte enib.net à été créé.
 Vous pouvez dés maintenant vous connecter avec votre adresse email et le mot de
@@ -229,10 +229,11 @@ fortement de le changer dès votre première connexion.
 """
 
 
-REJECT_MAIL_TPL="""Bonjour {first_name} {last_name},
+REJECT_MAIL_TPL = """Bonjour {first_name} {last_name},
 
 Votre demande de création de compte sur enib.net à été rejetée.
 """
+
 
 @permission_required('accounts.manage_account_request')
 def accept_request(request, rid):

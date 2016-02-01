@@ -62,7 +62,6 @@ class Profile(models.Model):
     def get_url(self):
         return reverse('accounts:show', kwargs={'username': self.user.username})
 
-
     def is_valid(self):
         # We need to force fetch the object because django doesn't update it soon enough when we submit the edit form.
         prof = self.__class__.objects.get(id=self.id)

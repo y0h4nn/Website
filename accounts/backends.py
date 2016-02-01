@@ -35,7 +35,6 @@ class NormalAuth(BaseAuth):
             return user
 
 
-
 class CASAuth(BaseAuth):
     def authenticate(self, email=None, password=None):
         user = None
