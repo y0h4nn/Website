@@ -7,11 +7,11 @@ from events import models as event_models
 from . import models
 from . import views
 
+
 class AccessTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('user', 'user@example.com', 'password')
         self.group = Group.objects.create(name="AccessGroup")
-
 
     def test_public_access(self):
         models.PublicAccess.objects.create(path="/public")
@@ -19,7 +19,6 @@ class AccessTest(TestCase):
         self.assertTrue(views.can_access("/public"))
         self.assertTrue(views.can_access("/public", self.user))
         self.assertTrue(views.can_access("/public", email="extern@example.com"))
-
 
     def test_group_access(self):
         models.GroupAccess.objects.create(path="/groups", group=self.group)
@@ -73,7 +72,6 @@ class AccessTest(TestCase):
         ext_inscription.save()
         self.assertTrue(views.can_access("/event", email="extern@example.com"))
 
-
         invitation = event_models.Invitation(
             mail='invited@example.com',
             first_name='Invited',
@@ -87,3 +85,4 @@ class AccessTest(TestCase):
         invitation.in_date = timezone.now()
         invitation.save()
         self.assertTrue(views.can_access("/event", email="invited@example.com"))
+

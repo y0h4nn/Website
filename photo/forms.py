@@ -14,6 +14,7 @@ class PublicAccessForm(AccessPolicyForm):
         model = models.PublicAccess
         exclude = ['path']
 
+
 class GroupAccessForm(AccessPolicyForm):
     """ Accès pour un groupe donné """
     class Meta:

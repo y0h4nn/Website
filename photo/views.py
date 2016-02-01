@@ -15,7 +15,6 @@ THUMBNAIL_DIRNAME = '.thumbnails'
 ALLOWED_IMAGE_EXT = ['.jpg', '.jpeg', '.png']
 
 
-
 def create_thumbnail(realpath, filename):
     if not os.path.isdir(os.path.join(realpath, THUMBNAIL_DIRNAME)):
         os.mkdir(os.path.join(realpath, THUMBNAIL_DIRNAME))
@@ -34,7 +33,7 @@ def create_thumbnail(realpath, filename):
             int((height + l) / 2)
         )
         region = image.crop(box)
-        region.thumbnail((100,100))
+        region.thumbnail((100, 100))
         region.save(os.path.join(realpath, THUMBNAIL_DIRNAME, filename), "JPEG")
     except OSError:
         return
@@ -151,7 +150,6 @@ def permissions(request, path):
                 'description': form.__doc__,
                 'instance': form()
             })
-
 
     context = {
         'path': path,
