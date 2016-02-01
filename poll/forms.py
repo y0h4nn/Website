@@ -34,8 +34,9 @@ class QuestionField(forms.Field):
 
 
 class PollForm(forms.ModelForm):
+
     class Meta:
-        model=Poll
+        model = Poll
         fields = ['title', 'group']
         widgets = {'title': widgets.TextInput,
                    'start_time': forms.SplitDateTimeWidget,
@@ -52,7 +53,6 @@ class PollForm(forms.ModelForm):
             initial_q_a = None
         super().__init__(*args, **kwargs)
 
-        #self.fields['group'].choices = [(x, x) for x in user.groups.all()]
         self.q_a_nb = "{}"
         self.questions_answers = OrderedDict()
         for f in ['start_time', 'end_time']:
@@ -65,7 +65,6 @@ class PollForm(forms.ModelForm):
         self.answers = []
         if initial_q_a is not None:
             self._init(initial_q_a)
-
 
         # Build a list of questions and answers out of the request
         if initial_q_a is None:

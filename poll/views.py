@@ -71,13 +71,13 @@ def poll_index(request):
 def poll_list(request):
     if request.method == "OPTIONS":
         return JsonResponse({'polls': [
-                {
-                    'title': p.title,
-                    'icon': 'fa fa-pie-chart',
-                    'id': p.id,
-                    'start': p.start_date.strftime("%d %B %Y %H:%M"),
-                    'end': p.end_date.strftime("%d %B %Y %H:%M"),
-                } for p in Poll.objects.filter(Q(group__in=request.user.groups.all()) & Q(start_date__lt=timezone.now())).order_by('-end_date')]
+            {
+                'title': p.title,
+                'icon': 'fa fa-pie-chart',
+                'id': p.id,
+                'start': p.start_date.strftime("%d %B %Y %H:%M"),
+                'end': p.end_date.strftime("%d %B %Y %H:%M"),
+            } for p in Poll.objects.filter(Q(group__in=request.user.groups.all()) & Q(start_date__lt=timezone.now())).order_by('-end_date')]
         })
 
 
@@ -99,15 +99,14 @@ def admin_index(request):
 @user_passes_test(lambda u: u.has_module_perms('poll'))
 def admin_list(request):
     return JsonResponse({'polls': [
-            {
-                'title': p.title,
-                'icon': 'fa fa-pie-chart',
-                'id': p.id,
-                'start': p.start_date.strftime("%d %B %Y %H:%M"),
-                'end': p.end_date.strftime("%d %B %Y %H:%M"),
-                'deleted': False,
-            } for p in Poll.objects.filter(author=request.user).order_by('-end_date')
-        ]
+        {
+            'title': p.title,
+            'icon': 'fa fa-pie-chart',
+            'id': p.id,
+            'start': p.start_date.strftime("%d %B %Y %H:%M"),
+            'end': p.end_date.strftime("%d %B %Y %H:%M"),
+            'deleted': False,
+        } for p in Poll.objects.filter(author=request.user).order_by('-end_date')]
     })
 
 
