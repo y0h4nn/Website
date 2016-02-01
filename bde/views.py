@@ -3,8 +3,7 @@ from django.utils import timezone
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User, Group
-from django.contrib.auth.decorators import login_required, permission_required
-from django.db import IntegrityError
+from django.contrib.auth.decorators import permission_required
 from django.conf import settings
 from django.http import HttpResponse
 from . import models
@@ -52,13 +51,13 @@ def contributors(request):
         else:
             return JsonResponse({'error': 'Stop envoyer de la merde. Contactez votre sysadmin.'})
 
-
         return JsonResponse({'error': None})
     return render(request, 'bde/contributors.html', {})
 
+
 @permission_required('bde.change_contributor')
 def detail(request, id):
-    user = User.objects.get(id=id);
+    user = User.objects.get(id=id)
 
     try:
         for mean in models.MEANS_OF_PAYMENT:
@@ -80,6 +79,7 @@ def detail(request, id):
         }
 
     return render(request, 'bde/contributors_detail.html', context)
+
 
 @permission_required('auth.change_permission')
 def members(request):

@@ -2,6 +2,7 @@ import datetime
 from django.db import models
 from django.conf import settings
 
+
 CONTRIBUTION_TYPES = [
     ('half', 'Demi-cotisation'),
     ('full', 'Cotisation'),
@@ -12,6 +13,7 @@ MEANS_OF_PAYMENT = [
     ('check', 'Chèque'),
     ('card', 'Carte'),
 ]
+
 
 class Contributor(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name="contribution")
