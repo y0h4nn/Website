@@ -88,7 +88,7 @@ class EventViewSet(viewsets.ModelViewSet):
     def set_registration(self, request, pk):
         event = get_object_or_404(Event, pk=pk)
         registered = False
-        if self.request.data.get('registration') == False:
+        if not self.request.data.get('registration'):
             try:
                 ins = Inscription.objects.get(event=event, user=request.user)
                 ins.delete()
@@ -119,6 +119,6 @@ class EventViewSet(viewsets.ModelViewSet):
             registered = False
         return Response({'user_is_registered': registered})
 
-
     def create(self, request):
         return Response({})
+

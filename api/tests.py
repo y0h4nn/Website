@@ -33,13 +33,11 @@ class TestEventAPI(TestCase):
         )
         return event
 
-
     def get(self, url):
         return self.client.get(url).json()
 
     def post(self, url, data):
         return json.loads(self.client.post(url, json.dumps(data), content_type="application/json").content.decode())
-
 
     def test_subscription(self):
         event = self.create_dummy_event(
