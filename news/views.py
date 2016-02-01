@@ -74,6 +74,7 @@ def comment(request, nid):
     context['comment_form'] = form
     return render(request, "news/comment.html", context)
 
+
 @login_required
 def del_comment(request, cid):
     if request.user.has_perm('news.delete_comment'):
