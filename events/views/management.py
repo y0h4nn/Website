@@ -107,7 +107,7 @@ def management_ack(request, eid, type, iid):
     e = get_object_or_404(Event, id=eid)
     req = json.loads(request.read().decode())
     if type == "reg":
-        if req['user']:
+        if req.get('user'):
             u = User.objects.get(id=iid)
             ins = Inscription.objects.create(event=e, user=u)
         else:
