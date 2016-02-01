@@ -1,7 +1,9 @@
 from django import template
 from django.core.urlresolvers import reverse, resolve
 
+
 register = template.Library()
+
 
 @register.inclusion_tag('core/tags/menu_item.html', takes_context=True)
 def _base_menu_item(context, name, view, *args, **kwargs):
@@ -20,6 +22,7 @@ def _base_menu_item(context, name, view, *args, **kwargs):
         'url': reverse(view, args=args, kwargs=kwargs),
         'selected': 'selected' if selected else ''
     }
+
 
 @register.inclusion_tag('core/tags/menu_item.html', takes_context=True)
 def menu_item(context, name, view, *args, **kwargs):

@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from webmail.forms import WebmailSettingsForm
-from webmail.models import WebmailSettings
 from django.contrib.auth.decorators import login_required
 from rest_framework.authtoken.models import Token
+
 
 def index(request):
     return render(request, 'index.html', {})
@@ -26,7 +26,6 @@ def settings(request):
 
     else:
         webmail_settings_form = WebmailSettingsForm(instance=request.user.webmail_settings)
-
 
     return render(request, 'core/settings.html', {
         'webmail_settings_form': webmail_settings_form.as_p()

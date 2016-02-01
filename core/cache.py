@@ -24,7 +24,7 @@ def cache_unless(key, methods=["OPTIONS", "GET"]):
                 if r.get(key) is not None:
                     r.delete(key)
                     for method in methods:
-                         r.delete("%s_%s" % (func.__name__, method))
+                        r.delete("%s_%s" % (func.__name__, method))
 
                 cached = r.get(name)
                 if cached is None:
