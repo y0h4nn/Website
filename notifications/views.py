@@ -7,10 +7,11 @@ from . import models
 @login_required()
 def index(request):
     context = {
-        'notifications': models.Notification.objects.filter(user=request.user,read=False).order_by('date').all().reverse()
+        'notifications': models.Notification.objects.filter(user=request.user, read=False).order_by('date').all().reverse()
     }
 
     return render(request, 'notifications/index.html', context)
+
 
 @login_required()
 def read(request, nid):

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import Group, User
 from . import models
 
+
 def notify(message, backref, backref_args=None, users=None, groups=None):
     targets = []
 
@@ -11,7 +12,7 @@ def notify(message, backref, backref_args=None, users=None, groups=None):
         targets += users
 
     if backref_args:
-        backref_args_str = ';'.join(["%s=%s" % (k,v) for k,v in backref_args.items()])
+        backref_args_str = ';'.join(["%s=%s" % (k, v) for k, v in backref_args.items()])
     else:
         backref_args_str = ""
 

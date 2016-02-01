@@ -4,15 +4,14 @@ from django.contrib.auth.models import User, Group
 from .shortcuts import notify
 from . import models
 
+
 class TestNotifications(TestCase):
-
-
     def test_group_notifications(self):
         group = Group.objects.create(name=str(uuid.uuid4()))
         user_count = 10
         for i in range(user_count):
             user = User.objects.create_user(
-                    str(uuid.uuid4())[:30],
+                str(uuid.uuid4())[:30],
                 'user@exemple.com',
                 'password'
             )
@@ -24,8 +23,6 @@ class TestNotifications(TestCase):
             'notifications:index',
             groups=[group]
         )
-
-
         self.assertEqual(models.Notification.objects.all().count(), user_count)
 
     def test_user_notification(self):
@@ -40,3 +37,4 @@ class TestNotifications(TestCase):
             users=[user]
         )
         self.assertEqual(models.Notification.objects.all().count(), 1)
+

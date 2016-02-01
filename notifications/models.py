@@ -16,7 +16,7 @@ class Notification(models.Model):
 
     @staticmethod
     def has_notification(user):
-        return Notification.objects.filter(user=user,read=False).count() > 0
+        return Notification.objects.filter(user=user, read=False).count() > 0
 
     def backref_url(self):
         if self.backref_args:
@@ -24,3 +24,4 @@ class Notification(models.Model):
             return reverse(self.backref, kwargs=kwargs)
         else:
             return reverse(self.backref)
+
