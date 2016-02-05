@@ -12,7 +12,7 @@ from . import models
 # photo directory name
 PHOTO_DIRNAME = "photo"
 THUMBNAIL_DIRNAME = '.thumbnails'
-THUMBNAIL_SIZE = (75, 75)
+THUMBNAIL_SIZE = (100, 100)
 ALLOWED_IMAGE_EXT = ['.jpg', '.jpeg', '.png']
 
 
