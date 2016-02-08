@@ -146,8 +146,8 @@ class ExternLink(models.Model):
 class Formula(models.Model):
     name = models.CharField(max_length=255)
     event = models.ForeignKey(Event, related_name='formulas')
-    price_contributor = models.IntegerField()
-    price_non_contributor = models.IntegerField()
+    price_contributor = models.DecimalField(max_digits=10, decimal_places=2)
+    price_non_contributor = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return self.name
