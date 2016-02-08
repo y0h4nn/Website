@@ -12,6 +12,7 @@ from . import models
 # photo directory name
 PHOTO_DIRNAME = "photo"
 THUMBNAIL_DIRNAME = '.thumbnails'
+THUMBNAIL_SIZE = (100, 100)
 ALLOWED_IMAGE_EXT = ['.jpg', '.jpeg', '.png']
 
 
@@ -24,16 +25,24 @@ def create_thumbnail(realpath, filename):
 
     try:
         image = Image.open(os.path.join(realpath, filename))
-        l = min(image.size)
         width, height = image.size
+        factor = 1
+        while width/factor > 2*THUMBNAIL_SIZE[0] and height/factor > 2*THUMBNAIL_SIZE[1]:
+            factor *= 2
+        if factor > 1:
+            width, height = width/factor, height/factor
+            image.thumbnail((width, height), Image.NEAREST)
+
+        l = min(width, height)
         box = (
             int((width - l) / 2),
             int((height - l) / 2),
             int((width + l) / 2),
             int((height + l) / 2)
         )
+
         region = image.crop(box)
-        region.thumbnail((100, 100))
+        region.thumbnail((THUMBNAIL_SIZE[0], THUMBNAIL_SIZE[1]), Image.ANTIALIAS)
         region.save(os.path.join(realpath, THUMBNAIL_DIRNAME, filename), "JPEG")
     except OSError:
         return
