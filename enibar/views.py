@@ -40,7 +40,6 @@ def _create_view(cls):
     def view(request):
         if request.method == "PUT":
             req = get_req_or_404(request)
-            print(req)
             check_token(req)
             id_ = req.pop('id')
             create_or_update(cls, id_, **req)
