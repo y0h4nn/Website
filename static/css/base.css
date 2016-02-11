@@ -365,6 +365,9 @@ table:not(.rd-days) {
 .red {
   color: #E06060; }
 
+.green {
+  color: #60A060; }
+
 .blue {
   background-color: #68B9DE;
   color: white; }
@@ -507,6 +510,12 @@ table:not(.rd-days) {
 
 .retracted #main_container {
   max-width: calc(100% - 300px - 50px); }
+
+.retracted #note {
+  display: none; }
+
+.retracted #note_container {
+  font-size: 0.7em; }
 
 #main_div {
   margin: 2.5em; }
@@ -1512,5 +1521,14 @@ table:not(.rd-days) {
   display: inline-block; }
   .photo img {
     display: inline-block; }
+
+@media screen and (max-width: 640px) {
+  #note {
+    display: none; }
+
+  #note_container {
+    font-size: 1.3em; } }
+#note_container {
+  text-align: center; }
 
 /*# sourceMappingURL=base.css.map */

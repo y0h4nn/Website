@@ -34,9 +34,12 @@
                             {% else %}
                                 <li><a href="{% url 'notifications:index' %}"><i class="fa fa-inbox"></i></a></li>
                             {% endif %}
-                            <li><a href="{% url 'enibar:show_history' %}"><i class="fa fa-beer"></i></a></li>
+                            {% if user_note %}
+                                <li><a href="{% url 'enibar:show_history' %}"><i class="fa fa-beer"></i></a></li>
+                            {% endif %}
                         {% endif %}
                         <li><a href="{% url 'help:index' %}"><i class="fa fa-question-circle"></i></a></li>
+
                     </ul>
                 </nav>
             </header>
@@ -111,6 +114,16 @@
                         <img src="{% static 'images/default_user_icon.png' %}" alt="picture"/>
                     {% endif %}
                     <h1 id="username" class="center">{{ request.user.profile }}</h1>
+                    {% if user_note %}
+                        <h5 id="note_container">
+                            <span id="note">Note: </span>
+                            {% if user_note.note < 0 %}
+                                <span class="red">{{ user_note.note }} €</span>
+                            {% else %}
+                                <span class="green">{{ user_note.note }} €</span>
+                            {% endif %}
+                        </h5>
+                    {% endif %}
                     <nav>
                         <ul>
                               <li><a href="{% url 'accounts:show' username=request.user.username %}"><i class="fa fa-user"></i> <span>Mon profil</span></a></li>

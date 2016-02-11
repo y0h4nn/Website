@@ -7,6 +7,13 @@ class Note(models.Model):
     mail = models.EmailField()
     note = models.DecimalField(max_digits=10, decimal_places=2)
 
+    @classmethod
+    def get_note(cls, user):
+        try:
+            return cls.objects.get(mail=user.email)
+        except cls.DoesNotExist:
+            return None
+
 
 class HistoryLine(models.Model):
     foreign_id = models.IntegerField(db_index=True)

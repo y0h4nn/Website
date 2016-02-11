@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = (
@@ -55,6 +54,23 @@ INSTALLED_APPS = (
     'permissions',
     'photo',
     'enibar',
+    'devserver',
+)
+
+
+
+DEVSERVER_DEFAULT_ADDR = '127.0.0.1'
+DEVSERVER_DEFAULT_PORT=9000
+DEVSERVER_MODULES = (
+'devserver.modules.sql.SQLRealTimeModule',
+'devserver.modules.sql.SQLSummaryModule',
+'devserver.modules.profile.ProfileSummaryModule',
+
+# Modules not enabled by default
+#'devserver.modules.ajax.AjaxDumpModule',
+'devserver.modules.profile.MemoryUseModule',
+'devserver.modules.cache.CacheSummaryModule',
+#'devserver.modules.profile.LineProfilerModule',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -67,6 +83,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'notifications.middleware.ReadOnVisit',
+    'devserver.middleware.DevServerMiddleware',
 )
 
 ROOT_URLCONF = 'site_des_eleves.urls'
@@ -83,6 +100,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'notifications.context_processors.check_notifications',
+                'enibar.context_processors.check_note',
             ],
         },
     },
