@@ -71,7 +71,7 @@ request_history = _create_view(HistoryLine)
 def show_history(request, page):
     page = page or 1
     note = get_object_or_404(Note, mail=request.user.email)
-    paginator = Paginator(HistoryLine.objects.filter(note=note.nickname), 50)
+    paginator = Paginator(HistoryLine.objects.filter(note=note.nickname).order_by('-id'), 50)
 
     try:
         history = paginator.page(page)
