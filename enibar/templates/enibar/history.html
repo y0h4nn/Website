@@ -15,7 +15,7 @@
     </thead>
     <tbody>
     {% for line in history %}
-        <tr><td>{{ line.date }}<td>{{ line.product }} ({{ line.price_name }})</td><td>{{ line.quantity }}</td><td>{{ line.price }}</td></tr>
+        <tr><td>{{ line.date }}<td>{{ line.normalized_product_name }} ({{ line.price_name }})</td><td>{{ line.quantity }}</td><td>{{ line.price }}</td></tr>
     {% endfor %}
     </tbody>
 </table>

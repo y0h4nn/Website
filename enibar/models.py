@@ -27,3 +27,6 @@ class HistoryLine(models.Model):
     percentage = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
+    def normalized_product_name(self):
+        return self.product.replace('&', '')
+
