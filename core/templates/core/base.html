@@ -45,7 +45,7 @@
             </header>
             <main>
                 {% if quote %}
-                    <a href="{% url 'quotes:add_quote' %}">{{ quote }}</a>
+                <div id="quote"><a href="{% url 'quotes:add_quote' %}"><quote>{{ quote }}</quote><div class="prof">{{ quote_prof }}</div></a></div>
                 {% else %}
                     <div><a href="{% url 'quotes:add_quote' %}">Ajouter une citation</a></div>
                 {% endif %}

@@ -6,6 +6,9 @@ import random
 class Prof(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Quote(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='quotes')

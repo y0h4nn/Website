@@ -1,3 +1,4 @@
+@charset "UTF-8";
 @font-face {
   font-family: "Oxygen";
   src: url("../contrib/Oxygen/Oxygen-Regular.ttf");
@@ -1530,5 +1531,20 @@ table:not(.rd-days) {
     font-size: 1.3em; } }
 #note_container {
   text-align: center; }
+
+#quote {
+  margin: 1em;
+  padding: 1em 0;
+  border-top: 1px solid #222;
+  border-bottom: 1px solid #222; }
+  #quote quote {
+    font-style: italic; }
+  #quote .prof {
+    color: #888;
+    text-align: right; }
+  #quote quote::before {
+    content: "« "; }
+  #quote quote::after {
+    content: " »"; }
 
 /*# sourceMappingURL=base.css.map */
