@@ -39,4 +39,5 @@ urlpatterns = [
     url('^photo/', include('photo.urls', namespace='photo')),
     url('^enibar/', include('enibar.urls', namespace='enibar')),
     url('^api/', include('api.urls')),
+    url('^quotes/', include('quotes.urls', namespace='quotes')),
 ]

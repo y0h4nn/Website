@@ -44,13 +44,11 @@
                 </nav>
             </header>
             <main>
-                <form action="." method="POST">
-                    <div>
-                        {% csrf_token %}
-                        <input type="text" name="command" autocomplete="off" />
-                        <i class="fa fa-chevron-right"></i>
-                    </div>
-                </form>
+                {% if quote %}
+                    <a href="{% url 'quotes:add_quote' %}">{{ quote }}</a>
+                {% else %}
+                    <div><a href="{% url 'quotes:add_quote' %}">Ajouter une citation</a></div>
+                {% endif %}
                 <nav>
                     <ul>
                         {% _base_menu_item 'Actualités' 'news:index' %}

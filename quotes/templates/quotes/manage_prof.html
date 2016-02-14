@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+
+{% block menu %}
+    {% menu_item "Ajouter une citation" "quotes:add_quote" %}
+    {% menu_item "Gerer les profs" "quotes:manage_prof" %}
+    {% menu_item "Gerer les citations" "quotes:manage_quotes" %}
+{% endblock %}
+
+{% block main %}
+    <h2>Ajouter un prof</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ prof_form.as_p }}
+        <button>Ajouter</button>
+    </form>
+
+    {% if profs %}
+        <h2>Profs</h2>
+        <table>
+        <thead>
+            <tr>
+                <th>Prof</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for prof in profs %}
+            <tr>
+                <td>{{ prof.name }}</td>
+                <td class="action_cell">
+                    <a href="{% url 'quotes:del_prof' pid=prof.id %}">x</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

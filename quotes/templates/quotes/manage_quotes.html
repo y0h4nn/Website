@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+
+{% block menu %}
+    {% menu_item "Ajouter une citation" "quotes:add_quote" %}
+    {% menu_item "Gerer les profs" "quotes:manage_prof" %}
+    {% menu_item "Gerer les citations" "quotes:manage_quotes" %}
+{% endblock %}
+
+{% block main %}
+    {% if quotes_to_validate %}
+        <h2>Citations à valider</h2>
+        <table>
+        <thead>
+            <tr>
+                <th>Prof</th>
+                <th>Citation</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for quote in quotes_to_validate %}
+            <tr>
+                <td>{{ quote.prof.name }} </td>
+                <td>{{ quote.text }}</td>
+                <td class="action_cell">
+                    <a href="{% url 'quotes:approve_quote' qid=quote.id %}">v</a>
+                    <a href="{% url 'quotes:del_quote' qid=quote.id %}">x</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    {% endif %}
+
+    <h2>Citations approuvées</h2>
+    <table>
+    <thead>
+        <tr>
+            <th>Prof</th>
+            <th>Citation</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for quote in quotes %}
+        <tr>
+            <td>{{ quote.prof.name }} </td>
+            <td>{{ quote.text }}</td>
+            <td class="action_cell">
+                <a href="{% url 'quotes:del_quote' qid=quote.id %}">x</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}

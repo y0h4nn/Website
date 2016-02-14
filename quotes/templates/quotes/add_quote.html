@@ -1,0 +1,16 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+
+{% block menu %}
+    {% menu_item "Ajouter une citation" "quotes:add_quote" %}
+    {% menu_item "Gerer les profs" "quotes:manage_prof" %}
+    {% menu_item "Gerer les citations" "quotes:manage_quotes" %}
+{% endblock %}
+
+{% block main %}
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ quote_form.as_p }}
+        <button>Envoyer cette citation</button>
+    </form>
+{% endblock %}

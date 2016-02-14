@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'permissions',
     'photo',
     'enibar',
+    'quotes',
 )
 
 
@@ -84,6 +85,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'notifications.context_processors.check_notifications',
                 'enibar.context_processors.check_note',
+                'quotes.context_processors.get_quote',
             ],
         },
     },
