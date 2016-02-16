@@ -6,6 +6,9 @@ import random
 class Prof(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    class Meta:
+        permissions = (('manage_prof', 'Can manage profs'),)
+
     def __str__(self):
         return self.name
 
@@ -15,6 +18,9 @@ class Quote(models.Model):
     prof = models.ForeignKey(Prof, related_name='quotes')
     text = models.TextField()
     approved = models.BooleanField(default=False)
+
+    class Meta:
+        permissions = (('manage_quote', 'Can manage quotes'),)
 
     @classmethod
     def get_random(cls):

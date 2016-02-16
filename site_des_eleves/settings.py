@@ -160,12 +160,11 @@ LOGIN_URL = '/accounts/login'
 
 # Mails
 
-EMAIL_HOST=""
-EMAIL_PORT=587
-EMAIL_HOSt_USER=""
-EMAIL_HOST_PASSWORD=""
-EMAIL_USE_TLS=True
-
+EMAIL_HOST = ""
+EMAIL_PORT = 587
+EMAIL_HOSt_USER = ""
+EMAIL_HOST_PASSWORD = ""
+EMAIL_USE_TLS = True
 
 
 # Permissions
@@ -211,7 +210,6 @@ PERM_WHITELIST = {
         'delete_poll',
     ],
 
-
     'shop': [
         'view_history',
         'delete_buyinghistory',
@@ -225,8 +223,12 @@ PERM_WHITELIST = {
 
     'photo': [
         'manage_access_policy',
-    ]
+    ],
 
+    'quotes': [
+        'manage_prof',
+        'manage_quote',
+    ]
 }
 
 
@@ -253,7 +255,6 @@ except:
     pass
 
 import sys
-import os
 
 if 'test' in sys.argv:
     from django.db.models.signals import post_migrate

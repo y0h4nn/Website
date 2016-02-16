@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required, permission_required
 from .forms import QuoteForm, ProfForm
 from .models import Quote, Prof
 
 
+@login_required
 def add_quote(request):
     quote_form = QuoteForm(request.POST or None)
     if quote_form.is_valid():
@@ -15,6 +17,7 @@ def add_quote(request):
     return render(request, 'quotes/add_quote.html', context)
 
 
+@permission_required('quotes.manage_prof')
 def manage_prof(request):
     prof_form = ProfForm(request.POST or None)
     if prof_form.is_valid():
@@ -25,6 +28,7 @@ def manage_prof(request):
     return render(request, 'quotes/manage_prof.html', context)
 
 
+@permission_required('quotes.manage_quote')
 def manage_quotes(request):
     quotes_to_validate = Quote.objects.filter(approved=False)
     quotes = Quote.objects.filter(approved=True)
@@ -32,18 +36,21 @@ def manage_quotes(request):
     return render(request, 'quotes/manage_quotes.html', context)
 
 
+@permission_required('quotes.manage_prof')
 def del_prof(request, pid):
     prof = get_object_or_404(Prof, id=pid)
     prof.delete()
     return redirect('quotes:manage_prof')
 
 
+@permission_required('quotes.manage_quote')
 def del_quote(request, qid):
     quote = get_object_or_404(Quote, id=qid)
     quote.delete()
     return redirect('quotes:manage_quotes')
 
 
+@permission_required('quotes.manage_quote')
 def approve_quote(request, qid):
     quote = get_object_or_404(Quote, id=qid)
     quote.approved = True
