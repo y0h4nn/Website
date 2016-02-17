@@ -18,7 +18,7 @@
         <header>
             <h1>{{ event.name }} ({{ link.nb_places_left }} place(s) restante(s))</h1>
         </header>
-        <p>{{ event.description }}</p>
+        <p>{{ event.description|markdown }}</p>
         <div class="flex_container details">
             <div class="flex expand">
                 <p>{{ event.start_time }}</p>
