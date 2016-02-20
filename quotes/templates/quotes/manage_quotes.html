@@ -3,8 +3,12 @@
 
 {% block menu %}
     {% menu_item "Ajouter une citation" "quotes:add_quote" %}
-    {% menu_item "Gerer les profs" "quotes:manage_prof" %}
-    {% menu_item "Gerer les citations" "quotes:manage_quotes" %}
+    {% if perms.quotes.manage_prof %}
+        {% menu_item "Gerer les profs" "quotes:manage_prof" %}
+    {% endif %}
+    {% if perms.quotes.manage_quote %}
+        {% menu_item "Gerer les citations" "quotes:manage_quotes" %}
+    {% endif %}
 {% endblock %}
 
 {% block main %}
