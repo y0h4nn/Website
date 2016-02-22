@@ -1,6 +1,10 @@
 {% extends 'core/base.html' %}
 {% load menu_item %}
 
+{% block header %}
+    Proposer une citation
+{% endblock %}
+
 {% block menu %}
     {% menu_item "Ajouter une citation" "quotes:add_quote" %}
     {% if perms.quotes.manage_prof %}
