@@ -77,14 +77,14 @@ def asso_settings(request, aid):
     return render(request, 'asso/settings.html', context)
 
 
-@permission_required('asso.managment')
+@permission_required('asso.manage_asso')
 def asso_delete(request, aid):
     asso = get_object_or_404(models.Asso, pk=aid)
     asso.delete()
     return redirect('asso:managment')
 
 
-@permission_required('asso.managment')
+@permission_required('asso.manage_asso')
 def asso_create(request):
     if request.method == 'POST':
         form = forms.AssoSettingsForm(request.POST)
