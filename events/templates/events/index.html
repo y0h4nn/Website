@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% load menu_item %}
+{% load markdown %}
 
 {% block styles %}
 {% endblock %}
@@ -37,7 +38,7 @@
                     <p>{{ event.location }}, du {{ event.start_time }} au {{ event.end_time }}</p>
                 </header>
                 <main>
-                    <p>{{ event.description }}</p>
+                    <p>{{ event.description|markdown }}</p>
                     <a href="{% url 'events:event' eid=event.id %}">En savoir plus</a>
                 </main>
             </div>
