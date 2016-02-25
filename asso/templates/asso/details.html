@@ -25,24 +25,29 @@
 {% block main %}
     <h1>Présentation de l'association</h1>
     <div class="asso">
-        {% if asso.picture %}
-            <img src="{{ asso.picture.url }}" alt="asso-picture" />
-        {% endif %}
-        {% if asso.site %}
-        <p>
-            <a href="{{ asso.site }}"><i class="fa fa-globe"></i> {{ asso.site }}</a>
-        </p>
-        {% endif %}
-        {% if asso.mail %}
-        <p>
-            <a href="mailto:{{ asso.mail }}"><i class="fa fa-envelope"></i> {{ asso.mail }}</a>
-        </p>
-        {% endif %}
-        {% if asso.description %}
-            <p>{{ asso.description|markdown }}</p>
-        {% else %}
-            <p>L'association n'a pas rédigé de description</p>
-        {% endif %}
+        <header class="flex_container">
+            {% if asso.picture %}
+                <div>
+                    <img src="{{ asso.picture.url }}" alt="asso-picture" />
+                </div>
+            {% endif %}
+
+            <div class="links">
+                {% if asso.site %}
+                    <a href="{{ asso.site }}"><i class="fa fa-globe"></i> {{ asso.site }}</a>
+                {% endif %}
+                {% if asso.mail %}
+                    <a href="mailto:{{ asso.mail }}"><i class="fa fa-envelope"></i> {{ asso.mail }}</a>
+                {% endif %}
+            </div>
+        </header>
+        <main>
+            {% if asso.description %}
+                <p>{{ asso.description|markdown }}</p>
+            {% else %}
+                <p>L'association n'a pas rédigé de description</p>
+            {% endif %}
+        </main>
     </div>
     <h1>Membres de l'association</h1>
     <div id="userlist"></div>

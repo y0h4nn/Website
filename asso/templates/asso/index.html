@@ -2,6 +2,7 @@
 
 {% load menu_item %}
 {% load markdown %}
+{% load short %}
 
 {% block header %}
     Liste des associations
@@ -18,29 +19,33 @@
 {% block main %}
     {% for asso in assos %}
         <div class="asso">
-            {% if asso.picture %}
-                <img src="{{ asso.picture.url }}" alt="asso-picture" />
-            {% endif %}
+            <header class="flex_container">
+                {% if asso.picture %}
+                    <div>
+                        <img src="{{ asso.picture.url }}" alt="asso-picture" />
+                    </diV>
+                {% endif %}
+                <div>
+                    <h3><a href="{% url 'asso:details' aid=asso.pk %}">{{ asso }}</a></h3>
+                    <div class="links">
+                        {% if asso.site %}
+                            <a href="{{ asso.site }}"><i class="fa fa-globe"></i> {{ asso.site }}</a>
+                        {% endif %}
 
-            <h3><a href="{% url 'asso:details' aid=asso.pk %}">{{ asso }}</a></h3>
+                        {% if asso.mail %}
+                            <a href="mailto:{{ asso.mail }}"><i class="fa fa-envelope"></i> {{ asso.mail }}</a>
+                        {% endif %}
+                    </div>
+                </div>
 
-            {% if asso.site %}
-                <p>
-                    <a href="{{ asso.site }}"><i class="fa fa-globe"></i> {{ asso.site }}</a>
-                </p>
-            {% endif %}
-
-            {% if asso.mail %}
-                <p>
-                    <a href="mailto:{{ asso.mail }}"><i class="fa fa-envelope"></i> {{ asso.mail }}</a>
-                </p>
-            {% endif %}
-
-            {% if asso.description %}
-                <p>{{ asso.description|markdown }}</p>
-            {% else %}
-                <p>L'association n'a pas rédigé de description</p>
-            {% endif %}
+            </header>
+            <main>
+                {% if asso.description %}
+                    <p>{{ asso.description|markdown }}</p>
+                {% else %}
+                    <p>L'association n'a pas rédigé de description</p>
+                {% endif %}
+            </main>
         </div>
     {% endfor %}
 

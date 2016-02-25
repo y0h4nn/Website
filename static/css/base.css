@@ -1579,6 +1579,10 @@ table:not(.rd-days) {
   border-top: 1px solid #68B9DE;
   padding-top: 2em;
   margin-top: 2em; }
+.asso h3 {
+  margin: 0; }
+.asso .links a {
+  display: block; }
 
 .asso_member img {
   width: 100px; }
