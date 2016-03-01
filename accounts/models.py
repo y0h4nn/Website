@@ -81,7 +81,7 @@ class Address(models.Model):
     town = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return "{}, {} {}".format(self.streer, self.postal_code, self.town)
+        return "{}, {} {}".format(self.street, self.postal_code, self.town)
 
 
 class UserRequest(models.Model):
