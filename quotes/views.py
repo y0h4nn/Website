@@ -30,8 +30,8 @@ def manage_prof(request):
 
 @permission_required('quotes.manage_quote')
 def manage_quotes(request):
-    quotes_to_validate = Quote.objects.filter(approved=False)
-    quotes = Quote.objects.filter(approved=True)
+    quotes_to_validate = Quote.objects.filter(approved=False).select_related('prof')
+    quotes = Quote.objects.filter(approved=True).select_related('prof')
     context = {'quotes': quotes, 'quotes_to_validate': quotes_to_validate}
     return render(request, 'quotes/manage_quotes.html', context)
 

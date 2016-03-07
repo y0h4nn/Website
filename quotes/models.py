@@ -27,7 +27,7 @@ class Quote(models.Model):
         count = cls.objects.filter(approved=True).count()
         if count:
             random_index = random.randint(0, count - 1)
-            return cls.objects.filter(approved=True)[random_index]
+            return cls.objects.filter(approved=True).select_related('prof')[random_index]
         else:
             return None
 
