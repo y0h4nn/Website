@@ -77,8 +77,8 @@ def poll_list(request):
                 'title': p.title,
                 'icon': 'fa fa-pie-chart',
                 'id': p.id,
-                'start': p.start_date.strftime("%d %B %Y %H:%M"),
-                'end': p.end_date.strftime("%d %B %Y %H:%M"),
+                'start': p.start_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                'end': p.end_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
             } for p in Poll.objects.all().order_by('-end_date') if (p.is_open() and p.can_vote(request.user)) or (p.is_ended() and p.can_see_results(request.user))]
         })
 
@@ -105,8 +105,8 @@ def admin_list(request):
             'title': p.title,
             'icon': 'fa fa-pie-chart',
             'id': p.id,
-            'start': p.start_date.strftime("%d %B %Y %H:%M"),
-            'end': p.end_date.strftime("%d %B %Y %H:%M"),
+            'start': p.start_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            'end': p.end_date.strftime("%Y-%m-%dT%H:%M:%SZ"),
             'deleted': False,
         } for p in Poll.objects.filter(author=request.user).order_by('-end_date')]
     })

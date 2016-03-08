@@ -22,7 +22,9 @@
                         boldContainer.appendChild(document.createTextNode(elem['title']))
                     var nameContainer = document.createElement('div');
                         nameContainer.appendChild(boldContainer);
-                        nameContainer.appendChild(document.createTextNode('(' + elem['start'] + ' - ' + elem['end'] + ')'));
+                    var start = new Date(elem['start'])
+                    var end = new Date(elem['end'])
+                        nameContainer.appendChild(document.createTextNode('(' + start.toLocaleString() + ' - ' + end.toLocaleString() + ')'));
                     var actionContainer = document.createElement('div');
                         actionContainer.setAttribute('class', 'action_container');
 
