@@ -57,6 +57,13 @@
                     {{ form.group }}
                 </p>
             </div>
+            <div>
+                {{ form.contributor_only.errors }}
+                <p>
+                    <label for="{{ form.contributor_only.id_for_label }}">Cotisants uniquement: </label>
+                    {{ form.contributor_only }}
+                </p>
+            </div>
         </fieldset>
 
         <div id="main_form">

@@ -37,7 +37,7 @@ class PollForm(forms.ModelForm):
 
     class Meta:
         model = Poll
-        fields = ['title', 'group']
+        fields = ['title', 'group', 'contributor_only']
         widgets = {'title': widgets.TextInput,
                    'start_time': forms.SplitDateTimeWidget,
                    'end_time': forms.SplitDateTimeWidget,

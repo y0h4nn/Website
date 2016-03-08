@@ -20,14 +20,16 @@ def admin_question(request, pid):
 
 @login_required()
 def question(request, pid):
-    if not request.user.is_authenticated():
-        return HttpResponseForbidden()
     p = get_object_or_404(Poll, id=pid)
     context = {'poll': p, 'pid': pid, "errors": []}
     if not p.is_open():
         if p.is_ended():
+            if not p.can_see_results(request.user):
+                return HttpResponseForbidden()
             return render(request, 'poll/results.html', context)
         return redirect(reverse('poll:index'))
+    if not p.can_vote(request.user):
+        return HttpResponseForbidden()
 
     try:
         already_voted = Voter.objects.get(user=request.user, poll=p)
@@ -77,7 +79,7 @@ def poll_list(request):
                 'id': p.id,
                 'start': p.start_date.strftime("%d %B %Y %H:%M"),
                 'end': p.end_date.strftime("%d %B %Y %H:%M"),
-            } for p in Poll.objects.filter(Q(group__in=request.user.groups.all()) & Q(start_date__lt=timezone.now())).order_by('-end_date')]
+            } for p in Poll.objects.all().order_by('-end_date') if (p.is_open() and p.can_vote(request.user)) or (p.is_ended() and p.can_see_results(request.user))]
         })
 
 
