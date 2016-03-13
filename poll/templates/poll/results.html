@@ -1,6 +1,11 @@
 {% extends 'core/base.html' %}
 {% load menu_item %}
+{% load static %}
 
+{% block scripts %}
+    <script src="{% static 'contrib/Chart.min.js' %}"></script>
+    <script src="{% static 'js/color.js' %}"></script>
+{% endblock %}
 {% block header %} {{ poll }} {% endblock %}
 
 {% block menu %}
@@ -12,14 +17,34 @@
 
 {% block main %}
 
+    <script>
+        var i = 0;
+    </script>
     {% for question in poll.questions.all %}
-        <div>
+        <div style="text-align: center">
             <h3>{{ question }}</h3>
-            <ul>
+            <canvas id="chart"></canvas>
+            <script>
+                var answers = {}
                 {% for answer in question.answers.all %}
-                    <li>{{ answer }} => {{ answer.votes }}</li>
+                    answers['{{ answer }}'] = {{ answer.votes }};
                 {% endfor %}
-            </ul>
+                var colors = distinctColors(Object.keys(answers).length)
+                var ctx = document.getElementById("chart");
+                ctx.id = "chart" + i
+                var myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: Object.keys(answers),
+                            datasets: [{
+                                    label: '# of Votes',
+                                    data: Object.values(answers),
+                                    backgroundColor: colors
+                            }]
+                        },
+                });
+                i += 1;
+            </script>
         </div>
     {% endfor %}
 
