@@ -23,7 +23,10 @@ class Poll(models.Model):
         return timezone.now() >= self.end_date
 
     def can_vote(self, user):
-        return user.is_authenticated() and (not self.contributor_only or is_contributor(user)) and self.group in user.groups.all()
+        auth = user.is_authenticated()
+        contrib = not self.contributor_only and is_contributor(user)
+        group = self.group in user.groups.all()
+        return auth and contrib and group
 
     def can_see_results(self, user):
         return user.is_authenticated and self.group in user.groups.all()
@@ -49,3 +52,5 @@ class Voter(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='voted_questions')
     poll = models.ForeignKey(Poll)
 
+    def __repr__(self):
+        return "{} - {}".format(self.user.username, self.poll.title)
