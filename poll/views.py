@@ -121,7 +121,7 @@ def admin_add_poll(request):
 
         if form.is_valid():
             g = form.cleaned_data['group']
-            p = Poll(title=form.cleaned_data['title'], author=request.user, start_date=form.cleaned_data['start_time'], end_date=form.cleaned_data['end_time'], group=g)
+            p = Poll(title=form.cleaned_data['title'], author=request.user, start_date=form.cleaned_data['start_time'], end_date=form.cleaned_data['end_time'], group=g, contributor_only=form.cleaned_data['contributor_only'])
             p.save()
             for question, answers in form.questions_answers.items():
                 q = Question(poll=p, text=form.cleaned_data[question])
