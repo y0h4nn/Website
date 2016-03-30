@@ -28,6 +28,7 @@ class Command(BaseCommand):
             print("First creation of %s, start = %s (delay=%d)" % (event, event.start_time, event.delay))
         else:
             delta_dates = event.last_created - event.start_time + delta
+            delta_dates.replace(hour=0, minute=0)
             e = Event.objects.create(**{field: value for field, value in event.__dict__.items() if field in [field.column for field in Event._meta.fields if field.column not in ['id', 'model']]})
             e.start_time += delta_dates
             e.end_time += delta_dates
