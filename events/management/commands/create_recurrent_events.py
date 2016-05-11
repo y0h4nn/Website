@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from events.models import RecurrentEvent, Event
 from django.utils import timezone
 import datetime
+import time
 
 
 class Command(BaseCommand):
@@ -17,6 +18,8 @@ class Command(BaseCommand):
         self.stdout.write('Successfully created events')
 
     def update_event(self, event):
+        from pytz import timezone as tz
+        localtz = tz('Europe/Paris')
         delta = datetime.timedelta(days=event.delay)
 
         if event.last_created is None:  # First creation
@@ -28,16 +31,15 @@ class Command(BaseCommand):
             print("First creation of %s, start = %s (delay=%d)" % (event, event.start_time, event.delay))
         else:
             delta_dates = event.last_created - event.start_time + delta
-            delta_dates.replace(hour=0, minute=0)
             e = Event.objects.create(**{field: value for field, value in event.__dict__.items() if field in [field.column for field in Event._meta.fields if field.column not in ['id', 'model']]})
-            e.start_time += delta_dates
-            e.end_time += delta_dates
-            e.end_inscriptions += delta_dates
+            e.start_time = localtz.normalize(e.start_time + delta_dates)
+            e.end_time = localtz.normalize(e.end_time + delta_dates)
+            e.end_inscriptions = localtz.normalize(e.end_inscriptions + delta_dates)
             if e.invitations_start is not None:
-                e.invitations_start += delta_dates
+                e.invitations_start = localtz.normalize(e.invitations_start + delta_dates)
             e.save()
 
             event.last_created = e.start_time
             event.save()
-            print("Creating event %s for date %s" % (event, event.last_created))
+            print("Creating event %s for date %s" % (event, e.start_time))
 

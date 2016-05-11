@@ -1,12 +1,13 @@
 from freezegun import freeze_time
 from django.test import TestCase
-from .models import Event, Inscription, ExternInscription, ExternLink, Invitation
+from .models import Event, Inscription, ExternInscription, ExternLink, Invitation, RecurrentEvent
 from django.contrib.auth.models import User
 import datetime
 import uuid
 from datetime import timezone
 from bde.models import Contributor
 from django.templatetags.static import static
+from .management.commands.create_recurrent_events import Command
 
 
 class TestEvent(TestCase):
@@ -154,3 +155,22 @@ class TestEvent(TestCase):
         self.event.save()
         self.assertFalse(self.event.can_invite(u))
 
+    def test_recurrent_events_creation(self):
+        from pytz import timezone
+        localtz = timezone('Europe/Paris')
+        self.event.model = True
+        self.event.save()
+        re = RecurrentEvent(**{key: value for key, value in self.event.__dict__.items() if key not in ('_state', )})
+        re.save()
+        c = Command()
+        c.handle()
+        last = None
+        for event in Event.objects.filter(model=False):
+            t = localtz.localize(event.start_time.replace(tzinfo=None))
+            if last is not None:
+                try:
+                    self.assertEqual(t.time(), last.time())
+                except AssertionError:
+                    print(t, last)
+                    raise
+            last = t
