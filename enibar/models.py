@@ -13,6 +13,8 @@ class Note(models.Model):
             return cls.objects.get(mail=user.email)
         except cls.DoesNotExist:
             return None
+        except:
+            return None
 
 
 class HistoryLine(models.Model):

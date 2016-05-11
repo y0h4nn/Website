@@ -50,3 +50,5 @@ class Contributor(models.Model):
             'means_of_payment': mean,
         }, user=user)
 
+    def __str__(self):
+        return self.user.username

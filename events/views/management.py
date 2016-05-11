@@ -62,7 +62,7 @@ def management_list_users(request, eid):
                 "type": "reg",
                 "id": ins.id,
                 "formula": ins.formula.name if ins.formula else None,
-                "formula_price": (ins.formula.get('price_contributor') if is_contributor(ins.user) else ins.formula.price_non_contributor) if ins.formula else None,
+                "formula_price": (ins.formula.price_contributor if is_contributor(ins.user) else ins.formula.price_non_contributor) if ins.formula else None,
             } for ins in Inscription.objects.filter(event=e).select_related("user__profile").select_related('event').select_related("user__contribution").annotate(null_nick=Count('user__profile__nickname')).order_by('null_nick', '-user__profile__nickname', '-user__last_name', '-user__first_name', '-user__username').reverse()]
 
         ret['ext_reg'] = [{
@@ -72,7 +72,7 @@ def management_list_users(request, eid):
             "type": "ext_reg",
             "id": ins.id,
             "formula": ins.formula.name if ins.formula else None,
-            "formula_price": ins.formula.get('price_non_contributor') if ins.formula else None,
+            "formula_price": ins.formula.price_non_contributor if ins.formula else None,
         } for ins in ExternInscription.objects.filter(event=e).select_related('event').select_related('via').order_by('last_name', 'first_name')]
         ret['invits'] = [{
             "display_name": "{} {} (invité par {})".format(ins.first_name, ins.last_name, str(ins.user.profile)),
@@ -81,7 +81,7 @@ def management_list_users(request, eid):
             "type": "invit",
             "id": ins.id,
             "formula": ins.formula.name if ins.formula else None,
-            "formula_price": ins.formula.get('price_non_contributor') if ins.formula else None,
+            "formula_price": ins.formula.price_non_contributor if ins.formula else None,
         } for ins in Invitation.objects.filter(event=e).select_related('event').select_related('user__profile').order_by('last_name', 'first_name')]
         return JsonResponse(ret)
 
