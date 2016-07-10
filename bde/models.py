@@ -42,7 +42,10 @@ class Contributor(models.Model):
     @staticmethod
     def take_full_contribution(user, mean):
         now = datetime.datetime.now()
-        endate = datetime.date(now.year + 1, 6, 30)
+        if 1 <= now.month <= 6: # This is totally stupid, you should not be allowed to take a full contrib in the spring but he... quiwy is stupid too.
+            endate = datetime.date(now.year, 6, 30)
+        else:
+            endate = datetime.date(now.year + 1, 6, 30)
 
         return Contributor.objects.update_or_create({
             'end_date': endate,
