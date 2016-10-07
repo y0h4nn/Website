@@ -53,10 +53,12 @@ def management_list_users(request, eid):
                         "type": "reg",
                         "id": user.id,
                         "user": True,
+                        'username': user.username,
                     })
         else:
             ret['reg'] = [{
                 "display_name": str(ins.user.profile),
+                'username': ins.user.username,
                 "picture": ins.user.profile.get_picture_url(),
                 "color": "bg-blue" if ins.in_date is not None else "bg-green" if is_contributor(ins.user) else "bg-red",
                 "type": "reg",
