@@ -91,9 +91,9 @@ def get_photo_paths(request):
     last_updated = request.GET.get('last_updated')
     if last_updated:
         last_updated = datetime.datetime.strptime(last_updated, "%Y-%m-%dT%H:%M:%S")
-        users = User.objects.filter(profile__last_updated__gt=last_updated)
+        users = User.objects.filter(profile__last_updated__gt=last_updated).select_related('profile')
     else:
-        users = User.objects.all()
+        users = User.objects.all().select_related('profile')
     photos = {user.email: os.path.basename(user.profile.picture.path) for user in users if user.profile.picture and user.email}
 
     return JsonResponse(photos, safe=False)
