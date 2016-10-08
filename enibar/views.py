@@ -1,4 +1,5 @@
 from .models import Note, HistoryLine
+from django.contrib.auth.models import User, Group
 from django.conf import settings
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -6,6 +7,8 @@ from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404, render
+import datetime
+import os.path
 import json
 
 
@@ -84,3 +87,13 @@ def show_history(request, page):
 
     return render(request, 'enibar/history.html', context)
 
+def get_photo_paths(request):
+    last_updated = request.GET.get('last_updated')
+    if last_updated:
+        last_updated = datetime.datetime.strptime(last_updated, "%Y-%m-%dT%H:%M:%S")
+        users = User.objects.filter(profile__last_updated__gt=last_updated)
+    else:
+        users = User.objects.all()
+    photos = {user.email: os.path.basename(user.profile.picture.path) for user in users if user.profile.picture and user.email}
+
+    return JsonResponse(photos, safe=False)

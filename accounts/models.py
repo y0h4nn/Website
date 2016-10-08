@@ -35,6 +35,7 @@ class Profile(models.Model):
     promo = models.ForeignKey('Promo', related_name='members', null=True, blank=True)
     enib_join_year = models.PositiveSmallIntegerField(null=True, blank=True)
     semester = models.CharField(max_length=3, choices=SEMESTERS, null=True, blank=True)
+    last_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         if self.user.first_name and self.user.last_name and self.user.profile.nickname:
