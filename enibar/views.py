@@ -1,5 +1,6 @@
 from .models import Note, HistoryLine
 from django.contrib.auth.models import User, Group
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -71,6 +72,7 @@ request_note = _create_view(Note)
 request_history = _create_view(HistoryLine)
 
 
+@login_required
 def show_history(request, page):
     page = page or 1
     note = get_object_or_404(Note, mail=request.user.email)
