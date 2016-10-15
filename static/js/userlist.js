@@ -51,19 +51,6 @@
                 this.render();
             },
         },
-
-        match: {
-            value: function(user){
-                var match = false;
-                var regex = this.cachedSearchRegex;
-                match |= regex.test(user['last_name']);
-                match |= regex.test(user['first_name']);
-                match |= regex.test(user['nickname']);
-                match |= regex.test(user['username']);
-                match |= regex.test(user['display_name']);
-                return match;
-            },
-        },
     });
 
     window.UserList = UserList;
