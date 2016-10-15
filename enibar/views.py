@@ -32,11 +32,17 @@ def create_or_update(cls, foreign_id, **kwargs):
     try:
         obj = cls.objects.get(foreign_id=foreign_id)
     except cls.DoesNotExist:
-        cls.objects.create(foreign_id=foreign_id, **kwargs)
+        try:
+            cls.objects.create(foreign_id=foreign_id, **kwargs)
+        except:
+            pass
     else:
-        for key, value in kwargs.items():
-            setattr(obj, key, value)
-        obj.save()
+        try:
+            for key, value in kwargs.items():
+                setattr(obj, key, value)
+            obj.save()
+        except:
+            pass
 
 
 def _create_view(cls):
