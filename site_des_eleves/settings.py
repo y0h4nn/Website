@@ -56,6 +56,7 @@ INSTALLED_APPS = (
     'enibar',
     'quotes',
     'asso',
+    'partnerships',
 )
 
 
@@ -234,6 +235,10 @@ PERM_WHITELIST = {
     'asso': [
         'manage_asso',
     ],
+    
+    'partnerships': [
+        'manage_partnerships',
+    ],
 }
 
 
@@ -285,4 +290,3 @@ if 'test' in sys.argv:
 
         }
     }
-

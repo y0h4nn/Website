@@ -1,0 +1,46 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+{% load static %}
+
+{% block title %}
+    Partenariats
+{% endblock %}
+
+{% block header %}
+  Partenariats
+{% endblock %}
+
+{% block main %}
+  <table style="text-align:justify;">
+    <thead>
+      <tr>
+          <th>Logo</th>
+          <th>Nom</th>
+          <th>Adresse</th>
+          <th>Description</th>
+          <th>Lien</th>
+          <th></th>
+          <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in partnerships %}
+      <tr>
+        {% if p.logo %}
+          <td width="20%"><img style="width:100%;" src="{{ p.logo.url }}"/></td>
+        {% else %}
+          <td></td>
+        {% endif %}
+          <td width="15%">{{ p.name }}</td>
+          <td width="25%">{{ p.address }}</td>
+          <td width="40%">{{ p.description }}</td>
+          <td><a href="{{ p.urlLink }}"><i class="fa fa-external-link"></i></a></td>
+          <td width="5%"><a href="{% url 'partnerships:admin_edit' nid=p.id %}" title="Editer"><i class="fa fa-pencil"></i></a></td>
+          <td width="5%"><a href="{% url 'partnerships:admin_delete' nid=p.id %}" class="red" title="Supprimer"><i class="fa fa-trash-o"></i></a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</br>
+  <a href="{% url 'partnerships:admin_add_partnership' %}" class="button" title="Ajouter">Ajouter</a>
+{% endblock %}

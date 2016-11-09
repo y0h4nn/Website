@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+{% load menu_item %}
+
+{% block title %}
+    Ajouter un partenariat
+{% endblock %}
+
+{% block header %}
+  Partenariats
+{% endblock %}
+
+{% block main %}
+        <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Ajouter</button>
+        </form>
+{% endblock %}
